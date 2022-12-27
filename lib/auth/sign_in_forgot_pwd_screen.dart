@@ -25,10 +25,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   late SignInController controller;
 
   @override
-  Widget build(BuildContext context) {
-    changeStatusColor(colors.whiteColor);
-    var width = MediaQuery.of(context).size.width;
+  void initState() {
+    super.initState();
+
     controller = ControllerStore.putOrFind(SignInController());
+
     outlineInputBorder = const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(4)),
       borderSide: BorderSide(color: colors.viewColor, width: 0.8),
@@ -37,6 +38,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       borderRadius: BorderRadius.all(Radius.circular(4)),
       borderSide: BorderSide(color: colors.redColor, width: 0.8),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    changeStatusColor(colors.whiteColor);
+    var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: Form(

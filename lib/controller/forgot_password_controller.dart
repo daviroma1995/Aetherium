@@ -4,15 +4,18 @@ import 'package:aetherium_salon/service/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordController extends Controller {
-  late final TextEditingController emailController;
+  ForgotPasswordController();
+  late TextEditingController emailController = TextEditingController();
+  late AuthService _authService;
+
   final Map _formState = {'signInPressed': false, 'obscureText': false};
-  final AuthService _authService = AuthService();
 
   @override
   void initState() {
     super.initState();
     super.save = false;
     emailController = TextEditingController();
+    _authService = AuthService();
   }
 
   String? validateEmail(String? value) {

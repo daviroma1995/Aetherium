@@ -8,17 +8,19 @@ import 'package:nb_utils/nb_utils.dart';
 
 class SignInController extends Controller {
   SignInController();
-  late final TextEditingController emailController;
-  late final TextEditingController passwordController;
+  late TextEditingController emailController = TextEditingController();
+  late TextEditingController passwordController = TextEditingController();
   final Map _formState = {'signInPressed': false, 'obscureText': false};
-  final AuthService _authService = AuthService();
+  late AuthService _authService;
 
   @override
   void initState() {
     super.initState();
     super.save = false;
+    _authService = AuthService();
     emailController = TextEditingController();
     passwordController = TextEditingController();
+    log("inistate of signin controller is called");
   }
 
   String? validateEmail(String? value) {
@@ -29,8 +31,8 @@ class SignInController extends Controller {
     return null;
   }
 
-  bool get isObscureText => _formState['isObscureText'];
-  bool get isSigninPressed => _formState['isSigninPressed'];
+  bool get isObscureText => _formState['isObscureText'] ?? false;
+  bool get isSigninPressed => _formState['isSigninPressed'] ?? false;
 
   String? validatePassword(String? value) {
     if (!_formState['signInPressed']) return null;

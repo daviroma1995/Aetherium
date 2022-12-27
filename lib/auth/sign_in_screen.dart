@@ -27,10 +27,8 @@ class SignInState extends State<SignInScreen> {
   late SignInController controller;
 
   @override
-  Widget build(BuildContext context) {
-    changeStatusColor(colors.whiteColor);
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+  void initState() {
+    super.initState();
 
     controller = ControllerStore.putOrFind(SignInController());
 
@@ -42,6 +40,13 @@ class SignInState extends State<SignInScreen> {
       borderRadius: BorderRadius.all(Radius.circular(4)),
       borderSide: BorderSide(color: colors.redColor, width: 0.8),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    changeStatusColor(colors.whiteColor);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
