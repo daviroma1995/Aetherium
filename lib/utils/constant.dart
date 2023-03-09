@@ -22,3 +22,9 @@ const textSizeNormal = 20.0;
 const textSizeLarge = 24.0;
 const textSizeXLarge = 30.0;
 const textSizeXXLarge = 35.0;
+
+/* hex color prefix */
+String hexPrefix = "0xff";
+
+/* radius */
+const double containerRadius = 8, cardRadius = 8, buttonRadius = 8;

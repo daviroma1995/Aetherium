@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:aetherium_salon/utils/images.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../custom_widget/space.dart';
-import '../models/walk_through_model.dart';
+import '../widgets/custom/space.dart';
+import '../model/walk_through_model.dart';
 import '../utils/colors.dart';
 import '../auth/sign_in_screen.dart';
 

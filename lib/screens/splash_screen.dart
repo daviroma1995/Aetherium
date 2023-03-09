@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:aetherium_salon/auth/sign_in_screen.dart';
+import 'package:aetherium_salon/screens/main/channel_app_screen.dart';
 import 'package:aetherium_salon/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:aetherium_salon/screens/walk_through_screen.dart';
@@ -11,7 +11,7 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
@@ -30,10 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
       () {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(
-              builder: (context) => skipWalkthrough
-                  ? const SignInScreen()
-                  : const WalkThroughScreen()),
+          MaterialPageRoute(builder: (context) => skipWalkthrough ? const ChannelScreen() : const WalkThroughScreen()),
           (route) => false,
         );
       },
@@ -49,8 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child:
-            Image.asset(splashLogo, width: 100, height: 100, fit: BoxFit.cover),
+        child: Image.asset(splashLogo, width: 100, height: 100, fit: BoxFit.cover),
       ),
     );
   }

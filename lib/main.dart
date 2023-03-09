@@ -1,12 +1,15 @@
+import 'package:aetherium_salon/routes.dart';
+import 'package:aetherium_salon/screens/splash_screen.dart';
+import 'package:aetherium_salon/shared/loading.dart';
+import 'package:aetherium_salon/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:aetherium_salon/components/my_scroll_behaviour.dart';
-import 'package:aetherium_salon/screens/splash_screen.dart';
-import 'package:aetherium_salon/utils/colors.dart';
 import 'package:aetherium_salon/utils/constant.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -18,7 +21,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const App());
+  runApp(const ProviderScope(child: App()));
 }
 
 /// We are using a StatefulWidget such that we only create the [Future] once,
@@ -55,46 +58,15 @@ class _AppState extends State<App> {
             scrollBehavior: MyScrollBehavior(),
             debugShowCheckedModeBanner: false,
             title: appName,
-            theme: ThemeData.light().copyWith(
-              colorScheme: const ColorScheme(
-                brightness: Brightness.light,
-                primary: primaryColor,
-                onPrimary: whiteColor,
-                secondary: secondaryColor,
-                onSecondary: secondaryColor,
-                error: redColor,
-                onError: redColor,
-                background: whiteColor,
-                onBackground: whiteColor,
-                surface: whiteColor,
-                onSurface: blackColor,
-              ),
-              primaryColor: primaryColor,
-              secondaryHeaderColor: whiteColor,
-              iconTheme: const IconThemeData(color: primaryColor),
-              tabBarTheme: const TabBarTheme(labelColor: Colors.black),
-              listTileTheme: const ListTileThemeData(iconColor: blackColor),
-              brightness: Brightness.light,
-              dividerColor: transparent,
-              appBarTheme: const AppBarTheme(
-                iconTheme: IconThemeData(color: primaryColor),
-                titleTextStyle: TextStyle(color: primaryColor),
-                systemOverlayStyle: SystemUiOverlayStyle(
-                    statusBarIconBrightness: Brightness.dark),
-              ),
-              bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                backgroundColor: whiteColor,
-                selectedItemColor: bottomSelectedColor,
-                unselectedItemColor: bottomUnselectedColor,
-              ),
-            ),
-            themeMode: ThemeMode.light,
+            theme: appTheme,
             home: const SplashScreen(),
+            routes: appRoutes,
+            themeMode: ThemeMode.light,
           );
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
-        return const Text('loading', textDirection: TextDirection.ltr);
+        return const MaterialApp(home: LoadingScreen());
       },
     );
   }

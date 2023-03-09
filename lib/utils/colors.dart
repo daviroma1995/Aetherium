@@ -1,11 +1,21 @@
+import 'package:aetherium_salon/utils/constant.dart';
 import 'package:flutter/material.dart';
 
-const primaryColor = Colors.black;
+getHex(String colorHexCode) {
+  colorHexCode = colorHexCode.replaceAll("#", hexPrefix);
+  return int.tryParse(colorHexCode) ?? 0xFFFFFF;
+}
+
+const primaryColor = Color(0xFF583101);
+const secondaryColor = Colors.grey;
+
+const primaryShade001 = Color(0xFF8B5E34);
+const primaryShade002 = Color(0xFFE7BC91);
+
 const blackColor = Colors.black;
 const viewAllColor = Colors.orange;
 const orangeColor = Colors.orange;
 const blueColor = Colors.blue;
-const secondaryColor = Colors.grey;
 const greyColor = Colors.grey;
 const whiteColor = Colors.white;
 const greenColor = Colors.green;
@@ -54,7 +64,8 @@ const appSecondaryBackgroundColor = Color(0xff343434);
 const appDividerColor = Color(0xFFDADADA);
 const appSplashSecondaryColor = Color(0xFFD7DBDD);
 
-Color cardColor = Colors.grey.shade200;
+const cardColor = Color(0xf0f0f0f0);
+
 const cardColorDark = blackColor;
 const cardText = greyColor;
 const cardTextDark = Colors.white;
@@ -86,3 +97,7 @@ const selectedCard = Colors.black;
 Color unselectedCard = Colors.grey.shade100;
 
 Color purpleColor = const Color.fromARGB(255, 114, 88, 159);
+
+const fillColor = Color.fromARGB(100, 214, 194, 165);
+const fontColor = Color.fromARGB(255, 214, 194, 165);
+const buttonColor = Color.fromARGB(255, 93, 50, 33);

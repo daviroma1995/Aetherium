@@ -3,8 +3,6 @@ import 'package:aetherium_salon/utils/colors.dart' as colors;
 import 'package:aetherium_salon/utils/constant.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../../main.dart';
-
 InputDecoration commonInputDecoration(
     {String? hintText, Widget? prefixIcon, Widget? suffixIcon}) {
   return InputDecoration(

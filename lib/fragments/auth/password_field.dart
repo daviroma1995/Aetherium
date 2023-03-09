@@ -1,13 +1,19 @@
-import 'package:aetherium_salon/controller/sign_in_controller.dart';
+import 'package:aetherium_salon/validator/string_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:aetherium_salon/utils/colors.dart' as colors;
 import 'package:aetherium_salon/utils/strings.dart' as strings;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PasswordField extends StatelessWidget {
+final obscureStateProvider = StateProvider<bool>(
+  // We return the default sort type, here name.
+  (ref) => true,
+);
+
+class PasswordField extends ConsumerWidget {
   const PasswordField({
     Key? key,
-    required SignInController controller,
+    required final TextEditingController controller,
     required this.outlineInputBorder,
     required this.errorOutlineInputBorder,
   })  : _controller = controller,
@@ -15,40 +21,35 @@ class PasswordField extends StatelessWidget {
 
   final OutlineInputBorder outlineInputBorder;
   final OutlineInputBorder errorOutlineInputBorder;
-  final SignInController _controller;
+  final TextEditingController _controller;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return TextFormField(
-      controller: _controller.passwordController,
-      obscureText: _controller.isObscureText,
+      controller: _controller,
+      obscureText: ref.watch(obscureStateProvider),
       decoration: InputDecoration(
-        prefixIcon: const Icon(
-          FeatherIcons.lock,
-          size: 22,
-          color: colors.blackColor,
-        ),
-        suffixIcon: Padding(
-          padding: const EdgeInsets.only(right: 5.0),
-          child: IconButton(
-            icon: Icon(
-                _controller.isObscureText
-                    ? Icons.visibility_off
-                    : Icons.visibility,
-                size: 18),
-            onPressed: () {
-              _controller.toggle('obscureText');
-            },
+          prefixIcon: const Icon(
+            FeatherIcons.lock,
+            size: 22,
+            color: colors.fontColor,
           ),
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        focusedBorder: outlineInputBorder,
-        enabledBorder: outlineInputBorder,
-        errorBorder: errorOutlineInputBorder,
-        focusedErrorBorder: errorOutlineInputBorder,
-        hintText: strings.pwdPlaceholder,
-      ),
-      validator: _controller.validatePassword,
+          suffixIcon: InkWell(
+              onTap: () {
+                ref.read(obscureStateProvider.notifier).state =
+                    !ref.read(obscureStateProvider.notifier).state;
+              },
+              child: Icon(ref.watch(obscureStateProvider)
+                  ? Icons.visibility_off
+                  : Icons.visibility)),
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          focusedBorder: outlineInputBorder,
+          enabledBorder: outlineInputBorder,
+          errorBorder: errorOutlineInputBorder,
+          focusedErrorBorder: errorOutlineInputBorder,
+          hintText: strings.pwdPlaceholder,
+          hintStyle: const TextStyle(color: colors.fontColor)),
+      validator: StringUtils.validatePassword,
     );
   }
 }

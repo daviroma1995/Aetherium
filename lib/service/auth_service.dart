@@ -4,18 +4,24 @@ import 'package:aetherium_salon/handler/auth_exception_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
-  final _auth = FirebaseAuth.instance;
+  final userStream = FirebaseAuth.instance.authStateChanges();
+  final user = FirebaseAuth.instance.currentUser;
 
   Future<AuthStatus> signIn({
     required String email,
     required String password,
   }) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      log("credential are: $credential");
       return AuthStatus.successful;
     } on FirebaseAuthException catch (e) {
       return AuthExceptionHandler.handleAuthException(e);
     }
+  }
+
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
   }
 
   Future<AuthStatus> createAccount({
@@ -24,13 +30,13 @@ class AuthService {
     required String name,
   }) async {
     try {
-      UserCredential newUser = await _auth.createUserWithEmailAndPassword(
+      UserCredential newUser = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       log('newUser $newUser');
-      _auth.currentUser!.updateDisplayName(name);
+      FirebaseAuth.instance.currentUser!.updateDisplayName(name);
       return AuthStatus.successful;
     } on FirebaseAuthException catch (e) {
       return AuthExceptionHandler.handleAuthException(e);
@@ -41,7 +47,7 @@ class AuthService {
     required String email,
   }) async {
     try {
-      await _auth.sendPasswordResetEmail(email: email);
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       return AuthStatus.successful;
     } on FirebaseAuthException catch (e) {
       return AuthExceptionHandler.handleAuthException(e);
@@ -49,6 +55,6 @@ class AuthService {
   }
 
   Future<void> logout() async {
-    await _auth.signOut();
+    await FirebaseAuth.instance.signOut();
   }
 }

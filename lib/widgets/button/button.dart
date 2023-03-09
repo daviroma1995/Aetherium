@@ -4,16 +4,16 @@
 
 /// Three types of button implemented from Material Button.
 
-/// [ButtonType.elevated] - gives elevation to the button along with some height and shadow.
-/// [ButtonType.outlined] - gives outline to the button
-/// [ButtonType.text] - able to build text button
+/// [AppButtonType.elevated] - gives elevation to the button along with some height and shadow.
+/// [AppButtonType.outlined] - gives outline to the button
+/// [AppButtonType.text] - able to build text button
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:aetherium_salon/utils/constant.dart' as constants;
 
-enum ButtonType { elevated, outlined, text }
+enum AppButtonType { elevated, outlined, text }
 
-class Button extends StatelessWidget {
-  final ButtonType? buttonType;
+class AppButton extends StatelessWidget {
+  final AppButtonType? buttonType;
 
   final ButtonStyle? style;
 
@@ -48,7 +48,7 @@ class Button extends StatelessWidget {
 
   final Widget child;
 
-  const Button(
+  const AppButton(
       {this.onPressed,
       required this.child,
       this.msPadding,
@@ -59,7 +59,7 @@ class Button extends StatelessWidget {
       this.borderRadiusAll = 0,
       this.msBackgroundColor,
       this.backgroundColor,
-      this.buttonType = ButtonType.elevated,
+      this.buttonType = AppButtonType.elevated,
       this.style,
       this.msShadowColor,
       this.msSide,
@@ -73,7 +73,7 @@ class Button extends StatelessWidget {
       this.shadowColor,
       this.splashColor});
 
-  const Button.rounded(
+  const AppButton.rounded(
       {required this.onPressed,
       required this.child,
       this.msPadding,
@@ -84,7 +84,7 @@ class Button extends StatelessWidget {
       this.borderRadiusAll,
       this.msBackgroundColor,
       this.backgroundColor,
-      this.buttonType = ButtonType.elevated,
+      this.buttonType = AppButtonType.elevated,
       this.style,
       this.block = false,
       this.msSide,
@@ -98,9 +98,8 @@ class Button extends StatelessWidget {
       this.shadowColor,
       this.splashColor});
 
-  const Button.small(
-      {super.key,
-      required this.onPressed,
+  const AppButton.small(
+      {required this.onPressed,
       required this.child,
       this.msPadding,
       this.padding = const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -110,7 +109,7 @@ class Button extends StatelessWidget {
       this.borderRadiusAll,
       this.msBackgroundColor,
       this.backgroundColor,
-      this.buttonType = ButtonType.elevated,
+      this.buttonType = AppButtonType.elevated,
       this.style,
       this.block = false,
       this.msSide,
@@ -124,7 +123,7 @@ class Button extends StatelessWidget {
       this.shadowColor,
       this.splashColor});
 
-  const Button.medium(
+  const AppButton.medium(
       {required this.onPressed,
       required this.child,
       this.msPadding,
@@ -137,7 +136,7 @@ class Button extends StatelessWidget {
       this.borderRadiusAll,
       this.msBackgroundColor,
       this.backgroundColor,
-      this.buttonType = ButtonType.elevated,
+      this.buttonType = AppButtonType.elevated,
       this.style,
       this.msSide,
       this.disabled = false,
@@ -149,7 +148,7 @@ class Button extends StatelessWidget {
       this.shadowColor,
       this.splashColor});
 
-  const Button.text(
+  const AppButton.text(
       {required this.onPressed,
       required this.child,
       this.msPadding,
@@ -162,7 +161,7 @@ class Button extends StatelessWidget {
       this.borderRadiusAll,
       this.msBackgroundColor,
       this.backgroundColor,
-      this.buttonType = ButtonType.text,
+      this.buttonType = AppButtonType.text,
       this.style,
       this.msSide,
       this.disabled = false,
@@ -174,7 +173,7 @@ class Button extends StatelessWidget {
       this.shadowColor,
       this.splashColor});
 
-  const Button.block(
+  const AppButton.block(
       {required this.onPressed,
       required this.child,
       this.msPadding,
@@ -187,7 +186,7 @@ class Button extends StatelessWidget {
       this.borderRadiusAll,
       this.msBackgroundColor,
       this.backgroundColor,
-      this.buttonType = ButtonType.elevated,
+      this.buttonType = AppButtonType.elevated,
       this.style,
       this.msSide,
       this.disabled = false,
@@ -199,7 +198,7 @@ class Button extends StatelessWidget {
       this.shadowColor,
       this.splashColor});
 
-  const Button.outlined(
+  const AppButton.outlined(
       {required this.onPressed,
       required this.child,
       this.msPadding,
@@ -211,7 +210,7 @@ class Button extends StatelessWidget {
       this.borderRadiusAll,
       this.msBackgroundColor,
       this.backgroundColor,
-      this.buttonType = ButtonType.outlined,
+      this.buttonType = AppButtonType.outlined,
       this.style,
       this.msSide,
       this.block = false,
@@ -224,7 +223,7 @@ class Button extends StatelessWidget {
       this.shadowColor,
       this.splashColor});
 
-  const Button.large(
+  const AppButton.large(
       {required this.onPressed,
       required this.child,
       this.msPadding,
@@ -236,7 +235,7 @@ class Button extends StatelessWidget {
       this.borderRadiusAll,
       this.msBackgroundColor,
       this.backgroundColor,
-      this.buttonType = ButtonType.elevated,
+      this.buttonType = AppButtonType.elevated,
       this.style,
       this.disabled = false,
       this.msSide,
@@ -254,7 +253,7 @@ class Button extends StatelessWidget {
     Widget button;
     Color bgColor = backgroundColor ?? Theme.of(context).colorScheme.primary;
 
-    if (buttonType == ButtonType.outlined) {
+    if (buttonType == AppButtonType.outlined) {
       button = OutlinedButton(
         onPressed: onPressed,
         style: style ??
@@ -262,28 +261,21 @@ class Button extends StatelessWidget {
                 side: msSide ??
                     MaterialStateProperty.all(side ??
                         BorderSide(
-                          color:
-                              soft ? borderColor.withAlpha(100) : borderColor,
+                          color: soft ? borderColor.withAlpha(100) : borderColor,
                           width: soft ? 0.8 : 1,
                         )),
-                overlayColor: MaterialStateProperty.all(
-                    splashColor ?? (bgColor.withAlpha(40))),
-                backgroundColor: soft
-                    ? MaterialStateProperty.all(borderColor.withAlpha(40))
-                    : null,
-                foregroundColor:
-                    MaterialStateProperty.all(borderColor.withAlpha(40)),
-                shadowColor:
-                    msShadowColor ?? MaterialStateProperty.all(shadowColor),
+                overlayColor: MaterialStateProperty.all(splashColor ?? (bgColor.withAlpha(40))),
+                backgroundColor: soft ? MaterialStateProperty.all(borderColor.withAlpha(40)) : null,
+                foregroundColor: MaterialStateProperty.all(borderColor.withAlpha(40)),
+                shadowColor: msShadowColor ?? MaterialStateProperty.all(shadowColor),
                 padding: msPadding ?? MaterialStateProperty.all(padding),
                 shape: MaterialStateProperty.all(shape ??
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          borderRadiusAll ?? defaultAppButtonRadius),
+                      borderRadius: BorderRadius.circular(borderRadiusAll ?? constants.buttonRadius),
                     ))),
         child: child,
       );
-    } else if (buttonType == ButtonType.elevated) {
+    } else if (buttonType == AppButtonType.elevated) {
       button = ElevatedButton(
           style: style ??
               ButtonStyle(
@@ -309,23 +301,20 @@ class Button extends StatelessWidget {
                           return bgColor;
                         },
                       ),
-                  shadowColor: msShadowColor ??
-                      MaterialStateProperty.all(shadowColor ?? bgColor),
+                  shadowColor: msShadowColor ?? MaterialStateProperty.all(shadowColor ?? bgColor),
                   padding: msPadding ?? MaterialStateProperty.all(padding),
-                  overlayColor: MaterialStateProperty.all(splashColor ??
-                      (Theme.of(context).colorScheme.onPrimary.withAlpha(36))),
+                  overlayColor:
+                      MaterialStateProperty.all(splashColor ?? (Theme.of(context).colorScheme.onPrimary.withAlpha(36))),
                   shape: MaterialStateProperty.all(shape ??
                       RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            borderRadiusAll ?? defaultAppButtonRadius),
+                        borderRadius: BorderRadius.circular(borderRadiusAll ?? constants.buttonRadius),
                       ))),
           onPressed: onPressed,
           child: child);
     } else {
       button = TextButton(
         style: ButtonStyle(
-            overlayColor: MaterialStateProperty.all(
-                splashColor ?? (bgColor.withAlpha(40))),
+            overlayColor: MaterialStateProperty.all(splashColor ?? (bgColor.withAlpha(40))),
             padding: msPadding ?? MaterialStateProperty.all(padding),
             visualDensity: VisualDensity.compact,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap),
