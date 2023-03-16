@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="it.esteticaaurea.aetherium_salon">
+    package="com.example.aetherium_saloon_app">
    <application
-        android:label="aetherium_salon"
+        android:label="aetherium_saloon_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

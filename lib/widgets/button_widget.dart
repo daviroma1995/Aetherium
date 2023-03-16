@@ -1,0 +1,46 @@
+import 'package:flutter/material.dart';
+
+class ButtonWidget extends StatelessWidget {
+  final double width;
+  final Color color;
+  final String buttonText;
+  final Color buttonTextColor;
+  final bool bordered;
+  final Color borderColor;
+  final Function onTap;
+  const ButtonWidget({
+    super.key,
+    required this.width,
+    required this.buttonText,
+    this.bordered = false,
+    this.color = Colors.transparent,
+    this.buttonTextColor = Colors.white,
+    this.borderColor = const Color(0xffE2E8F0),
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => onTap(),
+      child: Container(
+        alignment: Alignment.center,
+        width: width,
+        height: 42.0,
+        decoration: BoxDecoration(
+          color: color,
+          border: bordered ? Border.all(color: borderColor) : null,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Text(
+          buttonText,
+          style: TextStyle(
+            color: buttonTextColor,
+            fontWeight: FontWeight.w700,
+            fontSize: 14.0,
+          ),
+        ),
+      ),
+    );
+  }
+}
