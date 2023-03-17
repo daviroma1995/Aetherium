@@ -17,7 +17,7 @@ class CustomInputFormField extends StatelessWidget {
   const CustomInputFormField({
     super.key,
     required this.textEdigintController,
-    required this.iconUrl,
+    this.iconUrl = '',
     required this.hintText,
     required this.isValid,
     required this.onSubmit,

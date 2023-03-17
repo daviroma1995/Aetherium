@@ -71,9 +71,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                         return const SizedBox(height: 0.0);
                       }
                     }),
-                    const SizedBox(
-                      height: 34.0,
-                    ),
+                    const SizedBox(height: 34.0),
                     ButtonWidget(
                       width: Get.width,
                       buttonText: AppLanguages.INVIA,

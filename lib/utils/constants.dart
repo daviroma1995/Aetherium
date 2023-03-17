@@ -82,9 +82,15 @@ class AppAssets {
   static const SHIELD_ICON = 'assets/images/icons/shield_icon.svg';
   static const PDF_ICON = 'assets/images/icons/pdf_icon.svg';
   static const CAMERA_ICON = 'assets/images/icons/camera_icon.svg';
+  static const ARROW_UP = 'assets/images/icons/arrow_up.svg';
+  static const ARROW_DOWN = 'assets/images/icons/arrow_down.svg';
   static const ACOUNTS_INFO_SCREEN_CURVE =
       'assets/images/acount_info_screen_curve.svg';
+  static const CHECKED_ICON = 'assets/images/icons/checked_icon.svg';
+  static const UNCHECKED_ICON = 'assets/images/icons/unchecked_icon.svg';
   static const PROFILE_PIC = 'assets/images/profile_pic.png';
+  static const CALENDER_ICON_LIGHT =
+      'assets/images/icons/calender_iocn_light.svg';
 }
 
 class AppLanguages {
@@ -134,4 +140,13 @@ class AppLanguages {
   static const TERMS_OF_SERVICE = 'Terms of service';
   static const TERMS_OF_USE = 'Terms of use';
   static const PRIVACY = 'Privacy';
+  static const PHONE_NUMBER = 'Phone Number';
+  static const GENDER = 'Gender';
+  static const ADDRESS = 'Address';
+  static const BIRTHDAY = 'Birthday';
+  static const APPOINTMENTS = 'Appointments';
+  static const APPOINTMENT_DESCRIPTION =
+      'Discover and book beauty & wellness professionals near you. Your scheduled appointments will show up here.';
+  static const SERVICES_TREATMENTS = 'Services/treatments';
+  static const CHOOSE_DATE_ADN_TIME = 'Choose Date & Time';
 }

@@ -20,9 +20,9 @@ class ProfileScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 13.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                child: const Text(
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 22.0),
+                child: Text(
                   AppLanguages.PROFILE,
                   style: TextStyle(
                     fontSize: 22.0,
@@ -36,7 +36,7 @@ class ProfileScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 22.0, vertical: 26.0),
                 child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: profileItems.length,
                   itemBuilder: (context, index) {

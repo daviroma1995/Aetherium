@@ -102,7 +102,7 @@ List<Event> events = [
   ),
 ];
 
-enum AgendaStatus {
+enum Status {
   canceled,
   archived,
   noshow,
@@ -116,7 +116,7 @@ class Agenda {
   final String userName;
   final String service;
   final String iamgeUrl;
-  final AgendaStatus status;
+  final Status status;
   Agenda({
     required this.startTime,
     required this.endTime,
@@ -129,13 +129,13 @@ class Agenda {
 
   Color get color {
     switch (status) {
-      case (AgendaStatus.archived):
+      case (Status.archived):
         return AppColors.ARCHIVED_COLOR;
-      case (AgendaStatus.canceled):
+      case (Status.canceled):
         return AppColors.CANCELED_COLOR;
-      case (AgendaStatus.confirmed):
+      case (Status.confirmed):
         return AppColors.CONFIRMED_COLOR;
-      case (AgendaStatus.noshow):
+      case (Status.noshow):
         return AppColors.NO_SHOW_COLOR;
     }
   }
@@ -149,7 +149,7 @@ List<Agenda> agendas = [
     userName: 'Savannah Nguyen',
     service: 'Flair Cosmetics',
     iamgeUrl: AppAssets.USER_IMAGE,
-    status: AgendaStatus.canceled,
+    status: Status.canceled,
   ),
   Agenda(
     startTime: '8:00 AM',
@@ -158,7 +158,7 @@ List<Agenda> agendas = [
     userName: 'Savannah Nguyen',
     service: 'Finesse Cosmetics',
     iamgeUrl: AppAssets.USER_IMAGE,
-    status: AgendaStatus.confirmed,
+    status: Status.confirmed,
   ),
   Agenda(
     startTime: '8:00 AM',
@@ -167,7 +167,7 @@ List<Agenda> agendas = [
     userName: 'Savannah Nguyen',
     service: 'Nourish Petals',
     iamgeUrl: AppAssets.USER_IMAGE,
-    status: AgendaStatus.noshow,
+    status: Status.noshow,
   ),
   Agenda(
     startTime: '8:00 AM',
@@ -176,7 +176,7 @@ List<Agenda> agendas = [
     userName: 'Savannah Nguyen',
     service: 'Flair Cosmetics',
     iamgeUrl: AppAssets.USER_IMAGE,
-    status: AgendaStatus.archived,
+    status: Status.archived,
   ),
   Agenda(
     startTime: '8:00 AM',
@@ -185,7 +185,7 @@ List<Agenda> agendas = [
     userName: 'Savannah Nguyen',
     service: 'Flair Cosmetics',
     iamgeUrl: AppAssets.USER_IMAGE,
-    status: AgendaStatus.confirmed,
+    status: Status.confirmed,
   ),
   Agenda(
     startTime: '8:00 AM',
@@ -194,7 +194,7 @@ List<Agenda> agendas = [
     userName: 'Savannah Nguyen',
     service: 'Flair Cosmetics',
     iamgeUrl: AppAssets.USER_IMAGE,
-    status: AgendaStatus.noshow,
+    status: Status.noshow,
   ),
   Agenda(
     startTime: '8:00 AM',
@@ -203,7 +203,7 @@ List<Agenda> agendas = [
     userName: 'Savannah Nguyen',
     service: 'Flair Cosmetics',
     iamgeUrl: AppAssets.USER_IMAGE,
-    status: AgendaStatus.canceled,
+    status: Status.canceled,
   ),
 ];
 
