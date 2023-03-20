@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:atherium_saloon_app/data.dart';
+import 'package:atherium_saloon_app/screens/event_details/event_details_screen.dart';
 import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/form_field_widget.dart';
@@ -185,14 +186,20 @@ class HomeScreen extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.only(right: 10.0),
                         child: Obx(
-                          () => CustomEventCardWidget(
-                            index: index,
-                            iamgeUrl: events[index].imageUrl,
-                            title: events[index].title,
-                            subTitle: events[index].subTitle,
-                            time: events[index].date,
-                            isFavorite: events[index].isFavorite.value,
-                            onIconTap: controller.setFavorite,
+                          () => GestureDetector(
+                            onTap: () {
+                              Get.to(() => EventDetailsScreen(),
+                                  arguments: events[index]);
+                            },
+                            child: CustomEventCardWidget(
+                              index: index,
+                              iamgeUrl: events[index].imageUrl,
+                              title: events[index].title,
+                              subTitle: events[index].subTitle,
+                              time: events[index].date,
+                              isFavorite: events[index].isFavorite.value,
+                              onIconTap: controller.setFavorite,
+                            ),
                           ),
                         ),
                       );

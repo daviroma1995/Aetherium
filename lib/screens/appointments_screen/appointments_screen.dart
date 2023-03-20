@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
 
+import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,7 +31,7 @@ class AppointmentsScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       GestureDetector(
-                          onTap: () => Get.back(),
+                          onTap: () => Get.off(BottomNavigationScreen()),
                           child: SvgPicture.asset(AppAssets.BACK_ARROW)),
                       const SizedBox(width: 12.0),
                       const Text(

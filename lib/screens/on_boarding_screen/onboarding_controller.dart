@@ -12,7 +12,7 @@ class OnBoardingController extends GetxController {
   void moveForward() {
     if (pageController.page!.toInt() == 2) {
       // Get.offAllNamed(AppRoutes.login);
-      log('GOing to Login page');
+
       Get.offAll(LoginScreen());
     }
     pageController.animateToPage(pageController.page!.toInt() + 1,

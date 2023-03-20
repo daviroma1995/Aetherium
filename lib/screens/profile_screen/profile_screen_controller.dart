@@ -13,19 +13,15 @@ import '../appointments_screen/appointments_screen.dart';
 class ProfileController extends GetxController {
   // TODO Implementation required
 
-  List<Widget> screens = <Widget>[
-    AppointmentsScreen(),
-    SettingsScreen(),
-    ConsultationsScreen(),
-    AgendaScreen(),
-    AccountInfoScreen(),
-    LoginScreen(),
-  ];
   void Navigator(int index) {
     if (index == profileItems.length - 1) {
       Get.offAll(LoginScreen());
     }
-    Get.to(() => screens[index]);
+    if (index == 0) Get.to(() => AppointmentsScreen());
+    if (index == 1) Get.to(() => SettingsScreen());
+    if (index == 2) Get.to(() => ConsultationsScreen());
+    if (index == 3) Get.to(() => AgendaScreen());
+    if (index == 4) Get.to(() => AccountInfoScreen());
   }
 }
 

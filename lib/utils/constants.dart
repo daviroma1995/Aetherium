@@ -8,6 +8,7 @@ class AppColors {
   static const WHITE_COLOR = Color(0XFFFFFFFF);
   static const BLACK_COLOR = Color(0XFF2A2B30);
   static const GREY_COLOR = Color(0XFFB8B8B8);
+  static const GREY_DARK = Color(0xff6a6a6a);
   static const BORDER_COLOR = Color(0XFFE2E8F0);
   static const BACKGROUND_COLOR = Color(0XFFFCFCFC);
   static const SECONDARY_LIGHT = Color(0XFFDDCBAA);
@@ -21,6 +22,8 @@ class AppColors {
   static const CONFIRMED_COLOR = Color(0XFF85BC9E);
   static const PROGRESS_COLOR = Color(0XFFB8A27B);
   static const SHADOW_COLOR = Color.fromRGBO(186, 186, 186, .25);
+
+  static const GREEN_COLOR = Color(0xff57CE63);
 }
 
 class AppAssets {
@@ -91,6 +94,12 @@ class AppAssets {
   static const PROFILE_PIC = 'assets/images/profile_pic.png';
   static const CALENDER_ICON_LIGHT =
       'assets/images/icons/calender_iocn_light.svg';
+  static const APPOINTMENT_TOP = 'assets/images/backgroundtop.svg';
+  static const APPOINTMENT_BOTTOM = 'assets/images/backgroundbottom.svg';
+  static const APPOINTMENT_CONFIRM =
+      'assets/images/icons/confirm_appointment_icon.svg';
+  static const MAP_IMAGE = 'assets/images/map.jpg';
+  static const WHATSAPP_ICON = 'assets/images/icons/whatsapp_logo.svg';
 }
 
 class AppLanguages {
@@ -149,4 +158,29 @@ class AppLanguages {
       'Discover and book beauty & wellness professionals near you. Your scheduled appointments will show up here.';
   static const SERVICES_TREATMENTS = 'Services/treatments';
   static const CHOOSE_DATE_ADN_TIME = 'Choose Date & Time';
+  static const AVAILABLE_SLOT = 'Available Slot';
+  static const ADDED_APPOINTMENT = 'Added Appointment';
+  static const CONFIRM_APPOINTMENT = 'Confirm Appointment';
+  static const CONGRATS = 'Congrats!';
+
+  static const YOUR_APPOINTMENT = 'Your appointment';
+  static const BOOKING_IS_SUCCESSFULLY = 'booking is successfully!';
+
+  static const APPOINTMENT_DETAILS = 'Appointments - Details';
+  static const SERVICE_TREATMENT_DURATION = 'Service/treatment duration';
+  static const SERVICE_TREATMENT_CATEGORY = 'Service treatment Category';
+  static const PRICE = 'Price';
+  static const TOTAL_PRICE = 'Total Price';
+  static const SHOP_PHONE = 'shop Ph';
+  static const NOTES = 'Notes';
+  static const APPOINTMENT_DETAILS_DESC =
+      'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit.';
+  static const CANCEL = 'Cancel';
+  static const EDIT = 'Edit';
+  static const FLOURISH_ESSENTIALS = 'Flourish Essentials';
+  static const CONTACTS = 'Contacts';
+  static const TIME = 'Time';
+  static const OPENING_HOURS_OF_THE_SHOP = 'Opening hours of the shop';
+  static const DESCRIPTION = 'Description';
+  static const BEAUTY_SPECIALIST = 'Beauty Specialist';
 }

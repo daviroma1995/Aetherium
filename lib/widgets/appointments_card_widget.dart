@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -7,26 +8,31 @@ class AppointmentsCardWidget extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String subTitle;
-  final String status;
+  final String? status;
   final Color color;
   final String date;
   final String time;
-
+  final double? timeContainerHeight;
+  final double? timeContainerRadius;
+  final double? timeContainerHorizontalPadding;
   const AppointmentsCardWidget({
     Key? key,
     required this.imageUrl,
     required this.title,
     required this.subTitle,
-    required this.status,
+    this.status,
     required this.color,
     required this.date,
     required this.time,
+    this.timeContainerHeight,
+    this.timeContainerRadius,
+    this.timeContainerHorizontalPadding,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 5.0),
+      padding: const EdgeInsets.symmetric(horizontal: 22.0),
       child: ListTile(
         shape: RoundedRectangleBorder(
           side: BorderSide(color: AppColors.BORDER_COLOR, width: 1.0),
@@ -73,23 +79,25 @@ class AppointmentsCardWidget extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 5.0, vertical: 7.0),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(100.0),
-              ),
-              child: Text(
-                status,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.BLACK_COLOR,
-                  fontSize: 8.0,
-                ),
-              ),
-            ),
+            status != null
+                ? Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0, vertical: 7.0),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(100.0),
+                    ),
+                    child: Text(
+                      status!,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.BLACK_COLOR,
+                        fontSize: 8.0,
+                      ),
+                    ),
+                  )
+                : SizedBox(),
           ],
         ),
         subtitle: Text(
@@ -101,11 +109,13 @@ class AppointmentsCardWidget extends StatelessWidget {
           ),
         ),
         trailing: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          height: timeContainerHeight,
+          padding: EdgeInsets.symmetric(
+              horizontal: timeContainerHorizontalPadding ?? 10.0),
           // alignment: Alignment.center,
           decoration: BoxDecoration(
             color: AppColors.SECONDARY_LIGHT,
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(timeContainerRadius ?? 8.0),
           ),
 
           child: Column(

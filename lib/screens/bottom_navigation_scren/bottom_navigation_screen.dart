@@ -13,12 +13,7 @@ import '../loyality_card_screen/loyality_card_screen.dart';
 
 class BottomNavigationScreen extends StatelessWidget {
   final controller = Get.put(BottomNavigationController());
-  final screens = [
-    HomeScreen(),
-    AgendaScreen(),
-    LoyalityCardScreen(),
-    ProfileScreen(),
-  ];
+
   BottomNavigationScreen({super.key});
 
   @override
@@ -31,7 +26,7 @@ class BottomNavigationScreen extends StatelessWidget {
               () => IndexedStack(
                 // index: controller.currentIndex.value,
                 children: [
-                  screens[controller.currentIndex.value],
+                  controller.screens[controller.currentIndex.value],
                 ],
               ),
             ),
@@ -87,12 +82,14 @@ class BottomNavigationScreen extends StatelessWidget {
                                     width: 5.0, color: AppColors.WHITE_COLOR),
                                 borderRadius: BorderRadius.circular(100.0),
                               ),
-                              child: const Text('+',
-                                  style: TextStyle(
-                                    color: AppColors.WHITE_COLOR,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w700,
-                                  )),
+                              child: const Text(
+                                '+',
+                                style: TextStyle(
+                                  color: AppColors.WHITE_COLOR,
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
                             ),
                           ),
                         ),

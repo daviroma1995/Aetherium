@@ -54,7 +54,7 @@ class SettingsScreen extends StatelessWidget {
                           child: Custom_List_TIle(
                               index: index,
                               title: settingsItems[index].title,
-                              onTap: () {},
+                              onTap: controller.navigationHandle,
                               imageUrl: settingsItems[index].iconUrl),
                         );
                       },

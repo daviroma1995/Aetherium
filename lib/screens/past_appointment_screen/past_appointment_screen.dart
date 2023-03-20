@@ -60,15 +60,24 @@ class PastAppointmentScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return index == pastAppointments.length
                               ? const SizedBox(height: 94.0)
-                              : AppointmentsCardWidget(
-                                  imageUrl: pastAppointments[index].imageUrl,
-                                  title: pastAppointments[index].title,
-                                  subTitle: pastAppointments[index].subTitle,
-                                  color: pastAppointments[index].color,
-                                  status:
-                                      pastAppointments[index].appointmentStatus,
-                                  date: pastAppointments[index].date,
-                                  time: pastAppointments[index].time,
+                              : InkWell(
+                                  onTap: () => controller.goToDetails(index),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 10.0),
+                                    child: AppointmentsCardWidget(
+                                      imageUrl:
+                                          pastAppointments[index].imageUrl,
+                                      title: pastAppointments[index].title,
+                                      subTitle:
+                                          pastAppointments[index].subTitle,
+                                      color: pastAppointments[index].color,
+                                      status: pastAppointments[index]
+                                          .appointmentStatus,
+                                      date: pastAppointments[index].date,
+                                      time: pastAppointments[index].time,
+                                    ),
+                                  ),
                                 );
                         },
                       ),

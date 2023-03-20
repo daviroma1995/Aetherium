@@ -1,9 +1,16 @@
+import 'package:atherium_saloon_app/screens/appointment_details/appointment_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../utils/constants.dart';
 
-class PastAppointmentController extends GetxController {}
+class PastAppointmentController extends GetxController {
+  void goToDetails(int index) {
+    Get.to(
+      AppointmentDetailsScreen(),
+    );
+  }
+}
 
 enum Status {
   canceled,

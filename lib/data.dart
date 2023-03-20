@@ -88,7 +88,7 @@ List<Event> events = [
   ),
   Event(
     imageUrl: AppAssets.EVENT_IMAGE_TWO,
-    title: 'Flourish Essentials',
+    title: 'Embrace Skincare',
     subTitle: 'Fragrances & Perfumes',
     date: '06/02/2022',
     isFavorite: false.obs,
