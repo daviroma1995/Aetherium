@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:atherium_saloon_app/screens/agenda_detail_screen/agenda_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -13,9 +14,11 @@ class AgendaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             Padding(
@@ -23,17 +26,18 @@ class AgendaScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'March',
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: .75,
-                    ),
-                  ),
+                  Text('March',
+                      style: Theme.of(context).textTheme.headlineLarge),
                   IconButton(
                     onPressed: () {},
-                    icon: Icon(Icons.calendar_month_outlined),
+                    icon: SvgPicture.asset(
+                      AppAssets.CALANDER_ICON,
+                      colorFilter: ColorFilter.mode(
+                          isDark
+                              ? AppColors.GREY_COLOR
+                              : AppColors.PRIMARY_COLOR,
+                          BlendMode.srcIn),
+                    ),
                   ),
                 ],
               ),
@@ -42,8 +46,9 @@ class AgendaScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 22.0),
               child: HorizontalCalendar(
                 date: DateTime.now(),
-                textColor: Colors.black45,
-                backgroundColor: Colors.white,
+                textColor: isDark ? AppColors.WHITE_COLOR : Colors.black45,
+                backgroundColor:
+                    !isDark ? Colors.white : AppColors.BACKGROUND_DARK,
                 selectedColor: AppColors.SECONDARY_COLOR,
                 showMonth: false,
                 onDateSelected: (date) {
@@ -61,7 +66,11 @@ class AgendaScreen extends StatelessWidget {
                 width: Get.width,
                 // height: double.infinity,
                 decoration: BoxDecoration(
-                  border: Border.all(width: 1.0, color: AppColors.BORDER_COLOR),
+                  color:
+                      isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
+                  border: isDark
+                      ? const Border()
+                      : Border.all(width: 1.0, color: AppColors.BORDER_COLOR),
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
@@ -69,7 +78,12 @@ class AgendaScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const CustomTitle(
+                    CustomTitle(
+                      style:
+                          Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w700,
+                              ),
                       title: 'Tuesday',
                       subTitle: '14/03/2023',
                       isUnderLined: false,
@@ -83,14 +97,20 @@ class AgendaScreen extends StatelessWidget {
                         return Padding(
                           padding:
                               const EdgeInsets.only(left: 23.0, bottom: 10.0),
-                          child: AgendaCustomCardWidget(
-                            startTime: agendas[index].startTime,
-                            endTime: agendas[index].endTime,
-                            duration: agendas[index].duration,
-                            userImageUrl: agendas[index].iamgeUrl,
-                            userName: agendas[index].userName,
-                            service: agendas[index].service,
-                            agendaColor: agendas[index].color,
+                          child: GestureDetector(
+                            onTap: () => Get.to(() => AgendaDetailScreen()),
+                            child: AgendaCustomCardWidget(
+                              startTime: agendas[index].startTime,
+                              endTime: agendas[index].endTime,
+                              duration: agendas[index].duration,
+                              userImageUrl: agendas[index].iamgeUrl,
+                              userName: agendas[index].userName,
+                              service: agendas[index].service,
+                              agendaColor: isDark
+                                  ? agendas[index].darkolor
+                                  : agendas[index].color,
+                              agendaBarsColor: agendas[index].color,
+                            ),
                           ),
                         );
                       },
@@ -114,6 +134,7 @@ class AgendaCustomCardWidget extends StatelessWidget {
   final String userName;
   final String service;
   final Color agendaColor;
+  final Color agendaBarsColor;
   const AgendaCustomCardWidget({
     Key? key,
     required this.startTime,
@@ -123,16 +144,18 @@ class AgendaCustomCardWidget extends StatelessWidget {
     required this.userName,
     required this.service,
     required this.agendaColor,
+    required this.agendaBarsColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
         Container(
           width: 3.0,
           height: 82.0,
-          color: agendaColor,
+          color: agendaBarsColor,
         ),
         const SizedBox(width: 16.0),
         Column(
@@ -140,23 +163,30 @@ class AgendaCustomCardWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                SvgPicture.asset(AppAssets.CLOCK_ICON),
+                SvgPicture.asset(
+                  AppAssets.CLOCK_ICON,
+                  colorFilter: ColorFilter.mode(
+                      isDark ? AppColors.WHITE_COLOR : AppColors.PRIMARY_COLOR,
+                      BlendMode.srcIn),
+                ),
                 const SizedBox(width: 5.0),
                 Column(
                   children: [
                     Text(
                       startTime,
-                      style: const TextStyle(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w500,
+                              ),
                     ),
                     Text(
                       endTime,
-                      style: const TextStyle(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w500,
+                              ),
                     )
                   ],
                 )
@@ -169,17 +199,17 @@ class AgendaCustomCardWidget extends StatelessWidget {
                   height: 8.0,
                   width: 8.0,
                   decoration: BoxDecoration(
-                    color: agendaColor,
+                    color: agendaBarsColor,
                     borderRadius: BorderRadius.circular(25.0),
                   ),
                 ),
                 const SizedBox(width: 12.0),
                 Text(
                   duration,
-                  style: const TextStyle(
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                 ),
               ],
             ),
@@ -220,19 +250,23 @@ class AgendaCustomCardWidget extends StatelessWidget {
                         Text(
                           userName,
                           maxLines: 1,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.w700,
-                            color: AppColors.PRIMARY_COLOR,
+                            color: isDark
+                                ? AppColors.WHITE_COLOR
+                                : AppColors.PRIMARY_COLOR,
                           ),
                         ),
                         Text(
                           service,
                           maxLines: 1,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12.0,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.PRIMARY_COLOR,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.PRIMARY_COLOR,
                           ),
                         ),
                       ],

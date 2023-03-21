@@ -45,13 +45,23 @@ class TopBanner extends StatelessWidget {
         SizedBox(
           height: Get.height * .22,
           width: Get.width,
-          child: SvgPicture.asset(AppAssets.LOGIN_TOP_BAR, fit: BoxFit.fill),
+          child: SvgPicture.asset(
+            AppAssets.LOGIN_TOP_BAR,
+            fit: BoxFit.fill,
+            colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.primary, BlendMode.srcIn),
+          ),
         ),
         Positioned(
           top: (Get.height / 100) * 10,
           left: 0,
           right: 0,
-          child: SvgPicture.asset(AppAssets.TOP_BAR_LOGO, fit: BoxFit.contain),
+          child: SvgPicture.asset(
+            AppAssets.TOP_BAR_LOGO,
+            fit: BoxFit.contain,
+            colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.onSecondary, BlendMode.srcIn),
+          ),
         ),
       ],
     );

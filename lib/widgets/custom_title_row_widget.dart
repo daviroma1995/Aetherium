@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 import '../utils/constants.dart';
@@ -6,12 +7,16 @@ class CustomTitle extends StatelessWidget {
   final String title;
   final String subTitle;
   final bool isUnderLined;
+  final TextStyle? style;
+  final Color borderColor;
   const CustomTitle({
-    super.key,
+    Key? key,
     required this.title,
     this.subTitle = 'See All',
     this.isUnderLined = true,
-  });
+    this.style,
+    this.borderColor = AppColors.GREY_COLOR,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +27,11 @@ class CustomTitle extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w700,
-            ),
+            style: style ??
+                const TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w700,
+                ),
           ),
           Container(
             padding: const EdgeInsets.only(
@@ -35,7 +41,7 @@ class CustomTitle extends StatelessWidget {
               border: isUnderLined
                   ? Border(
                       bottom: BorderSide(
-                        color: AppColors.GREY_COLOR,
+                        color: borderColor,
                         width: 1.0, // Underline thickness
                       ),
                     )
@@ -46,7 +52,8 @@ class CustomTitle extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14.0,
                 fontWeight: FontWeight.w500,
-                color: AppColors.GREY_COLOR,
+                letterSpacing: .75,
+                color: borderColor,
               ),
             ),
           )

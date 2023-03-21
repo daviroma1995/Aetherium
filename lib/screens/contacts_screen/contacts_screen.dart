@@ -13,9 +13,11 @@ class ContactsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -29,15 +31,8 @@ class ContactsScreen extends StatelessWidget {
                       child: SvgPicture.asset(AppAssets.BACK_ARROW),
                     ),
                     const SizedBox(width: 12.0),
-                    const Text(
-                      AppLanguages.CONTACTS,
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: AppColors.BLACK_COLOR,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: .75,
-                      ),
-                    ),
+                    Text(AppLanguages.CONTACTS,
+                        style: Theme.of(context).textTheme.headlineLarge),
                   ],
                 ),
               ),
@@ -45,8 +40,12 @@ class ContactsScreen extends StatelessWidget {
               Container(
                 width: Get.width,
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.BORDER_COLOR, width: 1.3),
-                  borderRadius: BorderRadius.only(
+                  color:
+                      isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
+                  border: isDark
+                      ? const Border()
+                      : Border.all(color: AppColors.BORDER_COLOR, width: 1.3),
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
                   ),
@@ -61,14 +60,16 @@ class ContactsScreen extends StatelessWidget {
                       children: [
                         Text(
                           AppLanguages.EMAIL,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                              ),
                         ),
                         const SizedBox(height: 10.0),
-                        Text(
+                        const Text(
                           'Email@example.com',
                           style: TextStyle(
                             fontSize: 16.0,
@@ -79,18 +80,20 @@ class ContactsScreen extends StatelessWidget {
                         const SizedBox(height: 20.0),
                         Text(
                           AppLanguages.PHONE_NUMBER,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                              ),
                         ),
                         const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               '+984 124 54967',
                               style: TextStyle(
                                 fontSize: 16.0,
@@ -110,7 +113,7 @@ class ContactsScreen extends StatelessWidget {
                                 children: [
                                   SvgPicture.asset(AppAssets.WHATSAPP_ICON),
                                   const SizedBox(width: 12.0),
-                                  Text(
+                                  const Text(
                                     'WhatsApp',
                                     style: TextStyle(
                                       fontSize: 8.0,
@@ -123,16 +126,18 @@ class ContactsScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 20.0),
-                        const Text(
+                        Text(
                           AppLanguages.TIME,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                              ),
                         ),
                         const SizedBox(height: 10.0),
-                        Text(
+                        const Text(
                           '8:00 AM - 8:30 AM',
                           style: TextStyle(
                             fontSize: 16.0,
@@ -141,13 +146,15 @@ class ContactsScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 20.0),
-                        const Text(
+                        Text(
                           AppLanguages.OPENING_HOURS_OF_THE_SHOP,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                              ),
                         ),
                         const SizedBox(height: 10.0),
                         ListView.builder(
@@ -167,13 +174,15 @@ class ContactsScreen extends StatelessWidget {
                           },
                         ),
                         const SizedBox(height: 10.0),
-                        const Text(
+                        Text(
                           AppLanguages.DESCRIPTION,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                              ),
                         ),
                         const SizedBox(height: 20.0),
                         const Text(
@@ -185,13 +194,15 @@ class ContactsScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 20.0),
-                        const Text(
+                        Text(
                           AppLanguages.BEAUTY_SPECIALIST,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                              ),
                         ),
                         const SizedBox(height: 20.0),
                         ListView.builder(
@@ -202,10 +213,11 @@ class ContactsScreen extends StatelessWidget {
                             return Column(
                               children: [
                                 specialistCard(
-                                  imageUrl: beautySpecialist[index].imageUrl,
-                                  title: beautySpecialist[index].name,
-                                  subtitle: beautySpecialist[index].designation,
-                                ),
+                                    imageUrl: beautySpecialist[index].imageUrl,
+                                    title: beautySpecialist[index].name,
+                                    subtitle:
+                                        beautySpecialist[index].designation,
+                                    isDark: isDark),
                                 const SizedBox(height: 10.0),
                               ],
                             );
@@ -223,18 +235,23 @@ class ContactsScreen extends StatelessWidget {
     );
   }
 
-  Container specialistCard(
-      {required String title,
-      required String subtitle,
-      required String imageUrl}) {
+  Container specialistCard({
+    required String title,
+    required String subtitle,
+    required String imageUrl,
+    required bool isDark,
+  }) {
     return Container(
       height: 82.0,
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
       decoration: BoxDecoration(
-        border: Border.all(
-          width: 1.0,
-          color: AppColors.BORDER_COLOR,
-        ),
+        color: isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+        border: isDark
+            ? const Border()
+            : Border.all(
+                width: 1.0,
+                color: AppColors.BORDER_COLOR,
+              ),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Row(
@@ -259,10 +276,10 @@ class ContactsScreen extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.BLACK_COLOR,
+                  color: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
                 ),
               ),
               const SizedBox(height: 6.0),

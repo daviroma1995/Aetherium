@@ -17,6 +17,7 @@ class AccountInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
@@ -29,6 +30,9 @@ class AccountInfoScreen extends StatelessWidget {
                   AppAssets.ACOUNTS_INFO_SCREEN_CURVE,
                   height: Get.size.height * 0.30,
                   fit: BoxFit.fitHeight,
+                  colorFilter: ColorFilter.mode(
+                      isDark ? AppColors.PRIMARY_DARK : AppColors.PRIMARY_COLOR,
+                      BlendMode.srcIn),
                 ),
                 Positioned(
                   bottom: 0,
@@ -60,7 +64,9 @@ class AccountInfoScreen extends StatelessWidget {
                             height: 35.0,
                             width: 35.0,
                             decoration: BoxDecoration(
-                              color: AppColors.PRIMARY_COLOR,
+                              color: isDark
+                                  ? AppColors.BACKGROUND_DARK
+                                  : AppColors.PRIMARY_COLOR,
                               border: Border.all(
                                 color: AppColors.BORDER_COLOR,
                                 width: 3.3,
@@ -91,6 +97,7 @@ class AccountInfoScreen extends StatelessWidget {
                     isValid: true,
                     onSubmit: () {},
                     autoFocus: false,
+                    paddingSymetric: 16.0,
                   ),
                   const SizedBox(height: 12.0),
                   const CustomLabelWidget(label: AppLanguages.SURNAME),
@@ -100,6 +107,7 @@ class AccountInfoScreen extends StatelessWidget {
                     isValid: true,
                     onSubmit: () {},
                     autoFocus: false,
+                    paddingSymetric: 16.0,
                   ),
                   const SizedBox(height: 12.0),
                   const CustomLabelWidget(label: AppLanguages.EMAIL),
@@ -109,6 +117,7 @@ class AccountInfoScreen extends StatelessWidget {
                     isValid: true,
                     onSubmit: () {},
                     autoFocus: false,
+                    paddingSymetric: 16.0,
                   ),
                   const SizedBox(height: 12.0),
                   const CustomLabelWidget(label: AppLanguages.PHONE_NUMBER),
@@ -118,6 +127,7 @@ class AccountInfoScreen extends StatelessWidget {
                     isValid: true,
                     onSubmit: () {},
                     autoFocus: false,
+                    paddingSymetric: 16.0,
                   ),
                   const SizedBox(height: 12.0),
                   const CustomLabelWidget(label: AppLanguages.GENDER),
@@ -140,6 +150,7 @@ class AccountInfoScreen extends StatelessWidget {
                     isValid: true,
                     onSubmit: () {},
                     autoFocus: false,
+                    paddingSymetric: 16.0,
                   ),
                   const SizedBox(height: 12.0),
                   const CustomLabelWidget(label: AppLanguages.BIRTHDAY),
@@ -149,6 +160,7 @@ class AccountInfoScreen extends StatelessWidget {
                     isValid: true,
                     onSubmit: () {},
                     autoFocus: false,
+                    paddingSymetric: 16.0,
                   ),
                   const SizedBox(height: 12.0),
                   Row(
@@ -159,15 +171,24 @@ class AccountInfoScreen extends StatelessWidget {
                         onTap: () {},
                         // color: Colors.black,
                         bordered: true,
-                        borderColor: AppColors.PRIMARY_COLOR,
-                        buttonTextColor: AppColors.PRIMARY_COLOR,
+                        borderColor: isDark
+                            ? AppColors.SECONDARY_LIGHT
+                            : AppColors.PRIMARY_COLOR,
+                        buttonTextColor: isDark
+                            ? AppColors.SECONDARY_LIGHT
+                            : AppColors.PRIMARY_COLOR,
                       ),
                       const SizedBox(width: 12.0),
                       ButtonWidget(
                         width: Get.width / 2 - 28,
                         buttonText: 'Save',
                         onTap: () {},
-                        color: AppColors.PRIMARY_COLOR,
+                        color: isDark
+                            ? AppColors.SECONDARY_LIGHT
+                            : AppColors.PRIMARY_COLOR,
+                        buttonTextColor: isDark
+                            ? AppColors.PRIMARY_DARK
+                            : AppColors.WHITE_COLOR,
                       )
                     ],
                   ),

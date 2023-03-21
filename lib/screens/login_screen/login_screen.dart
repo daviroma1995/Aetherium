@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,6 +17,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -26,27 +25,20 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const TopBar(
+              TopBar(
                 firstItem: Text(
                   AppLanguages.WELCOME_TO,
-                  style:
-                      TextStyle(fontSize: 22.0, color: AppColors.BLACK_COLOR),
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 secondItem: Text(
                   AppLanguages.AETHERIUM,
-                  style:
-                      TextStyle(fontSize: 22.0, color: AppColors.BLACK_COLOR),
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 22.0),
-                child: Text(
-                  AppLanguages.LOGIN,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 22.0,
-                      color: AppColors.BLACK_COLOR),
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                child: Text(AppLanguages.LOGIN,
+                    style: Theme.of(context).textTheme.headlineLarge),
               ),
               const SizedBox(height: 27.0),
               Padding(
@@ -117,8 +109,13 @@ class LoginScreen extends StatelessWidget {
                     ButtonWidget(
                       width: Get.width,
                       buttonText: AppLanguages.ACCEDI,
-                      color: AppColors.PRIMARY_COLOR,
+                      color: isDark
+                          ? AppColors.SECONDARY_LIGHT
+                          : AppColors.PRIMARY_COLOR,
                       onTap: controller.navigator,
+                      buttonTextColor: !isDark
+                          ? AppColors.WHITE_COLOR
+                          : AppColors.BLACK_COLOR,
                     ),
                     const SizedBox(height: 10.0),
                   ],

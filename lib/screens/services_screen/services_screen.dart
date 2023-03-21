@@ -16,13 +16,17 @@ class ServicesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Container(
-                color: AppColors.BACKGROUND_COLOR,
+                color: isDark
+                    ? AppColors.BACKGROUND_DARK
+                    : AppColors.BACKGROUND_COLOR,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 22.0, vertical: 10.0),
@@ -32,13 +36,8 @@ class ServicesScreen extends StatelessWidget {
                           onTap: Get.back,
                           child: SvgPicture.asset(AppAssets.BACK_ARROW)),
                       const SizedBox(width: 10.0),
-                      const Text(
-                        AppLanguages.SERVICES_TREATMENTS,
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
+                      Text(AppLanguages.SERVICES_TREATMENTS,
+                          style: Theme.of(context).textTheme.headlineLarge),
                     ],
                   ),
                 ),
@@ -83,9 +82,14 @@ class ServicesScreen extends StatelessWidget {
                 child: ButtonWidget(
                     width: Get.width,
                     buttonText: 'Next',
-                    color: AppColors.PRIMARY_COLOR,
+                    color: isDark
+                        ? AppColors.SECONDARY_LIGHT
+                        : AppColors.PRIMARY_COLOR,
+                    buttonTextColor:
+                        !isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
                     onTap: controller.moveToAppointmentBookingScree),
-              )
+              ),
+              const SizedBox(height: 30.0)
             ],
           ),
         ),

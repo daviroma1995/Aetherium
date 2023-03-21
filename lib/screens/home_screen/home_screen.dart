@@ -19,11 +19,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HomeScreenController());
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: SafeArea(
         top: true,
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Padding(
@@ -36,20 +37,23 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      children: const [
+                      children: [
                         Text(
                           AppLanguages.WELCOME,
-                          style: TextStyle(
-                            color: AppColors.BLACK_COLOR,
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: .75,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
                         ),
                         Text(
                           ' Jane C',
                           style: TextStyle(
-                            color: AppColors.SECONDARY_COLOR,
+                            color: isDark
+                                ? AppColors.WHITE_COLOR
+                                : AppColors.SECONDARY_COLOR,
                             fontSize: 22.0,
                             fontWeight: FontWeight.w800,
                             letterSpacing: .75,
@@ -62,11 +66,12 @@ class HomeScreen extends StatelessWidget {
                       width: 55.0,
                       child: Stack(
                         children: [
-                          const Positioned(
+                          Positioned(
                             right: 0.0,
                             child: Icon(
                               Icons.notifications_outlined,
                               size: 30.0,
+                              color: isDark ? AppColors.GREY_COLOR : null,
                             ),
                           ),
                           Positioned(
@@ -74,21 +79,29 @@ class HomeScreen extends StatelessWidget {
                             top: 0,
                             child: Container(
                               alignment: Alignment.center,
-                              width: 18.0,
-                              height: 18.0,
+                              width: 17.0,
+                              height: 17.0,
                               decoration: BoxDecoration(
-                                  color: AppColors.SECONDARY_COLOR,
+                                  color: isDark
+                                      ? AppColors.SECONDARY_LIGHT
+                                      : AppColors.SECONDARY_COLOR,
                                   borderRadius: BorderRadius.circular(110.0),
-                                  border: Border.all(
-                                    color: AppColors.WHITE_COLOR,
-                                    width: 1.1,
-                                  )),
-                              child: const FittedBox(
+                                  border: isDark
+                                      ? const Border()
+                                      : Border.all(
+                                          color: AppColors.WHITE_COLOR,
+                                          width: 1.1,
+                                        )),
+                              child: FittedBox(
                                 child: Text(
                                   '3',
                                   style: TextStyle(
-                                    color: AppColors.WHITE_COLOR,
+                                    fontFamily: 'Poppins',
+                                    color: isDark
+                                        ? AppColors.BACKGROUND_DARK
+                                        : AppColors.WHITE_COLOR,
                                     fontWeight: FontWeight.w700,
+                                    fontSize: 11.0,
                                   ),
                                 ),
                               ),
@@ -128,10 +141,17 @@ class HomeScreen extends StatelessWidget {
                             height: 60.0,
                             width: 60.0,
                             decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.BORDER_COLOR),
+                              border: !isDark
+                                  ? Border.all(color: AppColors.BORDER_COLOR)
+                                  : Border(),
                               borderRadius: BorderRadius.circular(130.0),
+                              color: !isDark
+                                  ? AppColors.WHITE_COLOR
+                                  : AppColors.PRIMARY_DARK,
                             ),
-                            child: SvgPicture.asset(e['service_image']),
+                            child: !isDark
+                                ? SvgPicture.asset(e['service_image'])
+                                : SvgPicture.asset(e['dark_image']),
                           ),
                           const SizedBox(height: 10.0),
                           Text(
@@ -139,6 +159,7 @@ class HomeScreen extends StatelessWidget {
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 12.0,
+                              letterSpacing: .98,
                             ),
                           ),
                         ],
@@ -147,32 +168,54 @@ class HomeScreen extends StatelessWidget {
                   ).toList(),
                 ),
               ),
-              const CustomTitle(
-                title: 'Upcoming appointments',
-              ),
-              const SizedBox(height: 20.0),
-              Padding(
-                padding: const EdgeInsets.only(left: 22.0),
-                child: SizedBox(
-                  height: 103.0,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: upcomingAppointments.length,
-                    itemBuilder: (context, index) {
-                      return CustomAppointmentCardWidget(
-                        imageUrl: upcomingAppointments[index].imageUrl,
-                        title: upcomingAppointments[index].userName,
-                        subTitle: upcomingAppointments[index].subTitle,
-                        date: upcomingAppointments[index].date,
-                        time: upcomingAppointments[index].time,
-                      );
-                    },
-                  ),
+              Container(
+                padding: const EdgeInsets.only(bottom: 31.0),
+                color:
+                    isDark ? AppColors.PRIMARY_DARK : const Color(0xFFFDF9F8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomTitle(
+                      title: AppLanguages.UPCOMING_APPOINTMENTS,
+                      style:
+                          Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                    ),
+                    const SizedBox(height: 20.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 22.0),
+                      child: SizedBox(
+                        height: 103.0,
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: upcomingAppointments.length,
+                          itemBuilder: (context, index) {
+                            return CustomAppointmentCardWidget(
+                              imageUrl: upcomingAppointments[index].imageUrl,
+                              title: upcomingAppointments[index].userName,
+                              subTitle: upcomingAppointments[index].subTitle,
+                              date: upcomingAppointments[index].date,
+                              time: upcomingAppointments[index].time,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 20.0),
-              const CustomTitle(
+              CustomTitle(
                 title: 'Events',
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                borderColor:
+                    isDark ? AppColors.SECONDARY_LIGHT : AppColors.GREY_COLOR,
               ),
               const SizedBox(height: 13.0),
               Padding(
@@ -181,6 +224,7 @@ class HomeScreen extends StatelessWidget {
                   height: 190.0,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
                     itemCount: events.length,
                     itemBuilder: (context, index) {
                       return Padding(

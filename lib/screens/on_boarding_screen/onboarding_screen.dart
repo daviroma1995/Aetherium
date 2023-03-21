@@ -15,7 +15,7 @@ class OnBoardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.PRIMARY_COLOR,
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       body: Stack(
         children: [
           Obx(() {
@@ -25,6 +25,8 @@ class OnBoardingScreen extends StatelessWidget {
               child: SvgPicture.asset(
                 screens[controller.index.value].backgroundImageUrl,
                 fit: BoxFit.fill,
+                colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.secondary, BlendMode.srcIn),
               ),
             );
           }),
@@ -60,7 +62,7 @@ class OnBoardingScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: screens[controller.index.value].id == e.id
                                 ? AppColors.SECONDARY_LIGHT
-                                : AppColors.GREY_COLOR,
+                                : Theme.of(context).indicatorColor,
                             borderRadius: BorderRadius.circular(5.0),
                           ),
                         ),

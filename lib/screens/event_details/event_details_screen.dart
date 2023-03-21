@@ -15,9 +15,11 @@ class EventDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Padding(
@@ -32,13 +34,8 @@ class EventDetailsScreen extends StatelessWidget {
                       child: SvgPicture.asset(AppAssets.BACK_ARROW),
                     ),
                     const SizedBox(width: 12.0),
-                    Text(
-                      Get.arguments.title,
-                      style: const TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
+                    Text(Get.arguments.title,
+                        style: Theme.of(context).textTheme.headlineLarge),
                   ],
                 ),
               ),
@@ -50,11 +47,16 @@ class EventDetailsScreen extends StatelessWidget {
                 ),
                 child: Container(
                   decoration: BoxDecoration(
+                      color: !isDark
+                          ? AppColors.BACKGROUND_COLOR
+                          : AppColors.PRIMARY_DARK,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(30.0),
                         topRight: Radius.circular(30.0),
                       ),
-                      border: Border.all(color: AppColors.BORDER_COLOR)),
+                      border: isDark
+                          ? const Border()
+                          : Border.all(color: AppColors.BORDER_COLOR)),
                   child: Padding(
                     padding: const EdgeInsets.all(27.0),
                     child: Column(
@@ -62,7 +64,7 @@ class EventDetailsScreen extends StatelessWidget {
                       children: [
                         Stack(
                           children: [
-                            Container(
+                            SizedBox(
                               height: 251.0,
                               width: double.infinity,
                               child: ClipRRect(
@@ -90,7 +92,7 @@ class EventDetailsScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 19.0),
+                        const SizedBox(height: 20.0),
                         ListTile(
                           contentPadding: EdgeInsets.zero,
                           leading: Container(
@@ -101,7 +103,7 @@ class EventDetailsScreen extends StatelessWidget {
                               border: Border.all(
                                   width: 1.3, color: AppColors.BORDER_COLOR),
                             ),
-                            child: CircleAvatar(
+                            child: const CircleAvatar(
                               backgroundImage: AssetImage(AppAssets.USER_IMAGE),
                             ),
                           ),
@@ -110,27 +112,33 @@ class EventDetailsScreen extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.BLACK_COLOR),
+                                color: isDark
+                                    ? AppColors.WHITE_COLOR
+                                    : AppColors.BLACK_COLOR),
                           ),
-                          subtitle: Text(
+                          subtitle: const Text(
                             'Fragrances & Perfumes',
                             style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500,
                                 color: AppColors.GREY_COLOR),
                           ),
                         ),
                         const SizedBox(height: 16.0),
                         Image.asset(AppAssets.MAP_IMAGE),
                         const SizedBox(height: 16.0),
-                        const TextRowWidget(
+                        TextRowWidget(
                           textOne: 'Date:',
                           textTwo: 'Location:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.0,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium!
+                              .copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16.0,
+                                  color: isDark
+                                      ? AppColors.WHITE_COLOR
+                                      : AppColors.BLACK_COLOR),
                         ),
                         const SizedBox(height: 20.0),
                         TextRowWidget(
@@ -143,14 +151,19 @@ class EventDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16.0),
-                        const TextRowWidget(
+                        TextRowWidget(
                           textOne: 'Start Time: ',
                           textTwo: 'End Time: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16.0,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium!
+                              .copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16.0,
+                                color: isDark
+                                    ? AppColors.WHITE_COLOR
+                                    : AppColors.BLACK_COLOR,
+                              ),
                         ),
                         const SizedBox(height: 20.0),
                         const TextRowWidget(
@@ -163,14 +176,19 @@ class EventDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16.0),
-                        const TextRowWidget(
+                        TextRowWidget(
                           textOne: 'Duration',
                           textTwo: '',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16.0,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium!
+                              .copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16.0,
+                                color: isDark
+                                    ? AppColors.WHITE_COLOR
+                                    : AppColors.BLACK_COLOR,
+                              ),
                         ),
                         const SizedBox(height: 20.0),
                         const TextRowWidget(
@@ -183,13 +201,18 @@ class EventDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 20.0),
-                        const Text(
+                        Text(
                           'Description: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16.0,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium!
+                              .copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16.0,
+                                color: isDark
+                                    ? AppColors.WHITE_COLOR
+                                    : AppColors.BLACK_COLOR,
+                              ),
                         ),
                         const SizedBox(height: 20.0),
                         const Text(

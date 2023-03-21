@@ -31,11 +31,15 @@ class AppointmentsCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 22.0),
       child: ListTile(
+        tileColor: isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: AppColors.BORDER_COLOR, width: 1.0),
+          side: BorderSide(
+              color: isDark ? AppColors.PRIMARY_DARK : AppColors.BORDER_COLOR,
+              width: 1.0),
           borderRadius: BorderRadius.circular(8.0),
         ),
         leading: Container(
@@ -58,12 +62,12 @@ class AppointmentsCardWidget extends StatelessWidget {
                   image: DecorationImage(
                       image: imageProvider,
                       fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
+                      colorFilter: const ColorFilter.mode(
                           AppColors.GREY_COLOR, BlendMode.colorBurn)),
                 ),
               ),
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
         ),
@@ -72,11 +76,11 @@ class AppointmentsCardWidget extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.BLACK_COLOR,
-                ),
+                maxLines: 1,
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w700,
+                    ),
               ),
             ),
             status != null
@@ -90,21 +94,22 @@ class AppointmentsCardWidget extends StatelessWidget {
                     ),
                     child: Text(
                       status!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         color: AppColors.BLACK_COLOR,
-                        fontSize: 8.0,
+                        fontSize: 6.0,
                       ),
                     ),
                   )
-                : SizedBox(),
+                : const SizedBox(),
           ],
         ),
         subtitle: Text(
           subTitle,
+          maxLines: 1,
           style: const TextStyle(
             color: AppColors.GREY_COLOR,
-            fontSize: 14.0,
+            fontSize: 11.0,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -114,7 +119,8 @@ class AppointmentsCardWidget extends StatelessWidget {
               horizontal: timeContainerHorizontalPadding ?? 10.0),
           // alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppColors.SECONDARY_LIGHT,
+            color:
+                isDark ? AppColors.BACKGROUND_DARK : AppColors.SECONDARY_LIGHT,
             borderRadius: BorderRadius.circular(timeContainerRadius ?? 8.0),
           ),
 
@@ -124,19 +130,17 @@ class AppointmentsCardWidget extends StatelessWidget {
             children: [
               Text(
                 date,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.BLACK_COLOR,
-                  fontSize: 8.0,
-                ),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      fontSize: 8.0,
+                      fontWeight: FontWeight.w700,
+                    ),
               ),
               Text(
                 time,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.BLACK_COLOR,
-                  fontSize: 8.0,
-                ),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      fontSize: 8.0,
+                      fontWeight: FontWeight.w700,
+                    ),
               ),
             ],
           ),

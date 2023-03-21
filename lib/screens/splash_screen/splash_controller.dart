@@ -5,7 +5,7 @@ class SplashScreenController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 5));
     Get.offAll(OnBoardingScreen());
   }
 }

@@ -12,7 +12,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.PRIMARY_COLOR,
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       body: SizedBox(
         height: double.infinity,
         width: double.infinity,
@@ -21,16 +21,29 @@ class SplashScreen extends StatelessWidget {
             Positioned(
               top: 0,
               left: 0,
-              child: SvgPicture.asset(AppAssets.SPLASH_TOP),
+              child: SvgPicture.asset(
+                AppAssets.SPLASH_TOP,
+                colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.secondary, BlendMode.srcIn),
+                width: Get.width * .7,
+              ),
             ),
             Center(
                 child: Center(
-              child: SvgPicture.asset((AppAssets.SPLASH_TEXT)),
+              child: SvgPicture.asset((AppAssets.SPLASH_TEXT),
+                  colorFilter: ColorFilter.mode(
+                      Theme.of(context).colorScheme.onSecondary,
+                      BlendMode.srcIn)),
             )),
             Positioned(
               bottom: 0,
               right: 0,
-              child: SvgPicture.asset(AppAssets.SPLASH_BOTTOM),
+              child: SvgPicture.asset(
+                AppAssets.SPLASH_BOTTOM,
+                colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.secondary, BlendMode.srcIn),
+                width: Get.width * .4,
+              ),
             ),
           ],
         ),

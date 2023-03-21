@@ -30,13 +30,19 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
   _CustomDropDownListWidgetState();
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.BORDER_COLOR),
+        border:
+            isDark ? const Border() : Border.all(color: AppColors.BORDER_COLOR),
         borderRadius: BorderRadius.circular(8.0),
         color: !_isExpanded
-            ? AppColors.SECONDARY_COLOR
-            : AppColors.BACKGROUND_COLOR,
+            ? isDark
+                ? AppColors.PRIMARY_DARK
+                : AppColors.SECONDARY_COLOR
+            : isDark
+                ? AppColors.PRIMARY_DARK
+                : AppColors.BACKGROUND_COLOR,
       ),
       child: Padding(
         padding: const EdgeInsets.only(
@@ -61,10 +67,12 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                     const SizedBox(width: 10.0),
                     Text(
                       widget.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: .75,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: .75,
+                              ),
                     ),
                   ],
                 ),
@@ -79,13 +87,21 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                   },
                   icon: !_isExpanded
                       ? SvgPicture.asset(AppAssets.ARROW_DOWN)
-                      : SvgPicture.asset(AppAssets.ARROW_UP),
+                      : SvgPicture.asset(
+                          AppAssets.ARROW_UP,
+                          colorFilter: ColorFilter.mode(
+                              isDark
+                                  ? AppColors.WHITE_COLOR
+                                  : AppColors.BLACK_COLOR,
+                              BlendMode.srcIn),
+                        ),
                 ),
               ],
             ),
             _isExpanded ? const SizedBox(height: 10.0) : const SizedBox(),
             _isExpanded
                 ? ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: widget.items.length,
                     itemBuilder: (context, index) {
@@ -123,8 +139,10 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                                   fontSize: 14.0,
                                   color: selectedItems
                                           .contains(widget.items[index])
-                                      ? AppColors.SECONDARY_LIGHT
-                                      : AppColors.BLACK_COLOR,
+                                      ? AppColors.SECONDARY_COLOR
+                                      : isDark
+                                          ? AppColors.WHITE_COLOR
+                                          : AppColors.BLACK_COLOR,
                                 ),
                               ),
                               selectedItems.contains(widget.items[index])

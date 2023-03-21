@@ -52,10 +52,11 @@ class PastAppointmentScreen extends StatelessWidget {
                         ],
                       ),
                     )
-                  : Container(
+                  : SizedBox(
                       height: Get.height * .826,
                       child: ListView.builder(
                         // shrinkWrap: false,
+                        physics: const BouncingScrollPhysics(),
                         itemCount: pastAppointments.length + 1,
                         itemBuilder: (context, index) {
                           return index == pastAppointments.length

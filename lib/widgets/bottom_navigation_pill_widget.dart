@@ -27,7 +27,7 @@ class BottomNavigationPill extends StatelessWidget {
             ? const EdgeInsets.symmetric(horizontal: 5.0, vertical: 6.0)
             : null,
         decoration: BoxDecoration(
-          color: isCurrent ? AppColors.SECONDARY_COLOR : Colors.transparent,
+          color: isCurrent ? AppColors.SECONDARY_LIGHT : Colors.transparent,
           borderRadius: BorderRadius.circular(100.0),
         ),
         child: Row(
@@ -38,6 +38,11 @@ class BottomNavigationPill extends StatelessWidget {
               width: isCurrent ? 20.0 : 23.0,
               child: SvgPicture.asset(
                 iconUrl,
+                colorFilter: isCurrent
+                    ? ColorFilter.mode(Theme.of(context).colorScheme.onSurface,
+                        BlendMode.srcIn)
+                    : ColorFilter.mode(Theme.of(context).colorScheme.onPrimary,
+                        BlendMode.srcIn),
               ),
             ),
             isCurrent
@@ -46,9 +51,10 @@ class BottomNavigationPill extends StatelessWidget {
                     child: FittedBox(
                       child: Text(
                         label,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11.0,
                           fontWeight: FontWeight.w700,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ),

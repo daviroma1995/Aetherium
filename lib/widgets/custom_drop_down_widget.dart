@@ -40,6 +40,7 @@ class CustomDropDown extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     if (sort)
       (options ?? []).sort((a, b) {
         return isMap
@@ -65,8 +66,10 @@ class CustomDropDown extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             height: height ?? 40,
             decoration: BoxDecoration(
-                color: AppColors.WHITE_COLOR,
-                border: Border.all(color: AppColors.BORDER_COLOR, width: 1),
+                color: isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
+                border: isDark
+                    ? const Border()
+                    : Border.all(color: AppColors.BORDER_COLOR, width: 1),
                 borderRadius: BorderRadius.circular(8.0),
                 boxShadow: const []),
             child: InkWell(
@@ -223,7 +226,9 @@ class CustomDropDown extends StatelessWidget {
                             ? Icons.keyboard_arrow_right
                             : Icons.keyboard_arrow_down,
                         size: isFowrardArrow! ? 25 : 18,
-                        color: AppColors.BLACK_COLOR)
+                        color: isDark
+                            ? AppColors.GREY_COLOR
+                            : AppColors.BLACK_COLOR)
                 ],
               ),
             )),

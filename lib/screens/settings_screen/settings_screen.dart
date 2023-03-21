@@ -28,15 +28,8 @@ class SettingsScreen extends StatelessWidget {
                         onTap: () => Get.back(),
                         child: SvgPicture.asset(AppAssets.BACK_ARROW)),
                     const SizedBox(width: 12.0),
-                    const Text(
-                      AppLanguages.SETTINGS,
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: AppColors.BLACK_COLOR,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: .75,
-                      ),
-                    ),
+                    Text(AppLanguages.SETTINGS,
+                        style: Theme.of(context).textTheme.headlineLarge),
                   ],
                 ),
               ),
@@ -51,7 +44,7 @@ class SettingsScreen extends StatelessWidget {
                         int index = settingsItems.indexOf(e);
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Custom_List_TIle(
+                          child: CustomListTIle(
                               index: index,
                               title: settingsItems[index].title,
                               onTap: controller.navigationHandle,

@@ -10,8 +10,9 @@ class AppointmentConfirmScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         height: Get.height,
         child: Stack(
@@ -20,28 +21,34 @@ class AppointmentConfirmScreen extends StatelessWidget {
             Positioned(
               top: 0,
               left: 0,
-              child: SvgPicture.asset(AppAssets.APPOINTMENT_TOP),
+              child: SvgPicture.asset(
+                AppAssets.APPOINTMENT_TOP,
+                colorFilter: ColorFilter.mode(
+                    isDark ? AppColors.PRIMARY_DARK : AppColors.SECONDARY_LIGHT,
+                    BlendMode.srcIn),
+              ),
             ),
             Positioned(
               bottom: 100.0,
               right: 0,
-              child: SvgPicture.asset(AppAssets.APPOINTMENT_BOTTOM),
+              child: SvgPicture.asset(
+                AppAssets.APPOINTMENT_BOTTOM,
+                colorFilter: ColorFilter.mode(
+                    isDark ? AppColors.PRIMARY_DARK : AppColors.SECONDARY_LIGHT,
+                    BlendMode.srcIn),
+              ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(AppAssets.APPOINTMENT_CONFIRM),
+                isDark
+                    ? SvgPicture.asset(AppAssets.DARK_CONFIRM_ICON)
+                    : SvgPicture.asset(AppAssets.APPOINTMENT_CONFIRM),
                 const SizedBox(height: 44.0),
-                const Text(
-                  'Congrats!',
-                  style: TextStyle(
-                    fontSize: 22.0,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.BLACK_COLOR,
-                  ),
-                ),
+                Text('Congrats!',
+                    style: Theme.of(context).textTheme.headlineLarge),
                 const SizedBox(height: 10.0),
-                Text(
+                const Text(
                   AppLanguages.YOUR_APPOINTMENT,
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -50,7 +57,7 @@ class AppointmentConfirmScreen extends StatelessWidget {
                     color: AppColors.GREY_COLOR,
                   ),
                 ),
-                Text(
+                const Text(
                   AppLanguages.BOOKING_IS_SUCCESSFULLY,
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -69,11 +76,19 @@ class AppointmentConfirmScreen extends StatelessWidget {
                 width: Get.width,
                 buttonText: 'Close',
                 onTap: () {
-                  Get.offAll(AppointmentsScreen());
+                  Get.offUntil(
+                      GetPageRoute(page: () => AppointmentsScreen()),
+                      (route) =>
+                          (route as GetPageRoute).routeName ==
+                          '/BottomNavigationScreen');
                 },
-                color: AppColors.PRIMARY_COLOR,
+                color: isDark
+                    ? AppColors.SECONDARY_LIGHT
+                    : AppColors.PRIMARY_COLOR,
+                buttonTextColor:
+                    isDark ? AppColors.BACKGROUND_DARK : AppColors.WHITE_COLOR,
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -4,7 +4,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../utils/constants.dart';
 
-class Primo_Details_Widget extends StatelessWidget {
+class PrimoDetailsWidget extends StatelessWidget {
   final double percent;
   final Color progressColor;
   final String primoTitle;
@@ -12,7 +12,7 @@ class Primo_Details_Widget extends StatelessWidget {
   final String totalPoints;
   final String date;
   final String imageUrl;
-  const Primo_Details_Widget({
+  const PrimoDetailsWidget({
     Key? key,
     required this.percent,
     required this.progressColor,
@@ -41,11 +41,10 @@ class Primo_Details_Widget extends StatelessWidget {
           children: [
             Text(
               primoTitle,
-              style: const TextStyle(
-                color: AppColors.BLACK_COLOR,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w700,
-              ),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineLarge!
+                  .copyWith(fontSize: 16.0, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 6.0),
             Text(
@@ -63,11 +62,10 @@ class Primo_Details_Widget extends StatelessWidget {
           children: [
             Text(
               '$pointsGained of $totalPoints',
-              style: const TextStyle(
-                color: AppColors.BLACK_COLOR,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w700,
-              ),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineLarge!
+                  .copyWith(fontSize: 16.0, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 6.0),
             const Text(

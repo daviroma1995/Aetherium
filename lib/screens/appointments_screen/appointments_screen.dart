@@ -17,6 +17,10 @@ class AppointmentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(Get.previousRoute);
+    print(Get.currentRoute);
+    print(Get.defaultOpaqueRoute);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -24,29 +28,25 @@ class AppointmentsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                color: AppColors.BACKGROUND_COLOR,
+                color: isDark
+                    ? AppColors.BACKGROUND_DARK
+                    : AppColors.BACKGROUND_COLOR,
                 child: Padding(
                   padding:
                       const EdgeInsets.only(left: 22.0, top: 10.0, right: 22.0),
                   child: Row(
                     children: [
                       GestureDetector(
-                          onTap: () => Get.off(BottomNavigationScreen()),
+                          onTap: () => controller.handleBack(),
                           child: SvgPicture.asset(AppAssets.BACK_ARROW)),
                       const SizedBox(width: 12.0),
-                      const Text(
-                        AppLanguages.APPOINTMENTS,
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          color: AppColors.BLACK_COLOR,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: .75,
-                        ),
-                      ),
+                      Text(AppLanguages.APPOINTMENTS,
+                          style: Theme.of(context).textTheme.headlineLarge),
                     ],
                   ),
                 ),
               ),
+              const SizedBox(height: 18.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Row(
@@ -60,12 +60,24 @@ class AppointmentsScreen extends StatelessWidget {
                             height: 50.0,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                color: AppColors.WHITE_COLOR,
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: controller.isCurrentPast.value
-                                            ? AppColors.BLACK_COLOR
-                                            : AppColors.GREY_COLOR))),
+                              color: controller.isCurrentPast.value
+                                  ? isDark
+                                      ? AppColors.PRIMARY_DARK
+                                      : AppColors.WHITE_COLOR
+                                  : isDark
+                                      ? AppColors.BACKGROUND_DARK
+                                      : AppColors.WHITE_COLOR,
+                              border: Border(
+                                bottom: BorderSide(
+                                    color: controller.isCurrentPast.value
+                                        ? isDark
+                                            ? AppColors.PRIMARY_DARK
+                                            : AppColors.BLACK_COLOR
+                                        : isDark
+                                            ? AppColors.PRIMARY_DARK
+                                            : AppColors.GREY_COLOR),
+                              ),
+                            ),
                             child: Text(
                               'Past',
                               style: TextStyle(
@@ -74,7 +86,9 @@ class AppointmentsScreen extends StatelessWidget {
                                       ? FontWeight.w800
                                       : FontWeight.w500,
                                   color: controller.isCurrentPast.value
-                                      ? AppColors.PRIMARY_COLOR
+                                      ? !isDark
+                                          ? AppColors.PRIMARY_COLOR
+                                          : AppColors.GREY_COLOR
                                       : AppColors.GREY_COLOR,
                                   letterSpacing: .75),
                             ),
@@ -90,25 +104,38 @@ class AppointmentsScreen extends StatelessWidget {
                             height: 50.0,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                color: AppColors.WHITE_COLOR,
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color:
-                                            controller.isCurrentUpcomming.value
-                                                ? AppColors.BLACK_COLOR
-                                                : AppColors.GREY_COLOR))),
+                              color: controller.isCurrentUpcomming.value
+                                  ? isDark
+                                      ? AppColors.PRIMARY_DARK
+                                      : AppColors.WHITE_COLOR
+                                  : isDark
+                                      ? AppColors.BACKGROUND_DARK
+                                      : AppColors.WHITE_COLOR,
+                              border: Border(
+                                bottom: BorderSide(
+                                    color: controller.isCurrentUpcomming.value
+                                        ? isDark
+                                            ? AppColors.PRIMARY_DARK
+                                            : AppColors.BLACK_COLOR
+                                        : isDark
+                                            ? AppColors.PRIMARY_DARK
+                                            : AppColors.GREY_COLOR),
+                              ),
+                            ),
                             child: Text(
                               'Upcoming',
                               style: TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight:
-                                      controller.isCurrentUpcomming.value
-                                          ? FontWeight.w800
-                                          : FontWeight.w500,
-                                  color: controller.isCurrentUpcomming.value
-                                      ? AppColors.PRIMARY_COLOR
-                                      : AppColors.GREY_COLOR,
-                                  letterSpacing: .75),
+                                fontSize: 14.0,
+                                fontWeight: controller.isCurrentUpcomming.value
+                                    ? FontWeight.w800
+                                    : FontWeight.w500,
+                                color: controller.isCurrentUpcomming.value
+                                    ? !isDark
+                                        ? AppColors.PRIMARY_COLOR
+                                        : AppColors.GREY_COLOR
+                                    : AppColors.GREY_COLOR,
+                                letterSpacing: .75,
+                              ),
                             ),
                           ),
                         ),
@@ -129,6 +156,26 @@ class AppointmentsScreen extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+      floatingActionButton: InkWell(
+        onTap: () {
+          controller.createAppointment();
+        },
+        child: Container(
+          alignment: Alignment.center,
+          height: 66,
+          width: 66,
+          decoration: BoxDecoration(
+            color:
+                isDark ? AppColors.BACKGROUND_DARK : AppColors.SECONDARY_COLOR,
+            border: Border.all(width: 6.0, color: AppColors.BORDER_COLOR),
+            borderRadius: BorderRadius.circular(100.0),
+          ),
+          child: const Icon(
+            Icons.add,
+            color: AppColors.WHITE_COLOR,
           ),
         ),
       ),

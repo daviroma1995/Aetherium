@@ -12,9 +12,11 @@ class AppointmentDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Padding(
@@ -29,13 +31,8 @@ class AppointmentDetailsScreen extends StatelessWidget {
                       child: SvgPicture.asset(AppAssets.BACK_ARROW),
                     ),
                     const SizedBox(width: 12.0),
-                    const Text(
-                      AppLanguages.FRAGRANCES_PERFUMES,
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
+                    Text(AppLanguages.FRAGRANCES_PERFUMES,
+                        style: Theme.of(context).textTheme.headlineLarge),
                   ],
                 ),
               ),
@@ -47,24 +44,31 @@ class AppointmentDetailsScreen extends StatelessWidget {
                 ),
                 child: Container(
                   decoration: BoxDecoration(
+                      color: isDark
+                          ? AppColors.PRIMARY_DARK
+                          : AppColors.WHITE_COLOR,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(30.0),
                         topRight: Radius.circular(30.0),
                       ),
-                      border: Border.all(color: AppColors.BORDER_COLOR)),
+                      border: isDark
+                          ? const Border()
+                          : Border.all(color: AppColors.BORDER_COLOR)),
                   child: Padding(
                     padding: const EdgeInsets.all(27.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const TextRowWidget(
+                        TextRowWidget(
                           textOne: 'Date: ',
                           textTwo: 'Time: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16.0,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16.0,
+                              ),
                         ),
                         const SizedBox(height: 20.0),
                         const TextRowWidget(
@@ -77,14 +81,16 @@ class AppointmentDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16.0),
-                        const TextRowWidget(
+                        TextRowWidget(
                           textOne: AppLanguages.SERVICE_TREATMENT_DURATION,
                           textTwo: AppLanguages.SERVICE_TREATMENT_CATEGORY,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16.0,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16.0,
+                              ),
                         ),
                         const SizedBox(height: 20.0),
                         const TextRowWidget(
@@ -97,14 +103,16 @@ class AppointmentDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16.0),
-                        const TextRowWidget(
+                        TextRowWidget(
                           textOne: AppLanguages.PRICE,
                           textTwo: AppLanguages.TOTAL_PRICE,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16.0,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16.0,
+                              ),
                         ),
                         const SizedBox(height: 20.0),
                         const TextRowWidget(
@@ -117,13 +125,15 @@ class AppointmentDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 20.0),
-                        const Text(
+                        Text(
                           AppLanguages.NOTES,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16.0,
-                            color: AppColors.BLACK_COLOR,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16.0,
+                              ),
                         ),
                         const SizedBox(height: 20.0),
                         const Text(
@@ -163,13 +173,23 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                 Get.back();
                               },
                               bordered: true,
-                              buttonTextColor: AppColors.BLACK_COLOR,
+                              buttonTextColor: isDark
+                                  ? AppColors.SECONDARY_LIGHT
+                                  : AppColors.BLACK_COLOR,
+                              borderColor: isDark
+                                  ? AppColors.SECONDARY_LIGHT
+                                  : AppColors.BLACK_COLOR,
                             ),
                             ButtonWidget(
                               width: (Get.width / 2) - 33.0,
                               buttonText: 'Edit',
                               onTap: () {},
-                              color: AppColors.PRIMARY_COLOR,
+                              color: isDark
+                                  ? AppColors.SECONDARY_LIGHT
+                                  : AppColors.PRIMARY_COLOR,
+                              buttonTextColor: isDark
+                                  ? AppColors.PRIMARY_DARK
+                                  : AppColors.WHITE_COLOR,
                             )
                           ],
                         )

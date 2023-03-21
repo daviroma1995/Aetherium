@@ -18,6 +18,7 @@ class BottomNavigationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: Column(
         children: [
@@ -33,7 +34,7 @@ class BottomNavigationScreen extends StatelessWidget {
           ),
           Container(
             height: 80.0,
-            color: AppColors.PRIMARY_COLOR,
+            color: Theme.of(context).colorScheme.onSurface,
             child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: Get.width < 321 ? 10.0 : 22.0),

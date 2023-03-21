@@ -14,14 +14,7 @@ class CustomLabelWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            color: AppColors.BLACK_COLOR,
-            fontSize: 14.0,
-          ),
-        ),
+        Text(label, style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 10.0),
       ],
     );

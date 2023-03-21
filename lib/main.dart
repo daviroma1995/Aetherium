@@ -1,5 +1,6 @@
 import 'package:atherium_saloon_app/screens/settings_screen/settings_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
+import 'package:atherium_saloon_app/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -31,15 +32,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: AppLanguages.APP_NAME,
-      theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.BACKGROUND_COLOR,
-        unselectedWidgetColor: AppColors.GREY_COLOR,
-        fontFamily: 'Lato',
-      ),
-      darkTheme: ThemeData(
-        scaffoldBackgroundColor: AppColors.BACKGROUND_DARK,
-        unselectedWidgetColor: AppColors.GREY_COLOR,
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       themeMode: ThemeMode.system,
       home: SplashScreen(),
     );

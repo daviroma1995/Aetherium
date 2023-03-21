@@ -16,21 +16,15 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 13.0),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 22.0),
-                child: Text(
-                  AppLanguages.PROFILE,
-                  style: TextStyle(
-                    fontSize: 22.0,
-                    color: AppColors.BLACK_COLOR,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: .75,
-                  ),
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                child: Text(AppLanguages.PROFILE,
+                    style: Theme.of(context).textTheme.headlineLarge),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -42,7 +36,7 @@ class ProfileScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 10.0),
-                      child: Custom_List_TIle(
+                      child: CustomListTIle(
                           index: index,
                           title: profileItems[index].title,
                           onTap: controller.Navigator,

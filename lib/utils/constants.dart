@@ -17,10 +17,15 @@ class AppColors {
   static const NAVIGATION_BAR_DARK = Color(0XFF15151E);
   static const ERROR_COLOR = Colors.redAccent;
   static const CANCELED_COLOR = Color(0XFFF3C2C2);
+  static const DARK_CANCELED_COLOR = Color(0X48F3C2C2);
   static const ARCHIVED_COLOR = Color(0XFFDDCBAA);
+  static const DARK_ARCHIVED_COLOR = Color(0X48DDCBAA);
   static const NO_SHOW_COLOR = Color(0XFFC3FFF8);
+  static const DARK_NO_SHOW_COLOR = Color(0X48C3FFF8);
   static const CONFIRMED_COLOR = Color(0XFF85BC9E);
+  static const DARK_CONFIRMED_COLOR = Color(0X4885BC9E);
   static const PROGRESS_COLOR = Color(0XFFB8A27B);
+  static const CARD_COLOR = Color(0XFFFDF9F8);
   static const SHADOW_COLOR = Color.fromRGBO(186, 186, 186, .25);
 
   static const GREEN_COLOR = Color(0xff57CE63);
@@ -44,9 +49,13 @@ class AppAssets {
   static const MESSAGE_ICON = 'assets/images/icons/message_icon.svg';
   static const SEARCH_ICON = 'assets/images/icons/search_icon.svg';
   static const MIRROR_ICON = 'assets/images/icons/mirror_icon.svg';
+  static const DARK_MIRROR_ICON = 'assets/images/icons/dark_service_1.svg';
   static const HAIR_ICON = 'assets/images/icons/hair_icon.svg';
+  static const DARK_HAIR_ICON = 'assets/images/icons/dark_sercie_2.svg';
   static const PORCELAIN_ICON = 'assets/images/icons/porcelain_icon.svg';
+  static const DARK_PORCELAIN_ICON = 'assets/images/icons/dark_service_3.svg';
   static const EMERGENT_ICON = 'assets/images/icons/emergent_icon.svg';
+  static const DARK_EMERGENT_ICON = 'assets/images/icons/dark_service_4.svg';
 
   static const PROFILE_IMAGE_ONE = 'assets/images/png/profile_image_1.png';
   static const PROFILE_IMAGE_TWO = 'assets/images/png/profile_image_2.png';
@@ -100,6 +109,7 @@ class AppAssets {
       'assets/images/icons/confirm_appointment_icon.svg';
   static const MAP_IMAGE = 'assets/images/map.jpg';
   static const WHATSAPP_ICON = 'assets/images/icons/whatsapp_logo.svg';
+  static const DARK_CONFIRM_ICON = 'assets/images/icons/dark_confirm_icon.svg';
 }
 
 class AppLanguages {
@@ -138,6 +148,8 @@ class AppLanguages {
   static const INVITATION_DESCRIPTION =
       'Bring a Friend to the Shop and get 25 points';
   static const MY_APPOINTMENTS = 'My Appointments';
+  static const UPCOMING_APPOINTMENTS = 'Upcoming Appointments';
+
   static const SETTINGS = 'Settings';
   static const CONSULTATIONS = 'Consultations';
   static const NOTIFICATIONS = 'Notifications';
@@ -167,8 +179,8 @@ class AppLanguages {
   static const BOOKING_IS_SUCCESSFULLY = 'booking is successfully!';
 
   static const APPOINTMENT_DETAILS = 'Appointments - Details';
-  static const SERVICE_TREATMENT_DURATION = 'Service/treatment duration';
-  static const SERVICE_TREATMENT_CATEGORY = 'Service treatment Category';
+  static const SERVICE_TREATMENT_DURATION = 'Service/Treatment Duration';
+  static const SERVICE_TREATMENT_CATEGORY = 'Service Treatment Category';
   static const PRICE = 'Price';
   static const TOTAL_PRICE = 'Total Price';
   static const SHOP_PHONE = 'shop Ph';
@@ -183,4 +195,17 @@ class AppLanguages {
   static const OPENING_HOURS_OF_THE_SHOP = 'Opening hours of the shop';
   static const DESCRIPTION = 'Description';
   static const BEAUTY_SPECIALIST = 'Beauty Specialist';
+}
+
+class AppTextStyle {
+  static const heading1Light = TextStyle(
+    fontSize: 22.0,
+    fontWeight: FontWeight.w400,
+    color: AppColors.BLACK_COLOR,
+  );
+  static const heading1Bold = TextStyle(
+    fontSize: 22.0,
+    fontWeight: FontWeight.w800,
+    color: AppColors.BLACK_COLOR,
+  );
 }

@@ -16,6 +16,7 @@ class ForgetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -29,14 +30,8 @@ class ForgetPasswordScreen extends StatelessWidget {
                   child: SvgPicture.asset(AppAssets.BACK_ARROW),
                 ),
                 space: 15.0,
-                secondItem: const Text(
-                  AppLanguages.FORGET_PASSWORD,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 22.0,
-                    color: AppColors.BLACK_COLOR,
-                  ),
-                ),
+                secondItem: Text(AppLanguages.FORGET_PASSWORD,
+                    style: Theme.of(context).textTheme.headlineLarge),
               ),
               const SizedBox(height: 35.0),
               Padding(
@@ -44,13 +39,8 @@ class ForgetPasswordScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      AppLanguages.EMAIL,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14.0,
-                      ),
-                    ),
+                    Text(AppLanguages.EMAIL,
+                        style: Theme.of(context).textTheme.bodyLarge),
                     const SizedBox(height: 10.0),
                     Obx(
                       () => CustomInputFormField(
@@ -74,9 +64,16 @@ class ForgetPasswordScreen extends StatelessWidget {
                     const SizedBox(height: 34.0),
                     ButtonWidget(
                       width: Get.width,
-                      buttonText: AppLanguages.INVIA,
-                      color: AppColors.PRIMARY_COLOR,
-                      onTap: () {},
+                      buttonText: AppLanguages.ACCEDI,
+                      color: isDark
+                          ? AppColors.SECONDARY_LIGHT
+                          : AppColors.PRIMARY_COLOR,
+                      onTap: () {
+                        //TODO
+                      },
+                      buttonTextColor: !isDark
+                          ? AppColors.WHITE_COLOR
+                          : AppColors.BLACK_COLOR,
                     ),
                   ],
                 ),

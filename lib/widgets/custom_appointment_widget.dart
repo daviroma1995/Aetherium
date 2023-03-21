@@ -20,18 +20,23 @@ class CustomAppointmentCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.only(right: 11.0),
       child: Stack(
+        fit: StackFit.loose,
         children: [
           Container(
             height: 75.0,
             width: 252.0,
             decoration: BoxDecoration(
-              border: Border.all(color: AppColors.BORDER_COLOR),
+              border: isDark
+                  ? const Border()
+                  : Border.all(color: AppColors.BORDER_COLOR),
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(8.0),
                   topRight: Radius.circular(8.0)),
+              color: isDark ? AppColors.BACKGROUND_DARK : AppColors.WHITE_COLOR,
             ),
             child: Padding(
               padding: const EdgeInsets.all(10.0),
@@ -54,28 +59,38 @@ class CustomAppointmentCardWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10.0),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.BLACK_COLOR,
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(
+                                  fontSize: 16.0,
+                                  color: isDark
+                                      ? AppColors.WHITE_COLOR
+                                      : AppColors.BLACK_COLOR),
                         ),
-                      ),
-                      const SizedBox(height: 6.0),
-                      Text(
-                        subTitle,
-                        style: const TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.GREY_COLOR,
+                        const SizedBox(height: 6.0),
+                        FittedBox(
+                          child: Text(
+                            subTitle,
+                            maxLines: 1,
+                            style: const TextStyle(
+                              fontFamily: 'Lato',
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.GREY_COLOR,
+                              letterSpacing: 0.75,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

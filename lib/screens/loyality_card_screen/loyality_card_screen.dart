@@ -17,9 +17,11 @@ class LoyalityCardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -29,123 +31,152 @@ class LoyalityCardScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 22.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        AppLanguages.LOYALITY_CARD,
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: .75,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 40.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                child: Row(
-                  children: [
-                    const Text(
-                      AppLanguages.POINTS_COLLECTED,
-                      style: TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(width: 10.0),
-                    Container(
-                      alignment: Alignment.center,
-                      width: 70.0,
-                      height: 30.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50.0),
-                        color: AppColors.GREY_COLOR,
-                      ),
-                      child: const Text(
-                        AppLanguages.PRIMO,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.BLACK_COLOR,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 25.0),
-              CircularPercentIndicator(
-                radius: 69.0,
-                lineWidth: 16.0,
-                percent: loyalityCard.percentage,
-                center: Container(
-                  height: 110.0,
-                  width: 110.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100.0),
-                    color: AppColors.WHITE_COLOR,
-                    boxShadow: const [
-                      BoxShadow(
-                        offset: Offset(-1, 1.0),
-                        color: AppColors.SHADOW_COLOR,
-                        blurRadius: 4.0,
-                      ),
-                      BoxShadow(
-                        offset: Offset(1, 1.0),
-                        color: AppColors.SHADOW_COLOR,
-                        blurRadius: 4.0,
-                      ),
-                      BoxShadow(
-                        offset: Offset(2, 1.0),
-                        color: AppColors.SHADOW_COLOR,
-                        blurRadius: 4.0,
-                      )
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        loyalityCard.gainedPoints.toStringAsFixed(0),
-                        style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.PROGRESS_COLOR,
-                        ),
-                      ),
-                      Text(
-                        'Of ${loyalityCard.totalPoints.toStringAsFixed(0)} Pts',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        AppLanguages.LOYALITY_CARD,
+                        style: Theme.of(context).textTheme.headlineLarge,
                       ),
                     ],
                   ),
                 ),
-                progressColor: AppColors.PROGRESS_COLOR,
-                backgroundColor: AppColors.BORDER_COLOR,
-                // backgroundWidth: 14,
               ),
-
+              const SizedBox(height: 13.0),
+              Container(
+                decoration: BoxDecoration(
+                  color:
+                      isDark ? AppColors.BACKGROUND_DARK : AppColors.CARD_COLOR,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 26.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              AppLanguages.POINTS_COLLECTED,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium!
+                                  .copyWith(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w700),
+                            ),
+                            const SizedBox(width: 10.0),
+                            Container(
+                              alignment: Alignment.center,
+                              width: 70.0,
+                              height: 30.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.0),
+                                color: isDark
+                                    ? AppColors.BACKGROUND_DARK
+                                    : AppColors.GREY_COLOR,
+                              ),
+                              child: Text(
+                                AppLanguages.PRIMO,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium!
+                                    .copyWith(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 25.0),
+                      CircularPercentIndicator(
+                        radius: 69.0,
+                        lineWidth: 12.7,
+                        percent: loyalityCard.percentage,
+                        center: Container(
+                          height: 113.0,
+                          width: 113.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100.0),
+                            color: isDark
+                                ? AppColors.BACKGROUND_DARK
+                                : AppColors.WHITE_COLOR,
+                            boxShadow: isDark
+                                ? List.empty()
+                                : const [
+                                    BoxShadow(
+                                      offset: Offset(-1, 1.0),
+                                      color: AppColors.SHADOW_COLOR,
+                                      blurRadius: 5.0,
+                                    ),
+                                    BoxShadow(
+                                      offset: Offset(1, 1.0),
+                                      color: AppColors.SHADOW_COLOR,
+                                      blurRadius: 5.0,
+                                    ),
+                                    BoxShadow(
+                                      offset: Offset(2, 1.0),
+                                      color: AppColors.SHADOW_COLOR,
+                                      blurRadius: 5.0,
+                                    )
+                                  ],
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                loyalityCard.gainedPoints.toStringAsFixed(0),
+                                style: const TextStyle(
+                                  fontSize: 30.0,
+                                  fontWeight: FontWeight.w900,
+                                  color: AppColors.SECONDARY_COLOR,
+                                ),
+                              ),
+                              Text(
+                                'Of ${loyalityCard.totalPoints.toStringAsFixed(0)} Pts',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium!
+                                    .copyWith(
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 1.28,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        progressColor: AppColors.PROGRESS_COLOR,
+                        backgroundColor: isDark
+                            ? AppColors.PRIMARY_DARK
+                            : AppColors.BORDER_COLOR,
+                        // backgroundWidth: 14,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               // ====================== Primo Card ===================== //
-              const SizedBox(height: 18.0),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 22.0),
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
-                    border:
-                        Border.all(width: 1.0, color: AppColors.BORDER_COLOR),
+                    color:
+                        isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
+                    border: isDark
+                        ? const Border()
+                        : Border.all(width: 1.0, color: AppColors.BORDER_COLOR),
                   ),
                   child: Column(
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 10.0, right: 20.0, top: 16.0, bottom: 16.0),
-                        child: Primo_Details_Widget(
+                        child: PrimoDetailsWidget(
                           percent: loyalityCard.gainedPoints /
                               loyalityCard.totalPoints,
                           primoTitle: AppLanguages.ACTIVE_PRIMO,
@@ -158,17 +189,17 @@ class LoyalityCardScreen extends StatelessWidget {
                           imageUrl: AppAssets.CUP_ICON,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(
+                      Padding(
+                        padding: const EdgeInsets.only(
                             left: 30.0, right: 30.0, bottom: 10.0),
                         child: TextRowWidget(
                           textOne: AppLanguages.NAME,
                           textTwo: AppLanguages.SURNAME,
-                          style: TextStyle(
-                            color: AppColors.BLACK_COLOR,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w700,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .copyWith(
+                                  fontSize: 14.0, fontWeight: FontWeight.w700),
                         ),
                       ),
                       const Padding(
@@ -184,17 +215,17 @@ class LoyalityCardScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(
+                      Padding(
+                        padding: const EdgeInsets.only(
                             left: 30.0, right: 30.0, bottom: 10.0),
                         child: TextRowWidget(
                           textOne: AppLanguages.LEVEL,
                           textTwo: AppLanguages.EXPIRY_DATE,
-                          style: TextStyle(
-                            color: AppColors.BLACK_COLOR,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w700,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .copyWith(
+                                  fontSize: 14.0, fontWeight: FontWeight.w700),
                         ),
                       ),
                       const Padding(
@@ -220,16 +251,19 @@ class LoyalityCardScreen extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
+                    color:
+                        isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
                     borderRadius: BorderRadius.circular(8.0),
-                    border:
-                        Border.all(width: 1.0, color: AppColors.BORDER_COLOR),
+                    border: isDark
+                        ? const Border()
+                        : Border.all(width: 1.0, color: AppColors.BORDER_COLOR),
                   ),
                   child: Column(
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 10.0, right: 20.0, top: 16.0, bottom: 16.0),
-                        child: Primo_Details_Widget(
+                        child: PrimoDetailsWidget(
                           percent: 1.0,
                           primoTitle: 'Basic',
                           date: '14 March 2023',
@@ -248,11 +282,14 @@ class LoyalityCardScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 22.0),
                 child: Row(
                   children: [
-                    const Text(AppLanguages.INVITE_FRIENDS,
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w700,
-                        )),
+                    Text(
+                      AppLanguages.INVITE_FRIENDS,
+                      style:
+                          Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                    ),
                   ],
                 ),
               ),
@@ -260,9 +297,11 @@ class LoyalityCardScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 22.0),
                 child: Container(
-                  padding: EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
-                    color: AppColors.SECONDARY_LIGHT,
+                    color: isDark
+                        ? AppColors.PRIMARY_DARK
+                        : AppColors.SECONDARY_LIGHT,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Row(
@@ -274,23 +313,34 @@ class LoyalityCardScreen extends StatelessWidget {
                         width: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100.0),
-                          color: AppColors.BACKGROUND_COLOR,
+                          color: isDark
+                              ? AppColors.BACKGROUND_DARK
+                              : AppColors.BACKGROUND_COLOR,
                           border: Border.all(
                               color: AppColors.GREY_COLOR, width: 1.3),
                         ),
-                        child: SvgPicture.asset(AppAssets.INVITE_FRIENDS_ICON),
+                        child: SvgPicture.asset(
+                          AppAssets.INVITE_FRIENDS_ICON,
+                          colorFilter: ColorFilter.mode(
+                              !isDark
+                                  ? AppColors.PRIMARY_COLOR
+                                  : AppColors.WHITE_COLOR,
+                              BlendMode.srcIn),
+                        ),
                       ),
                       const SizedBox(width: 10.0),
                       Expanded(
                         child: Column(
                           children: [
-                            const Text(
+                            Text(
                               AppLanguages.INVITATION_DESCRIPTION,
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.BLACK_COLOR,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium!
+                                  .copyWith(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                             ),
                             const SizedBox(width: 15.0),
                           ],
@@ -298,7 +348,14 @@ class LoyalityCardScreen extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          SvgPicture.asset(AppAssets.RIGHT_ARROW),
+                          SvgPicture.asset(
+                            AppAssets.RIGHT_ARROW,
+                            colorFilter: ColorFilter.mode(
+                                isDark
+                                    ? AppColors.GREY_COLOR
+                                    : AppColors.WHITE_COLOR,
+                                BlendMode.srcIn),
+                          ),
                           const SizedBox(width: 15.0),
                         ],
                       )

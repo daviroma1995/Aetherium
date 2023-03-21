@@ -25,6 +25,7 @@ class CustomEventCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
       height: 190.0,
       width: 190.0,
@@ -36,14 +37,17 @@ class CustomEventCardWidget extends StatelessWidget {
               height: 92.0,
               width: 190.0,
               decoration: BoxDecoration(
+                color: isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(8.0),
                   bottomRight: Radius.circular(8.0),
                 ),
-                border: Border.all(
-                  width: 1.0,
-                  color: AppColors.BORDER_COLOR,
-                ),
+                border: isDark
+                    ? const Border()
+                    : Border.all(
+                        width: 1.0,
+                        color: AppColors.BORDER_COLOR,
+                      ),
               ),
               child: Padding(
                 padding:
@@ -62,21 +66,30 @@ class CustomEventCardWidget extends StatelessWidget {
                     Text(
                       subTitle,
                       style: const TextStyle(
-                        fontSize: 14.0,
+                        fontSize: 13.0,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     const SizedBox(height: 6.0),
                     Row(
                       children: [
-                        SvgPicture.asset(AppAssets.CALANDER_ICON),
+                        SvgPicture.asset(
+                          AppAssets.CALANDER_ICON,
+                          colorFilter: isDark
+                              ? ColorFilter.mode(
+                                  AppColors.SECONDARY_LIGHT, BlendMode.srcIn)
+                              : ColorFilter.mode(
+                                  AppColors.PRIMARY_COLOR, BlendMode.srcIn),
+                        ),
                         const SizedBox(width: 6.0),
                         Text(
                           time,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 10.0,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.PRIMARY_COLOR,
+                            color: isDark
+                                ? AppColors.SECONDARY_LIGHT
+                                : AppColors.PRIMARY_COLOR,
                           ),
                         ),
                       ],

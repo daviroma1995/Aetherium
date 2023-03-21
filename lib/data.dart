@@ -8,18 +8,22 @@ List services = [
   {
     'service_title': 'Textured Skin',
     'service_image': AppAssets.MIRROR_ICON,
+    'dark_image': AppAssets.DARK_MIRROR_ICON,
   },
   {
     'service_title': 'Hair',
     'service_image': AppAssets.HAIR_ICON,
+    'dark_image': AppAssets.DARK_HAIR_ICON,
   },
   {
     'service_title': 'Porcelain',
     'service_image': AppAssets.PORCELAIN_ICON,
+    'dark_image': AppAssets.DARK_PORCELAIN_ICON,
   },
   {
     'service_title': 'Emergent',
     'service_image': AppAssets.EMERGENT_ICON,
+    'dark_image': AppAssets.DARK_EMERGENT_ICON,
   },
 ];
 
@@ -137,6 +141,19 @@ class Agenda {
         return AppColors.CONFIRMED_COLOR;
       case (Status.noshow):
         return AppColors.NO_SHOW_COLOR;
+    }
+  }
+
+  Color get darkolor {
+    switch (status) {
+      case (Status.archived):
+        return AppColors.DARK_ARCHIVED_COLOR;
+      case (Status.canceled):
+        return AppColors.DARK_CANCELED_COLOR;
+      case (Status.confirmed):
+        return AppColors.DARK_CONFIRMED_COLOR;
+      case (Status.noshow):
+        return AppColors.DARK_NO_SHOW_COLOR;
     }
   }
 }
