@@ -2,6 +2,7 @@
 import 'package:atherium_saloon_app/data.dart';
 import 'package:atherium_saloon_app/screens/event_details/event_details_screen.dart';
 import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
+import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/form_field_widget.dart';
 
@@ -22,7 +23,6 @@ class HomeScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: SafeArea(
-        top: true,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
@@ -62,52 +62,62 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                      height: 25.0,
-                      width: 55.0,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            right: 0.0,
-                            child: Icon(
-                              Icons.notifications_outlined,
-                              size: 30.0,
-                              color: isDark ? AppColors.GREY_COLOR : null,
+                      height: 30.0,
+                      width: 30.0,
+                      child: InkWell(
+                        onTap: () {},
+                        borderRadius: BorderRadius.circular(25.0),
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top: 5.0,
+                              right: 3.0,
+                              child: SvgPicture.asset(
+                                AppAssets.BELL_ICON,
+                                fit: BoxFit.cover,
+                                colorFilter: ColorFilter.mode(
+                                  isDark
+                                      ? AppColors.GREY_COLOR
+                                      : AppColors.BLACK_COLOR,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
                             ),
-                          ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 17.0,
-                              height: 17.0,
-                              decoration: BoxDecoration(
-                                  color: isDark
-                                      ? AppColors.SECONDARY_LIGHT
-                                      : AppColors.SECONDARY_COLOR,
-                                  borderRadius: BorderRadius.circular(110.0),
-                                  border: isDark
-                                      ? const Border()
-                                      : Border.all(
-                                          color: AppColors.WHITE_COLOR,
-                                          width: 1.1,
-                                        )),
-                              child: FittedBox(
-                                child: Text(
-                                  '3',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
+                            Positioned(
+                              right: 0,
+                              top: 0.0,
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: 17.0,
+                                height: 17.0,
+                                decoration: BoxDecoration(
                                     color: isDark
-                                        ? AppColors.BACKGROUND_DARK
-                                        : AppColors.WHITE_COLOR,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 11.0,
+                                        ? AppColors.SECONDARY_LIGHT
+                                        : AppColors.SECONDARY_COLOR,
+                                    borderRadius: BorderRadius.circular(110.0),
+                                    border: isDark
+                                        ? const Border()
+                                        : Border.all(
+                                            color: AppColors.WHITE_COLOR,
+                                            width: 1.1,
+                                          )),
+                                child: FittedBox(
+                                  child: Text(
+                                    '3',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: isDark
+                                          ? AppColors.BACKGROUND_DARK
+                                          : AppColors.WHITE_COLOR,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 11.0,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -124,48 +134,102 @@ class HomeScreen extends StatelessWidget {
                   onSubmit: () {},
                 ),
               ),
-              const CustomTitle(
-                title: 'Services',
-              ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 22.0, vertical: 20.0),
+                padding:
+                    const EdgeInsets.only(left: 22.0, right: 22.0, top: 20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: services.map(
-                    (e) {
-                      return Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            height: 60.0,
-                            width: 60.0,
-                            decoration: BoxDecoration(
-                              border: !isDark
-                                  ? Border.all(color: AppColors.BORDER_COLOR)
-                                  : Border(),
-                              borderRadius: BorderRadius.circular(130.0),
-                              color: !isDark
-                                  ? AppColors.WHITE_COLOR
-                                  : AppColors.PRIMARY_DARK,
-                            ),
-                            child: !isDark
-                                ? SvgPicture.asset(e['service_image'])
-                                : SvgPicture.asset(e['dark_image']),
+                  children: [
+                    Text(
+                      'Services',
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(() => ServicesScreen());
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.only(
+                          bottom: 5, // Space between underline and text
+                        ),
+                        decoration: BoxDecoration(
+                            border: Border(
+                          bottom: BorderSide(
+                            color: AppColors.BORDER_COLOR,
+                            width: 1.0, // Underline thickness
                           ),
-                          const SizedBox(height: 10.0),
-                          Text(
-                            e['service_title'],
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12.0,
-                              letterSpacing: .98,
-                            ),
+                        )),
+                        child: Text(
+                          'See All',
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: .75,
+                            color: AppColors.GREY_COLOR,
                           ),
-                        ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                width: Get.width,
+                height: 138.0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 22.0, vertical: 20.0),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemExtent: MediaQuery.of(context).size.width * .231,
+                    itemCount: services.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Get.to(() => ServicesScreen(), arguments: index);
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              height: 60.0,
+                              width: 60.0,
+                              decoration: BoxDecoration(
+                                border: !isDark
+                                    ? Border.all(color: AppColors.BORDER_COLOR)
+                                    : Border(),
+                                borderRadius: BorderRadius.circular(130.0),
+                                color: !isDark
+                                    ? AppColors.WHITE_COLOR
+                                    : AppColors.PRIMARY_DARK,
+                              ),
+                              child: !isDark
+                                  ? SvgPicture.asset(
+                                      services[index]['service_image'])
+                                  : SvgPicture.asset(
+                                      services[index]['dark_image']),
+                            ),
+                            const SizedBox(height: 10.0),
+                            Text(
+                              services[index]['service_title'],
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12.0,
+                                letterSpacing: .98,
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     },
-                  ).toList(),
+                  ),
                 ),
               ),
               Container(
@@ -251,6 +315,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 82.0),
             ],
           ),
         ),

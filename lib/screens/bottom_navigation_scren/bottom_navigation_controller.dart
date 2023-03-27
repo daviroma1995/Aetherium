@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../agenda_screen/agenda_screen.dart';
@@ -13,7 +14,11 @@ class BottomNavigationController extends GetxController {
     LoyalityCardScreen(),
     ProfileScreen(),
   ];
+  PageController pageController =
+      PageController(initialPage: 0, keepPage: true);
   void changeTab(int index) {
+    pageController.animateToPage(index,
+        duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
     currentIndex.value = index;
   }
 }

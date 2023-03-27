@@ -68,6 +68,7 @@ class CustomEventCardWidget extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 13.0,
                         fontWeight: FontWeight.w500,
+                        color: AppColors.GREY_COLOR,
                       ),
                     ),
                     const SizedBox(height: 6.0),

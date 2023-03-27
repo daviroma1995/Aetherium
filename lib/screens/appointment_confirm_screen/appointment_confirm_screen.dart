@@ -24,8 +24,10 @@ class AppointmentConfirmScreen extends StatelessWidget {
               child: SvgPicture.asset(
                 AppAssets.APPOINTMENT_TOP,
                 colorFilter: ColorFilter.mode(
-                    isDark ? AppColors.PRIMARY_DARK : AppColors.SECONDARY_LIGHT,
-                    BlendMode.srcIn),
+                  isDark ? AppColors.PRIMARY_DARK : AppColors.SECONDARY_LIGHT,
+                  BlendMode.srcIn,
+                ),
+                width: Get.width * .4,
               ),
             ),
             Positioned(
@@ -36,6 +38,7 @@ class AppointmentConfirmScreen extends StatelessWidget {
                 colorFilter: ColorFilter.mode(
                     isDark ? AppColors.PRIMARY_DARK : AppColors.SECONDARY_LIGHT,
                     BlendMode.srcIn),
+                width: Get.width * .15,
               ),
             ),
             Column(

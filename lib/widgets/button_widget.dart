@@ -21,23 +21,30 @@ class ButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onTap(),
-      child: Container(
-        alignment: Alignment.center,
-        width: width,
-        height: 42.0,
-        decoration: BoxDecoration(
+    return Container(
+      alignment: Alignment.center,
+      width: width,
+      height: 42.0,
+      decoration: BoxDecoration(
+        border: bordered ? Border.all(color: borderColor) : null,
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: MaterialButton(
+          onPressed: () => onTap(),
+          highlightColor: color,
+          minWidth: width,
+          height: 42.0,
           color: color,
-          border: bordered ? Border.all(color: borderColor) : null,
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: Text(
-          buttonText,
-          style: TextStyle(
-            color: buttonTextColor,
-            fontWeight: FontWeight.w700,
-            fontSize: 14.0,
+          elevation: 0.0,
+          child: Text(
+            buttonText,
+            style: TextStyle(
+              color: buttonTextColor,
+              fontWeight: FontWeight.w700,
+              fontSize: 14.0,
+            ),
           ),
         ),
       ),

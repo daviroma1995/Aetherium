@@ -46,43 +46,46 @@ class CustomInputFormField extends StatelessWidget {
             : const Border(),
         borderRadius: BorderRadius.circular(8.0),
       ),
-      child: TextField(
-        cursorColor: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
-        controller: textEdigintController,
-        onSubmitted: (value) => onSubmit(),
-        autofocus: autoFocus,
-        style: Theme.of(context).textTheme.bodyMedium,
-        obscureText: isObsecure,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
-          hintText: hintText,
-          hintStyle: Theme.of(context).textTheme.bodyMedium,
-          border: const OutlineInputBorder(
-            borderSide: BorderSide.none,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: TextField(
+          cursorColor: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
+          controller: textEdigintController,
+          onSubmitted: (value) => onSubmit(),
+          autofocus: autoFocus,
+          style: Theme.of(context).textTheme.bodyMedium,
+          obscureText: isObsecure,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
+            hintText: hintText,
+            hintStyle: Theme.of(context).textTheme.bodyMedium,
+            border: const OutlineInputBorder(
+              borderSide: BorderSide.none,
+            ),
+            suffixIcon: isPassword
+                ? IconButton(
+                    onPressed: () => onPressed!(),
+                    icon: isObsecure
+                        ? const Icon(Icons.visibility_off_outlined, size: 20.0)
+                        : const Icon(Icons.visibility_outlined, size: 20.0),
+                  )
+                : null,
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: paddingSymetric, vertical: 0.0),
+            prefixIcon: iconUrl != ''
+                ? Padding(
+                    padding: const EdgeInsets.only(
+                        top: 12.0, bottom: 12.0, right: 20.0, left: 18.0),
+                    child: SvgPicture.asset(iconUrl,
+                        colorFilter: isDark
+                            ? ColorFilter.mode(
+                                AppColors.GREY_COLOR, BlendMode.srcIn)
+                            : ColorFilter.mode(
+                                AppColors.GREY_DARK, BlendMode.srcIn)),
+                  )
+                : null,
           ),
-          suffixIcon: isPassword
-              ? IconButton(
-                  onPressed: () => onPressed!(),
-                  icon: isObsecure
-                      ? const Icon(Icons.visibility_off_outlined, size: 20.0)
-                      : const Icon(Icons.visibility_outlined, size: 20.0),
-                )
-              : null,
-          contentPadding:
-              EdgeInsets.symmetric(horizontal: paddingSymetric, vertical: 0.0),
-          prefixIcon: iconUrl != ''
-              ? Padding(
-                  padding: const EdgeInsets.only(
-                      top: 12.0, bottom: 12.0, right: 20.0, left: 18.0),
-                  child: SvgPicture.asset(iconUrl,
-                      colorFilter: isDark
-                          ? ColorFilter.mode(
-                              AppColors.GREY_COLOR, BlendMode.srcIn)
-                          : ColorFilter.mode(
-                              AppColors.GREY_DARK, BlendMode.srcIn)),
-                )
-              : null,
         ),
       ),
     );

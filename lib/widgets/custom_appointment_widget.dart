@@ -102,7 +102,7 @@ class CustomAppointmentCardWidget extends StatelessWidget {
               height: 27.0,
               width: 252.0,
               decoration: const BoxDecoration(
-                color: AppColors.SECONDARY_COLOR,
+                color: AppColors.SECONDARY_LIGHT,
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8.0),
                   bottomRight: Radius.circular(8.0),

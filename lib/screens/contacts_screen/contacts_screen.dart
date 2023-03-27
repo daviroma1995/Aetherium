@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../utils/constants.dart';
-import '../../widgets/custom_list_tile.dart';
+
 import 'contacts_controller.dart';
 
 class ContactsScreen extends StatelessWidget {
@@ -15,46 +15,58 @@ class ContactsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor:
+            isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+        elevation: 0.0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            InkWell(
+              borderRadius: BorderRadius.circular(25.0),
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: 25.0,
+                height: 25.0,
+                child: SvgPicture.asset(AppAssets.BACK_ARROW,
+                    height: 14.0, width: 14.0),
+              ),
+            ),
+            const SizedBox(width: 12.0),
+            Text(AppLanguages.APPOINTMENTS,
+                style: Theme.of(context).textTheme.headlineLarge),
+          ],
+        ),
+      ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 13.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => Get.back(),
-                      child: SvgPicture.asset(AppAssets.BACK_ARROW),
-                    ),
-                    const SizedBox(width: 12.0),
-                    Text(AppLanguages.CONTACTS,
-                        style: Theme.of(context).textTheme.headlineLarge),
-                  ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: Get.width,
+              height: Get.height - 80,
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
+                border: isDark
+                    ? const Border()
+                    : Border.all(color: AppColors.BORDER_COLOR, width: 1.3),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
                 ),
               ),
-              const SizedBox(height: 21.0),
-              Container(
-                width: Get.width,
-                decoration: BoxDecoration(
-                  color:
-                      isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
-                  border: isDark
-                      ? const Border()
-                      : Border.all(color: AppColors.BORDER_COLOR, width: 1.3),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30.0),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 27.0, top: 37.0, right: 27.0, bottom: 37.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(30.0),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 27.0, top: 37.0, right: 27.0, bottom: 37.0),
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -228,8 +240,8 @@ class ContactsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

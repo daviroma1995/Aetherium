@@ -32,7 +32,10 @@ class AppointmentDetailsScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 12.0),
                     Text(AppLanguages.FRAGRANCES_PERFUMES,
-                        style: Theme.of(context).textTheme.headlineLarge),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineLarge!
+                            .copyWith(fontSize: 21.0)),
                   ],
                 ),
               ),

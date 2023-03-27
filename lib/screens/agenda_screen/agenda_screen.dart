@@ -119,6 +119,7 @@ class AgendaScreen extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 72.0),
           ],
         ),
       ),

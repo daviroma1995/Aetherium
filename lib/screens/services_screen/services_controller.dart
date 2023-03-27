@@ -4,7 +4,44 @@ import 'package:get/get.dart';
 import '../appointment_booking_screen/appointment_booking_screen.dart';
 
 class ServicesController extends GetxController {
+  // On Init
+  // late int args;
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    print('On close called');
+  }
+
+  int? args;
+
   RxBool isExpanded = false.obs;
+  reArrange() {
+    if (args == null) {
+      reset();
+    } else {
+      if (args == 0) {
+        services[0].isExtended.value = true;
+        reset();
+      }
+      if (args != 0) {
+        final prevService = services[0];
+        final currentService = services[args!];
+        final temp = prevService;
+        services[0] = currentService;
+        services[0].isExtended.value = true;
+        services[args!] = temp;
+        reset();
+      }
+    }
+  }
+
+  void reset() {
+    for (int i = 1; i < services.length; i++) {
+      services[i].isExtended.value = false;
+    }
+  }
+
   void checkBoxController(int index) {
     fatFreezingServices[index].isSelected.value =
         !fatFreezingServices[index].isSelected.value;

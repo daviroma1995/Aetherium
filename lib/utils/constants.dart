@@ -32,6 +32,9 @@ class AppColors {
 }
 
 class AppAssets {
+  static const SPLASH_TOP_IMAGE = 'assets/images/splash_top.png';
+  static const SPLASH_BOTTOM_IMAGE = 'assets/images/splash_bottom.png';
+  static const SPLASH_LOGO_IMAGE = 'assets/images/logo.png';
   static const SPLASH_TEXT = 'assets/images/splash_text.svg';
   static const SPLASH_TOP = 'assets/images/splash_top.svg';
   static const SPLASH_BOTTOM = 'assets/images/splash_bottom.svg';
@@ -62,7 +65,7 @@ class AppAssets {
   static const CLOCK_ICON = 'assets/images/icons/clock_icon.svg';
   static const CALANDER_ICON = 'assets/images/icons/calender_icon.svg';
   static const PLUS_ICON = 'assets/images/icons/plus_icon.svg';
-  static const HOME_ICON = 'assets/images/icons/home_outlined.svg';
+  static const HOME_ICON = 'assets/images/icons/home.svg';
   static const HOME_ICON_SOLID = 'assets/images/icons/home_solid.svg';
   static const PEN_ICON = 'assets/images/icons/pen_outlined.svg';
   static const PEN_ICON_SOLID = 'assets/images/icons/pen_solid.svg';
@@ -155,7 +158,7 @@ class AppLanguages {
   static const NOTIFICATIONS = 'Notifications';
   static const NOTIFICATION_SETTINGS = 'Notification Settings';
 
-  static const ACCOUNT_INFO_DETAIL = 'Accoutn_Info_Detail';
+  static const ACCOUNT_INFO_DETAIL = 'My Information';
   static const LOGOUT = 'Logout';
   static const PROFILE = 'Profile';
   static const TERMS_OF_SERVICE = 'Terms of service';
@@ -169,7 +172,7 @@ class AppLanguages {
   static const APPOINTMENT_DESCRIPTION =
       'Discover and book beauty & wellness professionals near you. Your scheduled appointments will show up here.';
   static const SERVICES_TREATMENTS = 'Services/treatments';
-  static const CHOOSE_DATE_ADN_TIME = 'Choose Date & Time';
+  static const CHOOSE_DATE_AND_TIME = 'Choose Date & Time';
   static const AVAILABLE_SLOT = 'Available Slot';
   static const ADDED_APPOINTMENT = 'Added Appointment';
   static const CONFIRM_APPOINTMENT = 'Confirm Appointment';

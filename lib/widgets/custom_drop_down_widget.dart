@@ -84,7 +84,9 @@ class CustomDropDown extends StatelessWidget {
                         child: Column(
                           children: [
                             Material(
-                              color: Colors.white,
+                              color: isDark
+                                  ? AppColors.PRIMARY_DARK
+                                  : AppColors.GREY_COLOR,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 20.0),
@@ -99,10 +101,12 @@ class CustomDropDown extends StatelessWidget {
                                           curve: Curves.linear,
                                         );
                                       },
-                                      child: const RotatedBox(
+                                      child: RotatedBox(
                                         quarterTurns: 1,
                                         child: Icon(Icons.arrow_back_ios_new,
-                                            color: Colors.black),
+                                            color: isDark
+                                                ? AppColors.GREY_COLOR
+                                                : Colors.black),
                                       ),
                                     ),
                                     const SizedBox(width: 20.0),
@@ -117,10 +121,12 @@ class CustomDropDown extends StatelessWidget {
                                           curve: Curves.linear,
                                         );
                                       },
-                                      child: const RotatedBox(
+                                      child: RotatedBox(
                                         quarterTurns: 1,
                                         child: Icon(Icons.arrow_forward_ios,
-                                            color: Colors.black),
+                                            color: isDark
+                                                ? AppColors.GREY_COLOR
+                                                : Colors.black),
                                       ),
                                     ),
                                     const Spacer(),
@@ -137,7 +143,11 @@ class CustomDropDown extends StatelessWidget {
                                       child: Text(
                                         'Done',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w700),
+                                          fontWeight: FontWeight.w700,
+                                          color: isDark
+                                              ? AppColors.WHITE_COLOR
+                                              : AppColors.BLACK_COLOR,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -149,7 +159,9 @@ class CustomDropDown extends StatelessWidget {
                               child: ScrollConfiguration(
                                 behavior: ScrollBehavior(),
                                 child: CupertinoPicker(
-                                  backgroundColor: const Color(0XFFCED2DA),
+                                  backgroundColor: isDark
+                                      ? AppColors.BACKGROUND_DARK
+                                      : const Color(0XFFCED2DA),
                                   itemExtent: 33.0,
                                   magnification: 1.22,
                                   squeeze: 1.2,

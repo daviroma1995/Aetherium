@@ -19,28 +19,19 @@ class LoyalityCardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor:
+            isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+        title: Text(AppLanguages.LOYALITY_CARD,
+            style: Theme.of(context).textTheme.headlineLarge),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 13.0),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        AppLanguages.LOYALITY_CARD,
-                        style: Theme.of(context).textTheme.headlineLarge,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 13.0),
               Container(
                 decoration: BoxDecoration(
                   color:
@@ -363,7 +354,7 @@ class LoyalityCardScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 25.0),
+              const SizedBox(height: 82.0),
             ],
           ),
         ),

@@ -154,13 +154,48 @@ class AccountInfoScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12.0),
                   const CustomLabelWidget(label: AppLanguages.BIRTHDAY),
-                  CustomInputFormField(
-                    textEdigintController: TextEditingController(),
-                    hintText: 'Birthday',
-                    isValid: true,
-                    onSubmit: () {},
-                    autoFocus: false,
-                    paddingSymetric: 16.0,
+                  // CustomInputFormField(
+                  //   textEdigintController: TextEditingController(),
+                  //   hintText: 'Birthday',
+                  //   isValid: true,
+                  //   onSubmit: () {},
+                  //   autoFocus: false,
+                  //   paddingSymetric: 16.0,
+                  // ),
+                  GestureDetector(
+                    onTap: () async {
+                      final date = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.utc(1949, DateTime.january, 1),
+                        lastDate: DateTime.now(),
+                        helpText: 'Select Date of Birth',
+                      );
+                      controller.dateOfBirth.value = DateTime.parse(
+                        date.toString(),
+                      );
+                    },
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 18.0),
+                      height: 50.0,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? AppColors.PRIMARY_DARK
+                            : AppColors.WHITE_COLOR,
+                        border: isDark
+                            ? Border()
+                            : Border.all(
+                                width: 1.0,
+                                color: AppColors.BORDER_COLOR,
+                              ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Obx(
+                        () => Text(controller.getDateOfBirth),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 12.0),
                   Row(
@@ -189,7 +224,7 @@ class AccountInfoScreen extends StatelessWidget {
                         buttonTextColor: isDark
                             ? AppColors.PRIMARY_DARK
                             : AppColors.WHITE_COLOR,
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(height: 30.0)

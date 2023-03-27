@@ -20,8 +20,7 @@ class ProfileController extends GetxController {
     if (index == 0) Get.to(() => AppointmentsScreen());
     if (index == 1) Get.to(() => SettingsScreen());
     if (index == 2) Get.to(() => ConsultationsScreen());
-    if (index == 3) Get.to(() => AgendaScreen());
-    if (index == 4) Get.to(() => AccountInfoScreen());
+    if (index == 3) Get.to(() => AccountInfoScreen());
   }
 }
 
@@ -41,7 +40,6 @@ List<ProfileItem> profileItems = const [
   ProfileItem(
       title: AppLanguages.CONSULTATIONS,
       iconUrl: AppAssets.INVITE_FRIENDS_ICON),
-  ProfileItem(title: AppLanguages.NOTIFICATIONS, iconUrl: AppAssets.BELL_ICON),
   ProfileItem(
       title: AppLanguages.ACCOUNT_INFO_DETAIL, iconUrl: AppAssets.PROFILE_ICON),
   ProfileItem(title: AppLanguages.LOGOUT, iconUrl: AppAssets.EXIT_ICON),
