@@ -39,7 +39,7 @@ class ProfileScreen extends StatelessWidget {
                       child: CustomListTIle(
                           index: index,
                           title: profileItems[index].title,
-                          onTap: controller.Navigator,
+                          onTap: controller.navigator,
                           imageUrl: profileItems[index].iconUrl),
                     );
                   },

@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../utils/constants.dart';
-import '../../widgets/custom_list_tile.dart';
+
 import 'consultations_controller.dart';
 
 class ConsultationsScreen extends StatelessWidget {
@@ -15,6 +15,32 @@ class ConsultationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor:
+            isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+        elevation: 0.0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            InkWell(
+              borderRadius: BorderRadius.circular(25.0),
+              onTap: () => controller.handleBack(),
+              child: Container(
+                alignment: Alignment.center,
+                width: 25.0,
+                height: 25.0,
+                child: SvgPicture.asset(AppAssets.BACK_ARROW,
+                    height: 14.0, width: 14.0),
+              ),
+            ),
+            const SizedBox(width: 12.0),
+            Text(AppLanguages.CONSULTATIONS,
+                style: Theme.of(context).textTheme.headlineLarge),
+          ],
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -24,20 +50,6 @@ class ConsultationsScreen extends StatelessWidget {
               const SizedBox(height: 13.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                        onTap: () => Get.back(),
-                        child: SvgPicture.asset(AppAssets.BACK_ARROW)),
-                    const SizedBox(width: 12.0),
-                    Text(AppLanguages.CONSULTATIONS,
-                        style: Theme.of(context).textTheme.headlineLarge),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 22.0, vertical: 26.0),
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: consultations.length,

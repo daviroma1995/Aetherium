@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 
-import '../../widgets/app_bar_widget.dart';
 import '../../widgets/custom_dropdown_list_widget.dart';
 import '../../widgets/form_field_widget.dart';
 
@@ -18,13 +17,36 @@ class ServicesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     controller.args = Get.arguments;
-    print(controller.args);
     controller.reArrange();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBarCustom(
-        onTap: Get.back,
-        title: AppLanguages.SERVICES_TREATMENTS,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor:
+            isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+        elevation: 0.0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            InkWell(
+              borderRadius: BorderRadius.circular(25.0),
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: 25.0,
+                height: 25.0,
+                child: SvgPicture.asset(AppAssets.BACK_ARROW,
+                    height: 14.0, width: 14.0),
+              ),
+            ),
+            const SizedBox(width: 12.0),
+            Text(AppLanguages.SERVICES_TREATMENTS,
+                style: Theme.of(context).textTheme.headlineLarge),
+          ],
+        ),
       ),
       body: SafeArea(
         child: Column(
@@ -44,6 +66,9 @@ class ServicesScreen extends StatelessWidget {
                         onSubmit: () {},
                         autoFocus: false,
                         iconUrl: AppAssets.SEARCH_ICON,
+                        onchange: (value) {
+                          controller.searchService(value);
+                        },
                       ),
                     ),
                     const SizedBox(height: 10.0),
@@ -59,6 +84,7 @@ class ServicesScreen extends StatelessWidget {
                             children: [
                               const SizedBox(height: 10.0),
                               CustomDropDownListWidget(
+                                serviceIndex: index,
                                 title: services[index].title,
                                 imageUrl: AppAssets.USER_IMAGE,
                                 items: services[index]
@@ -66,7 +92,19 @@ class ServicesScreen extends StatelessWidget {
                                     .map((e) => e.title)
                                     .toList(),
                                 isExpanded: services[index].isExtended.value,
-                              ),
+                                price: services[index]
+                                    .items
+                                    .map((e) => e.price)
+                                    .toList(),
+                                time: services[index]
+                                    .items
+                                    .map((e) => e.time)
+                                    .toList(),
+                                serviceDetailController:
+                                    controller.serviceDetailController,
+                                selectedServices:
+                                    controller.selectedServiceController,
+                              )
                             ],
                           );
                         },
@@ -87,7 +125,7 @@ class ServicesScreen extends StatelessWidget {
                       : AppColors.PRIMARY_COLOR,
                   buttonTextColor:
                       !isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
-                  onTap: controller.moveToAppointmentBookingScree),
+                  onTap: controller.moveToAppointmentBookingScreen),
             ),
           ],
         ),

@@ -17,29 +17,38 @@ class EventDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor:
+            isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+        elevation: 0.0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            InkWell(
+              borderRadius: BorderRadius.circular(25.0),
+              onTap: () => controller.handleBack(context),
+              child: Container(
+                alignment: Alignment.center,
+                width: 25.0,
+                height: 25.0,
+                child: SvgPicture.asset(AppAssets.BACK_ARROW,
+                    height: 14.0, width: 14.0),
+              ),
+            ),
+            const SizedBox(width: 12.0),
+            Text(AppLanguages.FLOURISH_ESSENTIALS,
+                style: Theme.of(context).textTheme.headlineLarge),
+          ],
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 27.0, vertical: 13.0),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: SvgPicture.asset(AppAssets.BACK_ARROW),
-                    ),
-                    const SizedBox(width: 12.0),
-                    Text(Get.arguments.title,
-                        style: Theme.of(context).textTheme.headlineLarge),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 18.0),
+              const SizedBox(height: 10.0),
               ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30.0),

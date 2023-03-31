@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 
 class ConsultationsController extends GetxController {
   // TODO Implementation
+  void handleBack() {
+    Get.back();
+  }
 }
 
 class Consultation {

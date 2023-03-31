@@ -1,0 +1,17 @@
+[
+    {
+        "id": "77028268-701c-4dfc-a286-9528b7ea8825",
+        "name": "Ambra",
+        "service_list": [
+            "e762a53a-b2f6-451d-b4df-ecb1d1f7ca23",
+            "e762a53a-b2f6-451d-b4df-ecb1d1f7ca62"
+        ]
+    },
+    {
+        "id": "77028268-701c-4dfc-a286-9528b7ea8826",
+        "name": "Giovanna",
+        "service_list": [
+            "e762a53a-b2f6-451d-b4df-ecb1d1f7cg56"
+        ]
+    }
+]

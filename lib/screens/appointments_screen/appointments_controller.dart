@@ -1,5 +1,6 @@
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
 import 'package:atherium_saloon_app/screens/upcoming_appointments_screen/upcoming_appointments_screen.dart';
+import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
@@ -9,13 +10,12 @@ import '../services_screen/services_screen.dart';
 class AppointmentsController extends GetxController {
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     var myargs = Get.arguments;
   }
 
-  void handleBack() {
-    Get.back();
+  void handleBack(BuildContext context) {
+    Navigator.pop(context);
   }
 
   // TODO IMPLEMENT CONTROLLER
@@ -39,6 +39,11 @@ class AppointmentsController extends GetxController {
   }
 
   void createAppointment() {
-    Get.to(() => ServicesScreen());
+    Get.to(
+      () => ServicesScreen(),
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.easeInQuad,
+      transition: Transition.rightToLeft,
+    );
   }
 }

@@ -79,6 +79,9 @@ class AppAssets {
       'assets/images/icons/invite_firends_icon.svg';
   static const PRIMO_SUCCESS_ICON =
       'assets/images/icons/primo_success_icon.svg';
+  static const CONSULTATIONS_ICON = 'assets/images/icons/clipboard.svg';
+
+  static const PROFILE_INFO_ICON = 'assets/images/icons/info.svg';
 
   static const EVENT_IMAGE_ONE =
       'https://images.unsplash.com/photo-1605497788044-5a32c7078486?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80';
@@ -93,6 +96,12 @@ class AppAssets {
   static const EXIT_ICON = 'assets/images/icons/exit_icon.svg';
   static const BOOK_ICON = 'assets/images/icons/book_icon.svg';
   static const FILE_ICON = 'assets/images/icons/file_icon.svg';
+  static const FILE_MINUS = 'assets/images/icons/file-minus.svg';
+  static const ARCHIVE = 'assets/images/icons/archive.svg';
+  static const LOCK = 'assets/images/icons/lock.svg';
+  static const QRCODE_ICON = 'assets/images/icons/qr_code_icon.svg';
+  static const LINES = 'assets/images/icons/lines.svg';
+
   static const CROWN_ICON = 'assets/images/icons/crown_icon.svg';
   static const SHIELD_ICON = 'assets/images/icons/shield_icon.svg';
   static const PDF_ICON = 'assets/images/icons/pdf_icon.svg';
@@ -103,7 +112,7 @@ class AppAssets {
       'assets/images/acount_info_screen_curve.svg';
   static const CHECKED_ICON = 'assets/images/icons/checked_icon.svg';
   static const UNCHECKED_ICON = 'assets/images/icons/unchecked_icon.svg';
-  static const PROFILE_PIC = 'assets/images/profile_pic.png';
+  static const PROFILE_PIC = 'assets/images/png/profile-placeholder.png';
   static const CALENDER_ICON_LIGHT =
       'assets/images/icons/calender_iocn_light.svg';
   static const APPOINTMENT_TOP = 'assets/images/backgroundtop.svg';
@@ -113,9 +122,13 @@ class AppAssets {
   static const MAP_IMAGE = 'assets/images/map.jpg';
   static const WHATSAPP_ICON = 'assets/images/icons/whatsapp_logo.svg';
   static const DARK_CONFIRM_ICON = 'assets/images/icons/dark_confirm_icon.svg';
+  static const INFO_ICON = 'assets/images/icons/info.svg';
+  static const THEME_MODE = 'assets/images/icons/theme_mode.svg';
 }
 
 class AppLanguages {
+  static const THEME = 'Change Theme';
+  static const NEXT = 'Next';
   static const APP_NAME = 'Aetherium Saloon';
   static const WELCOME_TO = 'Welcome to';
   static const AETHERIUM = 'AETHERIUM';
@@ -198,6 +211,8 @@ class AppLanguages {
   static const OPENING_HOURS_OF_THE_SHOP = 'Opening hours of the shop';
   static const DESCRIPTION = 'Description';
   static const BEAUTY_SPECIALIST = 'Beauty Specialist';
+  static const AppuntamentoDettagli = 'Appuntamento - Dettagli';
+  static const APPOINTMENTCONFERMA = 'Appuntamento - Conferma';
 }
 
 class AppTextStyle {

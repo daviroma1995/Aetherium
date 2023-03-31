@@ -1,14 +1,22 @@
-import 'package:atherium_saloon_app/screens/appointment_details/appointment_details_screen.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'package:atherium_saloon_app/screens/appointment_confirm_detail_screen/appointment_confirm_detail_screen.dart';
+import 'package:atherium_saloon_app/screens/services_screen/services_controller.dart';
 
 import '../../utils/constants.dart';
 
 class PastAppointmentController extends GetxController {
-  void goToDetails(int index) {
+  goToDetails(int index) {
     Get.to(
-      AppointmentDetailsScreen(),
-    );
+        () => AppointmentConfirmDetailScreen(
+              isDetail: true,
+              isEditable: false,
+            ),
+        duration: const Duration(milliseconds: 600),
+        transition: Transition.rightToLeft,
+        arguments: pastAppointments[index].services);
   }
 }
 
@@ -26,6 +34,7 @@ class UserAppointmetn {
   final Status status;
   final String date;
   final String time;
+  final List<SubService> services;
   UserAppointmetn({
     required this.imageUrl,
     required this.title,
@@ -33,6 +42,7 @@ class UserAppointmetn {
     required this.status,
     required this.date,
     required this.time,
+    required this.services,
   });
   Color get color {
     switch (status) {
@@ -70,6 +80,10 @@ final pastAppointments = <UserAppointmetn>[
     status: Status.archived,
     date: '22 June',
     time: '6:00 PM',
+    services: [
+      SubService(title: 'Hair Services', price: 30, time: '30 Min'),
+      SubService(title: 'Textured Services', price: 30, time: '30 Min'),
+    ],
   ),
   UserAppointmetn(
     imageUrl:
@@ -79,6 +93,10 @@ final pastAppointments = <UserAppointmetn>[
     status: Status.noshow,
     date: '22 June',
     time: '6:00 PM',
+    services: [
+      SubService(title: 'Hair Services', price: 30, time: '30 Min'),
+      SubService(title: 'Textured Services', price: 30, time: '30 Min'),
+    ],
   ),
   UserAppointmetn(
     imageUrl:
@@ -88,6 +106,10 @@ final pastAppointments = <UserAppointmetn>[
     status: Status.canceled,
     date: '22 June',
     time: '6:00 PM',
+    services: [
+      SubService(title: 'Hair Services', price: 30, time: '30 Min'),
+      SubService(title: 'Textured Services', price: 30, time: '30 Min'),
+    ],
   ),
   UserAppointmetn(
     imageUrl:
@@ -97,6 +119,10 @@ final pastAppointments = <UserAppointmetn>[
     status: Status.confirmed,
     date: '22 June',
     time: '6:00 PM',
+    services: [
+      SubService(title: 'Hair Services', price: 30, time: '30 Min'),
+      SubService(title: 'Textured Services', price: 30, time: '30 Min'),
+    ],
   ),
   UserAppointmetn(
     imageUrl:
@@ -106,6 +132,10 @@ final pastAppointments = <UserAppointmetn>[
     status: Status.confirmed,
     date: '22 June',
     time: '6:00 PM',
+    services: [
+      SubService(title: 'Hair Services', price: 30, time: '30 Min'),
+      SubService(title: 'Textured Services', price: 30, time: '30 Min'),
+    ],
   ),
   UserAppointmetn(
     imageUrl:
@@ -115,6 +145,10 @@ final pastAppointments = <UserAppointmetn>[
     status: Status.confirmed,
     date: '22 June',
     time: '6:00 PM',
+    services: [
+      SubService(title: 'Hair Services', price: 30, time: '30 Min'),
+      SubService(title: 'Textured Services', price: 30, time: '30 Min'),
+    ],
   ),
   UserAppointmetn(
     imageUrl:
@@ -124,6 +158,10 @@ final pastAppointments = <UserAppointmetn>[
     status: Status.confirmed,
     date: '22 June',
     time: '6:00 PM',
+    services: [
+      SubService(title: 'Hair Services', price: 30, time: '30 Min'),
+      SubService(title: 'Textured Services', price: 30, time: '30 Min'),
+    ],
   ),
   UserAppointmetn(
     imageUrl:
@@ -133,6 +171,10 @@ final pastAppointments = <UserAppointmetn>[
     status: Status.confirmed,
     date: '22 June',
     time: '6:00 PM',
+    services: [
+      SubService(title: 'Hair Services', price: 30, time: '30 Min'),
+      SubService(title: 'Textured Services', price: 30, time: '30 Min'),
+    ],
   ),
   UserAppointmetn(
     imageUrl:
@@ -142,6 +184,10 @@ final pastAppointments = <UserAppointmetn>[
     status: Status.confirmed,
     date: '22 June',
     time: '6:00 PM',
+    services: [
+      SubService(title: 'Hair Services', price: 30, time: '30 Min'),
+      SubService(title: 'Textured Services', price: 30, time: '30 Min'),
+    ],
   ),
   UserAppointmetn(
     imageUrl:
@@ -151,6 +197,10 @@ final pastAppointments = <UserAppointmetn>[
     status: Status.confirmed,
     date: '22 June',
     time: '6:00 PM',
+    services: [
+      SubService(title: 'Hair Services', price: 30, time: '30 Min'),
+      SubService(title: 'Textured Services', price: 30, time: '30 Min'),
+    ],
   ),
   UserAppointmetn(
     imageUrl:
@@ -160,5 +210,9 @@ final pastAppointments = <UserAppointmetn>[
     status: Status.confirmed,
     date: '22 June',
     time: '6:00 PM',
+    services: [
+      SubService(title: 'Hair Services', price: 30, time: '30 Min'),
+      SubService(title: 'Textured Services', price: 30, time: '30 Min'),
+    ],
   ),
 ];

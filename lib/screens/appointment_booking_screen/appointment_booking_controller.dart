@@ -4,9 +4,12 @@ import 'package:atherium_saloon_app/screens/appointment_confirm_screen/appointme
 import 'package:atherium_saloon_app/screens/appointments_screen/appointments_screen.dart';
 import 'package:get/get.dart';
 
+import '../appointment_confirm_detail_screen/appointment_confirm_detail_screen.dart';
+
 int monthIndex = DateTime.now().month;
 
 class AppointMentBookingController extends GetxController {
+  double totalPrice = 0.0;
   Rx<DateTime> date = DateTime.now().obs;
   RxString currentMonth = months[monthIndex - 1].obs;
 
@@ -48,8 +51,16 @@ class AppointMentBookingController extends GetxController {
     selectedSlot.value = index;
   }
 
-  void confirmAppointment() {
-    Get.off(AppointmentConfirmScreen());
+  void next() {
+    Get.to(
+      AppointmentConfirmDetailScreen(
+        isDetail: false,
+        isEditable: false,
+      ),
+      duration: const Duration(milliseconds: 600),
+      transition: Transition.downToUp,
+      arguments: Get.arguments,
+    );
   }
 }
 

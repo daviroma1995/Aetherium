@@ -10,15 +10,24 @@ class BottomNavigationController extends GetxController {
   RxInt currentIndex = 0.obs;
   final screens = [
     HomeScreen(),
-    AgendaScreen(),
+    const AgendaScreen(),
     LoyalityCardScreen(),
     ProfileScreen(),
   ];
   PageController pageController =
       PageController(initialPage: 0, keepPage: true);
   void changeTab(int index) {
-    pageController.animateToPage(index,
-        duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
-    currentIndex.value = index;
+    if (index == 3) {
+      pageController.animateToPage(2,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+      currentIndex.value = 2;
+    } else if (index == 4) {
+      pageController.animateToPage(3,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    } else {
+      pageController.animateToPage(index,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+      currentIndex.value = index;
+    }
   }
 }

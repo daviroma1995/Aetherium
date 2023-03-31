@@ -1,11 +1,17 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:atherium_saloon_app/screens/account_info_screen/account_info_controller.dart';
+import 'package:atherium_saloon_app/screens/login_screen/login_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
+import 'package:atherium_saloon_app/utils/image_picker.dart';
 import 'package:atherium_saloon_app/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/custom_drop_down_widget.dart';
 import '../../widgets/custom_label_widget.dart';
@@ -40,24 +46,38 @@ class AccountInfoScreen extends StatelessWidget {
                   child: Stack(
                     children: [
                       Container(
-                        width: 111.0,
-                        height: 111.0,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 5.0, color: AppColors.BORDER_COLOR),
-                          borderRadius: BorderRadius.circular(100.0),
-                        ),
-                        child: Image.asset(
-                          AppAssets.PROFILE_PIC,
-                        ),
-                      ),
+                          width: 111.0,
+                          height: 111.0,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 5.0, color: AppColors.BORDER_COLOR),
+                            borderRadius: BorderRadius.circular(100.0),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Obx(
+                              () => controller.isUpdating.value == false
+                                  ? Image.asset(
+                                      AppAssets.PROFILE_PIC,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.file(
+                                      File(
+                                        controller.imageUrl.value!.path,
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                          )),
                       Positioned(
                         bottom: 0,
                         right: 5,
                         child: GestureDetector(
-                          onTap: () {
-                            // TODO IMPLEMENTATION REQUIRED
-                            log('Open Camera icon');
+                          onTap: () async {
+                            var image = await kImagePicker(context);
+                            if (image == null) return;
+                            controller.imageUrl.value = XFile(image.path);
+                            controller.isUpdating.value = true;
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -203,7 +223,22 @@ class AccountInfoScreen extends StatelessWidget {
                       ButtonWidget(
                         width: Get.width / 2 - 28,
                         buttonText: 'Delete Account',
-                        onTap: () {},
+                        onTap: () async {
+                          var isconfirmed = await showOkCancelAlertDialog(
+                            context: context,
+                            title: 'Alert!',
+                            message:
+                                'Are you sure you want to delete your account?',
+                            okLabel: 'Yes',
+                            cancelLabel: 'No',
+                            style: AdaptiveStyle.adaptive,
+                          );
+                          if (isconfirmed == OkCancelResult.ok) {
+                            final prefs = await SharedPreferences.getInstance();
+                            prefs.setBool('isLogedIn', false);
+                            Get.offAll(LoginScreen());
+                          }
+                        },
                         // color: Colors.black,
                         bordered: true,
                         borderColor: isDark

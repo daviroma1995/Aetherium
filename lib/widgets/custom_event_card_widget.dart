@@ -77,9 +77,9 @@ class CustomEventCardWidget extends StatelessWidget {
                         SvgPicture.asset(
                           AppAssets.CALANDER_ICON,
                           colorFilter: isDark
-                              ? ColorFilter.mode(
+                              ? const ColorFilter.mode(
                                   AppColors.SECONDARY_LIGHT, BlendMode.srcIn)
-                              : ColorFilter.mode(
+                              : const ColorFilter.mode(
                                   AppColors.PRIMARY_COLOR, BlendMode.srcIn),
                         ),
                         const SizedBox(width: 6.0),

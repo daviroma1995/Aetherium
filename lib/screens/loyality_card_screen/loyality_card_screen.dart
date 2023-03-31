@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:atherium_saloon_app/screens/loyality_card_screen/loyality_card_controller.dart';
+import 'package:atherium_saloon_app/screens/qr_code_screen/qr_code_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -172,12 +173,16 @@ class LoyalityCardScreen extends StatelessWidget {
                               loyalityCard.totalPoints,
                           primoTitle: AppLanguages.ACTIVE_PRIMO,
                           date: '22 March 2023',
-                          pointsGained:
-                              loyalityCard.gainedPoints.toStringAsFixed(0),
-                          totalPoints:
-                              loyalityCard.totalPoints.toStringAsFixed(0),
                           progressColor: AppColors.PROGRESS_COLOR,
                           imageUrl: AppAssets.CUP_ICON,
+                          onPressed: () {
+                            Get.to(
+                              () => QrCodeScreen(),
+                              duration: const Duration(milliseconds: 600),
+                              transition: Transition.circularReveal,
+                              arguments: '12399dklsfjd898034ljqlwkdf89',
+                            );
+                          },
                         ),
                       ),
                       Padding(

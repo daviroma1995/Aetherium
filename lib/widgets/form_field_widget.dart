@@ -16,7 +16,8 @@ class CustomInputFormField extends StatelessWidget {
   final bool autoFocus;
   final TextEditingController textEdigintController;
   final double paddingSymetric;
-
+  final Function? onchange;
+  final Function? onFocus;
   const CustomInputFormField({
     Key? key,
     this.iconUrl = '',
@@ -29,14 +30,14 @@ class CustomInputFormField extends StatelessWidget {
     this.autoFocus = true,
     required this.textEdigintController,
     this.paddingSymetric = 0.0,
+    this.onchange,
+    this.onFocus,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
-    if (isDark) {
-      print('is dark');
-    }
+
     return Container(
       padding: const EdgeInsets.only(left: 0.0),
       height: 50.0,
@@ -49,6 +50,20 @@ class CustomInputFormField extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: TextField(
+          onTap: () {
+            if (onFocus == null) {
+              () {};
+            } else {
+              onFocus!();
+            }
+          },
+          onChanged: (value) {
+            if (onchange == null) {
+              () {};
+            } else {
+              return onchange!(value);
+            }
+          }, //=> onchange!(value) ?? (value) {},
           cursorColor: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
           controller: textEdigintController,
           onSubmitted: (value) => onSubmit(),
@@ -79,9 +94,9 @@ class CustomInputFormField extends StatelessWidget {
                         top: 12.0, bottom: 12.0, right: 20.0, left: 18.0),
                     child: SvgPicture.asset(iconUrl,
                         colorFilter: isDark
-                            ? ColorFilter.mode(
+                            ? const ColorFilter.mode(
                                 AppColors.GREY_COLOR, BlendMode.srcIn)
-                            : ColorFilter.mode(
+                            : const ColorFilter.mode(
                                 AppColors.GREY_DARK, BlendMode.srcIn)),
                   )
                 : null,

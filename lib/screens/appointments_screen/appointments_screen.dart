@@ -1,21 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import 'package:atherium_saloon_app/data.dart';
 import 'package:atherium_saloon_app/screens/appointments_screen/appointments_controller.dart';
-import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
 import 'package:atherium_saloon_app/screens/past_appointment_screen/past_appointment_screen.dart';
 import 'package:atherium_saloon_app/screens/upcoming_appointments_screen/upcoming_appointments_screen.dart';
 
 import '../../utils/constants.dart';
 
 class AppointmentsScreen extends StatefulWidget {
-  AppointmentsScreen({super.key});
+  const AppointmentsScreen({super.key});
 
   @override
   State<AppointmentsScreen> createState() => _AppointmentsScreenState();
@@ -42,9 +38,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
             children: [
               InkWell(
                 borderRadius: BorderRadius.circular(25.0),
-                onTap: () {
-                  Get.back();
-                },
+                onTap: () => controller.handleBack(context),
                 child: Container(
                   alignment: Alignment.center,
                   width: 25.0,
@@ -95,7 +89,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                 const SizedBox(
                   height: 10.0,
                 ),
-                Container(
+                SizedBox(
                   width: double.infinity,
                   height: Get.height,
                   child: TabBarView(

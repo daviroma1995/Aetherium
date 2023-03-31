@@ -1,4 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
+import 'package:atherium_saloon_app/screens/service_detail_screen/service_detail_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,39 +9,47 @@ import 'package:get/get.dart';
 
 import '../../widgets/text_row_widget.dart';
 
-class AgendaDetailScreen extends StatelessWidget {
-  const AgendaDetailScreen({super.key});
+ServiceDetailController controller = Get.put(ServiceDetailController());
+
+class ServiceDetailScreen extends StatelessWidget {
+  const ServiceDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    controller.args = Get.arguments;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor:
+            isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+        elevation: 0.0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            InkWell(
+              borderRadius: BorderRadius.circular(25.0),
+              onTap: () => Get.back(),
+              child: Container(
+                alignment: Alignment.center,
+                width: 25.0,
+                height: 25.0,
+                child: SvgPicture.asset(AppAssets.BACK_ARROW,
+                    height: 14.0, width: 14.0),
+              ),
+            ),
+            const SizedBox(width: 12.0),
+            Text(controller.args['service_title'],
+                style: Theme.of(context).textTheme.headlineLarge),
+          ],
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 27.0, vertical: 13.0),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: SvgPicture.asset(AppAssets.BACK_ARROW),
-                    ),
-                    const SizedBox(width: 12.0),
-                    Text(AppLanguages.FRAGRANCES_PERFUMES,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineLarge!
-                            .copyWith(fontSize: 21.0)),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 18.0),
               ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30.0),
@@ -83,7 +94,7 @@ class AgendaDetailScreen extends StatelessWidget {
                         const SizedBox(height: 16.0),
                         TextRowWidget(
                           textOne: 'Duration: ',
-                          textTwo: 'Location: ',
+                          textTwo: 'Prezzo: ',
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 16.0,
@@ -93,9 +104,9 @@ class AgendaDetailScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 20.0),
-                        const TextRowWidget(
-                          textOne: '30 Mints',
-                          textTwo: 'Online',
+                        TextRowWidget(
+                          textOne: controller.args['time'],
+                          textTwo: '${controller.args['price']}\$',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,

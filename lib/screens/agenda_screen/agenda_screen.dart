@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:atherium_saloon_app/screens/agenda_detail_screen/agenda_detail_screen.dart';
+import 'package:atherium_saloon_app/screens/appointment_confirm_detail_screen/appointment_confirm_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -17,54 +17,50 @@ class AgendaScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         body: SafeArea(
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('March',
-                      style: Theme.of(context).textTheme.headlineLarge),
-                  IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(
-                      AppAssets.CALANDER_ICON,
-                      colorFilter: ColorFilter.mode(
-                          isDark
-                              ? AppColors.GREY_COLOR
-                              : AppColors.PRIMARY_COLOR,
-                          BlendMode.srcIn),
-                    ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('March', style: Theme.of(context).textTheme.headlineLarge),
+                IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(
+                    AppAssets.CALANDER_ICON,
+                    colorFilter: ColorFilter.mode(
+                        isDark ? AppColors.GREY_COLOR : AppColors.PRIMARY_COLOR,
+                        BlendMode.srcIn),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22.0),
-              child: HorizontalCalendar(
-                date: DateTime.now(),
-                textColor: isDark ? AppColors.WHITE_COLOR : Colors.black45,
-                backgroundColor:
-                    !isDark ? Colors.white : AppColors.BACKGROUND_DARK,
-                selectedColor: AppColors.SECONDARY_COLOR,
-                showMonth: false,
-                onDateSelected: (date) {
-                  print(date.toString());
-                },
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22.0),
+            child: HorizontalCalendar(
+              date: DateTime.now(),
+              textColor: isDark ? AppColors.WHITE_COLOR : Colors.black45,
+              backgroundColor:
+                  !isDark ? Colors.white : AppColors.BACKGROUND_DARK,
+              selectedColor: AppColors.SECONDARY_COLOR,
+              showMonth: false,
+              onDateSelected: (date) {
+                // TODO
+              },
             ),
-            const SizedBox(height: 13.0),
-            ClipRRect(
+          ),
+          const SizedBox(height: 13.0),
+          Expanded(
+            child: ClipRRect(
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30.0),
                 topRight: Radius.circular(30.0),
               ),
               child: Container(
                 width: Get.width,
-                // height: double.infinity,
+                height: null,
                 decoration: BoxDecoration(
                   color:
                       isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
@@ -76,52 +72,65 @@ class AgendaScreen extends StatelessWidget {
                     topRight: Radius.circular(30.0),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    CustomTitle(
-                      style:
-                          Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w700,
-                              ),
-                      title: 'Tuesday',
-                      subTitle: '14/03/2023',
-                      isUnderLined: false,
-                    ),
-                    const SizedBox(height: 17.0),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: agendas.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding:
-                              const EdgeInsets.only(left: 23.0, bottom: 10.0),
-                          child: GestureDetector(
-                            onTap: () => Get.to(() => AgendaDetailScreen()),
-                            child: AgendaCustomCardWidget(
-                              startTime: agendas[index].startTime,
-                              endTime: agendas[index].endTime,
-                              duration: agendas[index].duration,
-                              userImageUrl: agendas[index].iamgeUrl,
-                              userName: agendas[index].userName,
-                              service: agendas[index].service,
-                              agendaColor: isDark
-                                  ? agendas[index].darkolor
-                                  : agendas[index].color,
-                              agendaBarsColor: agendas[index].color,
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      CustomTitle(
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                        title: 'Tuesday',
+                        subTitle: '14/03/2023',
+                        isUnderLined: false,
+                      ),
+                      const SizedBox(height: 17.0),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: agendas.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.only(left: 23.0, bottom: 10.0),
+                            child: GestureDetector(
+                              onTap: () => Get.to(
+                                AppointmentConfirmDetailScreen(
+                                  isDetail: true,
+                                  isEditable: false,
+                                ),
+                                duration: const Duration(
+                                  milliseconds: 600,
+                                ),
+                                transition: Transition.downToUp,
+                              ),
+                              child: AgendaCustomCardWidget(
+                                startTime: agendas[index].startTime,
+                                endTime: agendas[index].endTime,
+                                duration: agendas[index].duration,
+                                userImageUrl: agendas[index].iamgeUrl,
+                                userName: agendas[index].userName,
+                                service: agendas[index].service,
+                                agendaColor: isDark
+                                    ? agendas[index].darkolor
+                                    : agendas[index].color,
+                                agendaBarsColor: agendas[index].color,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 72.0),
-          ],
-        ),
+          ),
+        ],
       ),
     ));
   }

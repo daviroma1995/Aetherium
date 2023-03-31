@@ -1,0 +1,16 @@
+[
+    {
+        "id": "840e7f90-0948-40b2-bd7d-39d42aceabdb",
+        "start_date": "31/03/2023",
+        "points": "150",
+        "client_id": "d3797032-904f-45df-b515-397e1b9d7328",
+        "membership_type_id": "b17bb975-124e-442c-aa7c-de2fb40d2c45"
+    },
+    {
+        "id": "840e7f90-0948-40b2-bd7d-39d42aceabdd",
+        "start_date": "31/03/2023",
+        "points": "180",
+        "client_id": "d3797032-904f-45df-b515-397e1b9d7329",
+        "membership_type_id": "b17bb975-124e-442c-aa7c-de2fb40d2c4d"
+    }
+]

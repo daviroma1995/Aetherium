@@ -1,0 +1,45 @@
+[{
+    "email": "shop@gmail.com",
+    "telephone": "",
+    "phone_number": "",
+    "description": "this is a great shop",
+    
+        "opening_hours": [
+          {
+            "day": "Lunedì",
+            "opening_time": "14:30",
+            "closing_time": "19:30"
+          },
+          {
+            "day": "Martedì",
+            "opening_time": "09:00",
+            "closing_time": "20:00"
+          },
+          {
+            "day": "Mercoledì",
+            "opening_time": "09:00",
+            "closing_time": "20:00"
+          },
+          {
+            "day": "Giovedì",
+            "opening_time": "09:00",
+            "closing_time": "20:00"
+          },
+          {
+            "day": "Venerdì",
+            "opening_time": "09:00",
+            "closing_time": "20:00"
+          },
+          {
+            "day": "Sabato",
+            "opening_time": "09:00",
+            "closing_time": "13:00"
+          },
+          {
+            "day": "Domenica",
+            "opening_time": "Chiusi",
+            "closing_time": "Chiusi"
+          }
+        ]
+      
+}]

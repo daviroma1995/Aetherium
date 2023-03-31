@@ -9,6 +9,7 @@ class CustomTitle extends StatelessWidget {
   final bool isUnderLined;
   final TextStyle? style;
   final Color borderColor;
+  final Function? onTap;
   const CustomTitle({
     Key? key,
     required this.title,
@@ -16,6 +17,7 @@ class CustomTitle extends StatelessWidget {
     this.isUnderLined = true,
     this.style,
     this.borderColor = AppColors.GREY_COLOR,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -33,27 +35,36 @@ class CustomTitle extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
           ),
-          Container(
-            padding: const EdgeInsets.only(
-              bottom: 5, // Space between underline and text
-            ),
-            decoration: BoxDecoration(
-              border: isUnderLined
-                  ? Border(
-                      bottom: BorderSide(
-                        color: borderColor,
-                        width: 1.0, // Underline thickness
-                      ),
-                    )
-                  : null,
-            ),
-            child: Text(
-              subTitle,
-              style: TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w500,
-                letterSpacing: .75,
-                color: borderColor,
+          GestureDetector(
+            onTap: () {
+              if (onTap != null) {
+                onTap!();
+              } else {
+                () {};
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.only(
+                bottom: 5, // Space between underline and text
+              ),
+              decoration: BoxDecoration(
+                border: isUnderLined
+                    ? Border(
+                        bottom: BorderSide(
+                          color: borderColor,
+                          width: 1.0, // Underline thickness
+                        ),
+                      )
+                    : null,
+              ),
+              child: Text(
+                subTitle,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: .75,
+                  color: borderColor,
+                ),
               ),
             ),
           )

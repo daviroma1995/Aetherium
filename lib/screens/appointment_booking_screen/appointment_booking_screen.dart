@@ -2,14 +2,11 @@ import 'dart:developer';
 
 import 'package:atherium_saloon_app/screens/appointment_booking_screen/appointment_booking_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
-import 'package:atherium_saloon_app/widgets/appointments_card_widget.dart';
 import 'package:atherium_saloon_app/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:horizontal_calendar/horizontal_calendar.dart';
-
-import '../../widgets/app_bar_widget.dart';
 
 class AppointmentBookingScreen extends StatelessWidget {
   final controller = Get.put(AppointMentBookingController());
@@ -19,9 +16,33 @@ class AppointmentBookingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBarCustom(
-        onTap: Get.back,
-        title: AppLanguages.CHOOSE_DATE_AND_TIME,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor:
+            isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+        elevation: 0.0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            InkWell(
+              borderRadius: BorderRadius.circular(25.0),
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: 25.0,
+                height: 25.0,
+                child: SvgPicture.asset(AppAssets.BACK_ARROW,
+                    height: 14.0, width: 14.0),
+              ),
+            ),
+            const SizedBox(width: 12.0),
+            Text(AppLanguages.CHOOSE_DATE_AND_TIME,
+                style: Theme.of(context).textTheme.headlineLarge),
+          ],
+        ),
       ),
       body: SafeArea(
         child: Column(
@@ -248,8 +269,8 @@ class AppointmentBookingScreen extends StatelessWidget {
                     : AppColors.PRIMARY_COLOR,
                 buttonTextColor:
                     !isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
-                buttonText: AppLanguages.CONFIRM_APPOINTMENT,
-                onTap: controller.confirmAppointment,
+                buttonText: 'Next',
+                onTap: controller.next,
               ),
             ),
           ],
@@ -269,7 +290,7 @@ Container specialistCard({
     height: 82.0,
     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
     decoration: BoxDecoration(
-      color: isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+      color: isDark ? AppColors.PRIMARY_DARK : AppColors.BACKGROUND_COLOR,
       border: isDark
           ? const Border()
           : Border.all(

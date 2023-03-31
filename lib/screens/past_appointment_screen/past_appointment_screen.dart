@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 import '../../utils/constants.dart';
 import '../../widgets/appointments_card_widget.dart';
-import '../appointments_screen/appointments_screen.dart';
 
 class PastAppointmentScreen extends StatelessWidget {
   final controller = Get.put(PastAppointmentController());
@@ -18,8 +17,8 @@ class PastAppointmentScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              pastAppointments.length < 1
-                  ? Container(
+              pastAppointments.isEmpty
+                  ? SizedBox(
                       height: Get.height - 250.0,
                       width: Get.width,
                       child: Column(
@@ -28,7 +27,7 @@ class PastAppointmentScreen extends StatelessWidget {
                         children: [
                           SvgPicture.asset(AppAssets.CALENDER_ICON_LIGHT),
                           const SizedBox(height: 48.0),
-                          Text(
+                          const Text(
                             'Scheduled Appointments',
                             style: TextStyle(
                               fontSize: 16.0,
@@ -36,9 +35,8 @@ class PastAppointmentScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 10.0),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 22.0),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 22.0),
                             child: Text(
                               AppLanguages.APPOINTMENT_DESCRIPTION,
                               textAlign: TextAlign.center,
