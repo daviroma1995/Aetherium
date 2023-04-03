@@ -28,6 +28,7 @@ class PrimoDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,7 +43,7 @@ class PrimoDetailsWidget extends StatelessWidget {
               center: SvgPicture.asset(imageUrl),
               progressColor: progressColor,
             ),
-            const SizedBox(width: 30.0),
+            SizedBox(width: size.width * .034),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

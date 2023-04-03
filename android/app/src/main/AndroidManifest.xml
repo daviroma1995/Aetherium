@@ -9,6 +9,8 @@
         android:label="aetherium_saloon_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyD83bL6G9N1zJnKRPdA0cqINbg86Xko1Nc"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

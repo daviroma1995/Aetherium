@@ -10,7 +10,7 @@ class BottomNavigationController extends GetxController {
   RxInt currentIndex = 0.obs;
   final screens = [
     HomeScreen(),
-    const AgendaScreen(),
+    AgendaScreen(),
     LoyalityCardScreen(),
     ProfileScreen(),
   ];

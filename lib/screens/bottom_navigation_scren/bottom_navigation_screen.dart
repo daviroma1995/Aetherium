@@ -152,7 +152,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         controller: controller.pageController,
         children: [
           HomeScreen(),
-          const AgendaScreen(),
+          AgendaScreen(),
           LoyalityCardScreen(),
           ProfileScreen(),
         ],
