@@ -33,6 +33,7 @@ dependencies:
   adaptive_theme: ^3.2.0
   intl: ^0.18.0
   google_maps_flutter: ^2.2.5
+  url_launcher: ^6.1.10
   
   
 
@@ -62,6 +63,7 @@ flutter:
     - assets/images/png/
     - assets/images/appointments/
     - assets/images/icons/arrow_right.svg
+    - data/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

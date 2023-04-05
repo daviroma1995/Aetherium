@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
+import 'package:atherium_saloon_app/utils/map_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,7 @@ class ContactsScreen extends StatelessWidget {
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
+
   static const CameraPosition _kLake = CameraPosition(
       bearing: 192.8334901395799,
       target: LatLng(37.43296265331129, -122.08832357078792),
@@ -26,6 +28,11 @@ class ContactsScreen extends StatelessWidget {
       zoom: 19.151926040649414);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   LatLng _center = LatLng(37.43296265331129, -122.08832357078792);
+  Future<void> _goToTheLake() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  }
+
   ContactsScreen({super.key});
 
   @override
@@ -55,7 +62,7 @@ class ContactsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12.0),
-            Text(AppLanguages.APPOINTMENTS,
+            Text(AppLanguages.CONTACTS,
                 style: Theme.of(context).textTheme.headlineLarge),
           ],
         ),
@@ -146,7 +153,7 @@ class ContactsScreen extends StatelessWidget {
                                     const Text(
                                       'WhatsApp',
                                       style: TextStyle(
-                                        fontSize: 8.0,
+                                        fontSize: 10.0,
                                         color: AppColors.WHITE_COLOR,
                                       ),
                                     ),
@@ -235,15 +242,28 @@ class ContactsScreen extends StatelessWidget {
                                 ),
                           ),
                           const SizedBox(height: 20.0),
-                          Container(
-                            height: 300.0,
-                            child: GoogleMap(
-                              initialCameraPosition: _kGooglePlex,
-                              mapType: MapType.hybrid,
-                              onMapCreated: (GoogleMapController controller) {
-                                _controller.complete(controller);
-                              },
-                              markers: markers.values.toSet(),
+                          GestureDetector(
+                            onTap: () {
+                              print('hello');
+                            },
+                            child: SizedBox(
+                              height: 250.0,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: GoogleMap(
+                                  onTap: (argument) {
+                                    MapUtils.openMap(
+                                        argument.latitude, argument.longitude);
+                                  },
+                                  initialCameraPosition: _kGooglePlex,
+                                  mapType: MapType.hybrid,
+                                  onMapCreated:
+                                      (GoogleMapController controller) {
+                                    _controller.complete(controller);
+                                  },
+                                  markers: markers.values.toSet(),
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(height: 20.0),

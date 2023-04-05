@@ -20,7 +20,8 @@ class CalendarTile extends StatefulWidget {
   final Color? todayColor;
   final Color? eventColor;
   final Color? eventDoneColor;
-
+  final bool? isExpended;
+  final bool? isSwapped;
   CalendarTile({
     this.onDateSelected,
     this.date,
@@ -36,6 +37,8 @@ class CalendarTile extends StatefulWidget {
     this.todayColor,
     this.eventColor,
     this.eventDoneColor,
+    this.isExpended: false,
+    this.isSwapped: false,
   });
 
   @override
@@ -44,13 +47,38 @@ class CalendarTile extends StatefulWidget {
 
 class _CalendarTileState extends State<CalendarTile> {
   Widget renderDateOrDayOfWeek(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     if (widget.isDayOfWeek) {
+      int index = 0;
       return InkWell(
         child: Container(
           alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color:
+                  widget.isSelected && !widget.isExpended! && !widget.isSwapped!
+                      ? isDark
+                          ? AppColors.SECONDARY_LIGHT
+                          : AppColors.SECONDARY_COLOR
+                      : Colors.transparent,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25.0),
+                topRight: Radius.circular(25.0),
+              )),
           child: Text(
             widget.dayOfWeek!,
-            style: widget.dayOfWeekStyle,
+            style: TextStyle(
+              color:
+                  widget.isSelected && !widget.isExpended! && !widget.isSwapped!
+                      ? isDark
+                          ? AppColors.BACKGROUND_DARK
+                          : AppColors.WHITE_COLOR
+                      : isDark
+                          ? AppColors.WHITE_COLOR
+                          : AppColors.BLACK_COLOR,
+              fontSize: 14.0,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       );
@@ -58,26 +86,47 @@ class _CalendarTileState extends State<CalendarTile> {
       int eventCount = 0;
       return InkWell(
         onTap: widget.onDateSelected,
-        child: Padding(
-          padding: const EdgeInsets.all(1.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(25.0),
+            bottomRight: Radius.circular(25.0),
+          ),
           child: Container(
-            height: 30,
-            decoration: widget.isSelected
-                ? const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.SECONDARY_COLOR,
+            height: 50,
+            width: 50,
+            decoration: widget.isSelected && !widget.isSwapped!
+                ? BoxDecoration(
+                    color: isDark
+                        ? AppColors.SECONDARY_LIGHT
+                        : AppColors.SECONDARY_COLOR,
+                    shape: widget.isExpended!
+                        ? BoxShape.circle
+                        : BoxShape.rectangle,
                   )
                 : const BoxDecoration(),
             alignment: Alignment.center,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  DateFormat("d").format(widget.date!),
-                  style: const TextStyle(
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 50.0,
+                    child: Text(
+                      DateFormat("d").format(widget.date!),
+                      style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: .75,
+                          color: widget.isSelected && !widget.isSwapped!
+                              ? isDark
+                                  ? AppColors.BLACK_COLOR
+                                  : AppColors.WHITE_COLOR
+                              : isDark
+                                  ? AppColors.GREY_COLOR
+                                  : AppColors.BLACK_COLOR),
+                    ),
+                  ),
                 ),
                 widget.events != null && widget.events!.isNotEmpty
                     ? Row(
@@ -88,17 +137,17 @@ class _CalendarTileState extends State<CalendarTile> {
                           return Container(
                             margin: const EdgeInsets.only(
                                 left: 2.0, right: 2.0, top: 2.0),
-                            width: 7.0,
-                            height: 7.0,
+                            width: 8.0,
+                            height: 8.0,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: event["isDone"]
                                   ? widget.isSelected
-                                      ? Colors.black
-                                      : Colors.green
+                                      ? AppColors.PRIMARY_COLOR
+                                      : AppColors.SECONDARY_LIGHT
                                   : widget.isSelected
-                                      ? Colors.white38
-                                      : Colors.black45,
+                                      ? Colors.redAccent
+                                      : Colors.red,
                             ),
                           );
                         }).toList())

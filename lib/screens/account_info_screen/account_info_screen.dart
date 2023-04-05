@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
@@ -56,14 +55,14 @@ class AccountInfoScreen extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(100),
                             child: Obx(
-                              () => controller.isUpdating.value == false
+                              () => controller.imageFileString.isEmpty
                                   ? Image.asset(
                                       AppAssets.PROFILE_PIC,
                                       fit: BoxFit.cover,
                                     )
                                   : Image.file(
                                       File(
-                                        controller.imageUrl.value!.path,
+                                        controller.imageFileString.value,
                                       ),
                                       fit: BoxFit.cover,
                                     ),

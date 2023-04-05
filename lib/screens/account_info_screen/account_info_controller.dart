@@ -6,13 +6,30 @@ class AccountInfoController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await profileImage();
+  }
+
+  @override
+  void onReady() async {
+    // TODO: implement onReady
+    super.onReady();
+    var prefs = await SharedPreferences.getInstance();
+    imageFileString.value = prefs.getString('imageUrlString') ?? '';
+    ever(isUpdating, (callback) {
+      print('called  ever');
+      setPrefs(imageUrl.value!.path);
+    });
+  }
+
+  void setPrefs(String path) async {
+    var prefs = await SharedPreferences.getInstance();
+    imageFileString.value = path;
+    prefs.setString('imageUrlString', path);
   }
 
   RxString genderValue = 'Male'.obs;
   Rx<XFile?> imageUrl = XFile('').obs;
   RxBool isUpdating = false.obs;
-  String imageFileString = '';
+  RxString imageFileString = ''.obs;
   final dateOfBirth = DateTime.now().obs;
   String get getDateOfBirth {
     final day = dateOfBirth.value.day < 10
@@ -24,17 +41,8 @@ class AccountInfoController extends GetxController {
     return '$day/$month/${dateOfBirth.value.year}';
   }
 
-  Future profileImage() async {
-    final prefs = await SharedPreferences.getInstance();
-    imageFileString = prefs.getString('profile_image') ?? '';
-  }
-
   void changeValue(String value) {
     genderValue.value = value;
-  }
-
-  void loadLocalData() async {
-    final prefs = await SharedPreferences.getInstance();
   }
 
   Future pickImage(ImageSource source) async {

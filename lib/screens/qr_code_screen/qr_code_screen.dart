@@ -43,6 +43,7 @@ class QrCodeScreen extends StatelessWidget {
         child: QrImage(
           data: Get.arguments ?? 'ERROR',
           size: 300,
+          backgroundColor: Colors.white,
         ),
       ),
     );

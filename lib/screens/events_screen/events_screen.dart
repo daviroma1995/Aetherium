@@ -1,5 +1,4 @@
 import 'package:atherium_saloon_app/data.dart';
-import 'package:atherium_saloon_app/screens/event_details/event_details_controller.dart';
 import 'package:atherium_saloon_app/screens/event_details/event_details_screen.dart';
 import 'package:atherium_saloon_app/screens/events_screen/events_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';

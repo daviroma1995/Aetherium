@@ -1,18 +1,20 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../utils/constants.dart';
+import 'favorite_icon_widget.dart';
 
-class CustomEventCardWidget extends StatelessWidget {
+class CustomEventCardWidget extends StatefulWidget {
   final int index;
   final String iamgeUrl;
   final String title;
   final String subTitle;
   final String time;
-  final bool isFavorite;
+  bool isFavorite;
   final Function onIconTap;
-  const CustomEventCardWidget({
+  CustomEventCardWidget({
     Key? key,
     required this.index,
     required this.iamgeUrl,
@@ -23,6 +25,11 @@ class CustomEventCardWidget extends StatelessWidget {
     required this.onIconTap,
   }) : super(key: key);
 
+  @override
+  State<CustomEventCardWidget> createState() => _CustomEventCardWidgetState();
+}
+
+class _CustomEventCardWidgetState extends State<CustomEventCardWidget> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -56,7 +63,7 @@ class CustomEventCardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      widget.title,
                       style: const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.w700,
@@ -64,7 +71,7 @@ class CustomEventCardWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 6.0),
                     Text(
-                      subTitle,
+                      widget.subTitle,
                       style: const TextStyle(
                         fontSize: 13.0,
                         fontWeight: FontWeight.w500,
@@ -84,7 +91,7 @@ class CustomEventCardWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 6.0),
                         Text(
-                          time,
+                          widget.time,
                           style: TextStyle(
                             fontSize: 10.0,
                             fontWeight: FontWeight.w500,
@@ -114,7 +121,7 @@ class CustomEventCardWidget extends StatelessWidget {
                   width: 190.0,
                   height: 108.0,
                   fit: BoxFit.cover,
-                  imageUrl: iamgeUrl,
+                  imageUrl: widget.iamgeUrl,
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       Center(
                     child: CircularProgressIndicator(
@@ -128,17 +135,9 @@ class CustomEventCardWidget extends StatelessWidget {
           Positioned(
             top: 9.0,
             right: 10.0,
-            child: GestureDetector(
-              onTap: () => onIconTap(index),
-              child: !isFavorite
-                  ? const Icon(
-                      Icons.favorite_border_outlined,
-                      color: AppColors.WHITE_COLOR,
-                    )
-                  : const Icon(
-                      Icons.favorite,
-                      color: Colors.white,
-                    ),
+            child: FavoriteIcon(
+              isFavorite: widget.isFavorite,
+              ontap: widget.onIconTap,
             ),
           ),
         ],

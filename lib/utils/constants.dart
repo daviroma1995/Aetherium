@@ -33,8 +33,12 @@ class AppColors {
 
 class AppAssets {
   static const SPLASH_TOP_IMAGE = 'assets/images/splash_top.png';
+  static const SPLASH_TOP_IMAGE_DARK = 'assets/images/splash_top_dark.png';
   static const SPLASH_BOTTOM_IMAGE = 'assets/images/splash_bottom.png';
+  static const SPLASH_BOTTOM_IMAGE_DARK =
+      'assets/images/splash_bottom_dark.png';
   static const SPLASH_LOGO_IMAGE = 'assets/images/logo.png';
+  static const SPLASH_LOGO_IMAGE_DARK = 'assets/images/splash_logo_dark.png';
   static const SPLASH_TEXT = 'assets/images/splash_text.svg';
   static const SPLASH_TOP = 'assets/images/splash_top.svg';
   static const SPLASH_BOTTOM = 'assets/images/splash_bottom.svg';

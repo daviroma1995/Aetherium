@@ -38,8 +38,7 @@ class EventDetailsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12.0),
-            Text(AppLanguages.FLOURISH_ESSENTIALS,
-                style: Theme.of(context).textTheme.headlineLarge),
+            Text('Text', style: Theme.of(context).textTheme.headlineLarge),
           ],
         ),
       ),
@@ -91,7 +90,7 @@ class EventDetailsScreen extends StatelessWidget {
                                 () => GestureDetector(
                                   onTap: controller.setFavorite,
                                   child: Icon(
-                                    Get.arguments.isFavorite.value
+                                    controller.isfavorite.value
                                         ? Icons.favorite
                                         : Icons.favorite_border,
                                     color: AppColors.WHITE_COLOR,

@@ -8,6 +8,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:horizontal_calendar/horizontal_calendar.dart';
 
+import '../../widgets/clean_calendar.dart';
+
 class AppointmentBookingScreen extends StatelessWidget {
   final controller = Get.put(AppointMentBookingController());
   AppointmentBookingScreen({super.key});
@@ -55,76 +57,11 @@ class AppointmentBookingScreen extends StatelessWidget {
                   children: [
                     const SizedBox(height: 20.0),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              InkWell(
-                                onTap: controller.prevMonth,
-                                child: SvgPicture.asset(AppAssets.BACK_ARROW),
-                              ),
-                              const SizedBox(width: 20.0),
-                              Obx(
-                                () => Text(
-                                  controller.currentMonth.value,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium,
-                                ),
-                              ),
-                              const SizedBox(width: 20.0),
-                              InkWell(
-                                onTap: controller.nextMonth,
-                                child: SvgPicture.asset(
-                                  AppAssets.RIGHT_ARROW,
-                                  colorFilter: const ColorFilter.mode(
-                                      AppColors.GREY_COLOR, BlendMode.srcIn),
-                                ),
-                              ),
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              controller.resetDate();
-                            },
-                            child: SvgPicture.asset(
-                              AppAssets.CALANDER_ICON,
-                              colorFilter: ColorFilter.mode(
-                                  isDark
-                                      ? AppColors.GREY_COLOR
-                                      : AppColors.PRIMARY_COLOR,
-                                  BlendMode.srcIn),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 17.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                      child: GetBuilder<AppointMentBookingController>(
-                        builder: (_) {
-                          return HorizontalCalendar(
-                            date: controller.date.value,
-                            initialDate: DateTime.now(),
-                            selectedColor: isDark
-                                ? AppColors.SECONDARY_LIGHT
-                                : AppColors.SECONDARY_COLOR,
-                            backgroundColor: !isDark
-                                ? AppColors.WHITE_COLOR
-                                : AppColors.BACKGROUND_DARK,
-                            textColor: isDark
-                                ? AppColors.WHITE_COLOR
-                                : AppColors.BLACK_COLOR,
-                            onDateSelected: (date) {
-                              () => controller.changeDate(date);
-
-                              log(date);
-                            },
-                          );
-                        },
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Calendar(
+                        events: {},
+                        hideTodayIcon: true,
+                        // startOnMonday: true,
                       ),
                     ),
                     const SizedBox(height: 35.0),

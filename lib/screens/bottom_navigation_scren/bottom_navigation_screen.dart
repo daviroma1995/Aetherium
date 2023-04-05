@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:atherium_saloon_app/network_utils/network_service.dart';
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_controller.dart';
 import 'package:atherium_saloon_app/screens/home_screen/home_screen.dart';
 import 'package:atherium_saloon_app/screens/profile_screen/profile_screen.dart';
@@ -159,7 +160,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: GestureDetector(
-        onTap: () {
+        onTap: () async {
           Get.to(
             () => ServicesScreen(),
             duration: const Duration(milliseconds: 600),

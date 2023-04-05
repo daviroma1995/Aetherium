@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import 'screens/splash_screen/splash_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(const MyApp());
@@ -24,8 +24,7 @@ class MyApp extends StatelessWidget {
         statusBarColor: context.isDarkMode
             ? AppColors.BACKGROUND_COLOR
             : AppColors.BACKGROUND_DARK,
-        statusBarIconBrightness:
-            context.isDarkMode ? Brightness.dark : Brightness.light,
+        statusBarIconBrightness: isDark ? Brightness.dark : Brightness.light,
       ),
     );
     return AdaptiveTheme(
@@ -34,7 +33,7 @@ class MyApp extends StatelessWidget {
       initial: AdaptiveThemeMode.light,
       builder: (theme, darkTheme) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Adaptive Theme Demo',
+        title: 'Aetherium App',
         theme: theme,
         darkTheme: darkTheme,
         home: SplashScreen(),
@@ -42,13 +41,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-//  return GetMaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: AppLanguages.APP_NAME,
-//       theme: lightTheme,
-//       darkTheme: darkTheme,
-//       themeMode: ThemeMode.system,
-//       home: SplashScreen(),
-//     );

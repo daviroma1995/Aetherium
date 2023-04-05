@@ -17,6 +17,7 @@ class ProfileController extends GetxController {
     if (index == profileItems.length - 1) {
       var prefs = await SharedPreferences.getInstance();
       prefs.setBool('isLogedIn', false);
+      prefs.setString('imageUrlString', '');
       Get.offAll(
         LoginScreen(),
         duration: const Duration(milliseconds: 500),

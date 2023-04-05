@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:atherium_saloon_app/screens/appointment_confirm_detail_screen/appointment_confirm_detail_screen.dart';
+import 'package:atherium_saloon_app/screens/services_screen/services_controller.dart';
 import 'package:atherium_saloon_app/widgets/clean_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,42 +23,16 @@ class AgendaScreen extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            // child: HorizontalCalendar(
-            //   date: DateTime.now(),
-            //   initialDate: DateTime.now(),
-            //   textColor: isDark ? AppColors.WHITE_COLOR : Colors.black45,
-            //   backgroundColor:
-            //       !isDark ? Colors.white : AppColors.BACKGROUND_DARK,
-            //   selectedColor: AppColors.SECONDARY_COLOR,
-            //   showMonth: false,
-            //   onDateSelected: (date) {
-            //     print(date);
-            //   },
-            // ),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Calendar(
-              dayOfWeekStyle: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Lato',
-                fontSize: 14.0,
-              ),
-              todayColor: AppColors.ARCHIVED_COLOR,
               events: {
                 DateTime(selectedDay.year, selectedDay.month, 4): [
-                  {'name': 'Event A', 'isDone': true, 'time': '13 - 15 PM'},
-                  {'name': 'Event A', 'isDone': false, 'time': '13 - 15 PM'},
                   {'name': 'Event A', 'isDone': true, 'time': '13 - 15 PM'},
                   {'name': 'Event A', 'isDone': true, 'time': '13 - 15 PM'},
                 ]
               },
-              eventDoneColor: AppColors.SECONDARY_COLOR,
               hideArrows: true,
               hideTodayIcon: true,
-              hideBottomBar: true,
-              eventColor: AppColors.SECONDARY_COLOR,
-              onDateSelected: (value) {
-                print(value.toLocal());
-              },
             ),
           ),
           const SizedBox(height: 13.0),
@@ -112,6 +87,12 @@ class AgendaScreen extends StatelessWidget {
                                   isDetail: true,
                                   isEditable: false,
                                 ),
+                                arguments: [
+                                  SubService(
+                                      title: 'Flair Cosometics',
+                                      price: 33,
+                                      time: '8:00 AM')
+                                ],
                                 duration: const Duration(
                                   milliseconds: 600,
                                 ),

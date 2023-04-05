@@ -78,7 +78,7 @@ class _CalendarState extends State<Calendar> {
   String? currentMonth;
   bool isExpanded = false;
   String displayMonth = "";
-
+  bool isSwapped = false;
   DateTime get selectedDate => _selectedDate;
 
   void initState() {
@@ -103,13 +103,13 @@ class _CalendarState extends State<Calendar> {
     var rightArrow;
 
     if (!widget.hideArrows) {
-      leftArrow = IconButton(
-        onPressed: isExpanded ? previousMonth : previousWeek,
-        icon: Icon(Icons.chevron_left),
+      leftArrow = InkWell(
+        onTap: isExpanded ? previousMonth : previousWeek,
+        child: Icon(Icons.chevron_left),
       );
-      rightArrow = IconButton(
-        onPressed: isExpanded ? nextMonth : nextWeek,
-        icon: Icon(Icons.chevron_right),
+      rightArrow = InkWell(
+        onTap: isExpanded ? nextMonth : nextWeek,
+        child: Icon(Icons.chevron_right),
       );
     } else {
       leftArrow = Container();
@@ -129,12 +129,13 @@ class _CalendarState extends State<Calendar> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const SizedBox(width: 10.0),
             leftArrow ?? Container(),
+            leftArrow == false ? SizedBox(width: 10.0) : SizedBox(),
             Column(
-              children: <Widget>[
-                todayIcon ?? Container(),
+              children: [
+                todayIcon ?? SizedBox(),
                 Text(displayMonth,
                     style: Theme.of(context).textTheme.headlineLarge),
               ],
@@ -179,6 +180,7 @@ class _CalendarState extends State<Calendar> {
             primary: false,
             shrinkWrap: true,
             crossAxisCount: 7,
+            addSemanticIndexes: true,
             padding: EdgeInsets.only(bottom: 0.0),
             children: calendarBuilder(),
           ),
@@ -193,6 +195,28 @@ class _CalendarState extends State<Calendar> {
         isExpanded ? selectedMonthsDays : selectedWeekDays as List<DateTime>;
     widget.weekDays.forEach(
       (day) {
+        var fullday = '';
+        if (day == 'Sun') {
+          fullday = 'sun';
+        }
+        if (day == 'Mon') {
+          fullday = 'Monday';
+        }
+        if (day == 'Tue') {
+          fullday = 'Tuesday';
+        }
+        if (day == 'Wed') {
+          fullday = 'Wednesday';
+        }
+        if (day == 'Thu') {
+          fullday = 'Thursday';
+        }
+        if (day == 'Fri') {
+          fullday = 'Friday';
+        }
+        if (day == 'Sat') {
+          fullday = 'Saturday';
+        }
         dayWidgets.add(
           CalendarTile(
             selectedColor: widget.selectedColor,
@@ -208,6 +232,9 @@ class _CalendarState extends State<Calendar> {
                   fontWeight: FontWeight.w500,
                   fontSize: 11,
                 ),
+            isSelected: DateFormat.EEEE().format(_selectedDate) == fullday,
+            isExpended: isExpanded,
+            isSwapped: isSwapped,
           ),
         );
       },
@@ -242,11 +269,15 @@ class _CalendarState extends State<Calendar> {
               child: this.widget.dayBuilder!(context, day),
               date: day,
               onDateSelected: () => handleSelectedDateAndUserCallback(day),
+              isExpended: isExpanded,
+              isSwapped: isSwapped,
             ),
           );
         } else {
           dayWidgets.add(
             CalendarTile(
+                isSwapped: isSwapped,
+                isExpended: isExpanded,
                 selectedColor: widget.selectedColor,
                 todayColor: widget.todayColor,
                 eventColor: widget.eventColor,
@@ -327,20 +358,18 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          nameAndIconRow,
-          ExpansionCrossFade(
-            collapsed: calendarGridView,
-            expanded: calendarGridView,
-            isExpanded: isExpanded,
-          ),
-          expansionButtonRow
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        nameAndIconRow,
+        ExpansionCrossFade(
+          collapsed: calendarGridView,
+          expanded: calendarGridView,
+          isExpanded: isExpanded,
+        ),
+        expansionButtonRow
+      ],
     );
   }
 
@@ -366,6 +395,7 @@ class _CalendarState extends State<Calendar> {
   void nextMonth() {
     setState(() {
       _selectedDate = Utils.nextMonth(_selectedDate);
+      isSwapped = true;
       var firstDateOfNewMonth = Utils.firstDayOfMonth(_selectedDate);
       var lastDateOfNewMonth = Utils.lastDayOfMonth(_selectedDate);
       updateSelectedRange(firstDateOfNewMonth, lastDateOfNewMonth);
@@ -382,6 +412,7 @@ class _CalendarState extends State<Calendar> {
     setState(() {
       _selectedDate = Utils.previousMonth(_selectedDate);
       var firstDateOfNewMonth = Utils.firstDayOfMonth(_selectedDate);
+      isSwapped = true;
       var lastDateOfNewMonth = Utils.lastDayOfMonth(_selectedDate);
       updateSelectedRange(firstDateOfNewMonth, lastDateOfNewMonth);
       selectedMonthsDays = _daysInMonth(_selectedDate);
@@ -395,6 +426,7 @@ class _CalendarState extends State<Calendar> {
 
   void nextWeek() {
     setState(() {
+      isSwapped = true;
       _selectedDate = Utils.nextWeek(_selectedDate);
       var firstDayOfCurrentWeek = _firstDayOfWeek(_selectedDate);
       var lastDayOfCurrentWeek = _lastDayOfWeek(_selectedDate);
@@ -414,6 +446,7 @@ class _CalendarState extends State<Calendar> {
     var firstDayOfCurrentWeek = _firstDayOfWeek(_selectedDate);
     var lastDayOfCurrentWeek = _lastDayOfWeek(_selectedDate);
     setState(() {
+      isSwapped = true;
       _selectedDate = Utils.previousWeek(_selectedDate);
       updateSelectedRange(firstDayOfCurrentWeek, lastDayOfCurrentWeek);
       selectedWeekDays =
@@ -445,8 +478,14 @@ class _CalendarState extends State<Calendar> {
   void _onSwipeRight() {
     if (isExpanded) {
       previousMonth();
+      setState(() {
+        isSwapped = true;
+      });
     } else {
       previousWeek();
+      setState(() {
+        isSwapped = true;
+      });
     }
   }
 
@@ -469,6 +508,7 @@ class _CalendarState extends State<Calendar> {
     var lastDayOfCurrentWeek = _lastDayOfWeek(day);
 
     setState(() {
+      isSwapped = false;
       _selectedDate = day;
       selectedWeekDays =
           Utils.daysInRange(firstDayOfCurrentWeek, lastDayOfCurrentWeek)

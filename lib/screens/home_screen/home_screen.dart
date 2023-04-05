@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:atherium_saloon_app/data.dart';
+
 import 'package:atherium_saloon_app/screens/events_screen/events_screen.dart';
 
 import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
@@ -23,6 +23,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    print('build called');
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -48,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                                     Theme.of(context).colorScheme.onBackground),
                       ),
                       Text(
-                        ' Jane C',
+                        ' Basit',
                         style: TextStyle(
                           color: isDark
                               ? AppColors.WHITE_COLOR
@@ -346,32 +347,39 @@ class HomeScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 22.0),
                       child: SizedBox(
                         height: 190.0,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: events.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: Obx(
-                                () => GestureDetector(
-                                  onTap: () {
-                                    controller.eventNavigation(index);
-                                  },
-                                  child: CustomEventCardWidget(
-                                    index: index,
-                                    iamgeUrl: events[index].imageUrl,
-                                    title: events[index].title,
-                                    subTitle: events[index].subTitle,
-                                    time: events[index].date,
-                                    isFavorite: events[index].isFavorite.value,
-                                    onIconTap: controller.setFavorite,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                        child: Obx(() => controller.isInitialized.value
+                            ? ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: controller.events.value.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 10.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        controller.eventNavigation(index);
+                                      },
+                                      child: CustomEventCardWidget(
+                                        index: index,
+                                        iamgeUrl:
+                                            controller.events[index].imageUrl!,
+                                        title: controller.events[index].title!,
+                                        subTitle: events[index].subTitle,
+                                        time: controller.events[index].date!,
+                                        isFavorite: controller
+                                            .events[index].isFavorite!,
+                                        onIconTap: () =>
+                                            controller.setFavorite(index),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : Container(
+                                alignment: Alignment.center,
+                                height: 190,
+                                child: const CircularProgressIndicator(),
+                              )),
                       ),
                     ),
                     const SizedBox(height: 82.0),

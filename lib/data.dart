@@ -66,14 +66,14 @@ List upcomingAppointments = [
   ),
 ];
 
-class Event {
+class Events {
   final String imageUrl;
   final String title;
   final String subTitle;
   final String date;
 
   RxBool isFavorite;
-  Event({
+  Events({
     required this.imageUrl,
     required this.title,
     required this.subTitle,
@@ -82,22 +82,22 @@ class Event {
   });
 }
 
-List<Event> events = [
-  Event(
+List<Events> events = [
+  Events(
     imageUrl: AppAssets.EVENT_IMAGE_ONE,
     title: 'Flourish Essentials',
     subTitle: 'Fragrances & Perfumes',
     date: '06/02/2022',
     isFavorite: false.obs,
   ),
-  Event(
+  Events(
     imageUrl: AppAssets.EVENT_IMAGE_TWO,
     title: 'Embrace Skincare',
     subTitle: 'Fragrances & Perfumes',
     date: '06/02/2022',
     isFavorite: false.obs,
   ),
-  Event(
+  Events(
     imageUrl: AppAssets.EVENT_IMAGE_THREE,
     title: 'Flourish Essentials',
     subTitle: 'Fragrances & Perfumes',
