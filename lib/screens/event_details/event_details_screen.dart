@@ -174,9 +174,9 @@ class EventDetailsScreen extends StatelessWidget {
                               ),
                         ),
                         const SizedBox(height: 20.0),
-                        const TextRowWidget(
-                          textOne: '6:00 AM',
-                          textTwo: '6:30 AM',
+                        TextRowWidget(
+                          textOne: controller.getTime(Get.arguments.startTime),
+                          textTwo: controller.getTime(Get.arguments.endTime),
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,
@@ -199,8 +199,8 @@ class EventDetailsScreen extends StatelessWidget {
                               ),
                         ),
                         const SizedBox(height: 20.0),
-                        const TextRowWidget(
-                          textOne: '30 Mints',
+                        TextRowWidget(
+                          textOne: Get.arguments.duration,
                           textTwo: '',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -223,17 +223,8 @@ class EventDetailsScreen extends StatelessWidget {
                               ),
                         ),
                         const SizedBox(height: 20.0),
-                        const Text(
-                          'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16.0,
-                            color: AppColors.GREY_COLOR,
-                          ),
-                        ),
-                        const SizedBox(height: 20.0),
-                        const Text(
-                          'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
+                        Text(
+                          Get.arguments.desc,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 16.0,

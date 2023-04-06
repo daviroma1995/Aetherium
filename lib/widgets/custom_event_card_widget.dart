@@ -135,9 +135,17 @@ class _CustomEventCardWidgetState extends State<CustomEventCardWidget> {
           Positioned(
             top: 9.0,
             right: 10.0,
-            child: FavoriteIcon(
-              isFavorite: widget.isFavorite,
-              ontap: widget.onIconTap,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  widget.isFavorite = !widget.isFavorite;
+                });
+                widget.onIconTap();
+              },
+              child: Icon(
+                widget.isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: AppColors.WHITE_COLOR,
+              ),
             ),
           ),
         ],

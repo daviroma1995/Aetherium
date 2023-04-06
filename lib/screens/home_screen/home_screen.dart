@@ -334,12 +334,20 @@ class HomeScreen extends StatelessWidget {
                       borderColor: isDark
                           ? AppColors.SECONDARY_LIGHT
                           : AppColors.GREY_COLOR,
-                      onTap: () {
-                        Get.to(
+                      onTap: () async {
+                        final result = await Get.to(
                           () => EventsScreen(),
                           duration: Duration(milliseconds: 600),
                           transition: Transition.rightToLeft,
+                          arguments: controller.events,
                         );
+                        if (result != null) {
+                          if (controller.shoueldReload.value == true) {
+                            controller.shoueldReload.value = false;
+                          } else {
+                            controller.shoueldReload.value = true;
+                          }
+                        }
                       },
                     ),
                     const SizedBox(height: 13.0),
@@ -359,17 +367,39 @@ class HomeScreen extends StatelessWidget {
                                       onTap: () {
                                         controller.eventNavigation(index);
                                       },
-                                      child: CustomEventCardWidget(
-                                        index: index,
-                                        iamgeUrl:
-                                            controller.events[index].imageUrl!,
-                                        title: controller.events[index].title!,
-                                        subTitle: events[index].subTitle,
-                                        time: controller.events[index].date!,
-                                        isFavorite: controller
-                                            .events[index].isFavorite!,
-                                        onIconTap: () =>
-                                            controller.setFavorite(index),
+                                      child: Obx(
+                                        () => controller.shoueldReload.value ==
+                                                false
+                                            ? CustomEventCardWidget(
+                                                index: index,
+                                                iamgeUrl: controller
+                                                    .events[index].imageUrl!,
+                                                title: controller
+                                                    .events[index].title!,
+                                                subTitle:
+                                                    events[index].subTitle,
+                                                time: controller
+                                                    .events[index].date!,
+                                                isFavorite: controller
+                                                    .events[index].isFavorite!,
+                                                onIconTap: () => controller
+                                                    .setFavorite(index),
+                                              )
+                                            : CustomEventCardWidget(
+                                                index: index,
+                                                iamgeUrl: controller
+                                                    .events[index].imageUrl!,
+                                                title: controller
+                                                    .events[index].title!,
+                                                subTitle:
+                                                    events[index].subTitle,
+                                                time: controller
+                                                    .events[index].date!,
+                                                isFavorite: controller
+                                                    .events[index].isFavorite!,
+                                                onIconTap: () => controller
+                                                    .setFavorite(index),
+                                              ),
                                       ),
                                     ),
                                   );

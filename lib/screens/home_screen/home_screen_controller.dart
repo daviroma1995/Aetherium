@@ -16,6 +16,7 @@ class HomeScreenController extends GetxController {
   RxInt searchServicesLength = 0.obs;
   RxBool isVisible = true.obs;
   RxBool isInitialized = false.obs;
+  RxBool shoueldReload = false.obs;
   var events = <Event>[].obs;
   var searchedService = "".obs;
   @override
@@ -94,14 +95,22 @@ class HomeScreenController extends GetxController {
         transition: Transition.circularReveal);
   }
 
-  void eventNavigation(int index) {
-    Get.to(
+  void eventNavigation(int index) async {
+    final result = await Get.to(
       () => EventDetailsScreen(),
       arguments: events[index],
       transition: Transition.downToUp,
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeInCubic,
     );
+    if (result != null) {
+      events[index].isFavorite = result;
+      if (shoueldReload.value == true) {
+        shoueldReload.value = false;
+      } else {
+        shoueldReload.value = true;
+      }
+    }
   }
 }
 
