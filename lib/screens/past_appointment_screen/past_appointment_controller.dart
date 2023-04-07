@@ -53,7 +53,7 @@ class UserAppointmetn {
       case (Status.confirmed):
         return AppColors.CONFIRMED_COLOR;
       case (Status.noshow):
-        return AppColors.NO_SHOW_COLOR;
+        return AppColors.GREY_COLOR;
     }
   }
 

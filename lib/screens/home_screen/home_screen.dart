@@ -331,9 +331,8 @@ class HomeScreen extends StatelessWidget {
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.w700,
                               ),
-                      borderColor: isDark
-                          ? AppColors.SECONDARY_LIGHT
-                          : AppColors.GREY_COLOR,
+                      borderColor:
+                          isDark ? AppColors.GREY_COLOR : AppColors.GREY_COLOR,
                       onTap: () async {
                         final result = await Get.to(
                           () => EventsScreen(),
