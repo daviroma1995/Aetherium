@@ -159,14 +159,14 @@ class EventsScreen extends StatelessWidget {
                                     right: 10,
                                     child: GestureDetector(
                                       onTap: () {
-                                        controller.events[index].isFavorite =
+                                        controller.events[index].isfavorite =
                                             !controller
-                                                .events[index].isFavorite!;
+                                                .events[index].isfavorite!;
                                         controller.shouldUpdate.value =
                                             !controller.shouldUpdate.value;
                                       },
                                       child: Icon(
-                                        controller.events[index].isFavorite ==
+                                        controller.events[index].isfavorite ==
                                                 true
                                             ? Icons.favorite
                                             : Icons.favorite_border,
@@ -179,14 +179,14 @@ class EventsScreen extends StatelessWidget {
                                     right: 10,
                                     child: GestureDetector(
                                       onTap: () {
-                                        controller.events[index].isFavorite =
+                                        controller.events[index].isfavorite =
                                             !controller
-                                                .events[index].isFavorite!;
+                                                .events[index].isfavorite!;
                                         controller.shouldUpdate.value =
                                             !controller.shouldUpdate.value;
                                       },
                                       child: Icon(
-                                        controller.events[index].isFavorite ==
+                                        controller.events[index].isfavorite ==
                                                 true
                                             ? Icons.favorite
                                             : Icons.favorite_border,

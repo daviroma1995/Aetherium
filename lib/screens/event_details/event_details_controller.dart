@@ -1,16 +1,16 @@
-import 'dart:ffi';
-
-import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
+import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EventDetailsControlelr extends GetxController {
   RxBool isfavorite = false.obs;
   var args;
+  late String uid;
   @override
-  void onInit() {
+  void onInit() async {
     args = Get.arguments;
-    isfavorite.value = args.isFavorite;
+    isfavorite.value = args.isfavorite;
+    uid = await FirebaseSerivces.checkUserUid();
     super.onInit();
   }
 
@@ -20,11 +20,22 @@ class EventDetailsControlelr extends GetxController {
     //     transition: Transition.upToDown,
     //     curve: Curves.easeIn);
     // Navigator.pop(context);
-    Get.back(result: args.isFavorite);
+    Get.back(result: args.isfavorite);
   }
 
-  void setFavorite() {
-    args.isFavorite = !args.isFavorite;
+  void setFavorite() async {
+    if (args.isfavorite == true) {
+      print('If Called: ${args.clientId}');
+      args.clientId!.removeWhere((element) => element == uid);
+      print('If Called: ${args.clientId}');
+    } else {
+      print('else Called: ${args.clientId}');
+      args.clientId!.add(uid);
+      print('else Called: ${args.clientId} id: ${args.eventId}');
+    }
+    FirebaseSerivces.toggleFavorite(eventId: args.eventId!, data: args);
+    args.isfavorite = !args.isfavorite;
+
     isfavorite.value = !isfavorite.value;
   }
 

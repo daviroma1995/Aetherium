@@ -1,44 +1,77 @@
-import 'package:atherium_saloon_app/network_utils/network_service.dart';
+import 'dart:developer';
+
 import 'package:atherium_saloon_app/screens/appointments_screen/appointments_screen.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_controller.dart'
     as appointments;
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
+import 'package:atherium_saloon_app/utils/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/client.dart';
 import '../../models/event.dart';
+import '../../network_utils/firebase_services.dart';
 import '../../utils/constants.dart';
 import '../appointment_confirm_detail_screen/appointment_confirm_detail_screen.dart';
 import '../event_details/event_details_screen.dart';
+import '../login_screen/login_screen.dart';
 
 class HomeScreenController extends GetxController {
   RxInt searchServicesLength = 0.obs;
   RxBool isVisible = true.obs;
   RxBool isInitialized = false.obs;
   RxBool shoueldReload = false.obs;
+  var currentUser = Client().obs;
+  late String _uid;
   var events = <Event>[].obs;
   var searchedService = "".obs;
+
+  Future<void> checkUserUid() async {
+    FirebaseAuth.instance.authStateChanges().listen(
+      (User? user) {
+        if (user == null) {
+          Get.offAll(() => LoginScreen());
+        } else {
+          _uid = user.uid;
+        }
+      },
+    );
+  }
+
   @override
   void onInit() async {
     super.onInit();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      var prefs = await SharedPreferences.getInstance();
-      loadEvents();
-      isInitialized.value = true;
-      prefs.setBool('isLogedIn', true);
-    });
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        _uid = await FirebaseSerivces.checkUserUid();
+        await initializeUser();
+        // await loadEvents();
+        isInitialized.value = true;
+        LocalData.setIsLogedIn(true);
+        events.bindStream(FirebaseSerivces.eventStream());
+      },
+    );
   }
 
-  void loadEvents() async {
-    events.value = await NetworkService.getEventsList();
-    print(events[0].isFavorite);
-  }
-
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
+  Future<void> loadEvents() async {
+    try {
+      var list = <Event>[];
+      var data =
+          await FirebaseSerivces.getLimitedData(collection: 'events', limit: 4);
+      for (var element in data!) {
+        var data = Event.fromJson(element);
+        data.isfavorite =
+            data.clientId!.where((id) => id == _uid).toList().isNotEmpty;
+        data.eventId = element['collection_id'];
+        // print(clientId);
+        // data.isfavorite = clientId == null || clientId != _uid ? false : true;
+        list.add(data);
+      }
+      events.value = list;
+    } on Exception catch (ex) {
+      log(ex.toString());
+    }
   }
 
   void navigateToAppointmentDetail(int index) {
@@ -65,8 +98,15 @@ class HomeScreenController extends GetxController {
     searchServicesLength.value = services.length;
   }
 
-  void setFavorite(int index) {
-    events[index].isFavorite = !events[index].isFavorite!;
+  void setFavorite(int index) async {
+    if (events[index].isfavorite == true) {
+      events[index].clientId!.removeWhere((element) => element == _uid);
+    } else {
+      events[index].clientId!.add(_uid);
+    }
+    FirebaseSerivces.toggleFavorite(
+        eventId: events[index].eventId!, data: events[index]);
+    events[index].isfavorite = !events[index].isfavorite!;
   }
 
   void navigateToServices() {
@@ -104,7 +144,7 @@ class HomeScreenController extends GetxController {
       curve: Curves.easeInCubic,
     );
     if (result != null) {
-      events[index].isFavorite = result;
+      events[index].isfavorite = result;
       if (shoueldReload.value == true) {
         shoueldReload.value = false;
       } else {
@@ -112,75 +152,15 @@ class HomeScreenController extends GetxController {
       }
     }
   }
-}
 
-class CustomSearchDelegate extends SearchDelegate {
-  final List searchTerms;
-  CustomSearchDelegate({
-    required this.searchTerms,
-  });
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: const Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        close(context, null);
-      },
-      icon: const Icon(Icons.arrow_back),
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    List matchQuery = [];
-    for (var services in searchTerms) {
-      if (services['service_title']
-          .toLowerCase()
-          .contains(query.toLowerCase())) {
-        matchQuery.add(services);
-      }
+  Future<void> initializeUser() async {
+    try {
+      var data = await FirebaseSerivces.getDataWhere(
+          collection: 'clients', key: 'user_id', value: _uid);
+      currentUser.value = Client.fromJson(data!);
+    } on Exception catch (ex) {
+      log(ex.toString());
     }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result['service_title'].toString()),
-        );
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List matchQuery = [];
-    for (var services in searchTerms) {
-      if (services['service_title']
-          .toLowerCase()
-          .contains(query.toLowerCase())) {
-        matchQuery.add(services);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result['service_title'].toString()),
-        );
-      },
-    );
   }
 }
 
@@ -247,46 +227,6 @@ List upcomingAppointments = [
     imageUrl: AppAssets.PROFILE_IMAGE_TWO,
     time: '8:02 AM',
     date: '06/02/2022',
-  ),
-];
-
-class Events {
-  final String imageUrl;
-  final String title;
-  final String subTitle;
-  final String date;
-
-  RxBool isFavorite;
-  Events({
-    required this.imageUrl,
-    required this.title,
-    required this.subTitle,
-    required this.date,
-    required this.isFavorite,
-  });
-}
-
-List<Events> events = [
-  Events(
-    imageUrl: AppAssets.EVENT_IMAGE_ONE,
-    title: 'Flourish Essentials',
-    subTitle: 'Fragrances & Perfumes',
-    date: '06/02/2022',
-    isFavorite: false.obs,
-  ),
-  Events(
-    imageUrl: AppAssets.EVENT_IMAGE_TWO,
-    title: 'Embrace Skincare',
-    subTitle: 'Fragrances & Perfumes',
-    date: '06/02/2022',
-    isFavorite: false.obs,
-  ),
-  Events(
-    imageUrl: AppAssets.EVENT_IMAGE_THREE,
-    title: 'Flourish Essentials',
-    subTitle: 'Fragrances & Perfumes',
-    date: '06/02/2022',
-    isFavorite: false.obs,
   ),
 ];
 

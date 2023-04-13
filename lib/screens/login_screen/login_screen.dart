@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:atherium_saloon_app/screens/forget_password_screen/foreget_password_screen.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 
@@ -22,6 +21,7 @@ class LoginScreen extends StatelessWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -55,13 +55,14 @@ class LoginScreen extends StatelessWidget {
                         textEdigintController: controller.emailController,
                         isValid: controller.isEmailValid.value,
                         onSubmit: controller.validateEmail,
+                        autoFocus: false,
                       ),
                     ),
                     Obx(() {
                       if (!controller.isEmailValid.value) {
                         return Text(
                           controller.emailErrorMessage.value,
-                          style: TextStyle(color: AppColors.ERROR_COLOR),
+                          style: const TextStyle(color: AppColors.ERROR_COLOR),
                         );
                       } else {
                         return const SizedBox(height: 0.0);
@@ -80,6 +81,7 @@ class LoginScreen extends StatelessWidget {
                         isValid: controller.isPasswordValid.value,
                         onSubmit: controller.validatePassword,
                         onPressed: controller.hideOrShowPassword,
+                        autoFocus: false,
                       ),
                     ),
                     Obx(() {
@@ -94,8 +96,7 @@ class LoginScreen extends StatelessWidget {
                     }),
                     const SizedBox(height: 17.0),
                     GestureDetector(
-                      // TODO add navigation to forget password screen
-                      onTap: () => Get.to(ForgetPasswordScreen()),
+                      onTap: controller.navigateToForgetPassword,
                       child: const Align(
                         alignment: Alignment.centerRight,
                         child: Text(
@@ -103,9 +104,21 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 34.0,
-                    ),
+                    const SizedBox(height: 17.0),
+                    Obx(() {
+                      if (controller.isLoading.value == true) {
+                        return Column(
+                          children: const [
+                            Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            SizedBox(height: 17.0)
+                          ],
+                        );
+                      } else {
+                        return const SizedBox(height: 17.0);
+                      }
+                    }),
                     ButtonWidget(
                       width: Get.width,
                       buttonText: AppLanguages.ACCEDI,

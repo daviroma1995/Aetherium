@@ -7,6 +7,7 @@ class Client {
   String? email;
   String? address;
   String? photo;
+  String? userId;
 
   Client(
       {this.id,
@@ -16,7 +17,8 @@ class Client {
       this.phoneNumber,
       this.email,
       this.address,
-      this.photo});
+      this.photo,
+      this.userId});
 
   Client.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -27,11 +29,11 @@ class Client {
     email = json['email'];
     address = json['address'];
     photo = json['photo'];
+    userId = json['user_id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
     data['first_name'] = this.firstName;
     data['last_name'] = this.lastName;
     data['gender'] = this.gender;
@@ -39,6 +41,7 @@ class Client {
     data['email'] = this.email;
     data['address'] = this.address;
     data['photo'] = this.photo;
+    data['user_id'] = this.userId;
     return data;
   }
 }

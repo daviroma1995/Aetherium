@@ -23,11 +23,15 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    print('build called');
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
+            ElevatedButton(
+                onPressed: () {
+                  controller.loadEvents();
+                },
+                child: Text('Get ddat')),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20.0,
@@ -48,16 +52,20 @@ class HomeScreen extends StatelessWidget {
                                 color:
                                     Theme.of(context).colorScheme.onBackground),
                       ),
-                      Text(
-                        ' Basit',
-                        style: TextStyle(
-                          color: isDark
-                              ? AppColors.WHITE_COLOR
-                              : AppColors.SECONDARY_COLOR,
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: .75,
-                        ),
+                      Obx(
+                        () => controller.currentUser.value.firstName != null
+                            ? Text(
+                                ' ${controller.currentUser.value.firstName}',
+                                style: TextStyle(
+                                  color: isDark
+                                      ? AppColors.WHITE_COLOR
+                                      : AppColors.SECONDARY_COLOR,
+                                  fontSize: 22.0,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: .75,
+                                ),
+                              )
+                            : Text(''),
                       ),
                     ],
                   ),
@@ -354,61 +362,81 @@ class HomeScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 22.0),
                       child: SizedBox(
                         height: 190.0,
-                        child: Obx(() => controller.isInitialized.value
-                            ? ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: controller.events.value.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 10.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        controller.eventNavigation(index);
-                                      },
-                                      child: Obx(
-                                        () => controller.shoueldReload.value ==
-                                                false
-                                            ? CustomEventCardWidget(
-                                                index: index,
-                                                iamgeUrl: controller
-                                                    .events[index].imageUrl!,
-                                                title: controller
-                                                    .events[index].title!,
-                                                subTitle:
-                                                    events[index].subTitle,
-                                                time: controller
-                                                    .events[index].date!,
-                                                isFavorite: controller
-                                                    .events[index].isFavorite!,
-                                                onIconTap: () => controller
-                                                    .setFavorite(index),
-                                              )
-                                            : CustomEventCardWidget(
-                                                index: index,
-                                                iamgeUrl: controller
-                                                    .events[index].imageUrl!,
-                                                title: controller
-                                                    .events[index].title!,
-                                                subTitle:
-                                                    events[index].subTitle,
-                                                time: controller
-                                                    .events[index].date!,
-                                                isFavorite: controller
-                                                    .events[index].isFavorite!,
-                                                onIconTap: () => controller
-                                                    .setFavorite(index),
-                                              ),
+                        child: Obx(
+                          () => controller.isInitialized.value &&
+                                  controller.events.isNotEmpty
+                              ? ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: controller.events.value.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 10.0),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          controller.eventNavigation(index);
+                                        },
+                                        child: Obx(
+                                          () => controller
+                                                      .shoueldReload.value ==
+                                                  false
+                                              ? CustomEventCardWidget(
+                                                  index: index,
+                                                  iamgeUrl: controller
+                                                      .events[index].imageUrl!,
+                                                  title: controller
+                                                      .events[index].title!,
+                                                  subTitle: controller
+                                                      .events[index].subtitle!,
+                                                  time: controller
+                                                      .events[index].date!,
+                                                  isFavorite: controller
+                                                          .events[index]
+                                                          .isfavorite ??
+                                                      false,
+                                                  onIconTap: () => controller
+                                                      .setFavorite(index),
+                                                )
+                                              : CustomEventCardWidget(
+                                                  index: index,
+                                                  iamgeUrl: controller
+                                                      .events[index].imageUrl!,
+                                                  title: controller
+                                                      .events[index].title!,
+                                                  subTitle: controller
+                                                      .events[index].subtitle!,
+                                                  time: controller
+                                                      .events[index].date!,
+                                                  isFavorite: controller
+                                                      .events[index]
+                                                      .isfavorite!,
+                                                  onIconTap: () => controller
+                                                      .setFavorite(index),
+                                                ),
+                                        ),
                                       ),
+                                    );
+                                  },
+                                )
+                              : controller.events.isEmpty
+                                  ? Container(
+                                      height: 150,
+                                      alignment: Alignment.center,
+                                      width: Get.width,
+                                      child: Text(
+                                        'No Events Found',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineLarge,
+                                      ),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      height: 190,
+                                      child: const CircularProgressIndicator(),
                                     ),
-                                  );
-                                },
-                              )
-                            : Container(
-                                alignment: Alignment.center,
-                                height: 190,
-                                child: const CircularProgressIndicator(),
-                              )),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 82.0),

@@ -1,29 +1,27 @@
+import 'dart:developer';
+
+import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
+import 'package:atherium_saloon_app/utils/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../utils/image_picker.dart';
+import '../../models/client.dart';
 
 class AccountInfoController extends GetxController {
+  String uid = '';
+  var currentClient = Client().obs;
   @override
   void onInit() async {
     super.onInit();
+    uid = await FirebaseSerivces.checkUserUid();
+    await getUserInfo();
   }
 
   @override
   void onReady() async {
-    // TODO: implement onReady
     super.onReady();
-    var prefs = await SharedPreferences.getInstance();
-    imageFileString.value = prefs.getString('imageUrlString') ?? '';
-    ever(isUpdating, (callback) {
-      print('called  ever');
-      setPrefs(imageUrl.value!.path);
-    });
-  }
-
-  void setPrefs(String path) async {
-    var prefs = await SharedPreferences.getInstance();
-    imageFileString.value = path;
-    prefs.setString('imageUrlString', path);
+    imageFileString.value = LocalData.imageUrlString;
   }
 
   RxString genderValue = 'Male'.obs;
@@ -45,19 +43,24 @@ class AccountInfoController extends GetxController {
     genderValue.value = value;
   }
 
-  Future pickImage(ImageSource source) async {
+  void pickImageFromMobile(context) async {
+    var image = await kImagePicker(context);
+    if (image == null) {
+      return;
+    } else {
+      imageFileString.value = image.path;
+      LocalData.setImageUrlString(image.path);
+      isUpdating.value = !isUpdating.value;
+    }
+  }
+
+  Future<void> getUserInfo() async {
     try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) {
-        return;
-      } else {
-        imageUrl.value = image;
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setString('profile_image', image.path);
-        isUpdating.value = true;
-      }
-    } catch (e) {
-      print(e);
+      var data = await FirebaseSerivces.getDataWhere(
+          collection: 'clients', key: 'user_id', value: uid);
+      currentClient.value = Client.fromJson(data!);
+    } on Exception catch (ex) {
+      log(ex.toString());
     }
   }
 }

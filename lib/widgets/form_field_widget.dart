@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 
 class CustomInputFormField extends StatelessWidget {
@@ -18,6 +17,7 @@ class CustomInputFormField extends StatelessWidget {
   final double paddingSymetric;
   final Function? onchange;
   final Function? onFocus;
+  final String? initialValue;
   const CustomInputFormField({
     Key? key,
     this.iconUrl = '',
@@ -32,6 +32,7 @@ class CustomInputFormField extends StatelessWidget {
     this.paddingSymetric = 0.0,
     this.onchange,
     this.onFocus,
+    this.initialValue,
   }) : super(key: key);
 
   @override
@@ -66,6 +67,7 @@ class CustomInputFormField extends StatelessWidget {
           }, //=> onchange!(value) ?? (value) {},
           cursorColor: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
           controller: textEdigintController,
+
           onSubmitted: (value) => onSubmit(),
           autofocus: autoFocus,
           style: Theme.of(context).textTheme.bodyMedium,
