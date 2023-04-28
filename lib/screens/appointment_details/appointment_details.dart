@@ -3,26 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import 'package:atherium_saloon_app/screens/appointment_confirm_detail_screen/appointment_confirm_detail_controller.dart';
+import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
 
-import '../../models/treatment.dart';
+import '../../models/appointment.dart';
 import '../../utils/constants.dart';
 import '../../widgets/button_widget.dart';
 import '../../widgets/text_row_widget.dart';
+import '../appointment_booking_screen/appointment_booking_screen.dart';
 import '../home_screen/home_screen_controller.dart';
+import 'appointment_details_controller.dart';
 
-class AppointmentConfirmDetailScreen extends StatelessWidget {
-  final controller = Get.put(AppointmentConfirmDetailController());
+class AppointmentDetailsScreen extends StatelessWidget {
+  final controller = Get.put(AppointmentDetailsController());
   final HomeScreenController homecontroller = Get.find();
-  AppointmentConfirmDetailScreen({
+  AppointmentDetailsScreen({
     Key? key,
-    required this.isDetail,
-    required this.isEditable,
-    required this.services,
+    this.isDetail = false,
+    this.isEditable = false,
+    required this.appointment,
   }) : super(key: key);
-  final bool isDetail;
-  final bool isEditable;
-  final List<Treatment> services;
+  final bool? isDetail;
+  final bool? isEditable;
+  final Appointment appointment;
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
@@ -38,9 +40,16 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
           children: [
             InkWell(
               borderRadius: BorderRadius.circular(25.0),
-              onTap: () {
-                Get.back();
-              },
+              onTap: isDetail! == false
+                  ? () {
+                      Get.offAll(
+                        const BottomNavigationScreen(),
+                        duration: const Duration(milliseconds: 600),
+                        transition: Transition.leftToRight,
+                        curve: Curves.linear,
+                      );
+                    }
+                  : () => Get.back(),
               child: Container(
                 alignment: Alignment.center,
                 width: 25.0,
@@ -52,7 +61,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
             const SizedBox(width: 12.0),
             Expanded(
               child: Text(
-                AppLanguages.APPOINTMENTCONFERMA,
+                AppLanguages.AppuntamentoDettagli,
                 style: Theme.of(context)
                     .textTheme
                     .headlineLarge!
@@ -111,9 +120,8 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 20.0),
                                 TextRowWidget(
-                                  textOne: controller.args.dateString ??
-                                      'Date Here ido',
-                                  textTwo: controller.args.time ?? 'TIme here',
+                                  textOne: appointment.dateString,
+                                  textTwo: appointment.time!,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14.0,
@@ -138,8 +146,8 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 20.0),
                                 TextRowWidget(
-                                  textOne: controller.args.number,
-                                  textTwo: controller.args.email,
+                                  textOne: appointment.number!,
+                                  textTwo: appointment.email!,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14.0,
@@ -169,7 +177,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                       shrinkWrap: true,
                                       physics:
                                           const NeverScrollableScrollPhysics(),
-                                      itemCount: services.length,
+                                      itemCount: appointment.serviceId!.length,
                                       itemBuilder: (context, index) {
                                         return Obx(
                                           () => controller.allTreatments.isEmpty
@@ -185,7 +193,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                                               .spaceBetween,
                                                       children: [
                                                         Text(
-                                                          '${services[index].name} - ${services[index].duration} Min',
+                                                          '${controller.getName(appointment.serviceId![index])} - ${controller.getTime(appointment.serviceId![index])} Min',
                                                           style: TextStyle(
                                                             fontSize: 14.0,
                                                             fontWeight:
@@ -198,7 +206,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                                           ),
                                                         ),
                                                         Text(
-                                                          '${services[index].price} \$',
+                                                          '${controller.getPrice(appointment.serviceId![index])} \$',
                                                           style: TextStyle(
                                                             fontSize: 14.0,
                                                             fontWeight:
@@ -225,10 +233,10 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                       children: [
                                         const Text('Total'),
                                         GetBuilder<
-                                            AppointmentConfirmDetailController>(
+                                            AppointmentDetailsController>(
                                           builder: (controller) {
                                             return Text(
-                                                '${controller.getTotalPrice(services)} \$');
+                                                '${controller.totalPrice(appointment.serviceId!)} \$');
                                           },
                                         )
                                       ],
@@ -250,9 +258,8 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 20.0),
                                 specialistCard(
-                                  title: homecontroller.getEmployeeName(
-                                      controller.args.employeeId ??
-                                          '8f1cYZExVjeOo2sBDmQC'),
+                                  title: homecontroller
+                                      .getEmployeeName(appointment.employeeId!),
                                   imageUrl: AppAssets.USER_IMAGE,
                                   subtitle: 'Fragrances',
                                   isDark: isDark,
@@ -272,7 +279,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 20.0),
                                 Text(
-                                  controller.args.notes ?? 'No Notes Added',
+                                  appointment.notes ?? 'No Notes avaialbe',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16.0,
@@ -286,27 +293,49 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ButtonWidget(
-                                width: Get.width - 56,
-                                buttonText: 'Confirm',
-                                buttonTextColor: isDark
-                                    ? AppColors.BLACK_COLOR
-                                    : AppColors.WHITE_COLOR,
-                                color: isDark
-                                    ? AppColors.SECONDARY_LIGHT
-                                    : AppColors.PRIMARY_COLOR,
-                                onTap: () {
-                                  controller.confirm();
-                                },
-                              ),
-                            ],
+                        if (isDetail == false)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ButtonWidget(
+                                  width: Get.width / 2 - 32,
+                                  buttonText: 'Cancel',
+                                  buttonTextColor: isDark
+                                      ? AppColors.SECONDARY_LIGHT
+                                      : AppColors.BLACK_COLOR,
+                                  borderColor: isDark
+                                      ? AppColors.SECONDARY_LIGHT
+                                      : AppColors.BLACK_COLOR,
+                                  bordered: true,
+                                  onTap: () {
+                                    Get.offAll(
+                                      const BottomNavigationScreen(),
+                                      duration:
+                                          const Duration(milliseconds: 600),
+                                      transition: Transition.leftToRight,
+                                      curve: Curves.linear,
+                                    );
+                                  },
+                                ),
+                                ButtonWidget(
+                                  width: Get.width / 2 - 32,
+                                  buttonText: 'Edit',
+                                  buttonTextColor: isDark
+                                      ? AppColors.BACKGROUND_DARK
+                                      : AppColors.WHITE_COLOR,
+                                  color: isDark
+                                      ? AppColors.SECONDARY_LIGHT
+                                      : AppColors.PRIMARY_COLOR,
+                                  bordered: false,
+                                  onTap: () {
+                                    controller.onEdit(appointment);
+                                  },
+                                )
+                              ],
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   ),
@@ -318,67 +347,4 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-Container specialistCard({
-  required String title,
-  required String subtitle,
-  required String imageUrl,
-  required bool isDark,
-}) {
-  return Container(
-    height: 82.0,
-    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
-    decoration: BoxDecoration(
-      color: isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
-      border: isDark
-          ? const Border()
-          : Border.all(
-              width: 1.0,
-              color: AppColors.BORDER_COLOR,
-            ),
-      borderRadius: BorderRadius.circular(8.0),
-    ),
-    child: Row(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 1.3, color: AppColors.BORDER_COLOR),
-            borderRadius: BorderRadius.circular(50.0),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(50.0),
-            child: CircleAvatar(
-              radius: 25.0,
-              backgroundImage: AssetImage(imageUrl),
-            ),
-          ),
-        ),
-        const SizedBox(width: 10.0),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.w700,
-                color: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
-              ),
-            ),
-            const SizedBox(height: 6.0),
-            Text(
-              subtitle,
-              style: const TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w500,
-                color: AppColors.GREY_COLOR,
-              ),
-            ),
-          ],
-        )
-      ],
-    ),
-  );
 }

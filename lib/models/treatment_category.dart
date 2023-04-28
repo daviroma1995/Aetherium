@@ -1,8 +1,10 @@
+import 'package:get/get.dart';
+
 class TreatmentCategory {
   String? id;
   String? name;
   String? description;
-
+  RxBool isExtended = false.obs;
   TreatmentCategory({this.id, this.name, this.description});
 
   TreatmentCategory.fromJson(Map<String, dynamic> json) {

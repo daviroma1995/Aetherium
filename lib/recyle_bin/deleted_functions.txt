@@ -1,0 +1,46 @@
+ Future<void> loadEvents() async {
+   try {
+     var list = <Event>[];
+     var data =
+         await FirebaseSerivces.getLimitedData(collection: 'events', limit: 4);
+     for (var element in data!) {
+       var data = Event.fromJson(element);
+       data.isfavorite =
+           data.clientId!.where((id) => id == _uid).toList().isNotEmpty;
+       data.eventId = element['collection_id'];
+        print(clientId);
+        data.isfavorite = clientId == null || clientId != _uid ? false : true;
+       list.add(data);
+     }
+     events.value = list;
+   } on Exception catch (ex) {
+     log(ex.toString());
+   }
+ }
+
+
+//Check the login users's uid
+
+Future<void> checkUserUid() async {
+    FirebaseAuth.instance.authStateChanges().listen(
+      (User? user) {
+        if (user == null) {
+          Get.offAll(() => LoginScreen());
+        } else {
+          _uid = user.uid;
+        }
+      },
+    );
+  }
+
+// Previous way of initilaizing user
+
+Future<void> initializeUser() async {
+    try {
+      var data = await FirebaseSerivces.getDataWhere(
+          collection: 'clients', key: 'user_id', value: _uid);
+      currentUser.value = Client.fromJson(data!);
+    } on Exception catch (ex) {
+      log(ex.toString());
+    }
+  }

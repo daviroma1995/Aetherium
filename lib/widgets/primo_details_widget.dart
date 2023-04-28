@@ -39,7 +39,8 @@ class PrimoDetailsWidget extends StatelessWidget {
               radius: 27.0,
               lineWidth: 4.8,
               percent: percent,
-              backgroundColor: AppColors.BORDER_COLOR,
+              backgroundColor:
+                  isDark ? AppColors.BACKGROUND_DARK : AppColors.BORDER_COLOR,
               center: SvgPicture.asset(imageUrl),
               progressColor: progressColor,
             ),

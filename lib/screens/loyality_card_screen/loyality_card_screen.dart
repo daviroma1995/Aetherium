@@ -179,7 +179,8 @@ class LoyalityCardScreen extends StatelessWidget {
                             Get.to(
                               () => QrCodeScreen(),
                               duration: const Duration(milliseconds: 600),
-                              transition: Transition.circularReveal,
+                              transition: Transition.downToUp,
+                              curve: Curves.linear,
                               arguments: '12399dklsfjd898034ljqlwkdf89',
                             );
                           },

@@ -1,13 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
-import 'package:atherium_saloon_app/screens/appointment_confirm_detail_screen/appointment_confirm_detail_screen.dart';
-import 'package:atherium_saloon_app/screens/services_screen/services_controller.dart';
+import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/widgets/clean_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:atherium_saloon_app/data.dart';
+import 'package:atherium_saloon_app/models/appointment.dart' as model;
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/custom_title_row_widget.dart';
 
@@ -83,16 +83,9 @@ class AgendaScreen extends StatelessWidget {
                                 const EdgeInsets.only(left: 23.0, bottom: 10.0),
                             child: GestureDetector(
                               onTap: () => Get.to(
-                                AppointmentConfirmDetailScreen(
-                                  isDetail: true,
-                                  isEditable: false,
-                                ),
-                                arguments: [
-                                  SubService(
-                                      title: 'Flair Cosometics',
-                                      price: 33,
-                                      time: '8:00 AM')
-                                ],
+                                AppointmentDetailsScreen(
+                                    appointment: model.Appointment()),
+                                arguments: [],
                                 duration: const Duration(
                                   milliseconds: 600,
                                 ),
@@ -187,7 +180,7 @@ class AgendaCustomCardWidget extends StatelessWidget {
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w500,
                               ),
-                    )
+                    ),
                   ],
                 )
               ],

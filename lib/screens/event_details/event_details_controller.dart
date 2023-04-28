@@ -10,7 +10,7 @@ class EventDetailsControlelr extends GetxController {
   void onInit() async {
     args = Get.arguments;
     isfavorite.value = args.isfavorite;
-    uid = await FirebaseSerivces.checkUserUid();
+    uid = await FirebaseServices.checkUserUid();
     super.onInit();
   }
 
@@ -33,7 +33,7 @@ class EventDetailsControlelr extends GetxController {
       args.clientId!.add(uid);
       print('else Called: ${args.clientId} id: ${args.eventId}');
     }
-    FirebaseSerivces.toggleFavorite(eventId: args.eventId!, data: args);
+    FirebaseServices.toggleFavorite(eventId: args.eventId!, data: args);
     args.isfavorite = !args.isfavorite;
 
     isfavorite.value = !isfavorite.value;

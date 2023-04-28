@@ -111,18 +111,15 @@ class AppointmentsCardWidget extends StatelessWidget {
                 : const SizedBox(),
           ],
         ),
-        subtitle: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            subTitle,
-            maxLines: 1,
-            textAlign: TextAlign.start,
-            style: const TextStyle(
-              color: AppColors.GREY_COLOR,
-              fontSize: 14.0,
-              fontWeight: FontWeight.w500,
-              overflow: TextOverflow.ellipsis,
-            ),
+        subtitle: Text(
+          subTitle,
+          maxLines: 1,
+          textAlign: TextAlign.start,
+          style: const TextStyle(
+            color: AppColors.GREY_COLOR,
+            fontSize: 12.0,
+            fontWeight: FontWeight.w500,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         trailing: Container(

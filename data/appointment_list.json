@@ -7,7 +7,7 @@
         "email": "client@gmail.com",
         "notes": "she's sensible on the nails",
         "employee_id": "77028268-701c-4dfc-a286-9528b7ea8825",
-        "service_id": "e762a53a-b2f6-451d-b4df-ecb1d1f7cg56",
+        "service_id": ["e762a53a-b2f6-451d-b4df-ecb1d1f7cg56"],
         "client_id": "d3797032-904f-45df-b515-397e1b9d7328",
         "status_id": "88aa7cf3-c6b6-4cab-91eb-247aa6445a0a"
     }

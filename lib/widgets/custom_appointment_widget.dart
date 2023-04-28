@@ -118,7 +118,7 @@ class CustomAppointmentCardWidget extends StatelessWidget {
                       Text(
                         time,
                         style: const TextStyle(
-                          fontSize: 14.0,
+                          fontSize: 12.0,
                           color: AppColors.PRIMARY_COLOR,
                         ),
                       )
@@ -132,7 +132,7 @@ class CustomAppointmentCardWidget extends StatelessWidget {
                       Text(
                         date,
                         style: const TextStyle(
-                          fontSize: 14.0,
+                          fontSize: 12.0,
                           color: AppColors.PRIMARY_COLOR,
                         ),
                       )

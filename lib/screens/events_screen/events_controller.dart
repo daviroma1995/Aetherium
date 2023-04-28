@@ -1,7 +1,9 @@
+import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:get/get.dart';
 
 import '../../models/event.dart';
-import '../../network_utils/network_service.dart';
+
+import '../../network_utils/firebase_services.dart';
 import '../event_details/event_details_screen.dart';
 
 class EventsController extends GetxController {
@@ -17,10 +19,22 @@ class EventsController extends GetxController {
     Get.back(result: 'update');
   }
 
+  void setFavorite(int index) async {
+    final uid = LoginController.instance.user.uid;
+    if (events[index].isfavorite == true) {
+      events[index].clientId!.removeWhere((element) => element == uid);
+    } else {
+      events[index].clientId!.add(uid);
+    }
+    FirebaseServices.toggleFavorite(
+        eventId: events[index].eventId!, data: events[index]);
+    events[index].isfavorite = !events[index].isfavorite!;
+  }
+
   void goToDetails(int index) async {
     final result = await Get.to(
       () => EventDetailsScreen(),
-      duration: Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 600),
       transition: Transition.downToUp,
       arguments: events[index],
     );

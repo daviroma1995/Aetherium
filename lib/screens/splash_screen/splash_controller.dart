@@ -1,6 +1,7 @@
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_screen.dart';
 import 'package:atherium_saloon_app/screens/on_boarding_screen/onboarding_screen.dart';
+import 'package:atherium_saloon_app/screens/splash_screen/splash_screen.dart';
 import 'package:get/get.dart';
 
 import '../../utils/shared_preferences.dart';
@@ -14,8 +15,6 @@ class SplashScreenController extends GetxController {
     super.onInit();
 
     getValues();
-    await Future.delayed(const Duration(seconds: 5));
-    navigate();
   }
 
   void getValues() async {
@@ -25,12 +24,14 @@ class SplashScreenController extends GetxController {
     this.isLogedIn = isLogedIn;
   }
 
-  void navigate() {
+  void navigate() async {
     if (showOnBoarding == false && isLogedIn != true) {
       Get.offAll(() => LoginScreen());
     } else if (showOnBoarding == false && isLogedIn == true) {
       Get.offAll(() => BottomNavigationScreen());
     } else {
+      Get.to(() => SplashScreen());
+      await Future.delayed(const Duration(seconds: 3));
       Get.offAll(() => OnBoardingScreen());
     }
   }

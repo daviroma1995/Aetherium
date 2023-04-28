@@ -7,6 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../forget_password_screen/foreget_password_screen.dart';
+import '../splash_screen/splash_controller.dart';
+import '../splash_screen/splash_screen.dart';
 
 class LoginController extends GetxController {
   // Auth controller instance..
@@ -14,6 +16,7 @@ class LoginController extends GetxController {
   // email passowrd, udername
   late Rx<User?> _user;
   // Firebase auth
+  User get user => _user.value!;
   FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -26,7 +29,8 @@ class LoginController extends GetxController {
 
   _initialScreen(User? user) {
     if (user == null) {
-      Get.offAll(LoginScreen());
+      SplashScreenController controller = Get.find();
+      controller.navigate();
     } else {
       Get.offAll(const BottomNavigationScreen());
     }

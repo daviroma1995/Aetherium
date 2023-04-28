@@ -102,40 +102,6 @@ class EventDetailsScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 20.0),
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50.0),
-                              border: Border.all(
-                                  width: 1.3, color: AppColors.BORDER_COLOR),
-                            ),
-                            child: const CircleAvatar(
-                              backgroundImage: AssetImage(AppAssets.USER_IMAGE),
-                            ),
-                          ),
-                          title: Text(
-                            'Ruth Okazaki',
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w700,
-                                color: isDark
-                                    ? AppColors.WHITE_COLOR
-                                    : AppColors.BLACK_COLOR),
-                          ),
-                          subtitle: const Text(
-                            'Fragrances & Perfumes',
-                            style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.GREY_COLOR),
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        Image.asset(AppAssets.MAP_IMAGE),
-                        const SizedBox(height: 16.0),
                         TextRowWidget(
                           textOne: 'Date:',
                           textTwo: 'Location:',
@@ -151,7 +117,7 @@ class EventDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20.0),
                         TextRowWidget(
-                          textOne: Get.arguments.date,
+                          textOne: Get.arguments.dateString,
                           textTwo: 'Online',
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
@@ -176,9 +142,9 @@ class EventDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20.0),
                         TextRowWidget(
-                          textOne: controller.getTime(Get.arguments.startTime),
-                          textTwo: controller.getTime(Get.arguments.endTime),
-                          style: TextStyle(
+                          textOne: Get.arguments.startTimeString,
+                          textTwo: Get.arguments.endTimeString,
+                          style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,
                             color: AppColors.GREY_COLOR,
@@ -201,7 +167,7 @@ class EventDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20.0),
                         TextRowWidget(
-                          textOne: Get.arguments.duration,
+                          textOne: Get.arguments.durationString,
                           textTwo: '',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -232,6 +198,8 @@ class EventDetailsScreen extends StatelessWidget {
                             color: AppColors.GREY_COLOR,
                           ),
                         ),
+                        const SizedBox(height: 16.0),
+                        Image.asset(AppAssets.MAP_IMAGE),
                       ],
                     ),
                   ),

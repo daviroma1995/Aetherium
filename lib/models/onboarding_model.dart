@@ -39,7 +39,7 @@ List<OnBoardingModel> screens = [
     id: 2,
     backgroundImageUrl: 'assets/images/onboarding/screen_three.svg',
     avatarImageUrl: 'assets/images/onboarding/skin_care.svg',
-    title: AppLanguages.FRAGRANCES_PERFUMES,
+    title: AppLanguages.SKIN_CARE,
     description: AppLanguages.ONBOARDING_DESCRIPTION,
     buttonText: AppLanguages.INZIA,
   ),

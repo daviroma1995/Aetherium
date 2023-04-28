@@ -14,7 +14,7 @@ class AccountInfoController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    uid = await FirebaseSerivces.checkUserUid();
+    uid = await FirebaseServices.checkUserUid();
     await getUserInfo();
   }
 
@@ -56,7 +56,7 @@ class AccountInfoController extends GetxController {
 
   Future<void> getUserInfo() async {
     try {
-      var data = await FirebaseSerivces.getDataWhere(
+      var data = await FirebaseServices.getDataWhere(
           collection: 'clients', key: 'user_id', value: uid);
       currentClient.value = Client.fromJson(data!);
     } on Exception catch (ex) {

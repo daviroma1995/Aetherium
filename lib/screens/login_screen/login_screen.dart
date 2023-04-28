@@ -32,7 +32,9 @@ class LoginScreen extends StatelessWidget {
                 ),
                 secondItem: Text(
                   AppLanguages.AETHERIUM,
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                 ),
               ),
               Padding(
@@ -69,7 +71,7 @@ class LoginScreen extends StatelessWidget {
                       }
                     }),
                     const SizedBox(height: 17.0),
-                    const CustomLabelWidget(label: AppLanguages.LOGIN),
+                    const CustomLabelWidget(label: AppLanguages.PASSWORD),
                     const SizedBox(height: 10.0),
                     Obx(
                       () => CustomInputFormField(

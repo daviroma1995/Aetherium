@@ -1,5 +1,3 @@
-import 'package:atherium_saloon_app/data.dart';
-import 'package:atherium_saloon_app/screens/event_details/event_details_screen.dart';
 import 'package:atherium_saloon_app/screens/events_screen/events_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -159,11 +157,7 @@ class EventsScreen extends StatelessWidget {
                                     right: 10,
                                     child: GestureDetector(
                                       onTap: () {
-                                        controller.events[index].isfavorite =
-                                            !controller
-                                                .events[index].isfavorite!;
-                                        controller.shouldUpdate.value =
-                                            !controller.shouldUpdate.value;
+                                        controller.setFavorite(index);
                                       },
                                       child: Icon(
                                         controller.events[index].isfavorite ==
@@ -179,11 +173,7 @@ class EventsScreen extends StatelessWidget {
                                     right: 10,
                                     child: GestureDetector(
                                       onTap: () {
-                                        controller.events[index].isfavorite =
-                                            !controller
-                                                .events[index].isfavorite!;
-                                        controller.shouldUpdate.value =
-                                            !controller.shouldUpdate.value;
+                                        controller.setFavorite(index);
                                       },
                                       child: Icon(
                                         controller.events[index].isfavorite ==

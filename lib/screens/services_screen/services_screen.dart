@@ -16,9 +16,9 @@ class ServicesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.args = Get.arguments;
-    controller.reArrange();
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    // controller.reArrange();
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -48,86 +48,120 @@ class ServicesScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
+      body: Obx(
+        () => SafeArea(
+          child: controller.services.isEmpty || controller.subServices.isEmpty
+              ? const Center(
+                  child: const CircularProgressIndicator(),
+                )
+              : Column(
                   children: [
-                    const SizedBox(height: 7.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                      child: CustomInputFormField(
-                        textEdigintController: TextEditingController(),
-                        hintText: 'Search',
-                        isValid: true,
-                        onSubmit: () {},
-                        autoFocus: false,
-                        iconUrl: AppAssets.SEARCH_ICON,
-                        onchange: (value) {
-                          controller.searchService(value);
-                        },
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 7.0),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 22.0),
+                              child: CustomInputFormField(
+                                textEdigintController: controller.search,
+                                hintText: 'Search',
+                                isValid: true,
+                                onSubmit: () {},
+                                autoFocus: false,
+                                iconUrl: AppAssets.SEARCH_ICON,
+                                onchange: (value) {
+                                  controller.searchService(value);
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 10.0),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 0.0),
+                              child: ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: controller.services
+                                    .where((service) {
+                                      return service.name!
+                                          .toLowerCase()
+                                          .contains(
+                                              controller.searchedValue.value);
+                                    })
+                                    .toList()
+                                    .length,
+                                itemBuilder: (context, index) {
+                                  var filteredServices =
+                                      controller.services.where((service) {
+                                    return service.name!.toLowerCase().contains(
+                                        controller.searchedValue.value);
+                                  }).toList()[index];
+                                  var serviceIndex =
+                                      controller.services.indexWhere(
+                                    (element) {
+                                      return element.name! ==
+                                          filteredServices.name;
+                                    },
+                                  );
+                                  return Column(
+                                    children: [
+                                      const SizedBox(height: 10.0),
+                                      CustomDropDownListWidget(
+                                        selectedItems:
+                                            controller.selectedServices.value,
+                                        serviceIndex: index,
+                                        title: filteredServices.name!,
+                                        imageUrl: AppAssets.USER_IMAGE,
+                                        items: controller.getServiceTitle(
+                                            controller.subServices,
+                                            controller.searchedValue.isEmpty
+                                                ? index
+                                                : serviceIndex),
+                                        isExpanded: controller
+                                            .services[index].isExtended.value,
+                                        price: controller.getServicePrice(
+                                            controller.subServices,
+                                            controller.searchedValue.isEmpty
+                                                ? index
+                                                : serviceIndex),
+                                        time: controller.getServiceTime(
+                                            controller.subServices,
+                                            controller.searchedValue.isEmpty
+                                                ? index
+                                                : serviceIndex),
+                                        serviceDetailController:
+                                            controller.serviceDetailController,
+                                        selectedServices: controller
+                                            .selectedServiceController,
+                                      )
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 10.0),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 0.0),
-                      child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: services.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              const SizedBox(height: 10.0),
-                              CustomDropDownListWidget(
-                                serviceIndex: index,
-                                title: services[index].title,
-                                imageUrl: AppAssets.USER_IMAGE,
-                                items: services[index]
-                                    .items
-                                    .map((e) => e.title)
-                                    .toList(),
-                                isExpanded: services[index].isExtended.value,
-                                price: services[index]
-                                    .items
-                                    .map((e) => e.price)
-                                    .toList(),
-                                time: services[index]
-                                    .items
-                                    .map((e) => e.time)
-                                    .toList(),
-                                serviceDetailController:
-                                    controller.serviceDetailController,
-                                selectedServices:
-                                    controller.selectedServiceController,
-                              )
-                            ],
-                          );
-                        },
-                      ),
+                          horizontal: 22.0, vertical: 20.0),
+                      child: ButtonWidget(
+                          width: Get.width,
+                          buttonText: 'Next',
+                          color: isDark
+                              ? AppColors.SECONDARY_LIGHT
+                              : AppColors.PRIMARY_COLOR,
+                          buttonTextColor: !isDark
+                              ? AppColors.WHITE_COLOR
+                              : AppColors.BLACK_COLOR,
+                          onTap: controller.moveToAppointmentBookingScreen),
                     ),
                   ],
                 ),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 22.0, vertical: 20.0),
-              child: ButtonWidget(
-                  width: Get.width,
-                  buttonText: 'Next',
-                  color: isDark
-                      ? AppColors.SECONDARY_LIGHT
-                      : AppColors.PRIMARY_COLOR,
-                  buttonTextColor:
-                      !isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
-                  onTap: controller.moveToAppointmentBookingScreen),
-            ),
-          ],
         ),
       ),
     );

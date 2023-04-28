@@ -1,21 +1,19 @@
-import 'dart:developer';
-
+import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/screens/appointments_screen/appointments_screen.dart';
-import 'package:atherium_saloon_app/screens/services_screen/services_controller.dart'
-    as appointments;
+import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
+
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:atherium_saloon_app/utils/shared_preferences.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../models/appointment.dart';
 import '../../models/client.dart';
+import '../../models/employee.dart';
 import '../../models/event.dart';
 import '../../network_utils/firebase_services.dart';
 import '../../utils/constants.dart';
-import '../appointment_confirm_detail_screen/appointment_confirm_detail_screen.dart';
 import '../event_details/event_details_screen.dart';
-import '../login_screen/login_screen.dart';
 
 class HomeScreenController extends GetxController {
   RxInt searchServicesLength = 0.obs;
@@ -25,66 +23,41 @@ class HomeScreenController extends GetxController {
   var currentUser = Client().obs;
   late String _uid;
   var events = <Event>[].obs;
+  var appointments = <Appointment>[].obs;
+  var appointmentsEmployee = <Employee>[].obs;
   var searchedService = "".obs;
-
-  Future<void> checkUserUid() async {
-    FirebaseAuth.instance.authStateChanges().listen(
-      (User? user) {
-        if (user == null) {
-          Get.offAll(() => LoginScreen());
-        } else {
-          _uid = user.uid;
-        }
-      },
-    );
-  }
 
   @override
   void onInit() async {
+    _uid = LoginController.instance.user.uid;
     super.onInit();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) async {
-        _uid = await FirebaseSerivces.checkUserUid();
-        await initializeUser();
-        // await loadEvents();
-        isInitialized.value = true;
-        LocalData.setIsLogedIn(true);
-        events.bindStream(FirebaseSerivces.eventStream());
-      },
-    );
   }
 
-  Future<void> loadEvents() async {
-    try {
-      var list = <Event>[];
-      var data =
-          await FirebaseSerivces.getLimitedData(collection: 'events', limit: 4);
-      for (var element in data!) {
-        var data = Event.fromJson(element);
-        data.isfavorite =
-            data.clientId!.where((id) => id == _uid).toList().isNotEmpty;
-        data.eventId = element['collection_id'];
-        // print(clientId);
-        // data.isfavorite = clientId == null || clientId != _uid ? false : true;
-        list.add(data);
-      }
-      events.value = list;
-    } on Exception catch (ex) {
-      log(ex.toString());
-    }
+  @override
+  void onReady() {
+    super.onReady();
+    print('Ready called');
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        currentUser.bindStream(FirebaseServices.currentUserStream());
+        events.bindStream(FirebaseServices.eventStream());
+        appointments
+            .bindStream(FirebaseServices.currentUserAppointmentsLimited());
+
+        appointmentsEmployee.bindStream(FirebaseServices.employeeStrem());
+
+        isInitialized.value = true;
+        LocalData.setIsLogedIn(true);
+      },
+    );
   }
 
   void navigateToAppointmentDetail(int index) {
     Get.to(
-      () => AppointmentConfirmDetailScreen(
-        isDetail: true,
-        isEditable: true,
-      ),
+      () => AppointmentDetailsScreen(appointment: appointments[index]),
       duration: const Duration(milliseconds: 600),
       transition: Transition.rightToLeft,
-      arguments: <appointments.SubService>[
-        appointments.SubService(title: 'Treatments', price: 30, time: '30 Min')
-      ],
+      arguments: appointments[index].clientId,
     );
   }
 
@@ -104,9 +77,19 @@ class HomeScreenController extends GetxController {
     } else {
       events[index].clientId!.add(_uid);
     }
-    FirebaseSerivces.toggleFavorite(
+    FirebaseServices.toggleFavorite(
         eventId: events[index].eventId!, data: events[index]);
     events[index].isfavorite = !events[index].isfavorite!;
+  }
+  // Get Employee name
+
+  String getEmployeeName(String id) {
+    for (var employee in appointmentsEmployee) {
+      if (employee.id == id) {
+        return employee.name!;
+      }
+    }
+    return 'No Name';
   }
 
   void navigateToServices() {
@@ -120,7 +103,7 @@ class HomeScreenController extends GetxController {
 
   void navigateToAppointments() {
     Get.to(
-      () => AppointmentsScreen(),
+      () => const AppointmentsScreen(),
       duration: const Duration(milliseconds: 600),
       curve: Curves.linear,
       transition: Transition.rightToLeft,
@@ -152,16 +135,6 @@ class HomeScreenController extends GetxController {
       }
     }
   }
-
-  Future<void> initializeUser() async {
-    try {
-      var data = await FirebaseSerivces.getDataWhere(
-          collection: 'clients', key: 'user_id', value: _uid);
-      currentUser.value = Client.fromJson(data!);
-    } on Exception catch (ex) {
-      log(ex.toString());
-    }
-  }
 }
 
 List searchServices = [];
@@ -191,44 +164,44 @@ List services = [
   },
 ];
 
-class Appointment {
-  final String userName;
-  final String subTitle;
-  final String imageUrl;
-  final String time;
-  final String date;
-  Appointment({
-    required this.userName,
-    required this.subTitle,
-    required this.imageUrl,
-    required this.time,
-    required this.date,
-  });
-}
+// class Appointment {
+//   final String userName;
+//   final String subTitle;
+//   final String imageUrl;
+//   final String time;
+//   final String date;
+//   Appointment({
+//     required this.userName,
+//     required this.subTitle,
+//     required this.imageUrl,
+//     required this.time,
+//     required this.date,
+//   });
+// }
 
-List upcomingAppointments = [
-  Appointment(
-    userName: 'Ruth Okazaki',
-    subTitle: 'Fragrances & Perfumes',
-    imageUrl: AppAssets.PROFILE_IMAGE_ONE,
-    time: '8:02 AM',
-    date: '06/02/2022',
-  ),
-  Appointment(
-    userName: 'Ruth Okazaki',
-    subTitle: 'Fragrances & Perfumes',
-    imageUrl: AppAssets.PROFILE_IMAGE_TWO,
-    time: '8:02 AM',
-    date: '06/02/2022',
-  ),
-  Appointment(
-    userName: 'Ruth Okazaki',
-    subTitle: 'Fragrances & Perfumes',
-    imageUrl: AppAssets.PROFILE_IMAGE_TWO,
-    time: '8:02 AM',
-    date: '06/02/2022',
-  ),
-];
+// List upcomingAppointments = [
+//   Appointment(
+//     userName: 'Ruth Okazaki',
+//     subTitle: 'Fragrances & Perfumes',
+//     imageUrl: AppAssets.PROFILE_IMAGE_ONE,
+//     time: '8:02 AM',
+//     date: '06/02/2022',
+//   ),
+//   Appointment(
+//     userName: 'Ruth Okazaki',
+//     subTitle: 'Fragrances & Perfumes',
+//     imageUrl: AppAssets.PROFILE_IMAGE_TWO,
+//     time: '8:02 AM',
+//     date: '06/02/2022',
+//   ),
+//   Appointment(
+//     userName: 'Ruth Okazaki',
+//     subTitle: 'Fragrances & Perfumes',
+//     imageUrl: AppAssets.PROFILE_IMAGE_TWO,
+//     time: '8:02 AM',
+//     date: '06/02/2022',
+//   ),
+// ];
 
 enum Status {
   canceled,

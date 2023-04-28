@@ -16,12 +16,12 @@ class MembershipType {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['icon'] = this.icon;
-    data['desc'] = this.desc;
-    data['discount_rate'] = this.discountRate;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['icon'] = icon;
+    data['desc'] = desc;
+    data['discount_rate'] = discountRate;
     return data;
   }
 }

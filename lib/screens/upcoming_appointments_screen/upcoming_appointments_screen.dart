@@ -30,7 +30,7 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                           SvgPicture.asset(
                             AppAssets.CALENDER_ICON_LIGHT,
                             colorFilter: const ColorFilter.mode(
-                                AppColors.GREY_DARK, BlendMode.srcIn),
+                                AppColors.BORDER_COLOR, BlendMode.srcIn),
                           ),
                           const SizedBox(height: 48.0),
                           Text(

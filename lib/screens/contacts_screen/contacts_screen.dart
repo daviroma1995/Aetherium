@@ -17,17 +17,17 @@ class ContactsScreen extends StatelessWidget {
       Completer<GoogleMapController>();
 
   static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+    target: LatLng(45.52307386080499, 10.2587832779112),
+    zoom: 20.0,
   );
 
   static const CameraPosition _kLake = CameraPosition(
       bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+      target: LatLng(45.52307386080499, 10.2587832779112),
+      tilt: 29.440717697143555,
+      zoom: 20.151926040649414);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-  LatLng _center = LatLng(37.43296265331129, -122.08832357078792);
+  LatLng _center = LatLng(45.52307386080499, 10.2587832779112);
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
@@ -67,233 +67,268 @@ class ContactsScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Container(
-                width: Get.width,
-                decoration: BoxDecoration(
-                  color:
-                      isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
-                  border: isDark
-                      ? const Border()
-                      : Border.all(color: AppColors.BORDER_COLOR, width: 1.3),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30.0),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 27.0, top: 37.0, right: 27.0, bottom: 37.0),
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            AppLanguages.EMAIL,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .copyWith(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w700,
-                                ),
+      body: Obx(
+        () => SafeArea(
+          child: controller.shopinfo.value.email == null
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        width: Get.width,
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? AppColors.PRIMARY_DARK
+                              : AppColors.WHITE_COLOR,
+                          border: isDark
+                              ? const Border()
+                              : Border.all(
+                                  color: AppColors.BORDER_COLOR, width: 1.3),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0),
                           ),
-                          const SizedBox(height: 10.0),
-                          const Text(
-                            'Email@example.com',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.GREY_COLOR,
-                            ),
-                          ),
-                          const SizedBox(height: 20.0),
-                          Text(
-                            AppLanguages.PHONE_NUMBER,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .copyWith(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
-                          const SizedBox(height: 10.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text(
-                                '+984 124 54967',
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.GREY_COLOR,
-                                ),
-                              ),
-                              Container(
-                                width: 102.0,
-                                height: 26.0,
-                                decoration: BoxDecoration(
-                                  color: AppColors.GREEN_COLOR,
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(AppAssets.WHATSAPP_ICON),
-                                    const SizedBox(width: 12.0),
-                                    const Text(
-                                      'WhatsApp',
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(30.0),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 27.0,
+                                top: 37.0,
+                                right: 27.0,
+                                bottom: 37.0),
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    AppLanguages.EMAIL,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium!
+                                        .copyWith(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w700,
+                                          color: isDark
+                                              ? AppColors.WHITE_COLOR
+                                              : AppColors.SECONDARY_COLOR,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 10.0),
+                                  Obx(
+                                    () => Text(
+                                      controller.isInitialized.value == true
+                                          ? controller.shopinfo.value.email!
+                                          : '',
                                       style: TextStyle(
-                                        fontSize: 10.0,
-                                        color: AppColors.WHITE_COLOR,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.GREY_COLOR,
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20.0),
-                          Text(
-                            AppLanguages.TIME,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .copyWith(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
-                          const SizedBox(height: 10.0),
-                          const Text(
-                            '8:00 AM - 8:30 AM',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.GREY_COLOR,
-                            ),
-                          ),
-                          const SizedBox(height: 20.0),
-                          Text(
-                            AppLanguages.OPENING_HOURS_OF_THE_SHOP,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .copyWith(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
-                          const SizedBox(height: 10.0),
-                          ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: timeTable.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  openingHours(
-                                      day: timeTable[index].day,
-                                      from: timeTable[index].startTime,
-                                      to: timeTable[index].endTim!),
+                                  ),
+                                  const SizedBox(height: 20.0),
+                                  Text(
+                                    AppLanguages.PHONE_NUMBER,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium!
+                                        .copyWith(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w700,
+                                          color: isDark
+                                              ? AppColors.WHITE_COLOR
+                                              : AppColors.SECONDARY_COLOR,
+                                        ),
+                                  ),
                                   const SizedBox(height: 10.0),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        controller.shopinfo.value.phoneNumber!,
+                                        style: const TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.GREY_COLOR,
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () {},
+                                        child: Container(
+                                          width: 102.0,
+                                          height: 26.0,
+                                          decoration: BoxDecoration(
+                                            color: AppColors.GREEN_COLOR,
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                  AppAssets.WHATSAPP_ICON),
+                                              const SizedBox(width: 12.0),
+                                              const Text(
+                                                'WhatsApp',
+                                                style: TextStyle(
+                                                  fontSize: 10.0,
+                                                  color: AppColors.WHITE_COLOR,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 30.0),
+                                  Text(
+                                    AppLanguages.OPENING_HOURS_OF_THE_SHOP,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium!
+                                        .copyWith(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w700,
+                                          color: isDark
+                                              ? AppColors.WHITE_COLOR
+                                              : AppColors.SECONDARY_COLOR,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 30.0),
+                                  ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: controller
+                                        .shopinfo.value.openingHours!.length,
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          openingHours(
+                                              isDark: isDark,
+                                              day: controller.shopinfo.value
+                                                  .openingHours![index].day!,
+                                              from: controller
+                                                  .shopinfo
+                                                  .value
+                                                  .openingHours![index]
+                                                  .openingTime,
+                                              to: controller
+                                                  .shopinfo
+                                                  .value
+                                                  .openingHours![index]
+                                                  .closingTime!),
+                                          const SizedBox(height: 10.0),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(height: 10.0),
+                                  Text(
+                                    AppLanguages.DESCRIPTION,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium!
+                                        .copyWith(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w700,
+                                          color: isDark
+                                              ? AppColors.WHITE_COLOR
+                                              : AppColors.SECONDARY_COLOR,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 20.0),
+                                  const Text(
+                                    'Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w400,
+                                      color: AppColors.GREY_COLOR,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20.0),
+                                  GestureDetector(
+                                    onTap: () {
+                                      print('hello');
+                                    },
+                                    child: SizedBox(
+                                      height: 250.0,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        child: GoogleMap(
+                                          onTap: (argument) {
+                                            MapUtils.openMap(argument.latitude,
+                                                argument.longitude);
+                                          },
+                                          initialCameraPosition: _kGooglePlex,
+                                          mapType: MapType.hybrid,
+                                          onMapCreated:
+                                              (GoogleMapController controller) {
+                                            _controller.complete(controller);
+                                          },
+                                          markers: markers.values.toSet(),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20.0),
+                                  Text(
+                                    AppLanguages.BEAUTY_SPECIALIST,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium!
+                                        .copyWith(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w700,
+                                          color: isDark
+                                              ? AppColors.WHITE_COLOR
+                                              : AppColors.SECONDARY_COLOR,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 20.0),
+                                  ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount:
+                                        controller.beautySpecialists.length,
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          specialistCard(
+                                              imageUrl: beautySpecialist[index]
+                                                  .imageUrl,
+                                              title: controller
+                                                  .beautySpecialists[index]
+                                                  .name!,
+                                              subtitle: beautySpecialist[index]
+                                                  .designation,
+                                              isDark: isDark),
+                                          const SizedBox(height: 10.0),
+                                        ],
+                                      );
+                                    },
+                                  )
                                 ],
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 10.0),
-                          Text(
-                            AppLanguages.DESCRIPTION,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .copyWith(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
-                          const SizedBox(height: 20.0),
-                          const Text(
-                            'Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.GREY_COLOR,
-                            ),
-                          ),
-                          const SizedBox(height: 20.0),
-                          Text(
-                            AppLanguages.BEAUTY_SPECIALIST,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .copyWith(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
-                          const SizedBox(height: 20.0),
-                          GestureDetector(
-                            onTap: () {
-                              print('hello');
-                            },
-                            child: SizedBox(
-                              height: 250.0,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: GoogleMap(
-                                  onTap: (argument) {
-                                    MapUtils.openMap(
-                                        argument.latitude, argument.longitude);
-                                  },
-                                  initialCameraPosition: _kGooglePlex,
-                                  mapType: MapType.hybrid,
-                                  onMapCreated:
-                                      (GoogleMapController controller) {
-                                    _controller.complete(controller);
-                                  },
-                                  markers: markers.values.toSet(),
-                                ),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20.0),
-                          ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: beautySpecialist.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  specialistCard(
-                                      imageUrl:
-                                          beautySpecialist[index].imageUrl,
-                                      title: beautySpecialist[index].name,
-                                      subtitle:
-                                          beautySpecialist[index].designation,
-                                      isDark: isDark),
-                                  const SizedBox(height: 10.0),
-                                ],
-                              );
-                            },
-                          )
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -362,16 +397,20 @@ class ContactsScreen extends StatelessWidget {
     );
   }
 
-  Row openingHours({required String day, String? from, required String to}) {
+  Row openingHours(
+      {required String day,
+      String? from,
+      required String to,
+      required bool isDark}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           day,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.w500,
-            color: AppColors.SECONDARY_COLOR,
+            color: isDark ? AppColors.SECONDARY_COLOR : AppColors.BLACK_COLOR,
           ),
         ),
         Text(

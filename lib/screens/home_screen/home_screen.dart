@@ -27,11 +27,6 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            ElevatedButton(
-                onPressed: () {
-                  controller.loadEvents();
-                },
-                child: Text('Get ddat')),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20.0,
@@ -302,31 +297,50 @@ class HomeScreen extends StatelessWidget {
                           const SizedBox(height: 20.0),
                           Padding(
                             padding: const EdgeInsets.only(left: 22.0),
-                            child: SizedBox(
-                              height: 103.0,
-                              child: ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                itemCount: upcomingAppointments.length,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      controller
-                                          .navigateToAppointmentDetail(index);
-                                    },
-                                    child: CustomAppointmentCardWidget(
-                                      imageUrl:
-                                          upcomingAppointments[index].imageUrl,
-                                      title:
-                                          upcomingAppointments[index].userName,
-                                      subTitle:
-                                          upcomingAppointments[index].subTitle,
-                                      date: upcomingAppointments[index].date,
-                                      time: upcomingAppointments[index].time,
+                            child: Obx(
+                              () => controller.appointments.isNotEmpty
+                                  ? SizedBox(
+                                      height: 103.0,
+                                      child: ListView.builder(
+                                        physics: const BouncingScrollPhysics(),
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount:
+                                            controller.appointments.length,
+                                        itemBuilder: (context, index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              controller
+                                                  .navigateToAppointmentDetail(
+                                                      index);
+                                            },
+                                            child: CustomAppointmentCardWidget(
+                                              imageUrl: AppAssets.USER_IMAGE,
+                                              title: controller.getEmployeeName(
+                                                  controller.appointments[index]
+                                                      .employeeId!),
+                                              subTitle:
+                                                  'controller.appointments[index].subTitle!',
+                                              date: controller
+                                                  .appointments[index]
+                                                  .dateString,
+                                              time: controller
+                                                  .appointments[index].time!,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      height: 100.0,
+                                      // alignment: Alignment.center,
+                                      child: const Text(
+                                        'No appointments',
+                                        style: TextStyle(
+                                            fontSize: 20.0,
+                                            color: Colors.black),
+                                      ),
                                     ),
-                                  );
-                                },
-                              ),
                             ),
                           ),
                         ],
@@ -390,7 +404,7 @@ class HomeScreen extends StatelessWidget {
                                                   subTitle: controller
                                                       .events[index].subtitle!,
                                                   time: controller
-                                                      .events[index].date!,
+                                                      .events[index].dateString,
                                                   isFavorite: controller
                                                           .events[index]
                                                           .isfavorite ??
@@ -407,7 +421,7 @@ class HomeScreen extends StatelessWidget {
                                                   subTitle: controller
                                                       .events[index].subtitle!,
                                                   time: controller
-                                                      .events[index].date!,
+                                                      .events[index].dateString,
                                                   isFavorite: controller
                                                       .events[index]
                                                       .isfavorite!,

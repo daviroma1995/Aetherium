@@ -1,18 +1,20 @@
-import 'dart:developer';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import 'package:atherium_saloon_app/screens/appointment_booking_screen/appointment_booking_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/button_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:horizontal_calendar/horizontal_calendar.dart';
 
 import '../../widgets/clean_calendar.dart';
 
 class AppointmentBookingScreen extends StatelessWidget {
   final controller = Get.put(AppointMentBookingController());
-  AppointmentBookingScreen({super.key});
+  AppointmentBookingScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +64,10 @@ class AppointmentBookingScreen extends StatelessWidget {
                         events: {},
                         hideTodayIcon: true,
                         // startOnMonday: true,
+                        onDateSelected: (value) {
+                          controller.args.dateTimestamp =
+                              Timestamp.fromDate(value);
+                        },
                       ),
                     ),
                     const SizedBox(height: 35.0),
@@ -106,7 +112,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 return Obx(
                                   () => InkWell(
-                                    onTap: () => controller.selectedSlot(index),
+                                    onTap: () => controller.selectSlot(index),
                                     child: Container(
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
@@ -119,7 +125,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                                             BorderRadius.circular(8.0),
                                         border: controller.selectedSlot != index
                                             ? isDark
-                                                ? Border()
+                                                ? const Border()
                                                 : Border.all(
                                                     color: AppColors
                                                         .SECONDARY_LIGHT,
@@ -129,16 +135,17 @@ class AppointmentBookingScreen extends StatelessWidget {
                                       child: Text(
                                         avaliableSlots[index],
                                         style: TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w500,
-                                            color: controller.selectedSlot ==
-                                                    index
-                                                ? isDark
-                                                    ? AppColors.BACKGROUND_DARK
-                                                    : AppColors.BLACK_COLOR
-                                                : isDark
-                                                    ? AppColors.WHITE_COLOR
-                                                    : AppColors.BLACK_COLOR),
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: controller.selectedSlot ==
+                                                  index
+                                              ? isDark
+                                                  ? AppColors.BACKGROUND_DARK
+                                                  : AppColors.BLACK_COLOR
+                                              : isDark
+                                                  ? AppColors.WHITE_COLOR
+                                                  : AppColors.BLACK_COLOR,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -171,26 +178,36 @@ class AppointmentBookingScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 20.0),
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: 7,
-                      itemBuilder: (contenxt, index) {
-                        return Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 22.0),
-                              child: specialistCard(
-                                  title: 'Ruth Okazaki',
-                                  subtitle: 'Fragrances & Perfumes',
-                                  imageUrl: AppAssets.USER_IMAGE,
-                                  isDark: isDark),
-                            ),
-                            const SizedBox(height: 10.0),
-                          ],
-                        );
-                      },
+                    Obx(
+                      () => ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: controller.employees.isEmpty
+                            ? 1
+                            : controller.employees.length,
+                        itemBuilder: (contenxt, index) {
+                          if (controller.employees.isEmpty) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 22.0),
+                                  child: specialistCard(
+                                      title: controller.employees[index].name!,
+                                      subtitle: 'Fragrances & Perfumes',
+                                      imageUrl: AppAssets.USER_IMAGE,
+                                      isDark: isDark),
+                                ),
+                                const SizedBox(height: 10.0),
+                              ],
+                            );
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),

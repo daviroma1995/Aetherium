@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class Event {
   String? eventId;
   String? address;
   List<String>? clientId;
   String? date;
+  Timestamp? dateTimstamp;
+  Timestamp? startTimeStamp;
+  Timestamp? endTimeStamp;
   String? desc;
   String? duration;
   String? endTime;
@@ -19,9 +23,12 @@ class Event {
 
   Event(
       {this.eventId,
+      this.dateTimstamp,
       this.address,
       this.clientId,
       this.date,
+      this.startTimeStamp,
+      this.endTimeStamp,
       this.desc,
       this.duration,
       this.endTime,
@@ -40,6 +47,9 @@ class Event {
     clientId = json['client_id'].cast<String>();
     date = json['date'];
     desc = json['desc'];
+    dateTimstamp = json['date_timestamp'];
+    startTimeStamp = json['start_timestamp'];
+    endTimeStamp = json['end_timestamp'];
     duration = json['duration'];
     endTime = json['end_time'];
     image = json['image'];
@@ -57,6 +67,9 @@ class Event {
     address = json['address'];
     clientId = json['client_id'].cast<String>();
     date = json['date'];
+    dateTimstamp = json['date_timestamp'];
+    startTimeStamp = json['start_timestamp'];
+    endTimeStamp = json['end_timestamp'];
     desc = json['desc'];
     duration = json['duration'];
     endTime = json['end_time'];
@@ -71,20 +84,49 @@ class Event {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['address'] = this.address;
-    data['client_id'] = this.clientId;
-    data['date'] = this.date;
-    data['desc'] = this.desc;
-    data['duration'] = this.duration;
-    data['end_time'] = this.endTime;
-    data['image'] = this.image;
-    data['image_url'] = this.imageUrl;
-    data['start_time'] = this.startTime;
-    data['subtitle'] = this.subtitle;
-    data['title'] = this.title;
-    data['longitude'] = this.longitude;
-    data['latitude'] = this.latitude;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['address'] = address;
+    data['client_id'] = clientId;
+    data['date_timestamp'] = dateTimstamp;
+    data['start_timestamp'] = startTimeStamp;
+    data['end_timestamp'] = endTimeStamp;
+    data['date'] = date;
+    data['desc'] = desc;
+    data['duration'] = duration;
+    data['end_time'] = endTime;
+    data['image'] = image;
+    data['image_url'] = imageUrl;
+    data['start_time'] = startTime;
+    data['subtitle'] = subtitle;
+    data['title'] = title;
+    data['longitude'] = longitude;
+    data['latitude'] = latitude;
     return data;
+  }
+
+  String get dateString {
+    String date = '';
+    final dateTime = dateTimstamp?.toDate() ?? DateTime.now();
+    date = DateFormat.yMd().format(dateTime);
+    return date;
+  }
+
+  String get endTimeString {
+    final dateTime = endTimeStamp?.toDate() ?? DateTime.now();
+    return DateFormat("hh:mm aa").format(dateTime);
+  }
+
+  String get startTimeString {
+    final dateTime = startTimeStamp?.toDate() ?? DateTime.now();
+    return DateFormat("hh:mm aa").format(dateTime);
+  }
+
+  String get durationString {
+    final startTime = startTimeStamp?.toDate() ?? DateTime.now();
+    final endTime = endTimeStamp?.toDate() ?? DateTime.now();
+
+    final startingHour = int.parse(DateFormat("hh").format(startTime));
+    final endTimeHour = int.parse(DateFormat("hh").format(endTime));
+    return '${endTimeHour - startingHour} hrs';
   }
 }

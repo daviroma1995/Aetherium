@@ -81,17 +81,14 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
           ),
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 10.0,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: Get.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 10.0,
+              ),
+              Expanded(
+                child: SizedBox(
                   child: TabBarView(
                     children: [
                       PastAppointmentScreen(),
@@ -99,9 +96,8 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                     ],
                   ),
                 ),
-                const SizedBox(height: 10.0),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         floatingActionButton: InkWell(

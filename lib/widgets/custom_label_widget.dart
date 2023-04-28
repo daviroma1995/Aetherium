@@ -11,10 +11,16 @@ class CustomLabelWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: Theme.of(context).textTheme.bodyMedium),
+        Text(label,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: isDark
+                      ? AppColors.WHITE_COLOR
+                      : AppColors.SECONDARY_COLOR,
+                )),
         const SizedBox(height: 10.0),
       ],
     );

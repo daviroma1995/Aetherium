@@ -1,9 +1,23 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:atherium_saloon_app/utils/constants.dart';
+import 'package:atherium_saloon_app/models/employee.dart';
+import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:atherium_saloon_app/utils/constants.dart';
+import '../../models/shop_info.dart';
 
 class ContactsController extends GetxController {
-  // TODO
+  var shopinfo = ShopInfo().obs;
+  var beautySpecialists = <Employee>[].obs;
+  RxBool isInitialized = false.obs;
+  @override
+  void onInit() async {
+    super.onInit();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      shopinfo.bindStream(FirebaseServices.shopInfoStream());
+      beautySpecialists.bindStream(FirebaseServices.employeeStrem());
+      isInitialized.value = true;
+    });
+  }
 }
 
 class ShopTime {

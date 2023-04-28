@@ -142,7 +142,7 @@ class AppLanguages {
   static const APPDEO = 'AP/Deo';
   static const SKIN_CARE = 'Skin Care';
   static const AVANTI = 'Avanti';
-  static const INZIA = 'Inzia';
+  static const INZIA = 'Inizia';
   static const INVIA = 'Invia';
   static const ACCEDI = 'Accedi';
   static const LOGIN = 'Login';
@@ -181,7 +181,7 @@ class AppLanguages {
   static const TERMS_OF_SERVICE = 'Terms of service';
   static const TERMS_OF_USE = 'Terms of use';
   static const PRIVACY = 'Privacy';
-  static const PHONE_NUMBER = 'Phone Number';
+  static const PHONE_NUMBER = 'Telefono';
   static const GENDER = 'Gender';
   static const ADDRESS = 'Address';
   static const BIRTHDAY = 'Birthday';
@@ -204,7 +204,7 @@ class AppLanguages {
   static const PRICE = 'Price';
   static const TOTAL_PRICE = 'Total Price';
   static const SHOP_PHONE = 'shop Ph';
-  static const NOTES = 'Notes';
+  static const NOTES = 'Notes:';
   static const APPOINTMENT_DETAILS_DESC =
       'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit.';
   static const CANCEL = 'Cancel';
@@ -212,8 +212,8 @@ class AppLanguages {
   static const FLOURISH_ESSENTIALS = 'Flourish Essentials';
   static const CONTACTS = 'Contacts';
   static const TIME = 'Time';
-  static const OPENING_HOURS_OF_THE_SHOP = 'Opening hours of the shop';
-  static const DESCRIPTION = 'Description';
+  static const OPENING_HOURS_OF_THE_SHOP = 'Orari di apertura';
+  static const DESCRIPTION = 'Descrizione';
   static const BEAUTY_SPECIALIST = 'Beauty Specialist';
   static const AppuntamentoDettagli = 'Appuntamento - Dettagli';
   static const APPOINTMENTCONFERMA = 'Appuntamento - Conferma';
