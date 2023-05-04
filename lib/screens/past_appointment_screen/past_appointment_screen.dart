@@ -68,9 +68,7 @@ class PastAppointmentScreen extends StatelessWidget {
                                             controller.goToDetails(index),
                                         child: AppointmentsCardWidget(
                                           imageUrl: AppAssets.EVENT_IMAGE_ONE,
-                                          title: controller
-                                              .appointmentEmployees[index]
-                                              .name!,
+                                          title: controller.employees[0].name!,
                                           subTitle: 'Fragrances & Perfumes',
                                           color: Colors.red,
                                           status: 'Status Here',

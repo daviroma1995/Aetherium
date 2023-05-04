@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../utils/constants.dart';
@@ -53,26 +54,16 @@ class AppointmentsCardWidget extends StatelessWidget {
           width: 50.0,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50.0),
-            border: Border.all(
-              width: 1.3,
-              color: AppColors.BORDER_COLOR,
-            ),
+            color: isDark ? AppColors.BACKGROUND_DARK : AppColors.PRIMARY_COLOR,
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50.0),
-            child: CachedNetworkImage(
-              imageUrl: imageUrl,
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                      colorFilter: const ColorFilter.mode(
-                          AppColors.GREY_COLOR, BlendMode.colorBurn)),
-                ),
-              ),
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+            child: SvgPicture.asset(
+              AppAssets.CALANDER_ICON,
+              height: 24.0,
+              fit: BoxFit.contain,
+              colorFilter: const ColorFilter.mode(
+                  AppColors.WHITE_COLOR, BlendMode.srcIn),
             ),
           ),
         ),

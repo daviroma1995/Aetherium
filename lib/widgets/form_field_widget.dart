@@ -15,9 +15,12 @@ class CustomInputFormField extends StatelessWidget {
   final bool autoFocus;
   final TextEditingController textEdigintController;
   final double paddingSymetric;
+  final double paddingVertical;
   final Function? onchange;
   final Function? onFocus;
   final String? initialValue;
+  final int? maxLines;
+  final int? minLInes;
   const CustomInputFormField({
     Key? key,
     this.iconUrl = '',
@@ -30,9 +33,12 @@ class CustomInputFormField extends StatelessWidget {
     this.autoFocus = true,
     required this.textEdigintController,
     this.paddingSymetric = 0.0,
+    this.paddingVertical = 0.0,
     this.onchange,
     this.onFocus,
     this.initialValue,
+    this.maxLines,
+    this.minLInes,
   }) : super(key: key);
 
   @override
@@ -41,7 +47,6 @@ class CustomInputFormField extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.only(left: 0.0),
-      height: 50.0,
       decoration: BoxDecoration(
         border: !isDark
             ? Border.all(color: isValid ? AppColors.BORDER_COLOR : Colors.red)
@@ -67,7 +72,8 @@ class CustomInputFormField extends StatelessWidget {
           }, //=> onchange!(value) ?? (value) {},
           cursorColor: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
           controller: textEdigintController,
-
+          maxLines: maxLines ?? 1,
+          minLines: minLInes ?? 1,
           onSubmitted: (value) => onSubmit(),
           autofocus: autoFocus,
           style: Theme.of(context).textTheme.bodyMedium,
@@ -89,7 +95,7 @@ class CustomInputFormField extends StatelessWidget {
                   )
                 : null,
             contentPadding: EdgeInsets.symmetric(
-                horizontal: paddingSymetric, vertical: 0.0),
+                horizontal: paddingSymetric, vertical: paddingVertical),
             prefixIcon: iconUrl != ''
                 ? Padding(
                     padding: const EdgeInsets.only(

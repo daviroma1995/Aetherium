@@ -91,7 +91,7 @@ class EventsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 6.0),
                                   Text(
-                                    'Fragrances & Perfumes',
+                                    controller.events[index].subtitle!,
                                     style: const TextStyle(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500,
@@ -112,7 +112,7 @@ class EventsScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 6.0),
                                       Text(
-                                        controller.events[index].date!,
+                                        controller.events[index].dateString,
                                         style: TextStyle(
                                           fontSize: 10.0,
                                           fontWeight: FontWeight.w500,

@@ -50,7 +50,9 @@ class HomeScreen extends StatelessWidget {
                       Obx(
                         () => controller.currentUser.value.firstName != null
                             ? Text(
-                                ' ${controller.currentUser.value.firstName}',
+                                controller.currentUser.value.isAdmin!
+                                    ? ' Admin'
+                                    : ' ${controller.currentUser.value.firstName}',
                                 style: TextStyle(
                                   color: isDark
                                       ? AppColors.WHITE_COLOR
@@ -298,7 +300,8 @@ class HomeScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(left: 22.0),
                             child: Obx(
-                              () => controller.appointments.isNotEmpty
+                              () => controller.appointments.isNotEmpty &&
+                                      controller.services.isNotEmpty
                                   ? SizedBox(
                                       height: 103.0,
                                       child: ListView.builder(
@@ -317,9 +320,10 @@ class HomeScreen extends StatelessWidget {
                                               imageUrl: AppAssets.USER_IMAGE,
                                               title: controller.getEmployeeName(
                                                   controller.appointments[index]
-                                                      .employeeId!),
-                                              subTitle:
-                                                  'controller.appointments[index].subTitle!',
+                                                      .employeeId![0]),
+                                              subTitle: controller.getServices(
+                                                  controller.appointments[index]
+                                                      .serviceId![0]),
                                               date: controller
                                                   .appointments[index]
                                                   .dateString,

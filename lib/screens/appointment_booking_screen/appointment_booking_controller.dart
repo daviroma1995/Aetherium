@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:atherium_saloon_app/models/client.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
+import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/treatment.dart';
@@ -16,26 +19,24 @@ class AppointMentBookingController extends GetxController {
   var employees = <Employee>[].obs;
   var treatments = <Treatment>[].obs;
   var selectedTreatements = <Treatment>[];
+  var currentUser = Client().obs;
+  RxBool isAdmin = false.obs;
+  TextEditingController notes = TextEditingController();
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     employees.bindStream(FirebaseServices.employeeStrem());
     treatments.bindStream(FirebaseServices.treatments());
-    print(args.serviceId);
+    var data = await FirebaseServices.getDataWhere(
+        collection: 'clients',
+        value: LoginController.instance.user.uid,
+        key: 'user_id');
+    currentUser.value = Client.fromJson(data!);
+    if (data['isAdmin'] == true) {
+      isAdmin.value = true;
+    }
     args.time = avaliableSlots[0];
     args.dateTimestamp = Timestamp.fromDate(DateTime.now());
-    Timer(Duration(milliseconds: 500), () {
-      args.serviceId.forEach((service) {
-        log('Called');
-        for (int index = 0; index < treatments.length; index++) {
-          if (treatments[index].name == service ||
-              treatments[index].id == service) {
-            selectedTreatements.add(treatments[index]);
-          }
-        }
-      });
-    });
-    print(selectedTreatements);
   }
 
   double totalPrice = 0.0;
@@ -54,12 +55,23 @@ class AppointMentBookingController extends GetxController {
   }
 
   void next() {
+    selectedTreatements = <Treatment>[];
     if (args.time == null) {
       args.time = avaliableSlots[0];
     }
     if (args.dateTimestamp == null) {
       args.dateTimestamp = Timestamp.fromDate(DateTime.now());
     }
+    args.serviceId.forEach((service) {
+      log('Called');
+      for (int index = 0; index < treatments.length; index++) {
+        if (treatments[index].name == service ||
+            treatments[index].id == service) {
+          selectedTreatements.add(treatments[index]);
+        }
+      }
+    });
+    print('Selected services : $selectedTreatements');
     Get.to(
       AppointmentConfirmDetailScreen(
         isDetail: false,

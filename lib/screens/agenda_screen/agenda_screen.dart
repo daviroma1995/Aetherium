@@ -7,7 +7,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:atherium_saloon_app/data.dart';
-import 'package:atherium_saloon_app/models/appointment.dart' as model;
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/custom_title_row_widget.dart';
 
@@ -25,14 +24,12 @@ class AgendaScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Calendar(
-              events: {
-                DateTime(selectedDay.year, selectedDay.month, 4): [
-                  {'name': 'Event A', 'isDone': true, 'time': '13 - 15 PM'},
-                  {'name': 'Event A', 'isDone': true, 'time': '13 - 15 PM'},
-                ]
-              },
+              events: controller.events,
               hideArrows: true,
               hideTodayIcon: true,
+              onDateSelected: (value) {
+                controller.onDateChange(value);
+              },
             ),
           ),
           const SizedBox(height: 13.0),
@@ -60,52 +57,60 @@ class AgendaScreen extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      CustomTitle(
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium!
-                            .copyWith(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w700,
-                            ),
-                        title: 'Tuesday',
-                        subTitle: '14/03/2023',
-                        isUnderLined: false,
+                      Obx(
+                        () => CustomTitle(
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                          title: controller.day.value,
+                          subTitle: controller.date.value,
+                          isUnderLined: false,
+                        ),
                       ),
                       const SizedBox(height: 17.0),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: agendas.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.only(left: 23.0, bottom: 10.0),
-                            child: GestureDetector(
-                              onTap: () => Get.to(
-                                AppointmentDetailsScreen(
-                                    appointment: model.Appointment()),
-                                arguments: [],
-                                duration: const Duration(
-                                  milliseconds: 600,
-                                ),
-                                transition: Transition.downToUp,
-                              ),
-                              child: AgendaCustomCardWidget(
-                                startTime: agendas[index].startTime,
-                                endTime: agendas[index].endTime,
-                                duration: agendas[index].duration,
-                                userImageUrl: agendas[index].iamgeUrl,
-                                userName: agendas[index].userName,
-                                service: agendas[index].service,
-                                agendaColor: isDark
-                                    ? agendas[index].darkolor
-                                    : agendas[index].color,
-                                agendaBarsColor: agendas[index].color,
-                              ),
-                            ),
-                          );
-                        },
+                      Obx(
+                        () => controller.appointments.isNotEmpty
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: controller.appointments.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 23.0, bottom: 10.0),
+                                    child: GestureDetector(
+                                      onTap: () => Get.to(
+                                        AppointmentDetailsScreen(
+                                            appointment:
+                                                controller.appointments[index],
+                                            isDetail: true),
+                                        duration: const Duration(
+                                          milliseconds: 600,
+                                        ),
+                                        transition: Transition.downToUp,
+                                      ),
+                                      child: AgendaCustomCardWidget(
+                                        startTime: controller.getTime(controller
+                                            .appointments[index].time!),
+                                        endTime: agendas[index].endTime,
+                                        duration: agendas[index].duration,
+                                        userImageUrl: agendas[index].iamgeUrl,
+                                        userName: agendas[index].userName,
+                                        service: agendas[index].service,
+                                        agendaColor: isDark
+                                            ? agendas[index].darkolor
+                                            : agendas[index].color,
+                                        agendaBarsColor: agendas[index].color,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : Container(),
                       ),
                     ],
                   ),

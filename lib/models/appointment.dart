@@ -8,7 +8,7 @@ class Appointment {
   String? number;
   String? email;
   String? notes;
-  String? employeeId;
+  List<String>? employeeId;
   List<String>? serviceId;
   String? clientId;
   String? statusId;
@@ -34,8 +34,8 @@ class Appointment {
     number = json['number'];
     email = json['email'];
     notes = json['notes'];
-    employeeId = json['employee_id'];
-    serviceId = json['service_id'].cast<String>();
+    employeeId = json['employee_id_list'].cast<String>();
+    serviceId = json['service_id_list'].cast<String>();
     clientId = json['client_id'];
     statusId = json['status_id'];
     dateTimestamp = json['date_timestamp'];
@@ -48,8 +48,8 @@ class Appointment {
     data['number'] = number;
     data['email'] = email;
     data['notes'] = notes;
-    data['employee_id'] = employeeId;
-    data['service_id'] = serviceId;
+    data['employee_id_list'] = employeeId;
+    data['service_id_list'] = serviceId;
     data['client_id'] = clientId;
     data['status_id'] = statusId;
     data['date_timestamp'] = dateTimestamp;

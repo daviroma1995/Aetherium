@@ -1,5 +1,4 @@
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:get/get.dart';
 
 import '../forget_password_screen/foreget_password_screen.dart';
 import '../splash_screen/splash_controller.dart';
-import '../splash_screen/splash_screen.dart';
 
 class LoginController extends GetxController {
   // Auth controller instance..

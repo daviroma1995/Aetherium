@@ -107,7 +107,7 @@ class Event {
   String get dateString {
     String date = '';
     final dateTime = dateTimstamp?.toDate() ?? DateTime.now();
-    date = DateFormat.yMd().format(dateTime);
+    date = DateFormat("dd/MM/yyyy").format(dateTime);
     return date;
   }
 

@@ -11,6 +11,7 @@ import '../../models/appointment.dart';
 import '../../models/client.dart';
 import '../../models/employee.dart';
 import '../../models/event.dart';
+import '../../models/treatment.dart';
 import '../../network_utils/firebase_services.dart';
 import '../../utils/constants.dart';
 import '../event_details/event_details_screen.dart';
@@ -25,6 +26,7 @@ class HomeScreenController extends GetxController {
   var events = <Event>[].obs;
   var appointments = <Appointment>[].obs;
   var appointmentsEmployee = <Employee>[].obs;
+  var services = <Treatment>[].obs;
   var searchedService = "".obs;
 
   @override
@@ -41,20 +43,35 @@ class HomeScreenController extends GetxController {
       (timeStamp) async {
         currentUser.bindStream(FirebaseServices.currentUserStream());
         events.bindStream(FirebaseServices.eventStream());
-        appointments
-            .bindStream(FirebaseServices.currentUserAppointmentsLimited());
-
+        var data = await FirebaseServices.getAppointments();
+        data.forEach((element) {
+          appointments.add(element);
+          print(element);
+        });
         appointmentsEmployee.bindStream(FirebaseServices.employeeStrem());
 
         isInitialized.value = true;
         LocalData.setIsLogedIn(true);
+        var treatments =
+            await FirebaseServices.getData(collection: 'treatments');
+
+        appointments.forEach(
+          (appointment) {
+            for (int i = 0; i < treatments!.length; i++) {
+              if (appointment.serviceId![0] == treatments[i]['id']) {
+                services.add(Treatment.fromJson(treatments[i]));
+              }
+            }
+          },
+        );
       },
     );
   }
 
   void navigateToAppointmentDetail(int index) {
     Get.to(
-      () => AppointmentDetailsScreen(appointment: appointments[index]),
+      () => AppointmentDetailsScreen(
+          appointment: appointments[index], isEditable: true),
       duration: const Duration(milliseconds: 600),
       transition: Transition.rightToLeft,
       arguments: appointments[index].clientId,
@@ -89,7 +106,16 @@ class HomeScreenController extends GetxController {
         return employee.name!;
       }
     }
-    return 'No Name';
+    return 'No Name!';
+  }
+
+  String getServices(String id) {
+    for (var treatments in services) {
+      if (treatments.id == id) {
+        return treatments.name!;
+      }
+    }
+    return '';
   }
 
   void navigateToServices() {

@@ -45,7 +45,9 @@ class NotificationsScreen extends StatelessWidget {
                 width: 32.0,
                 alignment: Alignment.center,
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    print('${(150 / 60).floor()} : ${(150 % 60).floor()} ');
+                  },
                   padding: const EdgeInsets.all(0.0),
                   child: SvgPicture.asset(
                     AppAssets.LINES,

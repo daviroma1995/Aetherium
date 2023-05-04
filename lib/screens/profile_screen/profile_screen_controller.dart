@@ -4,11 +4,9 @@ import 'package:atherium_saloon_app/screens/account_info_screen/account_info_scr
 import 'package:atherium_saloon_app/screens/consultations_screen/consultations_screen.dart';
 import 'package:atherium_saloon_app/screens/contacts_screen/contacts_screen.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_screen.dart';
 import 'package:atherium_saloon_app/screens/settings_screen/settings_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/utils/shared_preferences.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

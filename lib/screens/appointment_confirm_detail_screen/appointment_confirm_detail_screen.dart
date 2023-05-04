@@ -236,27 +236,43 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                   ],
                                 ),
                                 const SizedBox(height: 20.0),
-                                Text(
-                                  'Beauty Specialist:',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium!
-                                      .copyWith(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 16.0,
-                                          color: isDark
-                                              ? AppColors.WHITE_COLOR
-                                              : AppColors.SECONDARY_COLOR),
-                                ),
-                                const SizedBox(height: 20.0),
-                                specialistCard(
-                                  title: homecontroller.getEmployeeName(
-                                      controller.args.employeeId ??
-                                          '8f1cYZExVjeOo2sBDmQC'),
-                                  imageUrl: AppAssets.USER_IMAGE,
-                                  subtitle: 'Fragrances',
-                                  isDark: isDark,
-                                ),
+                                if (controller.args.employeeId != null)
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Beauty Specialist:',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium!
+                                            .copyWith(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 16.0,
+                                                color: isDark
+                                                    ? AppColors.WHITE_COLOR
+                                                    : AppColors
+                                                        .SECONDARY_COLOR),
+                                      ),
+                                      const SizedBox(height: 20.0),
+                                      ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              controller.args.employeeId.length,
+                                          itemBuilder: (context, index) {
+                                            return specialistCard(
+                                              title: homecontroller
+                                                  .getEmployeeName(controller
+                                                          .args
+                                                          .employeeId[index] ??
+                                                      '8f1cYZExVjeOo2sBDmQC'),
+                                              imageUrl: AppAssets.USER_IMAGE,
+                                              subtitle: 'Fragrances & Perfumes',
+                                              isDark: isDark,
+                                            );
+                                          }),
+                                    ],
+                                  ),
                                 const SizedBox(height: 20.0),
                                 Text(
                                   AppLanguages.NOTES,

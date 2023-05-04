@@ -4,7 +4,6 @@ import 'package:atherium_saloon_app/models/appointment.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/models/shop_info.dart';
 import 'package:atherium_saloon_app/models/treatment_category.dart';
-import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -101,7 +100,8 @@ class FirebaseServices {
     var uid = LoginController.instance.user.uid;
     return FirebaseFirestore.instance
         .collection('events')
-        .limit(4)
+        .orderBy('end_timestamp', descending: true)
+        .limit(3)
         .snapshots()
         .map(
       (event) {
@@ -153,6 +153,7 @@ class FirebaseServices {
     return FirebaseFirestore.instance
         .collection('appointments')
         .where('client_id', isEqualTo: uid)
+        .orderBy('date_timestamp', descending: true)
         .limit(3)
         .snapshots()
         .map((appointmentQuerySnapShot) {
@@ -161,11 +162,45 @@ class FirebaseServices {
         (queryDocumentSnapshot) {
           var document = queryDocumentSnapshot.data();
           document['id'] = queryDocumentSnapshot.id;
-          appointmentsList.add(Appointment.fromJson(document));
+          Timestamp timestamp = document['date_timestamp'];
+          if (timestamp.seconds >= Timestamp.now().seconds) {
+            appointmentsList.add(Appointment.fromJson(document));
+          }
         },
       );
       return appointmentsList;
     });
+  }
+
+  static Future<List<Appointment>> getAppointments() async {
+    List<Appointment> appointmentsList = [];
+    var data = await FirebaseFirestore.instance
+        .collection('appointments')
+        .where('client_id', isEqualTo: uid)
+        .orderBy('date_timestamp', descending: true)
+        .limit(3)
+        .get();
+    for (var querySnapshot in data.docs) {
+      var data = querySnapshot.data();
+      data['id'] = querySnapshot.id;
+      Timestamp timestamp = data['date_timestamp'];
+      if (timestamp.seconds >= Timestamp.now().seconds) {
+        appointmentsList.add(Appointment.fromJson(data));
+      }
+    }
+    //     (appointmentQuerySnapShot) {
+    //   appointmentQuerySnapShot.docs.forEach(
+    //     (queryDocumentSnapshot) {
+    //       var document = queryDocumentSnapshot.data();
+    //       document['id'] = queryDocumentSnapshot.id;
+    //       Timestamp timestamp = document['date_timestamp'];
+    //       if (timestamp.seconds >= Timestamp.now().seconds) {
+    //         appointmentsList.add(Appointment.fromJson(document));
+    //       }
+    //     },
+    //   );
+    // });
+    return appointmentsList;
   }
 
   static Stream<List<Appointment>> currentUserAppointments() {
@@ -286,5 +321,97 @@ class FirebaseServices {
       });
       return treatments;
     });
+  }
+
+  static Future<List<Appointment>> getAgendas(
+      Timestamp timestamp, bool isAdmin) async {
+    var secondTimestamp = Timestamp.fromDate(DateTime(DateTime.now().year,
+        DateTime.now().month, DateTime.now().day, 24, 00, 00, 100, 100));
+    List<Appointment> agendas = [];
+    print(secondTimestamp);
+    if (!isAdmin) {
+      try {
+        var data = await FirebaseFirestore.instance
+            .collection('appointments')
+            .where('date_timestamp',
+                isEqualTo: timestamp, isLessThan: secondTimestamp)
+            .where('client_id', isEqualTo: LoginController.instance.user.uid)
+            .get();
+        for (var querySnapShot in data.docs) {
+          var data = querySnapShot.data();
+          data['id'] = querySnapShot.id;
+          agendas.add(Appointment.fromJson(data));
+        }
+      } catch (ex) {
+        print('Error: $ex');
+      }
+    } else {
+      print('else called');
+      try {
+        var data = await FirebaseFirestore.instance
+            .collection('appointments')
+            .where('date_timestamp', isEqualTo: timestamp)
+            .get();
+        for (var querySnapShot in data.docs) {
+          var data = querySnapShot.data();
+          data['id'] = querySnapShot.id;
+          agendas.add(Appointment.fromJson(data));
+        }
+      } catch (ex) {
+        print('Error: $ex');
+      }
+    }
+    return agendas;
+  }
+
+  static Future<List<Appointment>> getAgendasAll(bool isAdmin) async {
+    List<Appointment> agendas = [];
+    if (!isAdmin) {
+      try {
+        var data = await FirebaseFirestore.instance
+            .collection('appointments')
+            .where('client_id', isEqualTo: LoginController.instance.user.uid)
+            .get();
+        for (var querySnapShot in data.docs) {
+          var data = querySnapShot.data();
+          data['id'] = querySnapShot.id;
+          agendas.add(Appointment.fromJson(data));
+        }
+      } catch (ex) {
+        print('Error: $ex');
+      }
+    } else {
+      print('else called');
+      try {
+        var data =
+            await FirebaseFirestore.instance.collection('appointments').get();
+        for (var querySnapShot in data.docs) {
+          var data = querySnapShot.data();
+          data['id'] = querySnapShot.id;
+          agendas.add(Appointment.fromJson(data));
+        }
+      } catch (ex) {
+        print('Error: $ex');
+      }
+    }
+    return agendas;
+  }
+
+  static Future<List<Map<String, dynamic>>?> getAllAppointments({
+    required String collection,
+  }) async {
+    var list = <Map<String, dynamic>>[];
+    try {
+      final snapShot =
+          await FirebaseFirestore.instance.collection(collection).get();
+      for (var queryDocumentSnapshot in snapShot.docs) {
+        var data = queryDocumentSnapshot.data();
+        data['id'] = queryDocumentSnapshot.id;
+        list.add(data);
+      }
+      return list;
+    } on Exception catch (ex) {
+      log(ex.toString());
+    }
   }
 }

@@ -1,63 +1,78 @@
+import 'package:atherium_saloon_app/models/employee.dart';
+import 'package:atherium_saloon_app/models/treatment.dart';
+import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
+import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
+import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+import '../../models/appointment.dart';
 import '../../utils/constants.dart';
 
 class UpcomingAppointmentsController extends GetxController {
-  // TODO
+  var upcommingAppointments = <Appointment>[].obs;
+  var employeesData = <Employee>[].obs;
+  var services = <Treatment>[].obs;
+  var uid = LoginController.instance.user.uid;
+  @override
+  void onInit() async {
+    var data = await FirebaseServices.getData(collection: 'appointments');
+    var employees = await FirebaseServices.getData(collection: 'employees');
+    var treatments = await FirebaseServices.getData(collection: 'treatments');
+    if (data != null &&
+        AgendaController.instance.currentUser.value.isAdmin! == false) {
+      data.forEach((treatment) {
+        if (treatment['client_id'] == uid &&
+            treatment['date_timestamp'].seconds >= Timestamp.now().seconds) {
+          upcommingAppointments.add(Appointment.fromJson(treatment));
+        }
+      });
+    } else {
+      data!.forEach((treatment) {
+        if (treatment['date_timestamp'].seconds >= Timestamp.now().seconds) {
+          upcommingAppointments.add(Appointment.fromJson(treatment));
+        }
+      });
+    }
+    upcommingAppointments.forEach((appointment) {
+      // appointment.employeeId!.forEach((employeeId) {
+      // for (int i = 0; i < employees!.length; i++) {
+      //   if (employees[i]['id'] == employeeId) {
+      //     var employee = Employee.fromJson(employees[i]);
+      //     employeesData.add(employee);
+      //   }
+      //   }
+      // });
+      for (int i = 0; i < employees!.length; i++) {
+        if (employees[i]['id'] == appointment.employeeId![0]) {
+          var employee = Employee.fromJson(employees[i]);
+          employeesData.add(employee);
+          break;
+        }
+      }
+    });
+    upcommingAppointments.forEach((appointment) {
+      // appointment.serviceId!.forEach((serviceId) {
+      //   for (int i = 0; i < treatments!.length; i++) {
+      //     if (serviceId == treatments[i]['id']) {
+      //       services.add(Treatment.fromJson(treatments[i]));
+      //     }
+      //   }
+      // });
+      for (int i = 0; i < treatments!.length; i++) {
+        if (appointment.serviceId![0] == treatments[i]['id']) {
+          services.add(Treatment.fromJson(treatments[i]));
+          break;
+        }
+      }
+    });
+    super.onInit();
+  }
+
   void createAppointment() {
-    Get.to(() => ServicesScreen());
+    // Get.to(() => ServicesScreen());
+    print(uid);
   }
 }
-
-enum Status {
-  canceled,
-  archived,
-  noshow,
-  confirmed,
-}
-
-class UserAppointmetn {
-  final String imageUrl;
-  final String title;
-  final String subTitle;
-  final Status status;
-  final String date;
-  final String time;
-  UserAppointmetn({
-    required this.imageUrl,
-    required this.title,
-    required this.subTitle,
-    required this.status,
-    required this.date,
-    required this.time,
-  });
-  Color get color {
-    switch (status) {
-      case (Status.archived):
-        return AppColors.ARCHIVED_COLOR;
-      case (Status.canceled):
-        return AppColors.CANCELED_COLOR;
-      case (Status.confirmed):
-        return AppColors.CONFIRMED_COLOR;
-      case (Status.noshow):
-        return AppColors.NO_SHOW_COLOR;
-    }
-  }
-
-  String get appointmentStatus {
-    switch (status) {
-      case (Status.archived):
-        return 'Archived';
-      case (Status.canceled):
-        return 'Canceled';
-      case (Status.confirmed):
-        return 'Confirmed';
-      case (Status.noshow):
-        return 'No-Show';
-    }
-  }
-}
-
-List upcomingAppointments = [];

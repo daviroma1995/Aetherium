@@ -1,3 +1,4 @@
+import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/screens/upcoming_appointments_screen/upcoming_appointments_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,10 +17,10 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              upcomingAppointments.isEmpty
-                  ? Container(
+          child: Obx(() => controller.upcommingAppointments.isEmpty
+              ? Column(
+                  children: [
+                    Container(
                       alignment: Alignment.center,
                       height: Get.height - 250,
                       width: Get.width,
@@ -60,28 +61,51 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                         ],
                       ),
                     )
-                  : SizedBox(
-                      height: Get.height * .826,
+                  ],
+                )
+              : Column(
+                  children: [
+                    SizedBox(
                       child: ListView.builder(
-                        // shrinkWrap: false,
+                        shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
-                        itemCount: upcomingAppointments.length + 1,
+                        itemCount: controller.upcommingAppointments.length + 1,
                         itemBuilder: (context, index) {
-                          return index == upcomingAppointments.length
+                          return index ==
+                                  controller.upcommingAppointments.length
                               ? const SizedBox(height: 94.0)
                               : Column(
                                   children: [
-                                    AppointmentsCardWidget(
-                                      imageUrl:
-                                          upcomingAppointments[index].imageUrl,
-                                      title: upcomingAppointments[index].title,
-                                      subTitle:
-                                          upcomingAppointments[index].subTitle,
-                                      color: upcomingAppointments[index].color,
-                                      status: upcomingAppointments[index]
-                                          .appointmentStatus,
-                                      date: upcomingAppointments[index].date,
-                                      time: upcomingAppointments[index].time,
+                                    InkWell(
+                                      onTap: () {
+                                        print('on Tap ');
+                                        Get.to(
+                                          () => AppointmentDetailsScreen(
+                                            appointment: controller
+                                                .upcommingAppointments[index],
+                                            isDetail: true,
+                                            isEditable: true,
+                                          ),
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          transition: Transition.rightToLeft,
+                                          curve: Curves.linear,
+                                        );
+                                      },
+                                      child: AppointmentsCardWidget(
+                                        imageUrl: AppAssets.EVENT_IMAGE_ONE,
+                                        title: controller
+                                            .employeesData[index].name!,
+                                        subTitle:
+                                            controller.services[index].name!,
+                                        color: Colors.red,
+                                        status: 'Archive',
+                                        date: controller
+                                            .upcommingAppointments[index]
+                                            .dateWithMonthName,
+                                        time: controller
+                                            .upcommingAppointments[index].time!,
+                                      ),
                                     ),
                                     const SizedBox(height: 10.0),
                                   ],
@@ -89,8 +113,8 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                         },
                       ),
                     ),
-            ],
-          ),
+                  ],
+                )),
         ),
       ),
     );

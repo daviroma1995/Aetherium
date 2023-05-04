@@ -8,6 +8,7 @@ class Client {
   String? address;
   String? photo;
   String? userId;
+  bool? isAdmin;
 
   Client(
       {this.id,
@@ -18,7 +19,8 @@ class Client {
       this.email,
       this.address,
       this.photo,
-      this.userId});
+      this.userId,
+      this.isAdmin});
 
   Client.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -30,6 +32,7 @@ class Client {
     address = json['address'];
     photo = json['photo'];
     userId = json['user_id'];
+    isAdmin = json['isAdmin'];
   }
 
   Map<String, dynamic> toJson() {

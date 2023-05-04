@@ -44,18 +44,24 @@ class CustomAppointmentCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
+                    alignment: Alignment.center,
                     height: 50,
                     width: 50,
                     decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1.3,
-                        color: AppColors.BORDER_COLOR,
-                      ),
+                      color: isDark
+                          ? AppColors.PRIMARY_DARK
+                          : AppColors.PRIMARY_COLOR,
                       borderRadius: BorderRadius.circular(50.0),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100.0),
-                      child: Image.asset(imageUrl),
+                      child: SvgPicture.asset(
+                        fit: BoxFit.contain,
+                        height: 24.0,
+                        AppAssets.CALANDER_ICON,
+                        colorFilter: ColorFilter.mode(
+                            AppColors.WHITE_COLOR, BlendMode.srcIn),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10.0),

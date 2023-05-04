@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
+import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,24 +20,57 @@ class PastAppointmentController extends GetxController {
     super.onInit();
     var data = await FirebaseServices.getData(collection: 'appointments');
     var employeeData = await FirebaseServices.getData(collection: 'employees');
-    for (var employee in employeeData!) {
-      employees.add(Employee.fromJson(employee));
-    }
-    for (var appointment in data!) {
-      if (currentUid == appointment['client_id']) {
+    // for (var employee in employeeData!) {
+    //   employees.add(Employee.fromJson(employee));
+    // }
+
+    if (AgendaController.instance.currentUser.value.isAdmin!) {
+      for (var appointment in data!) {
         if (appointment['date_timestamp'].seconds + 86400 <
             Timestamp.fromDate(DateTime.now()).seconds) {
           pastAppointments.add(Appointment.fromJson(appointment));
         }
       }
-    }
-    for (var element in employees) {
-      for (int i = 0; i < pastAppointments.length; i++) {
-        if (pastAppointments[i].employeeId == element.id) {
-          appointmentEmployees.add(element);
+    } else {
+      for (var appointment in data!) {
+        if (currentUid == appointment['client_id']) {
+          if (appointment['date_timestamp'].seconds + 86400 <
+              Timestamp.fromDate(DateTime.now()).seconds) {
+            pastAppointments.add(Appointment.fromJson(appointment));
+          }
         }
       }
     }
+    print(pastAppointments);
+    for (var element in employees) {
+      // for (int i = 0; i < pastAppointments.length; i++) {
+      //   // if (pastAppointments[i].employeeId == element.id) {
+      //   //   appointmentEmployees.add(element);
+      //   // }
+      //   pastAppointments[i].employeeId!.forEach((employeeId) {
+      //     if (employeeId == element.id) {
+      //       appointmentEmployees.add(element);
+      //     }
+      //   });
+      // }
+    }
+    pastAppointments.forEach((appointment) {
+      // appointment.employeeId!.forEach((employeeId) {
+      // for (int i = 0; i < employees!.length; i++) {
+      //   if (employees[i]['id'] == employeeId) {
+      //     var employee = Employee.fromJson(employees[i]);
+      //     employeesData.add(employee);
+      //   }
+      //   }
+      // });
+      for (int i = 0; i < employeeData!.length; i++) {
+        if (employeeData[i]['id'] == appointment.employeeId![0]) {
+          var employee = Employee.fromJson(employeeData[i]);
+          employees.add(employee);
+          break;
+        }
+      }
+    });
     isInititalized.value = true;
   }
 

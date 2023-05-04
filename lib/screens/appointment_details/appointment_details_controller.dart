@@ -74,19 +74,19 @@ class AppointmentDetailsController extends GetxController {
   }
 
   String getPrice(String id) {
-    int tempPrice = 0;
+    double tempPrice = 0;
     for (var treatment in allTreatments) {
       if (treatment.id == id) {
         if (!prices.contains(treatment.price)) {
           prices.add(treatment.price);
           var sum = prices.forEach((element) {
-            tempPrice += int.parse(element);
+            tempPrice += double.parse(element);
           });
           WidgetsBinding.instance.addPostFrameCallback((_) {
             update();
           });
         }
-        price.value = tempPrice;
+        price.value = tempPrice.toInt();
         return treatment.price.toString();
       }
     }

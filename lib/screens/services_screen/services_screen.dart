@@ -112,7 +112,7 @@ class ServicesScreen extends StatelessWidget {
                                       CustomDropDownListWidget(
                                         selectedItems:
                                             controller.selectedServices.value,
-                                        serviceIndex: index,
+                                        serviceIndex: serviceIndex,
                                         title: filteredServices.name!,
                                         imageUrl: AppAssets.USER_IMAGE,
                                         items: controller.getServiceTitle(

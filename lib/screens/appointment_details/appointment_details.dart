@@ -9,7 +9,6 @@ import '../../models/appointment.dart';
 import '../../utils/constants.dart';
 import '../../widgets/button_widget.dart';
 import '../../widgets/text_row_widget.dart';
-import '../appointment_booking_screen/appointment_booking_screen.dart';
 import '../home_screen/home_screen_controller.dart';
 import 'appointment_details_controller.dart';
 
@@ -257,13 +256,18 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                               : AppColors.SECONDARY_COLOR),
                                 ),
                                 const SizedBox(height: 20.0),
-                                specialistCard(
-                                  title: homecontroller
-                                      .getEmployeeName(appointment.employeeId!),
-                                  imageUrl: AppAssets.USER_IMAGE,
-                                  subtitle: 'Fragrances',
-                                  isDark: isDark,
-                                ),
+                                ListView.builder(
+                                    itemCount: appointment.employeeId!.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return specialistCard(
+                                        title: homecontroller.getEmployeeName(
+                                            appointment.employeeId![index]),
+                                        imageUrl: AppAssets.USER_IMAGE,
+                                        subtitle: 'Fragrances & Perfumes',
+                                        isDark: isDark,
+                                      );
+                                    }),
                                 const SizedBox(height: 20.0),
                                 Text(
                                   AppLanguages.NOTES,
@@ -293,7 +297,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (isDetail == false)
+                        if (isEditable == true)
                           Padding(
                             padding: const EdgeInsets.only(top: 20.0),
                             child: Row(
@@ -347,4 +351,68 @@ class AppointmentDetailsScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Container specialistCard({
+  required String title,
+  required String subtitle,
+  required String imageUrl,
+  required bool isDark,
+}) {
+  return Container(
+    height: 82.0,
+    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
+    margin: const EdgeInsets.only(bottom: 5.0),
+    decoration: BoxDecoration(
+      color: isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+      border: isDark
+          ? const Border()
+          : Border.all(
+              width: 1.0,
+              color: AppColors.BORDER_COLOR,
+            ),
+      borderRadius: BorderRadius.circular(8.0),
+    ),
+    child: Row(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 1.3, color: AppColors.BORDER_COLOR),
+            borderRadius: BorderRadius.circular(50.0),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50.0),
+            child: CircleAvatar(
+              radius: 25.0,
+              backgroundImage: AssetImage(imageUrl),
+            ),
+          ),
+        ),
+        const SizedBox(width: 10.0),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w700,
+                color: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
+              ),
+            ),
+            const SizedBox(height: 6.0),
+            Text(
+              subtitle,
+              style: const TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
+                color: AppColors.GREY_COLOR,
+              ),
+            ),
+          ],
+        )
+      ],
+    ),
+  );
 }

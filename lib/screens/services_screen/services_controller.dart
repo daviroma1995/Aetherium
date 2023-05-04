@@ -151,8 +151,8 @@ class ServicesController extends GetxController {
   }
 
   void moveToAppointmentBookingScreen() {
-    if (appointment.serviceId == null && args == null ||
-        appointment.serviceId!.isEmpty) {
+    if (appointment.serviceId == null ||
+        args == null && appointment.serviceId!.isEmpty) {
       print('Empty');
     } else {
       Get.to(
@@ -191,7 +191,8 @@ class ServicesController extends GetxController {
     //   selectedServices.removeWhere((element) =>
     //       element.title == services[serviceIndex].items[subServiceIndex].title);
     // }
-
+    print(serviceIndex);
+    print(subServiceIndex);
     var listOfSubServices = subServices
         .where((subService) =>
             subService.treatmentCategoryId == services[serviceIndex].id)
@@ -246,7 +247,7 @@ class ServicesController extends GetxController {
       appointment.clientId = LoginController.instance.user.uid;
       appointment.email = client.value.email;
       appointment.number = client.value.phoneNumber;
-      appointment.employeeId = '8f1cYZExVjeOo2sBDmQC';
+      appointment.employeeId = ['8f1cYZExVjeOo2sBDmQC'];
     }
   }
 
