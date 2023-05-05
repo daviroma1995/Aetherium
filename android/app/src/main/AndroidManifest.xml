@@ -1,9 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="it.esteticaaurea.aetherium_salon">
+    package="com.example.aetherium_saloon_app">
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-feature android:name="android.hardware.camera" />
+<uses-feature android:name="android.hardware.camera.autofocus" />
    <application
-        android:label="aetherium_salon"
+        android:label="aetherium_saloon_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyD83bL6G9N1zJnKRPdA0cqINbg86Xko1Nc"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>216835986009-c1ika74p5pk0svc9aob3rfbrs71akl2a.apps.googleusercontent.com</string>
+	<string>216835986009-tg5lod101ur4fkoj3jted3v63krjgsl5.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.216835986009-c1ika74p5pk0svc9aob3rfbrs71akl2a</string>
+	<string>com.googleusercontent.apps.216835986009-tg5lod101ur4fkoj3jted3v63krjgsl5</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBj8Ffh2QZbEnHwBy3K_vqTKjguK5zcTGQ</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>it.esteticaaurea.aetheriumSalon</string>
+	<string>com.example.aetheriumSaloonApp</string>
 	<key>PROJECT_ID</key>
 	<string>aetherium-salon</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:216835986009:ios:c82027a1bfaeb673c0d748</string>
+	<string>1:216835986009:ios:3b3dbbce734c5bdcc0d748</string>
 </dict>
 </plist>

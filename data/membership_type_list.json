@@ -1,0 +1,30 @@
+[
+    {
+        "id": "b17bb975-124e-442c-aa7c-de2fb40d2c4d",
+        "name": "base",
+        "icon": "",
+        "desc": "first tier",
+        "discount_rate": 3
+    },
+    {
+        "id": "b17bb975-124e-442c-aa7c-de2fb40d2c45",
+        "name": "primo",
+        "icon": "",
+        "desc": "second tier",
+        "discount_rate": 5
+    },
+    {
+        "id": "b17bb975-124e-442c-aa7c-de2fb40d2c4g",
+        "name": "fly",
+        "icon": "",
+        "desc": "third tier",
+        "discount_rate": 7
+    },
+    {
+        "id": "b17bb975-124e-442c-aa7c-de2fb47y2c4d",
+        "name": "base",
+        "icon": "",
+        "desc": "fourth tier",
+        "discount_rate": 10
+    }
+]

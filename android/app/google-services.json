@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:216835986009:android:74c93acdfa6e2958c0d748",
+        "android_client_info": {
+          "package_name": "com.example.aetherium_saloon_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216835986009-djjp6lvgsr7m997ui4371aab33j59fb2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7pnUJIv1pA2yYyWnhYYvshLMk6xTwrBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216835986009-djjp6lvgsr7m997ui4371aab33j59fb2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "216835986009-advfdo6gunevo1k7p4bgcf9v0efrvms7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "it.esteticaaurea.aetherium"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:216835986009:android:158b1171922672c0c0d748",
         "android_client_info": {
           "package_name": "it.esteticaaurea.aetherium_salon"

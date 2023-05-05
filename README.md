@@ -1,4 +1,4 @@
-# aetherium_salon
+# aetherium_saloon_app
 
 A new Flutter project.
 

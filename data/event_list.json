@@ -1,0 +1,58 @@
+[
+    {
+        "id": "f30851e3-d6eb-4c2d-a42b-cbdcf3b82b2c",
+        "title": "Pilates at ducos",
+        "desc": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
+        "date": "01/04/2022",
+        "start_time": "09:00",
+        "end_time": "11:00",
+        "duration": "2 Hours",
+        "address": "Via Ducos",
+        "imageUrl": "https://images.unsplash.com/photo-1605497788044-5a32c7078486?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+        "longitude": 0,
+        "latitude": 12312,
+        "isFavorite":false
+    },
+    {
+        "id": "f30851e3-d6eb-4c2d-a42b-cbdcf3b82b2d",
+        "title": "Pilates at ducos",
+        "desc": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
+        "date": "03/04/2022",
+        "start_time": "13:00",
+        "end_time": "15:00",
+        "duration": "2 Hours",
+        "address": "Via Ducos",
+        "imageUrl": "https://images.unsplash.com/photo-1593702295094-aea22597af65?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+        "longitude": 1231231,
+        "latitude": 12312,
+        "isFavorite":false
+    },
+    {
+        "address":
+"via ducos",
+"client_id":
+
+[
+"U4Vob2BIBTPWBmwAAEh0iBzskBA3"
+],
+"date":
+"16/05/2023",
+"desc":
+"Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet."
+,"duration":
+"2 hrs",
+"end_time":
+"11:00",
+"image":
+"images/ducos.jpeg",
+"image_url":
+"https://images.unsplash.com/photo-1605497788044-5a32c7078486?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'"
+,"start_time":
+"09:00",
+"subtitle":
+"pilate at ducos d",
+"title":
+"Pilate at ducos"
+    }
+]
+

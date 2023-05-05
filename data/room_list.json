@@ -1,0 +1,16 @@
+[{
+    "id":"69920752-f9c4-411f-ac89-8a358debfc28",
+    "description": "room for laser",
+    "service_list": [
+        "e762a53a-b2f6-451d-b4df-ecb1d1f7ca23",
+        "e762a53a-b2f6-451d-b4df-ecb1d1f7ca62"
+    ]
+},
+{
+    "id":"69920752-f9c4-411f-ac89-8a358debfc29",
+    "description": "room for nails",
+    "service_list": [
+        "e762a53a-b2f6-451d-b4df-ecb1d1f7cg56"
+    ]
+}
+]
