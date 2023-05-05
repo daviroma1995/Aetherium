@@ -32,23 +32,15 @@ class HomeScreenController extends GetxController {
   @override
   void onInit() async {
     _uid = LoginController.instance.user.uid;
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-    print('Ready called');
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
         currentUser.bindStream(FirebaseServices.currentUserStream());
+        appointmentsEmployee.bindStream(FirebaseServices.employeeStrem());
         events.bindStream(FirebaseServices.eventStream());
         var data = await FirebaseServices.getAppointments();
         data.forEach((element) {
           appointments.add(element);
-          print(element);
         });
-        appointmentsEmployee.bindStream(FirebaseServices.employeeStrem());
 
         isInitialized.value = true;
         LocalData.setIsLogedIn(true);
@@ -66,6 +58,13 @@ class HomeScreenController extends GetxController {
         );
       },
     );
+    super.onInit();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    print('Ready called');
   }
 
   void navigateToAppointmentDetail(int index) {

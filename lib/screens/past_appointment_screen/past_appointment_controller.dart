@@ -26,8 +26,8 @@ class PastAppointmentController extends GetxController {
 
     if (AgendaController.instance.currentUser.value.isAdmin!) {
       for (var appointment in data!) {
-        if (appointment['date_timestamp'].seconds + 86400 <
-            Timestamp.fromDate(DateTime.now()).seconds) {
+        if (appointment['date_timestamp'].seconds + 86400 <=
+            Timestamp.now().seconds) {
           pastAppointments.add(Appointment.fromJson(appointment));
         }
       }

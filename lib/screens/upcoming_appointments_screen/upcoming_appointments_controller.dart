@@ -25,7 +25,7 @@ class UpcomingAppointmentsController extends GetxController {
         AgendaController.instance.currentUser.value.isAdmin! == false) {
       data.forEach((treatment) {
         if (treatment['client_id'] == uid &&
-            treatment['date_timestamp'].seconds >= Timestamp.now().seconds) {
+            treatment['date_timestamp'] >= Timestamp.now()) {
           upcommingAppointments.add(Appointment.fromJson(treatment));
         }
       });
