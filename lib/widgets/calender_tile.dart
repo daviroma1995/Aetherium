@@ -6,7 +6,8 @@ import "package:intl/intl.dart";
 import '../utils/constants.dart';
 
 class CalendarTile extends StatefulWidget {
-  final VoidCallback? onDateSelected;
+  // final VoidCallback? onDateSelected;
+  final ValueChanged<DateTime>? onDateSelected;
   final DateTime? date;
   final String? dayOfWeek;
   final bool isDayOfWeek;
@@ -51,7 +52,11 @@ class _CalendarTileState extends State<CalendarTile> {
 
     if (widget.isDayOfWeek) {
       int index = 0;
-      return InkWell(
+      var inkWell = InkWell(
+        onTap:(){
+          widget.onDateSelected?.call(widget.date!);
+          print("on clock");
+        },
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
@@ -66,7 +71,7 @@ class _CalendarTileState extends State<CalendarTile> {
                 topRight: Radius.circular(25.0),
               )),
           child: Text(
-            widget.dayOfWeek!,
+           widget.dayOfWeek!,
             style: TextStyle(
               color:
                   widget.isSelected && !widget.isExpended! && !widget.isSwapped!
@@ -82,10 +87,14 @@ class _CalendarTileState extends State<CalendarTile> {
           ),
         ),
       );
+      return inkWell;
     } else {
       int eventCount = 0;
       return InkWell(
-        onTap: widget.onDateSelected,
+        onTap: (){
+          widget.onDateSelected?.call(widget.date!);
+          print("on clock");
+        },
         child: ClipRRect(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(25.0),
@@ -165,7 +174,7 @@ class _CalendarTileState extends State<CalendarTile> {
     if (widget.child != null) {
       return new InkWell(
         child: widget.child,
-        onTap: widget.onDateSelected,
+        onTap: ()=>widget.onDateSelected?.call(widget.date!),
       );
     }
     return new Container(

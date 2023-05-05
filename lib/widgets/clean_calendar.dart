@@ -1,6 +1,7 @@
 import 'package:atherium_saloon_app/widgets/simple_gesture_detector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
@@ -219,12 +220,14 @@ class _CalendarState extends State<Calendar> {
         }
         dayWidgets.add(
           CalendarTile(
+            onDateSelected: (date) => handleSelectedDateAndUserCallback(date),
             selectedColor: widget.selectedColor,
             todayColor: widget.todayColor,
             eventColor: widget.eventColor,
             eventDoneColor: widget.eventDoneColor,
             events: widget.events![day],
             isDayOfWeek: true,
+            date: calendarDays!.firstWhereOrNull((e)=>DateFormat("EEE").format(e).toLowerCase()==day.toLowerCase()),
             dayOfWeek: day,
             dayOfWeekStyle: widget.dayOfWeekStyle ??
                 TextStyle(
@@ -268,7 +271,7 @@ class _CalendarState extends State<Calendar> {
               events: widget.events![day],
               child: this.widget.dayBuilder!(context, day),
               date: day,
-              onDateSelected: () => handleSelectedDateAndUserCallback(day),
+              onDateSelected: (date) => handleSelectedDateAndUserCallback(date),
               isExpended: isExpanded,
               isSwapped: isSwapped,
             ),
@@ -283,7 +286,7 @@ class _CalendarState extends State<Calendar> {
                 eventColor: widget.eventColor,
                 eventDoneColor: widget.eventDoneColor,
                 events: widget.events![day],
-                onDateSelected: () => handleSelectedDateAndUserCallback(day),
+                onDateSelected: (date) => handleSelectedDateAndUserCallback(date),
                 date: day,
                 dateStyles: configureDateStyle(monthStarted, monthEnded),
                 isSelected: Utils.isSameDay(selectedDate, day),

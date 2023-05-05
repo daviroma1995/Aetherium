@@ -40,7 +40,6 @@ class AgendaController extends GetxController {
     var data = await FirebaseServices.getAgendas(
         Timestamp.fromDate(selectedDate), currentUser.value.isAdmin!);
     appointments.value = data;
-
     for (int i = 0; i < allAppointments.length; i++) {
       if (appointmentsCounter.isEmpty) {
         appointmentsCounter.add(
