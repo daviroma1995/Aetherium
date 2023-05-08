@@ -184,7 +184,7 @@ class FirebaseServices {
       var data = querySnapshot.data();
       data['id'] = querySnapshot.id;
       Timestamp timestamp = data['date_timestamp'];
-      if (timestamp.seconds >= Timestamp.now().seconds) {
+      if (timestamp.seconds + 86400 >= Timestamp.now().seconds) {
         appointmentsList.add(Appointment.fromJson(data));
       }
     }
@@ -333,8 +333,7 @@ class FirebaseServices {
       try {
         var data = await FirebaseFirestore.instance
             .collection('appointments')
-            .where('date_timestamp',
-                isEqualTo: timestamp, isLessThan: secondTimestamp)
+            .where('date_timestamp', isEqualTo: timestamp)
             .where('client_id', isEqualTo: LoginController.instance.user.uid)
             .get();
         for (var querySnapShot in data.docs) {

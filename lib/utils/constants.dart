@@ -68,6 +68,7 @@ class AppAssets {
   static const PROFILE_IMAGE_TWO = 'assets/images/png/profile_image_2.png';
   static const CLOCK_ICON = 'assets/images/icons/clock_icon.svg';
   static const CALANDER_ICON = 'assets/images/icons/calender_icon.svg';
+  static const CALANDER_ICON_BUTTON = 'assets/images/icons/calender_button.svg';
   static const PLUS_ICON = 'assets/images/icons/plus_icon.svg';
   static const HOME_ICON = 'assets/images/icons/home.svg';
   static const HOME_ICON_SOLID = 'assets/images/icons/home_solid.svg';
@@ -86,6 +87,7 @@ class AppAssets {
   static const CONSULTATIONS_ICON = 'assets/images/icons/clipboard.svg';
 
   static const PROFILE_INFO_ICON = 'assets/images/icons/info.svg';
+  static const USER_PLUS = 'assets/images/icons/user_plus.svg';
 
   static const EVENT_IMAGE_ONE =
       'https://images.unsplash.com/photo-1605497788044-5a32c7078486?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80';
@@ -128,6 +130,8 @@ class AppAssets {
   static const DARK_CONFIRM_ICON = 'assets/images/icons/dark_confirm_icon.svg';
   static const INFO_ICON = 'assets/images/icons/info.svg';
   static const THEME_MODE = 'assets/images/icons/theme_mode.svg';
+  static const PLUSS_BTN = 'assets/images/icons/add_btn.svg';
+  static const CROSS_BTN = 'assets/images/icons/x-circle.svg';
 }
 
 class AppLanguages {
@@ -170,6 +174,8 @@ class AppLanguages {
   static const MY_APPOINTMENTS = 'My Appointments';
   static const UPCOMING_APPOINTMENTS = 'Upcoming Appointments';
 
+  static const NEWCLIENT = 'Nuovo Cliente';
+  static const CLIENT_DETAILS = 'Dettaglio Cliente';
   static const SETTINGS = 'Settings';
   static const CONSULTATIONS = 'Consultations';
   static const NOTIFICATIONS = 'Notifications';
@@ -217,6 +223,7 @@ class AppLanguages {
   static const BEAUTY_SPECIALIST = 'Beauty Specialist';
   static const AppuntamentoDettagli = 'Appuntamento - Dettagli';
   static const APPOINTMENTCONFERMA = 'Appuntamento - Conferma';
+  static const SELECT_CLIENT = 'Seleziona Cliente';
 }
 
 class AppTextStyle {

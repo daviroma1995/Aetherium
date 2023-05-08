@@ -98,8 +98,9 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                                             .employeesData[index].name!,
                                         subTitle:
                                             controller.services[index].name!,
-                                        color: Colors.red,
-                                        status: 'Archive',
+                                        color: controller.getColor(
+                                            controller.status[index].label!),
+                                        status: controller.status[index].label,
                                         date: controller
                                             .upcommingAppointments[index]
                                             .dateWithMonthName,

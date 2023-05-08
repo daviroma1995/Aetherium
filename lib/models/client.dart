@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
+
 class Client {
   String? id;
   String? firstName;
@@ -9,6 +12,7 @@ class Client {
   String? photo;
   String? userId;
   bool? isAdmin;
+  Timestamp? birthday;
 
   Client(
       {this.id,
@@ -20,7 +24,8 @@ class Client {
       this.address,
       this.photo,
       this.userId,
-      this.isAdmin});
+      this.isAdmin,
+      this.birthday});
 
   Client.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -33,6 +38,7 @@ class Client {
     photo = json['photo'];
     userId = json['user_id'];
     isAdmin = json['isAdmin'];
+    birthday = json['birthday'];
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +51,13 @@ class Client {
     data['address'] = this.address;
     data['photo'] = this.photo;
     data['user_id'] = this.userId;
+    data['birthday'] = this.birthday;
     return data;
+  }
+
+  String getBirthday() {
+    String date = '';
+    date = DateFormat('dd/MM/yyyy').format(birthday!.toDate());
+    return date;
   }
 }

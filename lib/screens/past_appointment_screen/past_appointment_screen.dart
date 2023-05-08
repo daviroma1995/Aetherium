@@ -70,8 +70,10 @@ class PastAppointmentScreen extends StatelessWidget {
                                           imageUrl: AppAssets.EVENT_IMAGE_ONE,
                                           title: controller.employees[0].name!,
                                           subTitle: 'Fragrances & Perfumes',
-                                          color: Colors.red,
-                                          status: 'Status Here',
+                                          color: controller.getColor(controller
+                                              .appointmentStatus[index].label!),
+                                          status: controller
+                                              .appointmentStatus[index].label,
                                           date: controller
                                               .pastAppointments[index]
                                               .dateWithMonthName,

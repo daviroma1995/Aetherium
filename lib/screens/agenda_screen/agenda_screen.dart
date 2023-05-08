@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import 'package:atherium_saloon_app/data.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/custom_title_row_widget.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class AgendaScreen extends StatelessWidget {
   DateTime selectedDay = DateTime.now();
@@ -23,13 +23,24 @@ class AgendaScreen extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Calendar(
-              events: controller.events,
-              hideArrows: true,
-              hideTodayIcon: true,
-              onDateSelected: (value) {
-                controller.onDateChange(value);
-              },
+            child: Obx(
+              () => controller.reload.value
+                  ? Calendar(
+                      events: controller.events,
+                      hideArrows: true,
+                      hideTodayIcon: true,
+                      onDateSelected: (value) {
+                        controller.onDateChange(value);
+                      },
+                    )
+                  : Calendar(
+                      events: controller.events,
+                      hideArrows: true,
+                      hideTodayIcon: true,
+                      onDateSelected: (value) {
+                        controller.onDateChange(value);
+                      },
+                    ),
             ),
           ),
           const SizedBox(height: 13.0),
@@ -53,9 +64,11 @@ class AgendaScreen extends StatelessWidget {
                     topRight: Radius.circular(30.0),
                   ),
                 ),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
+                child: LiquidPullToRefresh(
+                  onRefresh: controller.loadData,
+                  child: ListView(
+                    shrinkWrap: true,
+                    // physics: const BouncingScrollPhysics(),
                     children: [
                       Obx(
                         () => CustomTitle(
@@ -96,15 +109,24 @@ class AgendaScreen extends StatelessWidget {
                                       child: AgendaCustomCardWidget(
                                         startTime: controller.getTime(controller
                                             .appointments[index].time!),
-                                        endTime: agendas[index].endTime,
-                                        duration: agendas[index].duration,
-                                        userImageUrl: agendas[index].iamgeUrl,
-                                        userName: agendas[index].userName,
-                                        service: agendas[index].service,
-                                        agendaColor: isDark
-                                            ? agendas[index].darkolor
-                                            : agendas[index].color,
-                                        agendaBarsColor: agendas[index].color,
+                                        endTime: controller.getDuration(
+                                            controller
+                                                .appointments[index].serviceId!,
+                                            controller
+                                                .appointments[index].time!)[1],
+                                        duration: controller.getDuration(
+                                            controller
+                                                .appointments[index].serviceId!,
+                                            controller
+                                                .appointments[index].time!)[0],
+                                        userImageUrl: AppAssets.CALANDER_ICON,
+                                        userName:
+                                            controller.employees[index].name!,
+                                        service: controller
+                                            .treatmentsData[index].name!,
+                                        agendaColor: AppColors.SECONDARY_LIGHT,
+                                        agendaBarsColor:
+                                            AppColors.SECONDARY_LIGHT,
                                       ),
                                     ),
                                   );
@@ -231,13 +253,17 @@ class AgendaCustomCardWidget extends StatelessWidget {
                   Container(
                     width: 50.0,
                     height: 50.0,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(width: 1.3, color: AppColors.WHITE_COLOR),
-                      borderRadius: BorderRadius.circular(100.0),
-                    ),
-                    child: CircleAvatar(
-                      backgroundImage: AssetImage(userImageUrl),
+                        borderRadius: BorderRadius.circular(100.0),
+                        color: isDark
+                            ? AppColors.PRIMARY_DARK
+                            : AppColors.PRIMARY_COLOR),
+                    child: SvgPicture.asset(
+                      userImageUrl,
+                      height: 28,
+                      colorFilter: ColorFilter.mode(
+                          AppColors.WHITE_COLOR, BlendMode.srcIn),
                     ),
                   ),
                   const SizedBox(width: 10.0),

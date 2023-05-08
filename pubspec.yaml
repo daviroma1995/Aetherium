@@ -21,7 +21,6 @@ dependencies:
   flutter_svg: ^2.0.4
   get: ^4.6.5
   cached_network_image: ^3.2.3
-  horizontal_calendar: ^1.0.2
   percent_indicator: ^4.2.3
   shared_preferences: ^2.0.20
   qr_flutter: any
@@ -38,6 +37,8 @@ dependencies:
   firebase_auth: ^4.2.2
   cloud_firestore: ^4.5.0
   fluttertoast: ^8.2.1
+  liquid_pull_to_refresh: ^3.0.1
+  animated_radial_menu: ^0.0.1
   
   
 

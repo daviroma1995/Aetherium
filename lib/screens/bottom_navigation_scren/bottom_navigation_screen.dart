@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
+
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_controller.dart';
 import 'package:atherium_saloon_app/screens/home_screen/home_screen.dart';
 import 'package:atherium_saloon_app/screens/profile_screen/profile_screen.dart';
@@ -8,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../add_new_client/new_client_screen.dart';
 import '../agenda_screen/agenda_screen.dart';
 import '../loyality_card_screen/loyality_card_screen.dart';
+import '../select_client_screen/select_client_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});
@@ -158,32 +162,112 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: GestureDetector(
-        onTap: () async {
-          Get.to(
-            () => ServicesScreen(),
-            duration: const Duration(milliseconds: 600),
-            transition: Transition.downToUp,
-            curve: Curves.easeInQuad,
-          );
-        },
-        child: Container(
+      floatingActionButton: Container(
+        height: 150.0,
+        child: Stack(
           alignment: Alignment.center,
-          height: 53.0,
-          width: 53.0,
-          decoration: BoxDecoration(
-            border: Border.all(width: 5.0, color: AppColors.WHITE_COLOR),
-            borderRadius: BorderRadius.circular(100.0),
-            color: isDark ? AppColors.PRIMARY_DARK : AppColors.PRIMARY_COLOR,
-          ),
-          child: const Text(
-            '+',
-            style: TextStyle(
-              color: AppColors.WHITE_COLOR,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w700,
+          children: [
+            Obx(
+              () => controller.toggle.value == true
+                  ? AnimatedPositioned(
+                      duration: const Duration(milliseconds: 300),
+                      bottom: controller.bottom.value.toDouble(),
+                      left: controller.leftRight.value,
+                      child: GestureDetector(
+                        onTap: () async {
+                          Get.to(
+                            () => AddNewClient(),
+                            duration: const Duration(milliseconds: 600),
+                            transition: Transition.downToUp,
+                            curve: Curves.easeInQuad,
+                          );
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 50.0,
+                          width: 50.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100.0),
+                            color: isDark
+                                ? AppColors.PRIMARY_DARK
+                                : AppColors.SECONDARY_LIGHT,
+                          ),
+                          child: SvgPicture.asset(AppAssets.USER_PLUS),
+                        ),
+                      ),
+                    )
+                  : Container(),
             ),
-          ),
+            Obx(
+              () => controller.toggle.value == true
+                  ? AnimatedPositioned(
+                      duration: const Duration(milliseconds: 300),
+                      bottom: controller.bottom.value.toDouble(),
+                      right: controller.leftRight.value,
+                      child: GestureDetector(
+                        onTap: () async {
+                          Get.to(
+                            () => SelectClientScreen(),
+                            duration: const Duration(milliseconds: 600),
+                            transition: Transition.downToUp,
+                            curve: Curves.easeInQuad,
+                          );
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 50.0,
+                          width: 50.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100.0),
+                            color: isDark
+                                ? AppColors.PRIMARY_DARK
+                                : AppColors.SECONDARY_LIGHT,
+                          ),
+                          child:
+                              SvgPicture.asset(AppAssets.CALANDER_ICON_BUTTON),
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+            ),
+            Positioned(
+              bottom: 25.0,
+              child: GestureDetector(
+                onTap: () {
+                  if (controller.client.value.isAdmin!) {
+                    controller.toggle.value = !controller.toggle.value;
+                    controller.bottom.value = 85;
+                    controller.leftRight.value = 115;
+                  } else {
+                    Get.to(
+                      () => ServicesScreen(),
+                      duration: const Duration(milliseconds: 600),
+                      transition: Transition.downToUp,
+                      curve: Curves.easeInQuad,
+                    );
+                  }
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 53.0,
+                  width: 53.0,
+                  decoration: BoxDecoration(
+                    border:
+                        Border.all(width: 5.0, color: AppColors.WHITE_COLOR),
+                    borderRadius: BorderRadius.circular(100.0),
+                    color: isDark
+                        ? AppColors.PRIMARY_DARK
+                        : AppColors.PRIMARY_COLOR,
+                  ),
+                  child: Obx(
+                    () => controller.toggle.value == false
+                        ? SvgPicture.asset(AppAssets.PLUSS_BTN)
+                        : SvgPicture.asset(AppAssets.CROSS_BTN),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

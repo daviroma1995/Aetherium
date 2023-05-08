@@ -1,10 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:atherium_saloon_app/models/appointment_status.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
+import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/appointment.dart';
@@ -14,12 +17,16 @@ class PastAppointmentController extends GetxController {
   String currentUid = LoginController.instance.user.uid;
   var employees = <Employee>[].obs;
   var appointmentEmployees = <Employee>[].obs;
+  var appointmentStatus = <AppointmentStatus>[].obs;
   RxBool isInititalized = false.obs;
   @override
   void onInit() async {
     super.onInit();
     var data = await FirebaseServices.getData(collection: 'appointments');
     var employeeData = await FirebaseServices.getData(collection: 'employees');
+    var statusData =
+        await FirebaseServices.getData(collection: 'appointment_status');
+
     // for (var employee in employeeData!) {
     //   employees.add(Employee.fromJson(employee));
     // }
@@ -31,12 +38,32 @@ class PastAppointmentController extends GetxController {
           pastAppointments.add(Appointment.fromJson(appointment));
         }
       }
+      for (var appointment in data) {
+        for (int i = 0; i < statusData!.length; i++) {
+          if (appointment['status_id'] == statusData[i]['id'] &&
+              appointment['date_timestamp'].seconds + 86400 <=
+                  Timestamp.now().seconds) {
+            appointmentStatus.add(AppointmentStatus.fromJson(statusData[i]));
+          }
+        }
+      }
     } else {
       for (var appointment in data!) {
         if (currentUid == appointment['client_id']) {
-          if (appointment['date_timestamp'].seconds + 86400 <
-              Timestamp.fromDate(DateTime.now()).seconds) {
+          if (appointment['date_timestamp'].seconds + 86400 <=
+              Timestamp.now().seconds) {
             pastAppointments.add(Appointment.fromJson(appointment));
+          }
+        }
+      }
+      for (var appointment in data) {
+        if (currentUid == appointment['client_id']) {
+          for (int i = 0; i < statusData!.length; i++) {
+            if (appointment['status_id'] == statusData[i]['id'] &&
+                appointment['date_timestamp'].seconds + 86400 <=
+                    Timestamp.now().seconds) {
+              appointmentStatus.add(AppointmentStatus.fromJson(statusData[i]));
+            }
           }
         }
       }
@@ -72,6 +99,19 @@ class PastAppointmentController extends GetxController {
       }
     });
     isInititalized.value = true;
+  }
+
+  Color getColor(String label) {
+    switch (label) {
+      case "archiviato":
+        return AppColors.ARCHIVED_COLOR;
+      case "cancellato":
+        return AppColors.CANCELED_COLOR;
+      case "confermato":
+        return AppColors.CONFIRMED_COLOR;
+      default:
+        return AppColors.NO_SHOW_COLOR;
+    }
   }
 
   goToDetails(int index) {
