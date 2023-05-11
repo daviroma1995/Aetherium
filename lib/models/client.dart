@@ -60,4 +60,6 @@ class Client {
     date = DateFormat('dd/MM/yyyy').format(birthday!.toDate());
     return date;
   }
+
+  String get fullName => '$firstName $lastName';
 }

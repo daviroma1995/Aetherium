@@ -21,6 +21,7 @@ class CustomInputFormField extends StatelessWidget {
   final String? initialValue;
   final int? maxLines;
   final int? minLInes;
+  final Color? iconColor;
   const CustomInputFormField({
     Key? key,
     this.iconUrl = '',
@@ -39,6 +40,7 @@ class CustomInputFormField extends StatelessWidget {
     this.initialValue,
     this.maxLines,
     this.minLInes,
+    this.iconColor,
   }) : super(key: key);
 
   @override
@@ -82,7 +84,10 @@ class CustomInputFormField extends StatelessWidget {
             filled: true,
             fillColor: isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
             hintText: hintText,
-            hintStyle: Theme.of(context).textTheme.bodyMedium,
+            hintStyle: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: AppColors.TEXT_FIELD_HINT_TEXT),
             border: const OutlineInputBorder(
               borderSide: BorderSide.none,
             ),
@@ -104,8 +109,9 @@ class CustomInputFormField extends StatelessWidget {
                         colorFilter: isDark
                             ? const ColorFilter.mode(
                                 AppColors.GREY_COLOR, BlendMode.srcIn)
-                            : const ColorFilter.mode(
-                                AppColors.GREY_DARK, BlendMode.srcIn)),
+                            : ColorFilter.mode(
+                                iconColor ?? AppColors.PRIMARY_COLOR,
+                                BlendMode.srcIn)),
                   )
                 : null,
           ),

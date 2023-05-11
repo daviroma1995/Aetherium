@@ -24,7 +24,15 @@ class AgendaController extends GetxController {
   static AgendaController instance = Get.find();
   var appointments = <Appointment>[].obs;
   var allAppointments = <Appointment>[].obs;
-  var appointmentsCounter = <Event>[].obs;
+  var appointmentsCounter = <Event>[
+    Event(
+      counter: 0,
+      timestamp: Timestamp.fromDate(
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
+            0, 0, 0, 0, 0),
+      ),
+    )
+  ].obs;
   var treatmentsData = <Treatment>[].obs;
   var allTreatments = <Treatment>[].obs;
   var employees = <Employee>[].obs;
@@ -42,7 +50,14 @@ class AgendaController extends GetxController {
   Future<void> loadData() async {
     appointments.value = [];
     allAppointments.value = [];
-    appointmentsCounter.value = [];
+    appointmentsCounter.value = <Event>[
+      Event(
+          counter: 0,
+          timestamp: Timestamp.fromDate(
+            DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day, 0, 0, 0, 0, 0),
+          )),
+    ];
     treatmentsData.value = [];
     allTreatments.value = [];
     employees.value = [];
@@ -90,29 +105,44 @@ class AgendaController extends GetxController {
       }
     }
     for (int i = 0; i < allAppointments.length; i++) {
-      if (appointmentsCounter.isEmpty) {
-        appointmentsCounter.add(
-            Event(timestamp: allAppointments[i].dateTimestamp, counter: 1));
-      } else {
-        for (int j = 0; j < appointmentsCounter.length; j++) {
-          if (appointmentsCounter[j].timestamp ==
-              allAppointments[i].dateTimestamp) {
-            appointmentsCounter[j].counter += 1;
-          } else if (j == appointmentsCounter.length - 1) {
-            appointmentsCounter.add(
-                Event(counter: 1, timestamp: allAppointments[i].dateTimestamp));
-            break;
-          }
+      // if (i == 0) {
+      //   appointmentsCounter.add(
+      //       Event(counter: 1, timestamp: allAppointments[i].dateTimestamp));
+      // } else {
+      for (int j = 0; j < appointmentsCounter.length; j++) {
+        if (i == 0) {
+          appointmentsCounter.value = [
+            Event(counter: 1, timestamp: allAppointments[0].dateTimestamp)
+          ];
+        } else if (appointmentsCounter[j].timestamp ==
+            allAppointments[i].dateTimestamp) {
+          appointmentsCounter[j].counter += 1;
+          break;
+        } else if (j == appointmentsCounter.length - 1) {
+          appointmentsCounter.add(
+              Event(counter: 1, timestamp: allAppointments[i].dateTimestamp));
+          break;
         }
       }
-      appointmentsCounter.forEach((element) {
-        events.addAll({
-          element.timestamp!.toDate(): List.generate(element.counter, (index) {
-            return {'isDone': true};
-          })
-        });
-      });
+      //}
+
+      // appointmentsCounter.forEach((element) {
+      //   if (element.timestamp!.seconds ==
+      //       allAppointments[i].dateTimestamp!.seconds) {
+      //     element.counter += 1;
+      //   } else {
+      //     appointmentsCounter.add(
+      //         Event(counter: 1, timestamp: allAppointments[i].dateTimestamp));
+      //   }
+      // });
     }
+    appointmentsCounter.forEach((element) {
+      events.addAll({
+        element.timestamp!.toDate(): List.generate(element.counter, (index) {
+          return {'isDone': true};
+        })
+      });
+    });
     reload.value = !reload.value;
   }
 
@@ -129,7 +159,9 @@ class AgendaController extends GetxController {
     // var currentDate =
     //     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     var data = await FirebaseServices.getAgendas(
-        Timestamp.fromDate(selectedDate), currentUser.value.isAdmin!);
+        Timestamp.fromDate(DateTime(selectedDate.year, selectedDate.month,
+            selectedDate.day, 0, 0, 0, 0, 0)),
+        currentUser.value.isAdmin!);
     appointments.value = data;
     employees.value = [];
     treatmentsData.value = [];
@@ -200,14 +232,14 @@ class AgendaController extends GetxController {
       hours = (startMint / 60).floor();
       minutes = startMint % 60;
       starthour += hours;
-      endTime = '$starthour:$minutes';
+      endTime = '$starthour:${startMint == 0 ? '00' : startMint}';
     } else if (starthour == 24) {
       starthour = 1;
       endTime = '$starthour:00';
     } else {
-      endTime = '$starthour:$startMint';
+      endTime = '$starthour:${startMint == 0 ? '00' : startMint}';
     }
-    time = '$duration Min';
+    time = '$duration Mints';
 
     // time = '$hours: Hours $minutes Mints';
     return [time, endTime];

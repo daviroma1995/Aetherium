@@ -113,16 +113,18 @@ class EventDetailsScreen extends StatelessWidget {
                                   fontSize: 16.0,
                                   color: isDark
                                       ? AppColors.WHITE_COLOR
-                                      : AppColors.BLACK_COLOR),
+                                      : AppColors.SECONDARY_COLOR),
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 10.0),
                         TextRowWidget(
                           textOne: Get.arguments.dateString,
                           textTwo: 'Online',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,
-                            color: AppColors.GREY_COLOR,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.BLACK_COLOR,
                           ),
                         ),
                         const SizedBox(height: 16.0),
@@ -137,17 +139,19 @@ class EventDetailsScreen extends StatelessWidget {
                                 fontSize: 16.0,
                                 color: isDark
                                     ? AppColors.WHITE_COLOR
-                                    : AppColors.BLACK_COLOR,
+                                    : AppColors.SECONDARY_COLOR,
                               ),
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 10.0),
                         TextRowWidget(
                           textOne: Get.arguments.startTimeString,
                           textTwo: Get.arguments.endTimeString,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,
-                            color: AppColors.GREY_COLOR,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.BLACK_COLOR,
                           ),
                         ),
                         const SizedBox(height: 16.0),
@@ -162,17 +166,19 @@ class EventDetailsScreen extends StatelessWidget {
                                 fontSize: 16.0,
                                 color: isDark
                                     ? AppColors.WHITE_COLOR
-                                    : AppColors.BLACK_COLOR,
+                                    : AppColors.SECONDARY_COLOR,
                               ),
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 10.0),
                         TextRowWidget(
                           textOne: Get.arguments.durationString,
                           textTwo: '',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,
-                            color: AppColors.GREY_COLOR,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.BLACK_COLOR,
                           ),
                         ),
                         const SizedBox(height: 20.0),
@@ -186,7 +192,7 @@ class EventDetailsScreen extends StatelessWidget {
                                 fontSize: 16.0,
                                 color: isDark
                                     ? AppColors.WHITE_COLOR
-                                    : AppColors.BLACK_COLOR,
+                                    : AppColors.SECONDARY_COLOR,
                               ),
                         ),
                         const SizedBox(height: 20.0),
@@ -195,7 +201,9 @@ class EventDetailsScreen extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 16.0,
-                            color: AppColors.GREY_COLOR,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.BLACK_COLOR,
                           ),
                         ),
                         const SizedBox(height: 16.0),

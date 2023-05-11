@@ -30,7 +30,7 @@ class SplashScreenController extends GetxController {
     } else if (showOnBoarding == false && isLogedIn == true) {
       Get.offAll(() => BottomNavigationScreen());
     } else {
-      Get.to(() => SplashScreen());
+      Get.offAll(() => SplashScreen());
       await Future.delayed(const Duration(seconds: 3));
       Get.offAll(() => OnBoardingScreen());
     }

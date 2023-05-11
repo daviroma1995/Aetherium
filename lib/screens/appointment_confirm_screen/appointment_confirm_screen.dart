@@ -48,7 +48,7 @@ class AppointmentConfirmScreen extends StatelessWidget {
                     ? SvgPicture.asset(AppAssets.DARK_CONFIRM_ICON)
                     : SvgPicture.asset(AppAssets.APPOINTMENT_CONFIRM),
                 const SizedBox(height: 44.0),
-                Text('Congrats!',
+                Text(AppLanguages.CONGRATS,
                     style: Theme.of(context).textTheme.headlineLarge),
                 const SizedBox(height: 10.0),
                 const Text(

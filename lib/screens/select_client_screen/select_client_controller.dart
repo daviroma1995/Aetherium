@@ -8,6 +8,8 @@ import '../../models/client.dart';
 class SelectClientController extends GetxController {
   var clients = <Client>[].obs;
   var selectedClients = <String>[];
+  var searchedClients = <Client>[].obs;
+  RxString searchText = ''.obs;
   RxBool isLoaded = false.obs;
   TextEditingController search = TextEditingController();
 
@@ -27,16 +29,17 @@ class SelectClientController extends GetxController {
     selectedClients = [];
     selectedClients.add(clients[index].firstName!);
     isLoaded.value = !isLoaded.value;
+    print(index);
   }
 
   void getClientDetails(int index) {
-    print(clients[index].firstName);
     Get.to(
       () => ClientDetailsScreen(
         client: clients[index],
       ),
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       transition: Transition.downToUp,
+      arguments: clients[index].id,
     );
   }
 }

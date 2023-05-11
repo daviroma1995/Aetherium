@@ -10,6 +10,7 @@ class CustomTitle extends StatelessWidget {
   final TextStyle? style;
   final Color borderColor;
   final Function? onTap;
+  final Color? subtitleColor;
   const CustomTitle({
     Key? key,
     required this.title,
@@ -18,6 +19,7 @@ class CustomTitle extends StatelessWidget {
     this.style,
     this.borderColor = AppColors.GREY_COLOR,
     this.onTap,
+    this.subtitleColor,
   }) : super(key: key);
 
   @override
@@ -63,7 +65,7 @@ class CustomTitle extends StatelessWidget {
                   fontSize: 14.0,
                   fontWeight: FontWeight.w500,
                   letterSpacing: .75,
-                  color: borderColor,
+                  color: subtitleColor ?? borderColor,
                 ),
               ),
             ),

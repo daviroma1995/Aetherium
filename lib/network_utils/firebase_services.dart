@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 
 import '../models/client.dart';
 import '../models/event.dart';
+import '../models/notification.dart';
 import '../models/treatment.dart';
 import '../screens/login_screen/login_screen.dart';
 
@@ -188,18 +189,6 @@ class FirebaseServices {
         appointmentsList.add(Appointment.fromJson(data));
       }
     }
-    //     (appointmentQuerySnapShot) {
-    //   appointmentQuerySnapShot.docs.forEach(
-    //     (queryDocumentSnapshot) {
-    //       var document = queryDocumentSnapshot.data();
-    //       document['id'] = queryDocumentSnapshot.id;
-    //       Timestamp timestamp = document['date_timestamp'];
-    //       if (timestamp.seconds >= Timestamp.now().seconds) {
-    //         appointmentsList.add(Appointment.fromJson(document));
-    //       }
-    //     },
-    //   );
-    // });
     return appointmentsList;
   }
 
@@ -326,7 +315,7 @@ class FirebaseServices {
   static Future<List<Appointment>> getAgendas(
       Timestamp timestamp, bool isAdmin) async {
     var secondTimestamp = Timestamp.fromDate(DateTime(DateTime.now().year,
-        DateTime.now().month, DateTime.now().day, 24, 00, 00, 100, 100));
+        DateTime.now().month, DateTime.now().day, 24, 00, 00, 0, 0));
     List<Appointment> agendas = [];
     print(secondTimestamp);
     if (!isAdmin) {
@@ -412,5 +401,35 @@ class FirebaseServices {
     } on Exception catch (ex) {
       log(ex.toString());
     }
+  }
+
+  static Future<List<Notification>> getUnreadNotifications() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    List<Notification> unreadNotifications = [];
+    await firestore
+        .collection('notifications')
+        .where('status', isEqualTo: 'unread')
+        .where('client_id', isEqualTo: LoginController.instance.user.uid)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((DocumentSnapshot doc) {
+        unreadNotifications.add(Notification.fromFirestore(doc));
+      });
+      // Handle the list of unread notifications
+      // For example, you can update the UI with the notifications
+    }).catchError((error) {
+      print('Error getting documents: $error');
+    });
+    return unreadNotifications;
+  }
+
+  static void markNotificationAsRead(String notificationId) {
+    DocumentReference notificationRef = FirebaseFirestore.instance
+        .collection('notifications')
+        .doc(notificationId);
+    notificationRef.update({
+      'status': 'read',
+    });
   }
 }

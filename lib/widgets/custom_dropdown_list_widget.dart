@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:atherium_saloon_app/screens/service_detail_screen/service_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -97,6 +98,13 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w600,
                                     letterSpacing: .75,
+                                    color: !widget.isExpanded
+                                        ? isDark
+                                            ? AppColors.SECONDARY_LIGHT
+                                            : AppColors.PRIMARY_COLOR
+                                        : isDark
+                                            ? AppColors.WHITE_COLOR
+                                            : AppColors.BLACK_COLOR,
                                   ),
                             ),
                           ),
@@ -110,7 +118,14 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                         });
                       },
                       icon: !widget.isExpanded
-                          ? SvgPicture.asset(AppAssets.ARROW_DOWN)
+                          ? SvgPicture.asset(
+                              AppAssets.ARROW_DOWN,
+                              colorFilter: ColorFilter.mode(
+                                  isDark
+                                      ? AppColors.WHITE_COLOR
+                                      : AppColors.BLACK_COLOR,
+                                  BlendMode.srcIn),
+                            )
                           : SvgPicture.asset(
                               AppAssets.ARROW_UP,
                               colorFilter: ColorFilter.mode(

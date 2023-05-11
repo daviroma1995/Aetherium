@@ -107,7 +107,7 @@ class EventsScreen extends StatelessWidget {
                                         colorFilter: ColorFilter.mode(
                                             isDark
                                                 ? AppColors.SECONDARY_LIGHT
-                                                : AppColors.BLACK_COLOR,
+                                                : AppColors.PRIMARY_COLOR,
                                             BlendMode.srcIn),
                                       ),
                                       const SizedBox(width: 6.0),
@@ -119,7 +119,7 @@ class EventsScreen extends StatelessWidget {
                                           letterSpacing: .75,
                                           color: isDark
                                               ? AppColors.SECONDARY_LIGHT
-                                              : AppColors.BLACK_COLOR,
+                                              : AppColors.PRIMARY_COLOR,
                                         ),
                                       )
                                     ],

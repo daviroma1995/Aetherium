@@ -1,7 +1,7 @@
 class Membership {
   String? id;
   String? startDate;
-  String? points;
+  int? points;
   String? clientId;
   String? membershipTypeId;
 

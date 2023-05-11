@@ -11,6 +11,7 @@ class CustomEventCardWidget extends StatefulWidget {
   final String iamgeUrl;
   final String title;
   final String subTitle;
+  final Color? subtitleColor;
   final String time;
   bool isFavorite;
   final Function onIconTap;
@@ -20,6 +21,7 @@ class CustomEventCardWidget extends StatefulWidget {
     required this.iamgeUrl,
     required this.title,
     required this.subTitle,
+    this.subtitleColor,
     required this.time,
     required this.isFavorite,
     required this.onIconTap,
@@ -72,10 +74,10 @@ class _CustomEventCardWidgetState extends State<CustomEventCardWidget> {
                     const SizedBox(height: 6.0),
                     Text(
                       widget.subTitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13.0,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.GREY_COLOR,
+                        color: widget.subtitleColor ?? AppColors.GREY_COLOR,
                       ),
                     ),
                     const SizedBox(height: 6.0),

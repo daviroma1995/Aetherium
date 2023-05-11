@@ -36,7 +36,9 @@ class AppointMentBookingController extends GetxController {
       isAdmin.value = true;
     }
     args.time = avaliableSlots[0];
-    args.dateTimestamp = Timestamp.fromDate(DateTime.now());
+    args.dateTimestamp = Timestamp.fromDate(DateTime(DateTime.now().year,
+        DateTime.now().month, DateTime.now().day, 0, 0, 0, 0, 0));
+    args.statusId = '88aa7cf3-c6b6-4cab-91eb-247aa6445a4g';
   }
 
   double totalPrice = 0.0;
@@ -56,12 +58,11 @@ class AppointMentBookingController extends GetxController {
 
   void next() {
     selectedTreatements = <Treatment>[];
-    if (args.time == null) {
-      args.time = avaliableSlots[0];
-    }
-    if (args.dateTimestamp == null) {
-      args.dateTimestamp = Timestamp.fromDate(DateTime.now());
-    }
+    DateTime time = DateTime(DateTime.now().year, DateTime.now().month,
+        DateTime.now().day, 0, 0, 0, 0, 0);
+    print(time);
+    args.dateTimestamp ??= Timestamp.fromDate(time);
+
     args.serviceId.forEach((service) {
       log('Called');
       for (int index = 0; index < treatments.length; index++) {
@@ -72,6 +73,7 @@ class AppointMentBookingController extends GetxController {
       }
     });
     print('Selected services : $selectedTreatements');
+    print(args.dateTimestamp.toDate());
     Get.to(
       AppointmentConfirmDetailScreen(
         isDetail: false,

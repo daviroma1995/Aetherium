@@ -49,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const CustomLabelWidget(label: AppLanguages.EMAIL),
-                    const SizedBox(height: 10.0),
+                    const SizedBox(height: 5.0),
                     Obx(
                       () => CustomInputFormField(
                         hintText: 'Email@gmail.com ',
@@ -72,7 +72,7 @@ class LoginScreen extends StatelessWidget {
                     }),
                     const SizedBox(height: 17.0),
                     const CustomLabelWidget(label: AppLanguages.PASSWORD),
-                    const SizedBox(height: 10.0),
+                    const SizedBox(height: 5.0),
                     Obx(
                       () => CustomInputFormField(
                         hintText: '***************',
@@ -103,6 +103,7 @@ class LoginScreen extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: Text(
                           '${AppLanguages.FORGET_PASSWORD}?',
+                          style: TextStyle(color: AppColors.GREY_DARK),
                         ),
                       ),
                     ),

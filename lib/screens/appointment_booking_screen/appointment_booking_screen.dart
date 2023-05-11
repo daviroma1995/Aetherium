@@ -62,7 +62,6 @@ class AppointmentBookingScreen extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      const SizedBox(height: 20.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Calendar(
@@ -70,8 +69,10 @@ class AppointmentBookingScreen extends StatelessWidget {
                           hideTodayIcon: true,
                           // startOnMonday: true,
                           onDateSelected: (value) {
-                            controller.args.dateTimestamp =
-                                Timestamp.fromDate(value);
+                            controller.args.dateTimestamp = Timestamp.fromDate(
+                                DateTime(value.year, value.month, value.day, 0,
+                                    0, 0, 0, 0));
+                            print(value);
                           },
                         ),
                       ),
@@ -205,7 +206,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                               )
                             : Container(),
                       ),
-                      const SizedBox(height: 41.0),
+                      const SizedBox(height: 20.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -336,10 +337,10 @@ Container specialistCard({
             const SizedBox(height: 6.0),
             Text(
               subtitle,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14.0,
                 fontWeight: FontWeight.w500,
-                color: AppColors.GREY_COLOR,
+                color: isDark ? AppColors.GREY_COLOR : AppColors.BLACK_COLOR,
               ),
             ),
           ],

@@ -79,7 +79,7 @@ class ClientDetailsScreen extends StatelessWidget {
                               fontSize: 16.0,
                               color: isDark
                                   ? AppColors.WHITE_COLOR
-                                  : AppColors.BLACK_COLOR,
+                                  : AppColors.SECONDARY_COLOR,
                             ),
                           ),
                           const SizedBox(height: 20.0),
@@ -101,7 +101,7 @@ class ClientDetailsScreen extends StatelessWidget {
                               fontSize: 16.0,
                               color: isDark
                                   ? AppColors.WHITE_COLOR
-                                  : AppColors.BLACK_COLOR,
+                                  : AppColors.SECONDARY_COLOR,
                             ),
                           ),
                           const SizedBox(height: 20.0),
@@ -123,7 +123,7 @@ class ClientDetailsScreen extends StatelessWidget {
                               fontSize: 16.0,
                               color: isDark
                                   ? AppColors.WHITE_COLOR
-                                  : AppColors.BLACK_COLOR,
+                                  : AppColors.SECONDARY_COLOR,
                             ),
                           ),
                           const SizedBox(height: 20.0),
@@ -137,6 +137,52 @@ class ClientDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 20.0),
+                          Text(
+                            '${AppLanguages.ADDRESS}:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16.0,
+                              color: isDark
+                                  ? AppColors.WHITE_COLOR
+                                  : AppColors.SECONDARY_COLOR,
+                            ),
+                          ),
+                          const SizedBox(height: 20.0),
+                          Text(
+                            client.address!,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.0,
+                              color: AppColors.GREY_COLOR,
+                            ),
+                          ),
+                          const SizedBox(height: 20.0),
+                          TextRowWidget(
+                            textOne: 'Tier: ',
+                            textTwo: 'Points: ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16.0,
+                              color: isDark
+                                  ? AppColors.WHITE_COLOR
+                                  : AppColors.SECONDARY_COLOR,
+                            ),
+                          ),
+                          const SizedBox(height: 20.0),
+                          Obx(
+                            () => TextRowWidget(
+                              textOne: controller.loading.value
+                                  ? 'Waiting...'
+                                  : controller.membershipType.value.name!,
+                              textTwo: controller.clientMembership.value.points
+                                  .toString(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.0,
+                                color: AppColors.GREY_COLOR,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

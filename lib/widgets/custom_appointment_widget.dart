@@ -86,11 +86,13 @@ class CustomAppointmentCardWidget extends StatelessWidget {
                           child: Text(
                             subTitle,
                             maxLines: 1,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Lato',
                               fontSize: 14.0,
                               fontWeight: FontWeight.w500,
-                              color: AppColors.GREY_COLOR,
+                              color: isDark
+                                  ? AppColors.GREY_COLOR
+                                  : AppColors.BLACK_COLOR,
                               letterSpacing: 0.75,
                             ),
                           ),

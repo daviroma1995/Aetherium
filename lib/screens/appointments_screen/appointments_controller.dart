@@ -8,6 +8,7 @@ import '../past_appointment_screen/past_appointment_screen.dart';
 import '../services_screen/services_screen.dart';
 
 class AppointmentsController extends GetxController {
+  RxInt selectedTab = 0.obs;
   @override
   void onInit() {
     super.onInit();

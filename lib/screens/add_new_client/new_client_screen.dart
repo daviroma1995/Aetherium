@@ -42,12 +42,21 @@ class AddNewClient extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 50.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 22.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CustomLabelWidget(label: AppLanguages.NAME),
+                  CustomLabelWidget(
+                    label: AppLanguages.NAME,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: isDark
+                              ? AppColors.WHITE_COLOR
+                              : AppColors.SECONDARY_COLOR,
+                        ),
+                  ),
                   CustomInputFormField(
                     textEdigintController: TextEditingController(),
                     hintText: 'Name',
@@ -57,7 +66,15 @@ class AddNewClient extends StatelessWidget {
                     paddingSymetric: 16.0,
                   ),
                   const SizedBox(height: 12.0),
-                  const CustomLabelWidget(label: AppLanguages.SURNAME),
+                  CustomLabelWidget(
+                    label: AppLanguages.SURNAME,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: isDark
+                              ? AppColors.WHITE_COLOR
+                              : AppColors.SECONDARY_COLOR,
+                        ),
+                  ),
                   CustomInputFormField(
                     textEdigintController: TextEditingController(),
                     hintText: AppLanguages.SURNAME,
@@ -67,7 +84,15 @@ class AddNewClient extends StatelessWidget {
                     paddingSymetric: 16.0,
                   ),
                   const SizedBox(height: 12.0),
-                  const CustomLabelWidget(label: AppLanguages.EMAIL),
+                  CustomLabelWidget(
+                    label: AppLanguages.EMAIL,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: isDark
+                              ? AppColors.WHITE_COLOR
+                              : AppColors.SECONDARY_COLOR,
+                        ),
+                  ),
                   CustomInputFormField(
                     textEdigintController: TextEditingController(),
                     hintText: 'Email@Gmail.com',
@@ -77,7 +102,15 @@ class AddNewClient extends StatelessWidget {
                     paddingSymetric: 16.0,
                   ),
                   const SizedBox(height: 12.0),
-                  const CustomLabelWidget(label: AppLanguages.PHONE_NUMBER),
+                  CustomLabelWidget(
+                    label: AppLanguages.PHONE_NUMBER,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: isDark
+                              ? AppColors.WHITE_COLOR
+                              : AppColors.SECONDARY_COLOR,
+                        ),
+                  ),
                   CustomInputFormField(
                     textEdigintController: TextEditingController(),
                     hintText: '+956 424 2687',
@@ -87,7 +120,15 @@ class AddNewClient extends StatelessWidget {
                     paddingSymetric: 16.0,
                   ),
                   const SizedBox(height: 12.0),
-                  const CustomLabelWidget(label: AppLanguages.GENDER),
+                  CustomLabelWidget(
+                    label: AppLanguages.GENDER,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: isDark
+                              ? AppColors.WHITE_COLOR
+                              : AppColors.SECONDARY_COLOR,
+                        ),
+                  ),
                   Obx(
                     () => CustomDropDown(
                       height: 50.0,
@@ -100,7 +141,15 @@ class AddNewClient extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12.0),
-                  const CustomLabelWidget(label: AppLanguages.ADDRESS),
+                  CustomLabelWidget(
+                    label: AppLanguages.ADDRESS,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: isDark
+                              ? AppColors.WHITE_COLOR
+                              : AppColors.SECONDARY_COLOR,
+                        ),
+                  ),
                   CustomInputFormField(
                     textEdigintController: TextEditingController(),
                     hintText: 'Address',
@@ -110,7 +159,15 @@ class AddNewClient extends StatelessWidget {
                     paddingSymetric: 16.0,
                   ),
                   const SizedBox(height: 12.0),
-                  const CustomLabelWidget(label: AppLanguages.BIRTHDAY),
+                  CustomLabelWidget(
+                    label: AppLanguages.BIRTHDAY,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: isDark
+                              ? AppColors.WHITE_COLOR
+                              : AppColors.SECONDARY_COLOR,
+                        ),
+                  ),
                   // CustomInputFormField(
                   //   textEdigintController: TextEditingController(),
                   //   hintText: 'Birthday',

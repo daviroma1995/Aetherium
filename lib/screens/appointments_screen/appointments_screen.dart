@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -54,29 +55,47 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
           ),
           bottom: PreferredSize(
             preferredSize: const Size(double.infinity, 50.0),
-            child: TabBar(
-              indicatorColor:
-                  isDark ? AppColors.PRIMARY_DARK : AppColors.GREY_COLOR,
-              padding: const EdgeInsets.symmetric(horizontal: 22.0),
-              indicatorPadding: const EdgeInsets.all(0.0),
-              labelColor:
-                  isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
-              unselectedLabelColor: AppColors.GREY_COLOR,
-              labelStyle: const TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w800,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.w500,
-              ),
-              tabs: [
-                Tab(
-                  text: 'Past',
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 22.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color:
+                    isDark ? AppColors.BACKGROUND_DARK : AppColors.WHITE_COLOR,
+                border: Border(
+                  bottom: BorderSide(
+                      color: isDark
+                          ? AppColors.PRIMARY_DARK
+                          : AppColors.GREY_COLOR),
                 ),
-                Tab(
-                  text: 'Upcoming',
+              ),
+              child: TabBar(
+                dragStartBehavior: DragStartBehavior.start,
+                indicatorColor:
+                    isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
+                padding: EdgeInsets.zero,
+                indicatorWeight: 1.0,
+                labelColor:
+                    isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
+                unselectedLabelColor: AppColors.GREY_COLOR,
+                labelStyle: const TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w800,
                 ),
-              ],
+                onTap: (value) {
+                  controller.selectedTab.value = value;
+                },
+                unselectedLabelStyle: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
+                tabs: [
+                  Tab(
+                    text: 'Past',
+                  ),
+                  Tab(
+                    text: 'Upcoming',
+                  ),
+                ],
+              ),
             ),
           ),
         ),

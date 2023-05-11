@@ -36,7 +36,7 @@ class NotificationsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12.0),
-                  Text(AppLanguages.SETTINGS,
+                  Text(AppLanguages.NOTIFICATIONS,
                       style: Theme.of(context).textTheme.headlineLarge),
                 ],
               ),
@@ -46,71 +46,80 @@ class NotificationsScreen extends StatelessWidget {
                 alignment: Alignment.center,
                 child: MaterialButton(
                   onPressed: () {
-                    print('${(150 / 60).floor()} : ${(150 % 60).floor()} ');
+                    controller.markasRead();
                   },
                   padding: const EdgeInsets.all(0.0),
                   child: SvgPicture.asset(
                     AppAssets.LINES,
                     fit: BoxFit.cover,
                     alignment: Alignment.center,
+                    colorFilter: ColorFilter.mode(
+                      isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
               ),
             ],
           ),
         ),
-        body: ListView.builder(
-            itemCount: notifications.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      notifications[index].title,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: .75,
-                        color: isDark
-                            ? AppColors.SECONDARY_LIGHT
-                            : AppColors.SECONDARY_COLOR,
+        body: Obx(
+          () => ListView.builder(
+              itemCount: controller.notifications.isEmpty
+                  ? 0
+                  : controller.notifications.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 23.0),
+                      Text(
+                        controller.notifications[index].title,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: .75,
+                          color: isDark
+                              ? AppColors.SECONDARY_LIGHT
+                              : AppColors.SECONDARY_COLOR,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12.0),
-                    Text(
-                      notifications[index].message,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: .75,
-                        color: isDark
-                            ? AppColors.WHITE_COLOR
-                            : AppColors.BLACK_COLOR,
+                      const SizedBox(height: 12.0),
+                      Text(
+                        controller.notifications[index].desc,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: .75,
+                          color: isDark
+                              ? AppColors.WHITE_COLOR
+                              : AppColors.BLACK_COLOR,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12.0),
-                    Text(
-                      '${notifications[index].date}, ${notifications[index].time}',
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: .75,
-                        color: isDark
-                            ? AppColors.GREY_COLOR
-                            : AppColors.GREY_COLOR,
+                      const SizedBox(height: 12.0),
+                      Text(
+                        controller.notifications[index].getDate,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: .75,
+                          color: isDark
+                              ? AppColors.GREY_COLOR
+                              : AppColors.GREY_COLOR,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12.0),
-                    index == notifications.length - 1
-                        ? const SizedBox()
-                        : const Divider(
-                            color: AppColors.GREY_COLOR,
-                          ),
-                  ],
-                ),
-              );
-            }));
+                      const SizedBox(height: 12.0),
+                      index == controller.notifications.length - 1
+                          ? const SizedBox()
+                          : const Divider(
+                              color: AppColors.GREY_COLOR,
+                            ),
+                    ],
+                  ),
+                );
+              }),
+        ));
   }
 }

@@ -109,7 +109,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR),
                                 ),
-                                const SizedBox(height: 20.0),
+                                const SizedBox(height: 10.0),
                                 TextRowWidget(
                                   textOne: controller.args.dateString ??
                                       'Date Here ido',
@@ -136,7 +136,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR),
                                 ),
-                                const SizedBox(height: 20.0),
+                                const SizedBox(height: 10.0),
                                 TextRowWidget(
                                   textOne: controller.args.number,
                                   textTwo: controller.args.email,
@@ -164,7 +164,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                                   ? AppColors.WHITE_COLOR
                                                   : AppColors.SECONDARY_COLOR),
                                     ),
-                                    const SizedBox(height: 20.0),
+                                    const SizedBox(height: 10.0),
                                     ListView.builder(
                                       shrinkWrap: true,
                                       physics:
@@ -223,19 +223,26 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text('Total'),
+                                        const Text(
+                                          'Total',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                         GetBuilder<
                                             AppointmentConfirmDetailController>(
                                           builder: (controller) {
                                             return Text(
-                                                '${controller.getTotalPrice(services)} \$');
+                                              '${controller.getTotalPrice(services)} \$',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            );
                                           },
                                         )
                                       ],
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 20.0),
+                                const SizedBox(height: 40.0),
                                 if (controller.args.employeeId != null)
                                   Column(
                                     crossAxisAlignment:

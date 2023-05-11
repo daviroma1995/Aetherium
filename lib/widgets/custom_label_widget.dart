@@ -1,12 +1,15 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 import '../utils/constants.dart';
 
 class CustomLabelWidget extends StatelessWidget {
   final String label;
+  final TextStyle? style;
   const CustomLabelWidget({
     Key? key,
     required this.label,
+    this.style,
   }) : super(key: key);
 
   @override
@@ -15,12 +18,15 @@ class CustomLabelWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: isDark
-                      ? AppColors.WHITE_COLOR
-                      : AppColors.SECONDARY_COLOR,
-                )),
+        Text(
+          label,
+          style: style ??
+              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color:
+                        isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
+                  ),
+        ),
         const SizedBox(height: 10.0),
       ],
     );

@@ -82,6 +82,9 @@ class AgendaScreen extends StatelessWidget {
                           title: controller.day.value,
                           subTitle: controller.date.value,
                           isUnderLined: false,
+                          subtitleColor: isDark
+                              ? AppColors.GREY_COLOR
+                              : AppColors.BLACK_COLOR,
                         ),
                       ),
                       const SizedBox(height: 17.0),
@@ -89,7 +92,7 @@ class AgendaScreen extends StatelessWidget {
                         () => controller.appointments.isNotEmpty
                             ? ListView.builder(
                                 shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: controller.appointments.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
@@ -178,62 +181,76 @@ class AgendaCustomCardWidget extends StatelessWidget {
           color: agendaBarsColor,
         ),
         const SizedBox(width: 16.0),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                SvgPicture.asset(
-                  AppAssets.CLOCK_ICON,
-                  colorFilter: ColorFilter.mode(
-                      isDark ? AppColors.WHITE_COLOR : AppColors.PRIMARY_COLOR,
-                      BlendMode.srcIn),
-                ),
-                const SizedBox(width: 5.0),
-                Column(
-                  children: [
-                    Text(
-                      startTime,
-                      style:
-                          Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                    ),
-                    Text(
-                      endTime,
-                      style:
-                          Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            const SizedBox(height: 7.0),
-            Row(
-              children: [
-                Container(
-                  height: 8.0,
-                  width: 8.0,
-                  decoration: BoxDecoration(
-                    color: agendaBarsColor,
-                    borderRadius: BorderRadius.circular(25.0),
+        SizedBox(
+          width: 75.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    AppAssets.CLOCK_ICON,
+                    colorFilter: ColorFilter.mode(
+                        isDark
+                            ? AppColors.WHITE_COLOR
+                            : AppColors.PRIMARY_COLOR,
+                        BlendMode.srcIn),
                   ),
-                ),
-                const SizedBox(width: 12.0),
-                Text(
-                  duration,
-                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500,
+                  const SizedBox(width: 5.0),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        startTime,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
-                ),
-              ],
-            ),
-          ],
+                      Text(
+                        endTime,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(height: 7.0),
+              Row(
+                children: [
+                  Container(
+                    height: 8.0,
+                    width: 8.0,
+                    decoration: BoxDecoration(
+                      color: agendaBarsColor,
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                  ),
+                  const SizedBox(width: 5.0),
+                  FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(
+                      duration,
+                      style:
+                          Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w500,
+                              ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
         const SizedBox(width: 17.0),
         Expanded(
@@ -278,7 +295,7 @@ class AgendaCustomCardWidget extends StatelessWidget {
                             fontSize: 16.0,
                             fontWeight: FontWeight.w700,
                             color: isDark
-                                ? AppColors.WHITE_COLOR
+                                ? AppColors.BLACK_COLOR
                                 : AppColors.PRIMARY_COLOR,
                           ),
                         ),
@@ -289,7 +306,7 @@ class AgendaCustomCardWidget extends StatelessWidget {
                             fontSize: 12.0,
                             fontWeight: FontWeight.w500,
                             color: isDark
-                                ? AppColors.GREY_COLOR
+                                ? AppColors.SECONDARY_COLOR
                                 : AppColors.PRIMARY_COLOR,
                           ),
                         ),

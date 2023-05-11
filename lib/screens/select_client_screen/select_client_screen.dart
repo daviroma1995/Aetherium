@@ -43,12 +43,13 @@ class SelectClientScreen extends StatelessWidget {
               child: CustomInputFormField(
                 textEdigintController: controller.search,
                 hintText: 'Search',
+                iconColor: AppColors.TEXT_FIELD_HINT_TEXT,
                 isValid: true,
                 onSubmit: () {},
                 autoFocus: false,
                 iconUrl: AppAssets.SEARCH_ICON,
                 onchange: (value) {
-                  print(value);
+                  controller.searchText.value = value;
                 },
               ),
             ),
@@ -65,19 +66,57 @@ class SelectClientScreen extends StatelessWidget {
                       ? const CircularProgressIndicator()
                       : controller.isLoaded.value
                           ? ListView.builder(
-                              itemCount: controller.clients.length,
+                              itemCount: controller.clients
+                                  .where((client) {
+                                    return client.fullName
+                                        .toLowerCase()
+                                        .contains(controller.searchText.value);
+                                  })
+                                  .toList()
+                                  .length,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
+                                controller.searchedClients.value =
+                                    controller.clients.where((client) {
+                                  return client.fullName
+                                      .toLowerCase()
+                                      .contains(controller.searchText.value);
+                                }).toList();
+                                int selectedIndex = controller
+                                            .searchedClients.length >
+                                        1
+                                    ? index
+                                    : controller.clients.indexWhere((client) {
+                                        return client.fullName
+                                            .toLowerCase()
+                                            .contains(
+                                                controller.searchText.value);
+                                      });
                                 return GestureDetector(
                                   onTap: () {
-                                    controller.onTap(index);
+                                    controller.onTap(
+                                        controller.searchedClients.length > 1
+                                            ? index
+                                            : selectedIndex);
                                   },
                                   child: !controller.selectedClients.contains(
-                                          controller.clients[index].firstName)
+                                          controller
+                                              .clients[controller
+                                                          .searchedClients
+                                                          .length >
+                                                      1
+                                                  ? index
+                                                  : selectedIndex]
+                                              .firstName)
                                       ? ClientTile(
-                                          index: index,
+                                          index: controller
+                                                      .searchedClients.length >
+                                                  1
+                                              ? index
+                                              : selectedIndex,
+                                          onTap: controller.getClientDetails,
                                           name:
-                                              '${controller.clients[index].firstName!} ${controller.clients[index].lastName}',
+                                              '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
                                           membership: 'Primo',
                                           checkColor: AppColors.BORDER_COLOR,
                                           textColor: isDark
@@ -86,36 +125,76 @@ class SelectClientScreen extends StatelessWidget {
                                           iconColor: isDark
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.BLACK_COLOR,
-                                          onTap: controller.getClientDetails,
                                         )
                                       : ClientTile(
-                                          index: index,
+                                          index: controller
+                                                      .searchedClients.length >
+                                                  1
+                                              ? index
+                                              : selectedIndex,
                                           onTap: controller.getClientDetails,
                                           name:
-                                              '${controller.clients[index].firstName!} ${controller.clients[index].lastName}',
+                                              '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
                                           membership: 'Primo',
-                                          iconColor: AppColors.SECONDARY_COLOR,
                                           textColor: AppColors.SECONDARY_COLOR,
+                                          iconColor: AppColors.SECONDARY_COLOR,
                                           checkColor:
                                               AppColors.SECONDARY_COLOR),
                                 );
                               },
                             )
                           : ListView.builder(
-                              itemCount: controller.clients.length,
+                              itemCount: controller.clients
+                                  .where((client) {
+                                    return client.fullName
+                                        .toLowerCase()
+                                        .contains(controller.searchText.value);
+                                  })
+                                  .toList()
+                                  .length,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
+                                controller.searchedClients.value =
+                                    controller.clients.where((client) {
+                                  return client.fullName
+                                      .toLowerCase()
+                                      .contains(controller.searchText.value);
+                                }).toList();
+                                int selectedIndex = controller
+                                            .searchedClients.length >
+                                        1
+                                    ? index
+                                    : controller.clients.indexWhere((client) {
+                                        return client.fullName
+                                            .toLowerCase()
+                                            .contains(
+                                                controller.searchText.value);
+                                      });
                                 return GestureDetector(
                                   onTap: () {
-                                    controller.onTap(index);
+                                    controller.onTap(
+                                        controller.searchedClients.length > 1
+                                            ? index
+                                            : selectedIndex);
                                   },
                                   child: !controller.selectedClients.contains(
-                                          controller.clients[index].firstName)
+                                          controller
+                                              .clients[controller
+                                                          .searchedClients
+                                                          .length >
+                                                      1
+                                                  ? index
+                                                  : selectedIndex]
+                                              .firstName)
                                       ? ClientTile(
-                                          index: index,
+                                          index: controller
+                                                      .searchedClients.length >
+                                                  1
+                                              ? index
+                                              : selectedIndex,
                                           onTap: controller.getClientDetails,
                                           name:
-                                              '${controller.clients[index].firstName!} ${controller.clients[index].lastName}',
+                                              '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
                                           membership: 'Primo',
                                           checkColor: AppColors.BORDER_COLOR,
                                           textColor: isDark
@@ -126,10 +205,14 @@ class SelectClientScreen extends StatelessWidget {
                                               : AppColors.BLACK_COLOR,
                                         )
                                       : ClientTile(
-                                          index: index,
+                                          index: controller
+                                                      .searchedClients.length >
+                                                  1
+                                              ? index
+                                              : selectedIndex,
                                           onTap: controller.getClientDetails,
                                           name:
-                                              '${controller.clients[index].firstName!} ${controller.clients[index].lastName}',
+                                              '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
                                           membership: 'Primo',
                                           textColor: AppColors.SECONDARY_COLOR,
                                           iconColor: AppColors.SECONDARY_COLOR,

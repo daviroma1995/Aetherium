@@ -37,7 +37,9 @@ class UpcomingAppointmentsController extends GetxController {
       data.forEach((appointment) {
         if (appointment['client_id'] == uid) {
           for (int i = 0; i < statusData!.length; i++) {
-            if (appointment['status_id'] == statusData[i]['id']) {
+            if (appointment['status_id'] == statusData[i]['id'] &&
+                appointment['date_timestamp'].seconds + 86400 >=
+                    Timestamp.now().seconds) {
               status.add(AppointmentStatus.fromJson(statusData[i]));
             }
           }
@@ -52,8 +54,11 @@ class UpcomingAppointmentsController extends GetxController {
       });
       data.forEach((appointment) {
         for (int i = 0; i < statusData!.length; i++) {
-          if (appointment['status_id'] == statusData[i]['id']) {
+          if (appointment['status_id'] == statusData[i]['id'] &&
+              appointment['date_timestamp'].seconds + 86400 >=
+                  Timestamp.now().seconds) {
             status.add(AppointmentStatus.fromJson(statusData[i]));
+            break;
           }
         }
       });

@@ -128,11 +128,13 @@ class ContactsScreen extends StatelessWidget {
                                       style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w500,
-                                        color: AppColors.GREY_COLOR,
+                                        color: isDark
+                                            ? AppColors.GREY_COLOR
+                                            : AppColors.BLACK_COLOR,
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 20.0),
+                                  const SizedBox(height: 30.0),
                                   Text(
                                     AppLanguages.PHONE_NUMBER,
                                     style: Theme.of(context)
@@ -155,10 +157,12 @@ class ContactsScreen extends StatelessWidget {
                                     children: [
                                       Text(
                                         controller.shopinfo.value.phoneNumber!,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w500,
-                                          color: AppColors.GREY_COLOR,
+                                          color: isDark
+                                              ? AppColors.GREY_COLOR
+                                              : AppColors.BLACK_COLOR,
                                         ),
                                       ),
                                       InkWell(
@@ -238,7 +242,7 @@ class ContactsScreen extends StatelessWidget {
                                       );
                                     },
                                   ),
-                                  const SizedBox(height: 10.0),
+                                  const SizedBox(height: 20.0),
                                   Text(
                                     AppLanguages.DESCRIPTION,
                                     style: Theme.of(context)
@@ -253,12 +257,14 @@ class ContactsScreen extends StatelessWidget {
                                         ),
                                   ),
                                   const SizedBox(height: 20.0),
-                                  const Text(
+                                  Text(
                                     'Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
                                     style: TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.w400,
-                                      color: AppColors.GREY_COLOR,
+                                      color: isDark
+                                          ? AppColors.GREY_COLOR
+                                          : AppColors.BLACK_COLOR,
                                     ),
                                   ),
                                   const SizedBox(height: 20.0),
@@ -389,10 +395,10 @@ class ContactsScreen extends StatelessWidget {
               const SizedBox(height: 6.0),
               Text(
                 subtitle,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.GREY_COLOR,
+                  color: isDark ? AppColors.GREY_COLOR : AppColors.GREY_COLOR,
                 ),
               ),
             ],
@@ -414,16 +420,16 @@ class ContactsScreen extends StatelessWidget {
           day,
           style: TextStyle(
             fontSize: 16.0,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w700,
             color: isDark ? AppColors.SECONDARY_COLOR : AppColors.BLACK_COLOR,
           ),
         ),
         Text(
           from == null ? '$to' : '$from - $to',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.w500,
-            color: AppColors.GREY_COLOR,
+            color: isDark ? AppColors.GREY_COLOR : AppColors.BLACK_COLOR,
           ),
         ),
       ],

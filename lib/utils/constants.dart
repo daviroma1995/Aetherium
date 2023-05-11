@@ -27,6 +27,7 @@ class AppColors {
   static const PROGRESS_COLOR = Color(0XFFB8A27B);
   static const CARD_COLOR = Color(0XFFFDF9F8);
   static const SHADOW_COLOR = Color.fromRGBO(186, 186, 186, .25);
+  static const TEXT_FIELD_HINT_TEXT = Color(0xff939393);
 
   static const GREEN_COLOR = Color(0xff57CE63);
 }
@@ -132,11 +133,13 @@ class AppAssets {
   static const THEME_MODE = 'assets/images/icons/theme_mode.svg';
   static const PLUSS_BTN = 'assets/images/icons/add_btn.svg';
   static const CROSS_BTN = 'assets/images/icons/x-circle.svg';
+  static const SCAN_ICON = 'assets/images/icons/scan_icon.svg';
 }
 
 class AppLanguages {
   static const THEME = 'Change Theme';
   static const NEXT = 'Next';
+  static const SCAN = 'Scan';
   static const APP_NAME = 'Aetherium Saloon';
   static const WELCOME_TO = 'Welcome to';
   static const AETHERIUM = 'AETHERIUM';
@@ -178,8 +181,8 @@ class AppLanguages {
   static const CLIENT_DETAILS = 'Dettaglio Cliente';
   static const SETTINGS = 'Settings';
   static const CONSULTATIONS = 'Consultations';
-  static const NOTIFICATIONS = 'Notifications';
-  static const NOTIFICATION_SETTINGS = 'Notification Settings';
+  static const NOTIFICATIONS = 'Notifiche';
+  static const NOTIFICATION_SETTINGS = 'Notification';
 
   static const ACCOUNT_INFO_DETAIL = 'My Information';
   static const LOGOUT = 'Logout';
@@ -194,23 +197,23 @@ class AppLanguages {
   static const APPOINTMENTS = 'Appointments';
   static const APPOINTMENT_DESCRIPTION =
       'Discover and book beauty & wellness professionals near you. Your scheduled appointments will show up here.';
-  static const SERVICES_TREATMENTS = 'Services/treatments';
+  static const SERVICES_TREATMENTS = 'Services/Treatments';
   static const CHOOSE_DATE_AND_TIME = 'Choose Date & Time';
   static const AVAILABLE_SLOT = 'Available Slot';
   static const ADDED_APPOINTMENT = 'Added Appointment';
   static const CONFIRM_APPOINTMENT = 'Confirm Appointment';
-  static const CONGRATS = 'Congrats!';
+  static const CONGRATS = 'Congratulazioni!';
 
   static const YOUR_APPOINTMENT = 'Your appointment';
   static const BOOKING_IS_SUCCESSFULLY = 'booking is successfully!';
 
-  static const APPOINTMENT_DETAILS = 'Appointments - Details';
+  static const APPOINTMENT_DETAILS = 'Appointlments - Details';
   static const SERVICE_TREATMENT_DURATION = 'Service/Treatment Duration';
   static const SERVICE_TREATMENT_CATEGORY = 'Service Treatment Category';
   static const PRICE = 'Price';
   static const TOTAL_PRICE = 'Total Price';
   static const SHOP_PHONE = 'shop Ph';
-  static const NOTES = 'Notes:';
+  static const NOTES = 'Note:';
   static const APPOINTMENT_DETAILS_DESC =
       'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit.';
   static const CANCEL = 'Cancel';

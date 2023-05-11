@@ -140,6 +140,7 @@ class HomeScreen extends StatelessWidget {
                 child: CustomInputFormField(
                   textEdigintController: controller.searchController,
                   iconUrl: AppAssets.SEARCH_ICON,
+                  iconColor: AppColors.GREY_COLOR,
                   hintText: 'Search',
                   isValid: true,
                   autoFocus: false,
@@ -200,7 +201,7 @@ class HomeScreen extends StatelessWidget {
                     Obx(
                       () => SizedBox(
                         width: Get.width,
-                        height: 138.0,
+                        height: 150,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 22.0, vertical: 20.0),
@@ -258,14 +259,16 @@ class HomeScreen extends StatelessWidget {
                                               filteredServices['dark_image']),
                                     ),
                                     const SizedBox(height: 10.0),
-                                    Text(
-                                      filteredServices['service_title'],
-                                      maxLines: 1,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 12.0,
-                                        letterSpacing: .98,
+                                    Expanded(
+                                      child: Text(
+                                        filteredServices['service_title'],
+                                        textAlign: TextAlign.center,
+                                        maxLines: 2,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 12.0,
+                                          letterSpacing: .98,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -409,6 +412,9 @@ class HomeScreen extends StatelessWidget {
                                                       .events[index].subtitle!,
                                                   time: controller
                                                       .events[index].dateString,
+                                                  subtitleColor: isDark
+                                                      ? AppColors.GREY_COLOR
+                                                      : AppColors.BLACK_COLOR,
                                                   isFavorite: controller
                                                           .events[index]
                                                           .isfavorite ??
@@ -420,6 +426,9 @@ class HomeScreen extends StatelessWidget {
                                                   index: index,
                                                   iamgeUrl: controller
                                                       .events[index].imageUrl!,
+                                                  subtitleColor: isDark
+                                                      ? AppColors.GREY_COLOR
+                                                      : AppColors.BLACK_COLOR,
                                                   title: controller
                                                       .events[index].title!,
                                                   subTitle: controller

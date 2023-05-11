@@ -24,8 +24,20 @@ class LoyalityCardScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor:
             isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
-        title: Text(AppLanguages.LOYALITY_CARD,
-            style: Theme.of(context).textTheme.headlineLarge),
+        title: Row(
+          children: [
+            const SizedBox(width: 5),
+            Text(AppLanguages.LOYALITY_CARD,
+                style: Theme.of(context).textTheme.headlineLarge),
+            const SizedBox(width: 13.0),
+            SvgPicture.asset(
+              AppAssets.INFO_ICON,
+              colorFilter: ColorFilter.mode(
+                  isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
+                  BlendMode.srcIn),
+            ),
+          ],
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -181,7 +193,7 @@ class LoyalityCardScreen extends StatelessWidget {
                               duration: const Duration(milliseconds: 600),
                               transition: Transition.downToUp,
                               curve: Curves.linear,
-                              arguments: '12399dklsfjd898034ljqlwkdf89',
+                              arguments: 'U4Vob2BIBTPWBmwAAEh0iBzskBA3',
                             );
                           },
                         ),

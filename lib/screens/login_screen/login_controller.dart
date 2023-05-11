@@ -1,4 +1,5 @@
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
+import 'package:atherium_saloon_app/screens/login_screen/login_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +84,7 @@ class LoginController extends GetxController {
 
   void logout() async {
     await auth.signOut();
+    Get.offAll(() => LoginScreen());
   }
 
   final emailController = TextEditingController();

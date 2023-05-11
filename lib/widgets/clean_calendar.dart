@@ -138,7 +138,10 @@ class _CalendarState extends State<Calendar> {
               children: [
                 todayIcon ?? SizedBox(),
                 Text(displayMonth,
-                    style: Theme.of(context).textTheme.headlineLarge),
+                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.w400,
+                        )),
               ],
             ),
             rightArrow ?? Container(),
@@ -154,8 +157,8 @@ class _CalendarState extends State<Calendar> {
             AppAssets.CALANDER_ICON,
             colorFilter: ColorFilter.mode(
                 Theme.of(context).brightness == Brightness.dark
-                    ? AppColors.GREY_COLOR
-                    : AppColors.PRIMARY_COLOR,
+                    ? AppColors.WHITE_COLOR
+                    : AppColors.BLACK_COLOR,
                 BlendMode.srcIn),
           ),
         ),
@@ -165,6 +168,7 @@ class _CalendarState extends State<Calendar> {
 
   Widget get calendarGridView {
     return Container(
+      padding: const EdgeInsets.only(top: 10.0),
       child: SimpleGestureDetector(
         onSwipeUp: _onSwipeUp,
         onSwipeDown: _onSwipeDown,
@@ -175,17 +179,19 @@ class _CalendarState extends State<Calendar> {
           horizontalThreshold: 40.0,
           swipeDetectionMoment: SwipeDetectionMoment.onUpdate,
         ),
-        child: Column(children: <Widget>[
-          GridView.count(
-            childAspectRatio: 1.4,
-            primary: false,
-            shrinkWrap: true,
-            crossAxisCount: 7,
-            addSemanticIndexes: true,
-            padding: EdgeInsets.only(bottom: 0.0),
-            children: calendarBuilder(),
-          ),
-        ]),
+        child: Column(
+          children: <Widget>[
+            GridView.count(
+              childAspectRatio: 1,
+              primary: false,
+              shrinkWrap: true,
+              crossAxisCount: 7,
+              addSemanticIndexes: true,
+              padding: EdgeInsets.only(),
+              children: calendarBuilder(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -227,7 +233,8 @@ class _CalendarState extends State<Calendar> {
             eventDoneColor: widget.eventDoneColor,
             events: widget.events![day],
             isDayOfWeek: true,
-            date: calendarDays!.firstWhereOrNull((e)=>DateFormat("EEE").format(e).toLowerCase()==day.toLowerCase()),
+            date: calendarDays.firstWhereOrNull((e) =>
+                DateFormat("EEE").format(e).toLowerCase() == day.toLowerCase()),
             dayOfWeek: day,
             dayOfWeekStyle: widget.dayOfWeekStyle ??
                 TextStyle(
@@ -286,7 +293,8 @@ class _CalendarState extends State<Calendar> {
                 eventColor: widget.eventColor,
                 eventDoneColor: widget.eventDoneColor,
                 events: widget.events![day],
-                onDateSelected: (date) => handleSelectedDateAndUserCallback(date),
+                onDateSelected: (date) =>
+                    handleSelectedDateAndUserCallback(date),
                 date: day,
                 dateStyles: configureDateStyle(monthStarted, monthEnded),
                 isSelected: Utils.isSameDay(selectedDate, day),
@@ -325,7 +333,7 @@ class _CalendarState extends State<Calendar> {
         onTap: toggleExpanded,
         child: Container(
           color: widget.bottomBarColor ?? Color.fromRGBO(200, 200, 200, 0.2),
-          height: 40,
+          height: 10,
           margin: EdgeInsets.only(top: 8.0),
           padding: EdgeInsets.all(0),
           child: Row(
@@ -386,8 +394,7 @@ class _CalendarState extends State<Calendar> {
           Utils.daysInRange(firstDayOfCurrentWeek, lastDayOfCurrentWeek)
               .toList();
       selectedMonthsDays = _daysInMonth(_selectedDate);
-      var monthFormat =
-          DateFormat("MMMM yyyy", widget.locale).format(_selectedDate);
+      var monthFormat = DateFormat("MMMM", widget.locale).format(_selectedDate);
       displayMonth =
           "${monthFormat[0].toUpperCase()}${monthFormat.substring(1)}";
     });
@@ -403,8 +410,7 @@ class _CalendarState extends State<Calendar> {
       var lastDateOfNewMonth = Utils.lastDayOfMonth(_selectedDate);
       updateSelectedRange(firstDateOfNewMonth, lastDateOfNewMonth);
       selectedMonthsDays = _daysInMonth(_selectedDate);
-      var monthFormat =
-          DateFormat("MMMM yyyy", widget.locale).format(_selectedDate);
+      var monthFormat = DateFormat("MMMM", widget.locale).format(_selectedDate);
       displayMonth =
           "${monthFormat[0].toUpperCase()}${monthFormat.substring(1)}";
     });
@@ -419,8 +425,7 @@ class _CalendarState extends State<Calendar> {
       var lastDateOfNewMonth = Utils.lastDayOfMonth(_selectedDate);
       updateSelectedRange(firstDateOfNewMonth, lastDateOfNewMonth);
       selectedMonthsDays = _daysInMonth(_selectedDate);
-      var monthFormat =
-          DateFormat("MMMM yyyy", widget.locale).format(_selectedDate);
+      var monthFormat = DateFormat("MMMM", widget.locale).format(_selectedDate);
       displayMonth =
           "${monthFormat[0].toUpperCase()}${monthFormat.substring(1)}";
     });
@@ -437,8 +442,7 @@ class _CalendarState extends State<Calendar> {
       selectedWeekDays =
           Utils.daysInRange(firstDayOfCurrentWeek, lastDayOfCurrentWeek)
               .toList();
-      var monthFormat =
-          DateFormat("MMMM yyyy", widget.locale).format(_selectedDate);
+      var monthFormat = DateFormat("MMMM", widget.locale).format(_selectedDate);
       displayMonth =
           "${monthFormat[0].toUpperCase()}${monthFormat.substring(1)}";
     });
@@ -455,8 +459,7 @@ class _CalendarState extends State<Calendar> {
       selectedWeekDays =
           Utils.daysInRange(firstDayOfCurrentWeek, lastDayOfCurrentWeek)
               .toList();
-      var monthFormat =
-          DateFormat("MMMM yyyy", widget.locale).format(_selectedDate);
+      var monthFormat = DateFormat("MMMM", widget.locale).format(_selectedDate);
       displayMonth =
           "${monthFormat[0].toUpperCase()}${monthFormat.substring(1)}";
     });

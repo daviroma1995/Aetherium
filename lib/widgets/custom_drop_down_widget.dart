@@ -198,7 +198,7 @@ class CustomDropDown extends StatelessWidget {
                       child: SvgPicture.asset(
                         'assets/images/svg/$hintIcon.svg',
                         colorFilter: ColorFilter.mode(
-                            AppColors.BLACK_COLOR, BlendMode.srcIn),
+                            AppColors.GREY_COLOR, BlendMode.srcIn),
                         height: iconHeight ?? 14,
                         width: iconWidth ?? 14,
                       ),
@@ -240,7 +240,7 @@ class CustomDropDown extends StatelessWidget {
                         size: isFowrardArrow! ? 25 : 18,
                         color: isDark
                             ? AppColors.GREY_COLOR
-                            : AppColors.BLACK_COLOR)
+                            : AppColors.GREY_COLOR)
                 ],
               ),
             )),

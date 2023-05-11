@@ -68,6 +68,7 @@ class ServicesScreen extends StatelessWidget {
                               child: CustomInputFormField(
                                 textEdigintController: controller.search,
                                 hintText: 'Search',
+                                iconColor: AppColors.TEXT_FIELD_HINT_TEXT,
                                 isValid: true,
                                 onSubmit: () {},
                                 autoFocus: false,

@@ -237,7 +237,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                   if (controller.client.value.isAdmin!) {
                     controller.toggle.value = !controller.toggle.value;
                     controller.bottom.value = 85;
-                    controller.leftRight.value = 115;
+                    controller.leftRight.value = Get.width * .25;
                   } else {
                     Get.to(
                       () => ServicesScreen(),
