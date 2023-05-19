@@ -167,9 +167,7 @@ class ContactsScreen extends StatelessWidget {
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          final Uri whatsapp = Uri.parse(
-                                              'https://wa.me/98412454967');
-                                          launchUrl(whatsapp);
+                                          controller.launchWhatsApp();
                                         },
                                         child: Container(
                                           width: 102.0,

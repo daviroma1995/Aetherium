@@ -1,24 +1,32 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:atherium_saloon_app/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:atherium_saloon_app/screens/services_screen/services_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
+import 'package:atherium_saloon_app/widgets/button_widget.dart';
 
 import '../../widgets/custom_dropdown_list_widget.dart';
 import '../../widgets/form_field_widget.dart';
 
 class ServicesScreen extends StatelessWidget {
   final controller = Get.put(ServicesController());
-  ServicesScreen({super.key});
-
+  ServicesScreen({
+    Key? key,
+    this.uid,
+    this.clientEmail,
+    this.number,
+  }) : super(key: key);
+  final String? uid;
+  final String? clientEmail;
+  final String? number;
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    // controller.reArrange();
-
+    controller.uid = uid;
+    controller.clientEmail = clientEmail;
+    controller.number = number;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

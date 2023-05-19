@@ -22,7 +22,6 @@ class Membership {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
     data['start_date'] = this.startDate;
     data['points'] = this.points;
     data['client_id'] = this.clientId;

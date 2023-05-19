@@ -24,6 +24,9 @@ class ServicesController extends GetxController {
   RxString searchedValue = ''.obs;
   var client = Client().obs;
   var list = <String>[];
+  String? uid;
+  String? clientEmail;
+  String? number;
   // On Init
   @override
   void onInit() async {
@@ -180,7 +183,7 @@ class ServicesController extends GetxController {
     );
   }
 
-  void selectedServiceController(int serviceIndex, int subServiceIndex) {
+  void selectedServiceController(int serviceIndex, int subServiceIndex) async {
     // if (selectedServices
     //     .where((element) =>
     //         element.title ==
@@ -244,9 +247,9 @@ class ServicesController extends GetxController {
       args = null;
     } else {
       appointment.serviceId = list;
-      appointment.clientId = LoginController.instance.user.uid;
-      appointment.email = client.value.email;
-      appointment.number = client.value.phoneNumber;
+      appointment.clientId = uid ?? LoginController.instance.user?.uid;
+      appointment.email = clientEmail ?? client.value.email;
+      appointment.number = number ?? client.value.phoneNumber;
       appointment.employeeId = ['8f1cYZExVjeOo2sBDmQC'];
     }
   }

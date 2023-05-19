@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../models/shop_info.dart';
 
 class ContactsController extends GetxController {
@@ -17,6 +21,39 @@ class ContactsController extends GetxController {
       beautySpecialists.bindStream(FirebaseServices.employeeStrem());
       isInitialized.value = true;
     });
+  }
+
+  void openwhatsapp() async {
+    var whatsapp = shopinfo.value.phoneNumber;
+    if (Platform.isAndroid) {
+      // add the [https]
+      Uri url = Uri.parse(
+          "https://wa.me/$whatsapp:/?text=${Uri.parse('')}"); // new line
+      print(launchUrl(url));
+    } else {
+      // add the [https]
+      Uri url = Uri.parse(
+          "https://api.whatsapp.com/send?phone=$whatsapp=${Uri.parse('')}"); // new line
+      print(launchUrl(url));
+    }
+  }
+
+  void launchWhatsApp() async {
+    var whatsapp = shopinfo.value.phoneNumber;
+
+    String url() {
+      if (Platform.isAndroid) {
+        return "http://wa.me/$whatsapp";
+      } else {
+        return "http://api.whatsapp.com/send?phone=$whatsapp";
+      }
+    }
+
+    // if (await canLaunchUrl(Uri.parse(url()))) {
+    await launchUrl(Uri.parse(url()), mode: LaunchMode.externalApplication);
+    // } else {
+    //  Fluttertoast.showToast(msg: 'Application is not installed');
+    //}
   }
 }
 

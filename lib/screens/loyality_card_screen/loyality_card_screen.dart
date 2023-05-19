@@ -193,7 +193,7 @@ class LoyalityCardScreen extends StatelessWidget {
                               duration: const Duration(milliseconds: 600),
                               transition: Transition.downToUp,
                               curve: Curves.linear,
-                              arguments: 'U4Vob2BIBTPWBmwAAEh0iBzskBA3',
+                              arguments: controller.uid,
                             );
                           },
                         ),

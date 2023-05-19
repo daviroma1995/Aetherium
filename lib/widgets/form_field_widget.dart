@@ -31,7 +31,7 @@ class CustomInputFormField extends StatelessWidget {
     required this.isValid,
     required this.onSubmit,
     this.onPressed,
-    this.autoFocus = true,
+    this.autoFocus = false,
     required this.textEdigintController,
     this.paddingSymetric = 0.0,
     this.paddingVertical = 0.0,
@@ -58,19 +58,8 @@ class CustomInputFormField extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: TextField(
-          onTap: () {
-            if (onFocus == null) {
-              () {};
-            } else {
-              onFocus!();
-            }
-          },
           onChanged: (value) {
-            if (onchange == null) {
-              () {};
-            } else {
-              return onchange!(value);
-            }
+            onchange!(value);
           }, //=> onchange!(value) ?? (value) {},
           cursorColor: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
           controller: textEdigintController,

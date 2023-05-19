@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_screen.dart';
 import 'package:atherium_saloon_app/screens/on_boarding_screen/onboarding_screen.dart';
@@ -26,7 +28,9 @@ class SplashScreenController extends GetxController {
 
   void navigate() async {
     if (showOnBoarding == false && isLogedIn != true) {
-      Get.offAll(() => LoginScreen());
+      Timer(Duration(milliseconds: 2000), () {
+        Get.offAll(() => LoginScreen());
+      });
     } else if (showOnBoarding == false && isLogedIn == true) {
       Get.offAll(() => BottomNavigationScreen());
     } else {

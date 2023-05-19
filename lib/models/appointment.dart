@@ -63,6 +63,6 @@ class Appointment {
 
   String get dateWithMonthName {
     var date = dateTimestamp?.toDate() ?? DateTime.now();
-    return DateFormat("dd MMMM").format(date);
+    return DateFormat("dd MMM").format(date);
   }
 }

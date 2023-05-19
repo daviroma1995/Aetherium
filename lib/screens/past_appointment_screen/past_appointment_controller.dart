@@ -14,7 +14,7 @@ import '../../models/appointment.dart';
 
 class PastAppointmentController extends GetxController {
   var pastAppointments = <Appointment>[].obs;
-  String currentUid = LoginController.instance.user.uid;
+  String currentUid = LoginController.instance.user?.uid ?? '';
   var employees = <Employee>[].obs;
   var appointmentEmployees = <Employee>[].obs;
   var appointmentStatus = <AppointmentStatus>[].obs;
@@ -22,7 +22,8 @@ class PastAppointmentController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    var data = await FirebaseServices.getData(collection: 'appointments');
+    var data = await FirebaseServices.getFilteredAppointments(
+        collection: 'appointments');
     var employeeData = await FirebaseServices.getData(collection: 'employees');
     var statusData =
         await FirebaseServices.getData(collection: 'appointment_status');
@@ -68,7 +69,6 @@ class PastAppointmentController extends GetxController {
         }
       }
     }
-    print(pastAppointments);
     for (var element in employees) {
       // for (int i = 0; i < pastAppointments.length; i++) {
       //   // if (pastAppointments[i].employeeId == element.id) {

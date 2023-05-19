@@ -29,15 +29,16 @@ class AppointMentBookingController extends GetxController {
     treatments.bindStream(FirebaseServices.treatments());
     var data = await FirebaseServices.getDataWhere(
         collection: 'clients',
-        value: LoginController.instance.user.uid,
+        value: LoginController.instance.user?.uid ?? '',
         key: 'user_id');
     currentUser.value = Client.fromJson(data!);
-    if (data['isAdmin'] == true) {
+    if (currentUser.value.isAdmin == true) {
       isAdmin.value = true;
     }
-    args.time = avaliableSlots[0];
-    args.dateTimestamp = Timestamp.fromDate(DateTime(DateTime.now().year,
-        DateTime.now().month, DateTime.now().day, 0, 0, 0, 0, 0));
+    args.time = args.time ?? avaliableSlots[0];
+    args.dateTimestamp = args.dateTimestamp ??
+        Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day, 0, 0, 0, 0, 0));
     args.statusId = '88aa7cf3-c6b6-4cab-91eb-247aa6445a4g';
   }
 
@@ -72,8 +73,6 @@ class AppointMentBookingController extends GetxController {
         }
       }
     });
-    print('Selected services : $selectedTreatements');
-    print(args.dateTimestamp.toDate());
     Get.to(
       AppointmentConfirmDetailScreen(
         isDetail: false,

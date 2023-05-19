@@ -1,8 +1,9 @@
+import 'package:atherium_saloon_app/screens/client_details_screen/client_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:get/get.dart';
 import '../../models/client.dart';
 
 class ScanScreen extends StatefulWidget {
@@ -53,9 +54,13 @@ class _ScanScreenState extends State<ScanScreen> {
       if (querySnapshot.docs.isNotEmpty) {
         late Client client;
         final clientData = querySnapshot.docs.first.data();
+        clientData['id'] = clientData['user_id'];
         client = Client.fromJson(clientData);
         // Send the clientData to another function to handle the data
-
+        Get.to(() => ClientDetailsScreen(client: client),
+            arguments: client.userId,
+            duration: const Duration(milliseconds: 300),
+            transition: Transition.downToUp);
         // Do something with the client data
       } else {
         print('Client not found');

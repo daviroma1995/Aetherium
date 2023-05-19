@@ -16,7 +16,7 @@ import '../models/treatment.dart';
 import '../screens/login_screen/login_screen.dart';
 
 class FirebaseServices {
-  static String uid = LoginController.instance.user.uid;
+  static String uid = LoginController.instance.user?.uid ?? '';
   static Future<String> checkUserUid() async {
     late String uid;
     await FirebaseAuth.instance.authStateChanges().listen(
@@ -67,6 +67,26 @@ class FirebaseServices {
     }
   }
 
+  static Future<List<Map<String, dynamic>>?> getFilteredAppointments({
+    required String collection,
+  }) async {
+    var list = <Map<String, dynamic>>[];
+    try {
+      final snapShot = await FirebaseFirestore.instance
+          .collection(collection)
+          .orderBy('date_timestamp', descending: false)
+          .get();
+      for (var queryDocumentSnapshot in snapShot.docs) {
+        var data = queryDocumentSnapshot.data();
+        data['id'] = queryDocumentSnapshot.id;
+        list.add(data);
+      }
+      return list;
+    } on Exception catch (ex) {
+      log(ex.toString());
+    }
+  }
+
   static Future<List<Map<String, dynamic>>?> getLimitedData({
     required String collection,
     required int limit,
@@ -98,7 +118,7 @@ class FirebaseServices {
   }
 
   static Stream<List<Event>> eventStream() {
-    var uid = LoginController.instance.user.uid;
+    var uid = LoginController.instance.user?.uid ?? '';
     return FirebaseFirestore.instance
         .collection('events')
         .orderBy('end_timestamp', descending: true)
@@ -128,7 +148,7 @@ class FirebaseServices {
   }
 
   static Stream<Client> currentUserStream() {
-    var uid = LoginController.instance.user.uid;
+    var uid = LoginController.instance.user?.uid ?? '';
     return FirebaseFirestore.instance
         .collection('clients')
         .where('user_id', isEqualTo: uid)
@@ -146,6 +166,14 @@ class FirebaseServices {
         return currentClient;
       },
     );
+  }
+  // Get current user
+
+  static Future<Map<String, dynamic>> getCurrentUser() async {
+    var uid = LoginController.instance.user?.uid ?? '';
+    var data =
+        await FirebaseFirestore.instance.collection('clients').doc(uid).get();
+    return data.data()!;
   }
 
   // Get all the appointments of current use
@@ -173,23 +201,42 @@ class FirebaseServices {
     });
   }
 
-  static Future<List<Appointment>> getAppointments() async {
-    List<Appointment> appointmentsList = [];
-    var data = await FirebaseFirestore.instance
-        .collection('appointments')
-        .where('client_id', isEqualTo: uid)
-        .orderBy('date_timestamp', descending: true)
-        .limit(3)
-        .get();
-    for (var querySnapshot in data.docs) {
-      var data = querySnapshot.data();
-      data['id'] = querySnapshot.id;
-      Timestamp timestamp = data['date_timestamp'];
-      if (timestamp.seconds + 86400 >= Timestamp.now().seconds) {
-        appointmentsList.add(Appointment.fromJson(data));
+  static Future<List<Appointment>> getAppointments(
+      {required bool isAdmin}) async {
+    if (isAdmin == false) {
+      List<Appointment> appointmentsList = [];
+      var data = await FirebaseFirestore.instance
+          .collection('appointments')
+          .where('client_id', isEqualTo: uid)
+          .orderBy('date_timestamp', descending: true)
+          .limit(3)
+          .get();
+      for (var querySnapshot in data.docs) {
+        var data = querySnapshot.data();
+        data['id'] = querySnapshot.id;
+        Timestamp timestamp = data['date_timestamp'];
+        if (timestamp.seconds + 86400 >= Timestamp.now().seconds) {
+          appointmentsList.add(Appointment.fromJson(data));
+        }
       }
+      return appointmentsList;
+    } else {
+      List<Appointment> appointmentsList = [];
+      var data = await FirebaseFirestore.instance
+          .collection('appointments')
+          .orderBy('date_timestamp', descending: true)
+          .limit(3)
+          .get();
+      for (var querySnapshot in data.docs) {
+        var data = querySnapshot.data();
+        data['id'] = querySnapshot.id;
+        Timestamp timestamp = data['date_timestamp'];
+        if (timestamp.seconds + 86400 >= Timestamp.now().seconds) {
+          appointmentsList.add(Appointment.fromJson(data));
+        }
+      }
+      return appointmentsList;
     }
-    return appointmentsList;
   }
 
   static Stream<List<Appointment>> currentUserAppointments() {
@@ -323,7 +370,8 @@ class FirebaseServices {
         var data = await FirebaseFirestore.instance
             .collection('appointments')
             .where('date_timestamp', isEqualTo: timestamp)
-            .where('client_id', isEqualTo: LoginController.instance.user.uid)
+            .where('client_id',
+                isEqualTo: LoginController.instance.user?.uid ?? '')
             .get();
         for (var querySnapShot in data.docs) {
           var data = querySnapShot.data();
@@ -358,7 +406,8 @@ class FirebaseServices {
       try {
         var data = await FirebaseFirestore.instance
             .collection('appointments')
-            .where('client_id', isEqualTo: LoginController.instance.user.uid)
+            .where('client_id',
+                isEqualTo: LoginController.instance.user?.uid ?? '')
             .get();
         for (var querySnapShot in data.docs) {
           var data = querySnapShot.data();
@@ -410,7 +459,7 @@ class FirebaseServices {
     await firestore
         .collection('notifications')
         .where('status', isEqualTo: 'unread')
-        .where('client_id', isEqualTo: LoginController.instance.user.uid)
+        .where('client_id', isEqualTo: LoginController.instance.user?.uid ?? '')
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((DocumentSnapshot doc) {
@@ -422,6 +471,22 @@ class FirebaseServices {
       print('Error getting documents: $error');
     });
     return unreadNotifications;
+  }
+
+  static Stream<List<Notification>> getUnreadNotficationsStream() {
+    return FirebaseFirestore.instance
+        .collection('notifications')
+        .where('status', isEqualTo: 'unread')
+        .where('client_id', isEqualTo: LoginController.instance.user?.uid ?? '')
+        .snapshots()
+        .map((notification) {
+      var notifications = <Notification>[];
+      var data = notification.docs;
+      for (var notification in data) {
+        notifications.add(Notification.fromFirestore(notification));
+      }
+      return notifications;
+    });
   }
 
   static void markNotificationAsRead(String notificationId) {

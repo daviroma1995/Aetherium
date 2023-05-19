@@ -24,7 +24,7 @@ class BottomNavigationController extends GetxController {
     var data = await FirebaseServices.getDataWhere(
         collection: 'clients',
         key: 'user_id',
-        value: LoginController.instance.user.uid);
+        value: LoginController.instance.user?.uid ?? '') ;
     client.value = Client.fromJson(data!);
   }
 

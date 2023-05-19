@@ -52,6 +52,7 @@ class Client {
     data['photo'] = this.photo;
     data['user_id'] = this.userId;
     data['birthday'] = this.birthday;
+    data['isAdmin'] = this.isAdmin;
     return data;
   }
 

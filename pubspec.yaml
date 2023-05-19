@@ -40,6 +40,7 @@ dependencies:
   liquid_pull_to_refresh: ^3.0.1
   animated_radial_menu: ^0.0.1
   qr_code_scanner: ^1.0.1
+  http: ^0.13.6
   
   
 

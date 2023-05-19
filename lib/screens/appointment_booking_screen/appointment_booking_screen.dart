@@ -68,6 +68,17 @@ class AppointmentBookingScreen extends StatelessWidget {
                           events: {},
                           hideTodayIcon: true,
                           // startOnMonday: true,
+                          initialDate: controller.args.dateTimestamp != null
+                              ? controller.args.dateTimestamp.toDate()
+                              : DateTime(
+                                  DateTime.now().year,
+                                  DateTime.now().month,
+                                  DateTime.now().day,
+                                  0,
+                                  0,
+                                  0,
+                                  0,
+                                  0),
                           onDateSelected: (value) {
                             controller.args.dateTimestamp = Timestamp.fromDate(
                                 DateTime(value.year, value.month, value.day, 0,
@@ -166,45 +177,49 @@ class AppointmentBookingScreen extends StatelessWidget {
                         ),
                       ),
                       Obx(
-                        () => controller.isAdmin.value
-                            ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 22.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                        () => Visibility(
+                          visible: controller.isAdmin.value,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 22.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Note',
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w700,
-                                            color: isDark
-                                                ? AppColors.WHITE_COLOR
-                                                : AppColors.SECONDARY_COLOR,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ],
+                                    Text(
+                                      'Note',
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w700,
+                                        color: isDark
+                                            ? AppColors.WHITE_COLOR
+                                            : AppColors.SECONDARY_COLOR,
+                                      ),
+                                      textAlign: TextAlign.left,
                                     ),
-                                    const SizedBox(height: 14.0),
-                                    CustomInputFormField(
-                                      hintText: 'Some Notes',
-                                      isValid: true,
-                                      onSubmit: () {},
-                                      textEdigintController:
-                                          TextEditingController(),
-                                      paddingSymetric: 16.0,
-                                      paddingVertical: 16.0,
-                                      autoFocus: false,
-                                      maxLines: 15,
-                                      minLInes: 8,
-                                    )
                                   ],
                                 ),
-                              )
-                            : Container(),
+                                const SizedBox(height: 14.0),
+                                CustomInputFormField(
+                                  hintText:
+                                      controller.args.notes ?? 'Some Notes',
+                                  isValid: true,
+                                  onSubmit: () {},
+                                  textEdigintController: controller.notes,
+                                  paddingSymetric: 16.0,
+                                  paddingVertical: 16.0,
+                                  autoFocus: false,
+                                  maxLines: 15,
+                                  minLInes: 8,
+                                  onchange: (value) {
+                                    controller.args.notes = value;
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 20.0),
                       Row(

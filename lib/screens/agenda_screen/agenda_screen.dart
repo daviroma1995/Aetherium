@@ -29,6 +29,7 @@ class AgendaScreen extends StatelessWidget {
                       events: controller.events,
                       hideArrows: true,
                       hideTodayIcon: true,
+                      initialDate: DateTime.now(),
                       onDateSelected: (value) {
                         controller.onDateChange(value);
                       },
@@ -37,6 +38,7 @@ class AgendaScreen extends StatelessWidget {
                       events: controller.events,
                       hideArrows: true,
                       hideTodayIcon: true,
+                      initialDate: DateTime.now(),
                       onDateSelected: (value) {
                         controller.onDateChange(value);
                       },

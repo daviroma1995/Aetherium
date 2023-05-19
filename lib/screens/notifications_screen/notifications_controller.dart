@@ -11,6 +11,7 @@ class NotificationsController extends GetxController {
   @override
   void onInit() async {
     notifications.value = await FirebaseServices.getUnreadNotifications();
+    notifications.bindStream(FirebaseServices.getUnreadNotficationsStream());
     super.onInit();
   }
 
@@ -21,12 +22,12 @@ class NotificationsController extends GetxController {
 
   void markasRead() {
     if (notifications.isNotEmpty) {
-      notifications.forEach((notification) {
+      for (var notification in notifications) {
         FirebaseServices.markNotificationAsRead(notification.id);
-        Fluttertoast.showToast(
-            msg: 'All Notifications are marked as read',
-            backgroundColor: AppColors.GREEN_COLOR);
-      });
+      }
+      Fluttertoast.showToast(
+          msg: 'All Notifications are marked as read',
+          backgroundColor: AppColors.GREEN_COLOR);
       notifications.value = <Notification>[];
     }
   }

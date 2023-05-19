@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../utils/shared_preferences.dart';
 import '../forget_password_screen/foreget_password_screen.dart';
 import '../splash_screen/splash_controller.dart';
 
@@ -15,7 +18,11 @@ class LoginController extends GetxController {
   // email passowrd, udername
   late Rx<User?> _user;
   // Firebase auth
-  User get user => _user.value!;
+
+  User? get user {
+    return _user.value;
+  }
+
   FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -31,7 +38,9 @@ class LoginController extends GetxController {
       SplashScreenController controller = Get.find();
       controller.navigate();
     } else {
-      Get.offAll(const BottomNavigationScreen());
+      Timer(Duration(milliseconds: 2000), () {
+        Get.offAll(() => BottomNavigationScreen());
+      });
     }
   }
 
@@ -83,6 +92,7 @@ class LoginController extends GetxController {
   }
 
   void logout() async {
+    await LocalData.resetData();
     await auth.signOut();
     Get.offAll(() => LoginScreen());
   }

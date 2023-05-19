@@ -173,10 +173,12 @@ class ClientDetailsScreen extends StatelessWidget {
                             () => TextRowWidget(
                               textOne: controller.loading.value
                                   ? 'Waiting...'
-                                  : controller.membershipType.value.name!,
+                                  : controller.membershipType.value.name!
+                                      .toString()
+                                      .capitalize!,
                               textTwo: controller.clientMembership.value.points
                                   .toString(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16.0,
                                 color: AppColors.GREY_COLOR,

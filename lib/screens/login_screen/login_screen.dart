@@ -58,6 +58,7 @@ class LoginScreen extends StatelessWidget {
                         isValid: controller.isEmailValid.value,
                         onSubmit: controller.validateEmail,
                         autoFocus: false,
+                        onchange: (value) {},
                       ),
                     ),
                     Obx(() {
@@ -84,6 +85,7 @@ class LoginScreen extends StatelessWidget {
                         onSubmit: controller.validatePassword,
                         onPressed: controller.hideOrShowPassword,
                         autoFocus: false,
+                        onchange: (value) {},
                       ),
                     ),
                     Obx(() {

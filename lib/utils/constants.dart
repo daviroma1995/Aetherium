@@ -205,6 +205,9 @@ class AppLanguages {
   static const CONGRATS = 'Congratulazioni!';
 
   static const YOUR_APPOINTMENT = 'Your appointment';
+  static const CLIENT_CREATION_MESSAGE_I = 'Il tuo cliente è stato creato,';
+  static const CLIENT_CREATION_MESSAGE_II = ' complimenti!';
+
   static const BOOKING_IS_SUCCESSFULLY = 'booking is successfully!';
 
   static const APPOINTMENT_DETAILS = 'Appointlments - Details';

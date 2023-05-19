@@ -62,7 +62,7 @@ class SelectClientScreen extends StatelessWidget {
                   border: Border.all(),
                 ),
                 child: Obx(
-                  () => controller.clients.isEmpty
+                  () => controller.clients.isEmpty || controller.tier.isEmpty
                       ? const CircularProgressIndicator()
                       : controller.isLoaded.value
                           ? ListView.builder(
@@ -107,7 +107,7 @@ class SelectClientScreen extends StatelessWidget {
                                                       1
                                                   ? index
                                                   : selectedIndex]
-                                              .firstName)
+                                              .userId)
                                       ? ClientTile(
                                           index: controller
                                                       .searchedClients.length >
@@ -117,7 +117,8 @@ class SelectClientScreen extends StatelessWidget {
                                           onTap: controller.getClientDetails,
                                           name:
                                               '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
-                                          membership: 'Primo',
+                                          membership:
+                                              controller.tier[index].name!,
                                           checkColor: AppColors.BORDER_COLOR,
                                           textColor: isDark
                                               ? AppColors.WHITE_COLOR
@@ -135,7 +136,8 @@ class SelectClientScreen extends StatelessWidget {
                                           onTap: controller.getClientDetails,
                                           name:
                                               '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
-                                          membership: 'Primo',
+                                          membership:
+                                              controller.tier[index].name!,
                                           textColor: AppColors.SECONDARY_COLOR,
                                           iconColor: AppColors.SECONDARY_COLOR,
                                           checkColor:
@@ -185,7 +187,7 @@ class SelectClientScreen extends StatelessWidget {
                                                       1
                                                   ? index
                                                   : selectedIndex]
-                                              .firstName)
+                                              .userId)
                                       ? ClientTile(
                                           index: controller
                                                       .searchedClients.length >
@@ -195,7 +197,8 @@ class SelectClientScreen extends StatelessWidget {
                                           onTap: controller.getClientDetails,
                                           name:
                                               '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
-                                          membership: 'Primo',
+                                          membership:
+                                              controller.tier[index].name!,
                                           checkColor: AppColors.BORDER_COLOR,
                                           textColor: isDark
                                               ? AppColors.WHITE_COLOR
@@ -213,7 +216,8 @@ class SelectClientScreen extends StatelessWidget {
                                           onTap: controller.getClientDetails,
                                           name:
                                               '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
-                                          membership: 'Primo',
+                                          membership:
+                                              controller.tier[index].name!,
                                           textColor: AppColors.SECONDARY_COLOR,
                                           iconColor: AppColors.SECONDARY_COLOR,
                                           checkColor:
@@ -233,7 +237,9 @@ class SelectClientScreen extends StatelessWidget {
             color: isDark ? AppColors.PRIMARY_DARK : AppColors.PRIMARY_COLOR,
             buttonText: AppLanguages.AVANTI,
             width: Get.width,
-            onTap: () {},
+            onTap: () {
+              controller.goToServicesScreen();
+            },
           ),
         ),
       ),

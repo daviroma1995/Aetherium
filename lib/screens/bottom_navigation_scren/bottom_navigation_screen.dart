@@ -162,7 +162,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
+      floatingActionButton: SizedBox(
         height: 150.0,
         child: Stack(
           alignment: Alignment.center,
@@ -175,6 +175,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                       left: controller.leftRight.value,
                       child: GestureDetector(
                         onTap: () async {
+                          controller.toggle.value = false;
                           Get.to(
                             () => AddNewClient(),
                             duration: const Duration(milliseconds: 600),
@@ -206,6 +207,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                       right: controller.leftRight.value,
                       child: GestureDetector(
                         onTap: () async {
+                          controller.toggle.value = false;
                           Get.to(
                             () => SelectClientScreen(),
                             duration: const Duration(milliseconds: 600),

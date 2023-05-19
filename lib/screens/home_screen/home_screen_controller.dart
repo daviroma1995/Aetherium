@@ -15,6 +15,7 @@ import '../../models/treatment.dart';
 import '../../network_utils/firebase_services.dart';
 import '../../utils/constants.dart';
 import '../event_details/event_details_screen.dart';
+import '../../models/notification.dart' as notification;
 
 class HomeScreenController extends GetxController {
   RxInt searchServicesLength = 0.obs;
@@ -26,27 +27,30 @@ class HomeScreenController extends GetxController {
   var events = <Event>[].obs;
   var appointments = <Appointment>[].obs;
   var appointmentsEmployee = <Employee>[].obs;
+  var notifications = <notification.Notification>[].obs;
   var services = <Treatment>[].obs;
   var searchedService = "".obs;
 
   @override
   void onInit() async {
-    _uid = LoginController.instance.user.uid;
+    _uid = LoginController.instance.user?.uid ?? '';
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
-        currentUser.bindStream(FirebaseServices.currentUserStream());
+        var map = await FirebaseServices.getCurrentUser();
+        currentUser.value = Client.fromJson(map);
+
         appointmentsEmployee.bindStream(FirebaseServices.employeeStrem());
+        notifications
+            .bindStream(FirebaseServices.getUnreadNotficationsStream());
         events.bindStream(FirebaseServices.eventStream());
-        var data = await FirebaseServices.getAppointments();
-        data.forEach((element) {
-          appointments.add(element);
-        });
 
         isInitialized.value = true;
         LocalData.setIsLogedIn(true);
         var treatments =
             await FirebaseServices.getData(collection: 'treatments');
-
+        var data = await FirebaseServices.getAppointments(
+            isAdmin: currentUser.value.isAdmin!);
+        appointments.value = data;
         appointments.forEach(
           (appointment) {
             for (int i = 0; i < treatments!.length; i++) {
@@ -62,8 +66,9 @@ class HomeScreenController extends GetxController {
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
+
     print('Ready called');
   }
 
@@ -159,6 +164,40 @@ class HomeScreenController extends GetxController {
         shoueldReload.value = true;
       }
     }
+  }
+
+  Future<void> onRefresh() async {
+    _uid = LoginController.instance.user?.uid ?? '';
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        var map = await FirebaseServices.getCurrentUser();
+        currentUser.value = Client.fromJson(map);
+
+        appointmentsEmployee.bindStream(FirebaseServices.employeeStrem());
+        notifications
+            .bindStream(FirebaseServices.getUnreadNotficationsStream());
+        events.bindStream(FirebaseServices.eventStream());
+
+        isInitialized.value = true;
+        LocalData.setIsLogedIn(true);
+        var treatments =
+            await FirebaseServices.getData(collection: 'treatments');
+
+        var data = await FirebaseServices.getAppointments(
+            isAdmin: currentUser.value.isAdmin!);
+        appointments.value = data;
+
+        appointments.forEach(
+          (appointment) {
+            for (int i = 0; i < treatments!.length; i++) {
+              if (appointment.serviceId![0] == treatments[i]['id']) {
+                services.add(Treatment.fromJson(treatments[i]));
+              }
+            }
+          },
+        );
+      },
+    );
   }
 }
 

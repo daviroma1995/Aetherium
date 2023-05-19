@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_controller.dart';
 import 'package:atherium_saloon_app/screens/events_screen/events_screen.dart';
 
 import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
@@ -11,6 +12,7 @@ import 'package:atherium_saloon_app/widgets/form_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 import '../../widgets/custom_appointment_widget.dart';
 import '../../widgets/custom_event_card_widget.dart';
@@ -23,8 +25,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
-      body: SafeArea(
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+        BottomNavigationController ctrl = Get.find();
+        ctrl.toggle.value = false;
+      },
+      child: SafeArea(
         child: Column(
           children: [
             Padding(
@@ -94,34 +101,43 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Positioned(
-                            right: 0,
-                            top: 0.0,
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 17.0,
-                              height: 17.0,
-                              decoration: BoxDecoration(
-                                  color: isDark
-                                      ? AppColors.SECONDARY_LIGHT
-                                      : AppColors.SECONDARY_COLOR,
-                                  borderRadius: BorderRadius.circular(110.0),
-                                  border: isDark
-                                      ? const Border()
-                                      : Border.all(
-                                          color: AppColors.WHITE_COLOR,
-                                          width: 1.1,
-                                        )),
-                              child: FittedBox(
-                                child: Text(
-                                  '3',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: isDark
-                                        ? AppColors.BACKGROUND_DARK
-                                        : AppColors.WHITE_COLOR,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 11.0,
+                          Obx(
+                            () => Visibility(
+                              visible: controller.notifications.isNotEmpty,
+                              child: Positioned(
+                                right: 0,
+                                top: 0.0,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 17.0,
+                                  height: 17.0,
+                                  decoration: BoxDecoration(
+                                      color: isDark
+                                          ? AppColors.SECONDARY_LIGHT
+                                          : AppColors.SECONDARY_COLOR,
+                                      borderRadius:
+                                          BorderRadius.circular(110.0),
+                                      border: isDark
+                                          ? const Border()
+                                          : Border.all(
+                                              color: AppColors.WHITE_COLOR,
+                                              width: 1.1,
+                                            )),
+                                  child: Obx(
+                                    () => FittedBox(
+                                      child: Text(
+                                        controller.notifications.length
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          color: isDark
+                                              ? AppColors.BACKGROUND_DARK
+                                              : AppColors.WHITE_COLOR,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 11.0,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -154,9 +170,10 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20.0),
             Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
+              child: LiquidPullToRefresh(
+                onRefresh: controller.onRefresh,
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 22.0, right: 22.0),
@@ -363,9 +380,10 @@ class HomeScreen extends StatelessWidget {
                       borderColor:
                           isDark ? AppColors.GREY_COLOR : AppColors.GREY_COLOR,
                       onTap: () async {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         final result = await Get.to(
                           () => EventsScreen(),
-                          duration: Duration(milliseconds: 600),
+                          duration: const Duration(milliseconds: 400),
                           transition: Transition.rightToLeft,
                           arguments: controller.events,
                         );

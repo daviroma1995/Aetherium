@@ -10,6 +10,7 @@ import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import '../../models/appointment.dart';
 import '../../models/client.dart';
 import '../../models/treatment.dart';
+import '../bottom_navigation_scren/bottom_navigation_controller.dart';
 
 class Event {
   Timestamp? timestamp;
@@ -39,15 +40,22 @@ class AgendaController extends GetxController {
   var currentUser = Client().obs;
   var events = <DateTime, List<Map<String, dynamic>>>{};
   var selectedDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+          .obs;
   RxBool reload = false.obs;
   @override
   void onInit() async {
     await loadData();
+    BottomNavigationController controller = Get.find();
+    controller.toggle.value = false;
     super.onInit();
   }
 
   Future<void> loadData() async {
+    day = DateFormat('EEEE').format(DateTime.now()).obs;
+    date = DateFormat('dd/MM/yyyy').format(DateTime.now()).obs;
+
+    RxBool isMonthView = false.obs;
     appointments.value = [];
     allAppointments.value = [];
     appointmentsCounter.value = <Event>[
@@ -68,18 +76,19 @@ class AgendaController extends GetxController {
     var user = await FirebaseServices.getDataWhere(
         collection: 'clients',
         key: 'user_id',
-        value: LoginController.instance.user.uid);
-    currentUser.value = Client.fromJson(user!);
+        value: LoginController.instance.user?.uid ?? '');
+    currentUser.value = Client.fromJson(user ?? {});
     var employeesData = await FirebaseServices.getData(collection: 'employees');
     var treatments = await FirebaseServices.getData(collection: 'treatments');
-    treatments!.forEach((element) {
+    treatments?.forEach((element) {
       allTreatments.add(Treatment.fromJson(element));
     });
-    var allAppoints =
-        await FirebaseServices.getAgendasAll(currentUser.value.isAdmin!);
+    var allAppoints = await FirebaseServices.getAgendasAll(
+        currentUser.value.isAdmin ?? false);
     allAppointments.value = allAppoints;
     var data = await FirebaseServices.getAgendas(
-        Timestamp.fromDate(selectedDate), currentUser.value.isAdmin!);
+        Timestamp.fromDate(selectedDate.value),
+        currentUser.value.isAdmin ?? false);
 
     appointments.value = data;
     for (var agenda in data) {
@@ -96,7 +105,7 @@ class AgendaController extends GetxController {
     for (var agenda in data) {
       if (agenda.serviceId != null) {
         if (agenda.serviceId!.isNotEmpty) {
-          for (int i = 0; i < treatments.length; i++) {
+          for (int i = 0; i < treatments!.length; i++) {
             if (agenda.serviceId![0] == treatments[i]['id']) {
               treatmentsData.add(Treatment.fromJson(treatments[i]));
             }
@@ -105,10 +114,6 @@ class AgendaController extends GetxController {
       }
     }
     for (int i = 0; i < allAppointments.length; i++) {
-      // if (i == 0) {
-      //   appointmentsCounter.add(
-      //       Event(counter: 1, timestamp: allAppointments[i].dateTimestamp));
-      // } else {
       for (int j = 0; j < appointmentsCounter.length; j++) {
         if (i == 0) {
           appointmentsCounter.value = [
@@ -124,17 +129,6 @@ class AgendaController extends GetxController {
           break;
         }
       }
-      //}
-
-      // appointmentsCounter.forEach((element) {
-      //   if (element.timestamp!.seconds ==
-      //       allAppointments[i].dateTimestamp!.seconds) {
-      //     element.counter += 1;
-      //   } else {
-      //     appointmentsCounter.add(
-      //         Event(counter: 1, timestamp: allAppointments[i].dateTimestamp));
-      //   }
-      // });
     }
     appointmentsCounter.forEach((element) {
       events.addAll({
