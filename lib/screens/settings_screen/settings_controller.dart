@@ -1,15 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../utils/constants.dart';
+import 'package:http/http.dart' as http;
 
 class SettingsController extends GetxController {
   void handleBack() {
     Get.back();
   }
 
-  navigationHandle(int index) {
-    print(index);
+  navigationHandle(int index) async {
+    if (index == 1) {}
   }
 }
 
@@ -27,6 +31,5 @@ List<SettingItem> settingsItems = const [
       title: AppLanguages.NOTIFICATION_SETTINGS, iconUrl: AppAssets.BELL_ICON),
   SettingItem(
       title: AppLanguages.TERMS_OF_SERVICE, iconUrl: AppAssets.FILE_MINUS),
-  SettingItem(title: AppLanguages.TERMS_OF_USE, iconUrl: AppAssets.ARCHIVE),
   SettingItem(title: AppLanguages.PRIVACY, iconUrl: AppAssets.LOCK),
 ];

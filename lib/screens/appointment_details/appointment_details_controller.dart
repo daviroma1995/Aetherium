@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:atherium_saloon_app/models/appointment.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
+import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,9 +16,9 @@ class AppointmentDetailsController extends GetxController {
   RxInt price = 0.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    allTreatments.bindStream(FirebaseServices.treatments());
+    allTreatments.bindStream(await FirebaseServices.treatments());
   }
 
   String totalPrice(List<String> service) {
@@ -28,7 +29,7 @@ class AppointmentDetailsController extends GetxController {
     allTreatments.forEach((element) {
       for (int i = 0; i < service.length; i++) {
         if (service[i] == element.id) {
-          totalPrice += double.parse(element.price!);
+          totalPrice += double.parse(element.price!.toString());
         }
       }
     });
@@ -48,7 +49,7 @@ class AppointmentDetailsController extends GetxController {
   String getTime(String id) {
     for (var treatment in allTreatments) {
       if (treatment.id == id) {
-        return treatment.duration!;
+        return treatment.duration!.toString();
       }
     }
     return '';
@@ -95,7 +96,7 @@ class AppointmentDetailsController extends GetxController {
 
   void onEdit(Appointment appointment) {
     Get.to(
-      () => ServicesScreen(),
+      () => ServicesScreen(uid: appointment.clientId),
       duration: const Duration(milliseconds: 700),
       curve: Curves.linear,
       transition: Transition.downToUp,

@@ -16,7 +16,8 @@ class BottomNavigationController extends GetxController {
   RxBool toggle = false.obs;
   RxInt bottom = 25.obs;
   RxDouble leftRight = (Get.width / 2 - 25).obs;
-
+  late AnimationController rightButtonController;
+  late AnimationController leftButtonController;
   @override
   void onInit() async {
     // TODO: implement onInit
@@ -24,7 +25,7 @@ class BottomNavigationController extends GetxController {
     var data = await FirebaseServices.getDataWhere(
         collection: 'clients',
         key: 'user_id',
-        value: LoginController.instance.user?.uid ?? '') ;
+        value: LoginController.instance.user?.uid ?? '');
     client.value = Client.fromJson(data!);
   }
 
@@ -49,5 +50,17 @@ class BottomNavigationController extends GetxController {
           duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
       currentIndex.value = index;
     }
+  }
+
+  void reverse() {
+    rightButtonController.reverse();
+    leftButtonController.reverse();
+    toggle.value = false;
+  }
+
+  void forward() {
+    rightButtonController.forward();
+    leftButtonController.forward();
+    toggle.value = true;
   }
 }

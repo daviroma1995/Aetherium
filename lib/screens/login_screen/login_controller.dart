@@ -38,8 +38,8 @@ class LoginController extends GetxController {
       SplashScreenController controller = Get.find();
       controller.navigate();
     } else {
-      Timer(Duration(milliseconds: 2000), () {
-        Get.offAll(() => BottomNavigationScreen());
+      Timer(const Duration(milliseconds: 2000), () {
+        Get.offAll(() => const BottomNavigationScreen());
       });
     }
   }

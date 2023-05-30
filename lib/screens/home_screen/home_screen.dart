@@ -8,6 +8,7 @@ import 'package:atherium_saloon_app/screens/notifications_screen/notifications_s
 
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/form_field_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -29,7 +30,7 @@ class HomeScreen extends StatelessWidget {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
         BottomNavigationController ctrl = Get.find();
-        ctrl.toggle.value = false;
+        ctrl.reverse();
       },
       child: SafeArea(
         child: Column(
@@ -216,82 +217,120 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     Obx(
-                      () => SizedBox(
-                        width: Get.width,
-                        height: 150,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 22.0, vertical: 20.0),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemExtent:
-                                MediaQuery.of(context).size.width * .231,
-                            itemCount: services
-                                .where((element) => element['service_title']
-                                    .toLowerCase()
-                                    .contains(controller.searchedService.value
-                                        .toLowerCase()))
-                                .toList()
-                                .length,
-                            itemBuilder: (context, index) {
-                              var filteredServices = services
-                                  .where((element) => element['service_title']
+                      () => Visibility(
+                        visible: controller.treatmentCategories.isEmpty,
+                        child: SizedBox(
+                          height: 150.0,
+                          width: Get.width,
+                          child:
+                              const Center(child: CircularProgressIndicator()),
+                        ),
+                      ),
+                    ),
+                    Obx(
+                      () => Visibility(
+                        visible: controller.treatmentCategories.isNotEmpty,
+                        child: SizedBox(
+                          width: Get.width,
+                          height: 150,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 22.0, vertical: 20.0),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemExtent:
+                                  MediaQuery.of(context).size.width * .231,
+                              itemCount: controller.treatmentCategories
+                                  .where((element) => element.name!
                                       .toLowerCase()
                                       .contains(controller.searchedService.value
                                           .toLowerCase()))
-                                  .toList()[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  controller.searchedService.value == ''
-                                      ? controller.serviceNavigation(index)
-                                      : controller.serviceNavigation(
-                                          services.indexWhere((element) =>
-                                              element['service_title'] ==
-                                              filteredServices[
-                                                  'service_title']));
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 60.0,
-                                      width: 60.0,
-                                      decoration: BoxDecoration(
-                                        border: !isDark
-                                            ? Border.all(
-                                                color: AppColors.BORDER_COLOR)
-                                            : const Border(),
-                                        borderRadius:
-                                            BorderRadius.circular(130.0),
-                                        color: !isDark
-                                            ? AppColors.WHITE_COLOR
-                                            : AppColors.PRIMARY_DARK,
+                                  .toList()
+                                  .length,
+                              itemBuilder: (context, index) {
+                                var filteredServices = controller
+                                    .treatmentCategories
+                                    .where((element) => element.name!
+                                        .toLowerCase()
+                                        .contains(controller
+                                            .searchedService.value
+                                            .toLowerCase()))
+                                    .toList()[index];
+                                return GestureDetector(
+                                  onTap: () {
+                                    controller.searchedService.value == ''
+                                        ? controller.serviceNavigation(index)
+                                        : controller.serviceNavigation(
+                                            controller.treatmentCategories
+                                                .indexWhere((element) =>
+                                                    element.name ==
+                                                    filteredServices.name));
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        height: 60.0,
+                                        width: 60.0,
+                                        decoration: BoxDecoration(
+                                          border: !isDark
+                                              ? Border.all(
+                                                  color: AppColors.BORDER_COLOR)
+                                              : const Border(),
+                                          borderRadius:
+                                              BorderRadius.circular(130.0),
+                                          color: !isDark
+                                              ? AppColors.WHITE_COLOR
+                                              : AppColors.PRIMARY_DARK,
+                                        ),
+                                        child: !isDark
+                                            ? ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      filteredServices.iconUrl!,
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  placeholder: (context, url) =>
+                                                      CircularProgressIndicator(),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(Icons.error),
+                                                ),
+                                              )
+                                            : SvgPicture.asset(
+                                                filteredServices.iconUrl!),
                                       ),
-                                      child: !isDark
-                                          ? SvgPicture.asset(
-                                              filteredServices['service_image'])
-                                          : SvgPicture.asset(
-                                              filteredServices['dark_image']),
-                                    ),
-                                    const SizedBox(height: 10.0),
-                                    Expanded(
-                                      child: Text(
-                                        filteredServices['service_title'],
-                                        textAlign: TextAlign.center,
-                                        maxLines: 2,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 12.0,
-                                          letterSpacing: .98,
+                                      const SizedBox(height: 10.0),
+                                      Expanded(
+                                        child: Text(
+                                          filteredServices.name!,
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 12.0,
+                                            letterSpacing: .98,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ),
@@ -317,54 +356,79 @@ class HomeScreen extends StatelessWidget {
                             onTap: controller.navigateToAppointments,
                           ),
                           const SizedBox(height: 20.0),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 22.0),
-                            child: Obx(
-                              () => controller.appointments.isNotEmpty &&
-                                      controller.services.isNotEmpty
-                                  ? SizedBox(
-                                      height: 103.0,
-                                      child: ListView.builder(
-                                        physics: const BouncingScrollPhysics(),
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount:
-                                            controller.appointments.length,
-                                        itemBuilder: (context, index) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              controller
-                                                  .navigateToAppointmentDetail(
-                                                      index);
+                          Obx(
+                            () => Visibility(
+                              visible: controller.isLoading.value == true,
+                              child: SizedBox(
+                                height: 103,
+                                width: Get.width,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Obx(
+                            () => Visibility(
+                              visible: controller.isLoading.value == false,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 22.0),
+                                child: Obx(
+                                  () => controller.appointments.isNotEmpty &&
+                                          controller.services.isNotEmpty
+                                      ? SizedBox(
+                                          height: 103.0,
+                                          child: ListView.builder(
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount:
+                                                controller.appointments.length,
+                                            itemBuilder: (context, index) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  controller
+                                                      .navigateToAppointmentDetail(
+                                                          index);
+                                                },
+                                                child:
+                                                    CustomAppointmentCardWidget(
+                                                  imageUrl:
+                                                      AppAssets.USER_IMAGE,
+                                                  title: controller
+                                                      .getEmployeeName(
+                                                          controller
+                                                              .appointments[
+                                                                  index]
+                                                              .employeeId![0]),
+                                                  subTitle: controller
+                                                      .getServices(controller
+                                                          .appointments[index]
+                                                          .serviceId![0]),
+                                                  date: controller
+                                                      .appointments[index]
+                                                      .dateString,
+                                                  time: controller
+                                                      .appointments[index]
+                                                      .time!,
+                                                ),
+                                              );
                                             },
-                                            child: CustomAppointmentCardWidget(
-                                              imageUrl: AppAssets.USER_IMAGE,
-                                              title: controller.getEmployeeName(
-                                                  controller.appointments[index]
-                                                      .employeeId![0]),
-                                              subTitle: controller.getServices(
-                                                  controller.appointments[index]
-                                                      .serviceId![0]),
-                                              date: controller
-                                                  .appointments[index]
-                                                  .dateString,
-                                              time: controller
-                                                  .appointments[index].time!,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    )
-                                  : Container(
-                                      alignment: Alignment.center,
-                                      height: 100.0,
-                                      // alignment: Alignment.center,
-                                      child: const Text(
-                                        'No appointments',
-                                        style: TextStyle(
-                                            fontSize: 20.0,
-                                            color: Colors.black),
-                                      ),
-                                    ),
+                                          ),
+                                        )
+                                      : Container(
+                                          alignment: Alignment.center,
+                                          height: 100.0,
+                                          // alignment: Alignment.center,
+                                          child: const Text(
+                                            'No appointments',
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                ),
+                              ),
                             ),
                           ),
                         ],

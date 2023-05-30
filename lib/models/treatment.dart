@@ -29,7 +29,6 @@ class Treatment {
     price = json['price'].toString();
     duration = json['duration'].toString();
     isLimited = json['isLimited'];
-    availableDays = json['availableDays'].cast<String>();
     isEmployeeRequired = json['isEmployeeRequired'];
   }
 
@@ -42,7 +41,6 @@ class Treatment {
     data['price'] = this.price;
     data['duration'] = this.duration;
     data['isLimited'] = this.isLimited;
-    data['availableDays'] = this.availableDays;
     data['isEmployeeRequired'] = this.isEmployeeRequired;
     return data;
   }

@@ -7,6 +7,7 @@ import 'package:atherium_saloon_app/models/treatment_category.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
 import '../models/client.dart';
@@ -495,6 +496,89 @@ class FirebaseServices {
         .doc(notificationId);
     notificationRef.update({
       'status': 'read',
+    });
+  }
+
+  static Future<List<Treatment>> getServicesBasedOnMembershipType(
+      String uid) async {
+    List<Treatment> services = <Treatment>[];
+    var clientDocSnapshot = await FirebaseFirestore.instance
+        .collection('client_memberships')
+        .doc(uid)
+        .get();
+    if (clientDocSnapshot.data() == null) {
+      var treatmentsQuerySnaps =
+          await FirebaseFirestore.instance.collection('treatments').get();
+      var treatmentsDocs = treatmentsQuerySnaps.docs;
+      for (var treatmentQuery in treatmentsDocs) {
+        Treatment treatment = Treatment.fromJson(treatmentQuery.data());
+        services.add(treatment);
+      }
+    } else {
+      var membershipDoc = clientDocSnapshot.data();
+      var membershipId = membershipDoc!['membership_type_id'];
+      var treatmentsQuerySnaps = await FirebaseFirestore.instance
+          .collection('treatments')
+          .where('membership_type_id', isEqualTo: membershipId)
+          .get();
+      var treatmentsDocs = treatmentsQuerySnaps.docs;
+      for (var treatmentQuery in treatmentsDocs) {
+        var data = treatmentQuery.data();
+        data['id'] = treatmentQuery.id;
+        Treatment treatment = Treatment.fromJson(data);
+        services.add(treatment);
+      }
+    }
+    return services;
+  }
+
+  static Future<List<TreatmentCategory>> getTreatmentCategories() async {
+    List<TreatmentCategory> treatmentCategories = <TreatmentCategory>[];
+    var query = await FirebaseFirestore.instance
+        .collection('treatment_categories')
+        .get();
+    var listDocs = query.docs;
+    for (var doc in listDocs) {
+      var docData = doc.data();
+      docData['id'] = doc.id;
+      var iconRef = docData['icon'];
+      try {
+        var ref = FirebaseStorage.instance.ref().child(iconRef);
+        var url = await ref.getDownloadURL();
+        docData['icon'] = url;
+      } catch (ex) {
+        log(ex.toString());
+      }
+      log(docData.toString());
+      treatmentCategories.add(TreatmentCategory.fromJson(docData));
+    }
+
+    return treatmentCategories;
+  }
+
+  static Future<Stream<List<Treatment>>> getTreatmentsFiltered(
+      String uid) async {
+    List<Treatment> services = <Treatment>[];
+    var clientDocSnapshot = await FirebaseFirestore.instance
+        .collection('client_memberships')
+        .doc(uid)
+        .get();
+
+    var membershipDoc = clientDocSnapshot.data();
+    var membershipId = membershipDoc!['membership_type_id'];
+
+    return FirebaseFirestore.instance
+        .collection('treatments')
+        .where('membership_type_id', isEqualTo: membershipId)
+        .snapshots()
+        .map((querySnapshot) {
+      List<Treatment> treatments = [];
+      querySnapshot.docs.forEach((documentQuery) {
+        var data = documentQuery.data();
+        data['id'] = documentQuery.id;
+        treatments.add(Treatment.fromJson(data));
+      });
+      return treatments;
     });
   }
 }

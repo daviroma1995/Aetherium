@@ -56,15 +56,12 @@ class AppointmentsCardWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(50.0),
             color: isDark ? AppColors.BACKGROUND_DARK : AppColors.PRIMARY_COLOR,
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(50.0),
-            child: SvgPicture.asset(
-              AppAssets.CALANDER_ICON,
-              height: 24.0,
-              fit: BoxFit.contain,
-              colorFilter: const ColorFilter.mode(
-                  AppColors.WHITE_COLOR, BlendMode.srcIn),
-            ),
+          child: SvgPicture.asset(
+            AppAssets.CALANDER_ICON,
+            height: 24.0,
+            fit: BoxFit.contain,
+            colorFilter:
+                const ColorFilter.mode(AppColors.WHITE_COLOR, BlendMode.srcIn),
           ),
         ),
         title: Row(

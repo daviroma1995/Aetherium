@@ -1,9 +1,14 @@
+import 'dart:developer';
+
+import 'package:atherium_saloon_app/models/treatment_category.dart';
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/screens/appointments_screen/appointments_screen.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:atherium_saloon_app/utils/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,6 +23,7 @@ import '../event_details/event_details_screen.dart';
 import '../../models/notification.dart' as notification;
 
 class HomeScreenController extends GetxController {
+  RxBool isLoading = true.obs;
   RxInt searchServicesLength = 0.obs;
   RxBool isVisible = true.obs;
   RxBool isInitialized = false.obs;
@@ -29,11 +35,15 @@ class HomeScreenController extends GetxController {
   var appointmentsEmployee = <Employee>[].obs;
   var notifications = <notification.Notification>[].obs;
   var services = <Treatment>[].obs;
+  var treatmentCategories = <TreatmentCategory>[].obs;
   var searchedService = "".obs;
 
   @override
   void onInit() async {
-    _uid = LoginController.instance.user?.uid ?? '';
+    isLoading.value = true;
+    _uid = LoginController.instance.auth.currentUser!.uid;
+    treatmentCategories.value = await FirebaseServices.getTreatmentCategories();
+    log(treatmentCategories.toString());
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
         var map = await FirebaseServices.getCurrentUser();
@@ -62,6 +72,7 @@ class HomeScreenController extends GetxController {
         );
       },
     );
+    isLoading.value = false;
     super.onInit();
   }
 
@@ -145,7 +156,7 @@ class HomeScreenController extends GetxController {
         arguments: index,
         duration: const Duration(milliseconds: 600),
         curve: Curves.easeInCubic,
-        transition: Transition.circularReveal);
+        transition: Transition.downToUp);
   }
 
   void eventNavigation(int index) async {

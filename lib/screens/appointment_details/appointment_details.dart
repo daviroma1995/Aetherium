@@ -120,7 +120,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                 const SizedBox(height: 10.0),
                                 TextRowWidget(
                                   textOne: appointment.dateString,
-                                  textTwo: appointment.time!,
+                                  textTwo: appointment.time ?? '',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14.0,
@@ -191,17 +191,20 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                                           MainAxisAlignment
                                                               .spaceBetween,
                                                       children: [
-                                                        Text(
-                                                          '${controller.getName(appointment.serviceId![index])} - ${controller.getTime(appointment.serviceId![index])} Min',
-                                                          style: TextStyle(
-                                                            fontSize: 14.0,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color: isDark
-                                                                ? AppColors
-                                                                    .GREY_COLOR
-                                                                : AppColors
-                                                                    .BLACK_COLOR,
+                                                        Expanded(
+                                                          child: Text(
+                                                            '${controller.getName(appointment.serviceId![index])} - ${controller.getTime(appointment.serviceId![index])} Min',
+                                                            style: TextStyle(
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color: isDark
+                                                                  ? AppColors
+                                                                      .GREY_COLOR
+                                                                  : AppColors
+                                                                      .BLACK_COLOR,
+                                                            ),
                                                           ),
                                                         ),
                                                         Text(

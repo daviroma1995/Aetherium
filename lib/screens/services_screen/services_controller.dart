@@ -15,6 +15,7 @@ import '../appointment_booking_screen/appointment_booking_screen.dart';
 
 class ServicesController extends GetxController {
   // late int args;
+  ServicesController({this.uid, this.clientEmail, this.number});
   var args = Get.arguments;
   var services = <TreatmentCategory>[].obs;
   var subServices = <Treatment>[].obs;
@@ -24,20 +25,23 @@ class ServicesController extends GetxController {
   RxString searchedValue = ''.obs;
   var client = Client().obs;
   var list = <String>[];
+  var checkedServices = <Treatment>[].obs;
   String? uid;
   String? clientEmail;
   String? number;
+  int duration = 0;
   // On Init
   @override
   void onInit() async {
-    super.onInit();
-    print(args);
+    var _uid = uid ?? LoginController.instance.auth.currentUser!.uid;
     services.bindStream(FirebaseServices.treatmentsCategory());
-    subServices.bindStream(FirebaseServices.treatments());
+    subServices.bindStream(await FirebaseServices.getTreatmentsFiltered(_uid));
     client.bindStream(FirebaseServices.currentUserStream());
-    Timer(Duration(milliseconds: 500), () {
+
+    Timer(const Duration(milliseconds: 500), () {
       updateScreen();
     });
+    super.onInit();
   }
 
   void updateScreen() async {
@@ -60,7 +64,7 @@ class ServicesController extends GetxController {
     var titles = <String>[];
     items.forEach((element) {
       if (services[index].id == element.treatmentCategoryId) {
-        titles.add(element.price!);
+        titles.add(element.price!.toString());
       }
     });
     return titles;
@@ -70,7 +74,7 @@ class ServicesController extends GetxController {
     var titles = <String>[];
     items.forEach((element) {
       if (services[index].id == element.treatmentCategoryId) {
-        titles.add(element.duration!);
+        titles.add(element.duration!.toString());
       }
     });
     return titles;
@@ -98,30 +102,32 @@ class ServicesController extends GetxController {
     if (args == null) {
       return;
     } else {
-      for (var serviceId in args.serviceId) {
-        for (var subservice in subServices) {
-          if (serviceId == subservice.id) {
-            treatmentCategoryId.add(subservice.treatmentCategoryId);
-            selectedServices.value.add(subservice.name!);
+      try {
+        for (var serviceId in args.serviceId) {
+          for (var subservice in subServices) {
+            if (serviceId == subservice.id) {
+              treatmentCategoryId.add(subservice.treatmentCategoryId);
+              selectedServices.value.add(subservice.name!);
+            }
           }
         }
-      }
-      for (var treatementId in treatmentCategoryId) {
-        for (var service in services) {
-          if (service.id == treatementId) {
-            service.isExtended.value = true;
+        for (var treatementId in treatmentCategoryId) {
+          for (var service in services) {
+            if (service.id == treatementId) {
+              service.isExtended.value = true;
 
-            for (int serviceIndex = 0;
-                serviceIndex < treatmentCategoryId.length;
-                serviceIndex++) {
-              final prevService = services[serviceIndex];
-              final index =
-                  services.indexWhere((element) => element.id == treatementId);
-              final currentService = services[index];
-              final temp = prevService;
-              services[serviceIndex] = currentService;
-              services[serviceIndex].isExtended.value = true;
-              services[index] = temp;
+              for (int serviceIndex = 0;
+                  serviceIndex < treatmentCategoryId.length;
+                  serviceIndex++) {
+                final prevService = services[serviceIndex];
+                final index = services
+                    .indexWhere((element) => element.id == treatementId);
+                final currentService = services[index];
+                final temp = prevService;
+                services[serviceIndex] = currentService;
+                services[serviceIndex].isExtended.value = true;
+                services[index] = temp;
+              }
             }
           }
         }
@@ -135,6 +141,16 @@ class ServicesController extends GetxController {
       //   services[args!] = temp;
       //   reset();
       // }
+      catch (ex) {
+        log(ex.toString());
+        var past = services[args];
+        past.isExtended.value = true;
+        var newData = services[0];
+        var temp = newData;
+        services[0] = past;
+        services[args] = temp;
+        args = null;
+      }
     }
   }
 
@@ -184,16 +200,6 @@ class ServicesController extends GetxController {
   }
 
   void selectedServiceController(int serviceIndex, int subServiceIndex) async {
-    // if (selectedServices
-    //     .where((element) =>
-    //         element.title ==
-    //         (services[serviceIndex].items[subServiceIndex].title))
-    //     .isEmpty) {
-    //   selectedServices.add(services[serviceIndex].items[subServiceIndex]);
-    // } else {
-    //   selectedServices.removeWhere((element) =>
-    //       element.title == services[serviceIndex].items[subServiceIndex].title);
-    // }
     print(serviceIndex);
     print(subServiceIndex);
     var listOfSubServices = subServices
@@ -202,33 +208,22 @@ class ServicesController extends GetxController {
         .toList();
     if (list.isEmpty) {
       list.add(listOfSubServices[subServiceIndex].id!);
+
+      duration += int.parse(listOfSubServices[subServiceIndex].duration!);
+      print(checkedServices);
     } else {
       if (list.contains(listOfSubServices[subServiceIndex].id!)) {
         list.removeWhere(
             (element) => element == listOfSubServices[subServiceIndex].id!);
+
+        duration -= int.parse(listOfSubServices[subServiceIndex].duration!);
+        print(checkedServices);
       } else {
         list.add(listOfSubServices[subServiceIndex].id!);
+        duration += int.parse(listOfSubServices[subServiceIndex].duration!);
+        print(checkedServices);
       }
     }
-    // selectedServices.forEach((service) {
-    //   subServices.forEach((subService) {
-    //     if (subService.name == service) {
-    //       list.isEmpty
-    //           ? list.add(subService.id!)
-    //           : {
-    //               list.forEach((id) {
-    //                 if (id == subService.id) {
-    //                   log('Equal');
-    //                   list.removeWhere((element) => element == subService.id);
-    //                 } else {
-    //                   list.add(subService.id!);
-    //                 }
-
-    //               })
-    //             };
-    //     }
-    //   });
-    // });
 
     if (args != null) {
       list = args.serviceId;
@@ -251,6 +246,7 @@ class ServicesController extends GetxController {
       appointment.email = clientEmail ?? client.value.email;
       appointment.number = number ?? client.value.phoneNumber;
       appointment.employeeId = ['8f1cYZExVjeOo2sBDmQC'];
+      appointment.duration = duration;
     }
   }
 

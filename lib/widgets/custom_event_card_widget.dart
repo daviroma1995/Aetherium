@@ -74,6 +74,7 @@ class _CustomEventCardWidgetState extends State<CustomEventCardWidget> {
                     const SizedBox(height: 6.0),
                     Text(
                       widget.subTitle,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 13.0,
                         fontWeight: FontWeight.w500,
@@ -134,22 +135,22 @@ class _CustomEventCardWidgetState extends State<CustomEventCardWidget> {
               ),
             ),
           ),
-          Positioned(
-            top: 9.0,
-            right: 10.0,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  widget.isFavorite = !widget.isFavorite;
-                });
-                widget.onIconTap();
-              },
-              child: Icon(
-                widget.isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: AppColors.WHITE_COLOR,
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: 9.0,
+          //   right: 10.0,
+          //   child: GestureDetector(
+          //     onTap: () {
+          //       setState(() {
+          //         widget.isFavorite = !widget.isFavorite;
+          //       });
+          //       widget.onIconTap();
+          //     },
+          //     child: Icon(
+          //       widget.isFavorite ? Icons.favorite : Icons.favorite_border,
+          //       color: AppColors.WHITE_COLOR,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

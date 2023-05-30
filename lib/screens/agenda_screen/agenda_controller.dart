@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -54,7 +56,9 @@ class AgendaController extends GetxController {
   Future<void> loadData() async {
     day = DateFormat('EEEE').format(DateTime.now()).obs;
     date = DateFormat('dd/MM/yyyy').format(DateTime.now()).obs;
-
+    selectedDate.value =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    print(selectedDate.value);
     RxBool isMonthView = false.obs;
     appointments.value = [];
     allAppointments.value = [];
@@ -69,8 +73,7 @@ class AgendaController extends GetxController {
     treatmentsData.value = [];
     allTreatments.value = [];
     employees.value = [];
-    employees.value = [];
-    employees.value = [];
+
     events = {};
 
     var user = await FirebaseServices.getDataWhere(
@@ -89,7 +92,6 @@ class AgendaController extends GetxController {
     var data = await FirebaseServices.getAgendas(
         Timestamp.fromDate(selectedDate.value),
         currentUser.value.isAdmin ?? false);
-
     appointments.value = data;
     for (var agenda in data) {
       if (agenda.employeeId != null) {
@@ -233,7 +235,7 @@ class AgendaController extends GetxController {
     } else {
       endTime = '$starthour:${startMint == 0 ? '00' : startMint}';
     }
-    time = '$duration Mints';
+    time = '$duration Min';
 
     // time = '$hours: Hours $minutes Mints';
     return [time, endTime];

@@ -23,27 +23,16 @@ class AgendaScreen extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Obx(
-              () => controller.reload.value
-                  ? Calendar(
-                      events: controller.events,
-                      hideArrows: true,
-                      hideTodayIcon: true,
-                      initialDate: DateTime.now(),
-                      onDateSelected: (value) {
-                        controller.onDateChange(value);
-                      },
-                    )
-                  : Calendar(
-                      events: controller.events,
-                      hideArrows: true,
-                      hideTodayIcon: true,
-                      initialDate: DateTime.now(),
-                      onDateSelected: (value) {
-                        controller.onDateChange(value);
-                      },
-                    ),
-            ),
+            child: Obx(() => Calendar(
+                  events: controller.events,
+                  hideArrows: true,
+                  hideTodayIcon: true,
+                  initialDate: controller.selectedDate.value,
+                  onDateSelected: (value) {
+                    controller.selectedDate.value = value;
+                    controller.onDateChange(value);
+                  },
+                )),
           ),
           const SizedBox(height: 13.0),
           Expanded(
@@ -67,7 +56,7 @@ class AgendaScreen extends StatelessWidget {
                   ),
                 ),
                 child: LiquidPullToRefresh(
-                  onRefresh: controller.loadData,
+                  onRefresh: () async => await controller.loadData(),
                   child: ListView(
                     shrinkWrap: true,
                     // physics: const BouncingScrollPhysics(),
@@ -127,8 +116,13 @@ class AgendaScreen extends StatelessWidget {
                                         userImageUrl: AppAssets.CALANDER_ICON,
                                         userName:
                                             controller.employees[index].name!,
-                                        service: controller
-                                            .treatmentsData[index].name!,
+                                        service:
+                                            controller.treatmentsData.isNotEmpty
+                                                ? controller
+                                                        .treatmentsData[index]
+                                                        .name ??
+                                                    ''
+                                                : '',
                                         agendaColor: AppColors.SECONDARY_LIGHT,
                                         agendaBarsColor:
                                             AppColors.SECONDARY_LIGHT,
@@ -137,7 +131,44 @@ class AgendaScreen extends StatelessWidget {
                                   );
                                 },
                               )
-                            : Container(),
+                            : SizedBox(
+                                width: Get.width,
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SizedBox(height: Get.height * .05),
+                                      SvgPicture.asset(
+                                          AppAssets.CALENDER_ICON_LIGHT),
+                                      const SizedBox(height: 35.0),
+                                      const Text(
+                                        'Nessun appuntamento',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.BLACK_COLOR,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10.0),
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 22.0),
+                                        child: Text(
+                                          AppLanguages.EMPTY_AGENDA_MESSAGE,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14.0,
+                                            color: AppColors.GREY_COLOR,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                       ),
                     ],
                   ),
@@ -238,10 +269,10 @@ class AgendaCustomCardWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 5.0),
-                  FittedBox(
-                    fit: BoxFit.contain,
+                  Expanded(
                     child: Text(
                       duration,
+                      overflow: TextOverflow.ellipsis,
                       style:
                           Theme.of(context).textTheme.headlineMedium!.copyWith(
                                 fontSize: 12.0,

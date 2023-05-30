@@ -56,6 +56,7 @@ class _CalendarTileState extends State<CalendarTile> {
         children: [
           Expanded(
             child: Container(
+              alignment: Alignment.center,
               padding: const EdgeInsets.only(top: 12.0),
               decoration: BoxDecoration(
                   color: widget.isSelected &&
@@ -155,7 +156,7 @@ class _CalendarTileState extends State<CalendarTile> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 5.0),
+                // const SizedBox(height: 5.0),
                 widget.events != null && widget.events!.isNotEmpty
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -163,8 +164,8 @@ class _CalendarTileState extends State<CalendarTile> {
                           eventCount++;
                           if (eventCount > 3) return Container();
                           return Container(
-                            margin: const EdgeInsets.only(
-                                left: 2.0, right: 2.0, top: 2.0),
+                            margin:
+                                const EdgeInsets.only(left: 2.0, right: 2.0),
                             width: 8.0,
                             height: 8.0,
                             decoration: BoxDecoration(

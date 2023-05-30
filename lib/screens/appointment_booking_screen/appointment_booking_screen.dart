@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:atherium_saloon_app/models/timeslot.dart';
 import 'package:atherium_saloon_app/widgets/form_field_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,10 @@ import 'package:get/get.dart';
 import 'package:atherium_saloon_app/screens/appointment_booking_screen/appointment_booking_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/button_widget.dart';
+import 'package:intl/intl.dart';
 
 import '../../widgets/clean_calendar.dart';
+import '../../widgets/drop_down_item_widget.dart';
 
 class AppointmentBookingScreen extends StatelessWidget {
   final controller = Get.put(AppointMentBookingController());
@@ -79,10 +82,26 @@ class AppointmentBookingScreen extends StatelessWidget {
                                   0,
                                   0,
                                   0),
-                          onDateSelected: (value) {
+                          onDateSelected: (value) async {
                             controller.args.dateTimestamp = Timestamp.fromDate(
                                 DateTime(value.year, value.month, value.day, 0,
                                     0, 0, 0, 0));
+                            controller.selectedDate.value =
+                                DateFormat("MM/dd/yyyy").format(DateTime(
+                                    value.year,
+                                    value.month,
+                                    value.day,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0));
+
+                            controller.args.date =
+                                controller.selectedDate.value;
+                            await controller.loadTimeslots(
+                                treatments: controller.selectedTreatmentsMap,
+                                appointmentDate: controller.selectedDate.value);
                             print(value);
                           },
                         ),
@@ -118,59 +137,95 @@ class AppointmentBookingScreen extends StatelessWidget {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 22.0),
-                              child: GridView.builder(
-                                gridDelegate:
-                                    const SliverGridDelegateWithMaxCrossAxisExtent(
-                                        mainAxisExtent: 37.0,
-                                        maxCrossAxisExtent: 110.0,
-                                        crossAxisSpacing: 12.0,
-                                        mainAxisSpacing: 7.0),
-                                itemCount: avaliableSlots.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return Obx(
-                                    () => InkWell(
-                                      onTap: () => controller.selectSlot(index),
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: controller.selectedSlot ==
-                                                  index
-                                              ? AppColors.SECONDARY_LIGHT
-                                              : isDark
-                                                  ? AppColors.BACKGROUND_DARK
-                                                  : AppColors.BACKGROUND_COLOR,
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          border:
-                                              controller.selectedSlot != index
-                                                  ? isDark
-                                                      ? const Border()
-                                                      : Border.all(
-                                                          color: AppColors
-                                                              .SECONDARY_LIGHT,
-                                                        )
-                                                  : Border(),
-                                        ),
-                                        child: Text(
-                                          avaliableSlots[index],
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w500,
-                                            color: controller.selectedSlot ==
-                                                    index
-                                                ? isDark
-                                                    ? AppColors.BACKGROUND_DARK
-                                                    : AppColors.BLACK_COLOR
-                                                : isDark
-                                                    ? AppColors.WHITE_COLOR
-                                                    : AppColors.BLACK_COLOR,
-                                          ),
-                                        ),
+                              child: Obx(
+                                () => controller.isLoading.value == true
+                                    ? SizedBox(
+                                        width: Get.width,
+                                        child: const Center(
+                                            child: CircularProgressIndicator()))
+                                    : GridView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                                                mainAxisExtent: 37.0,
+                                                maxCrossAxisExtent: 110.0,
+                                                crossAxisSpacing: 12.0,
+                                                mainAxisSpacing: 7.0),
+                                        itemCount:
+                                            controller.avaliableSlots.length,
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) {
+                                          return Obx(
+                                            () => InkWell(
+                                              onTap: () {
+                                                controller.selectSlot(index);
+                                                var startTime = controller
+                                                    .slotdata[index].startTime;
+                                                var endTime = controller
+                                                    .slotdata[index].endTime;
+                                                var roomIdList = controller
+                                                    .slotdata[index].roomIdList;
+                                                controller.args.roomId =
+                                                    roomIdList;
+                                                controller.args.startTime =
+                                                    startTime;
+                                                controller.args.endTime =
+                                                    endTime;
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: controller
+                                                              .selectedSlot ==
+                                                          index
+                                                      ? AppColors
+                                                          .SECONDARY_LIGHT
+                                                      : isDark
+                                                          ? AppColors
+                                                              .BACKGROUND_DARK
+                                                          : AppColors
+                                                              .BACKGROUND_COLOR,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                  border:
+                                                      controller.selectedSlot !=
+                                                              index
+                                                          ? isDark
+                                                              ? const Border()
+                                                              : Border.all(
+                                                                  color: AppColors
+                                                                      .SECONDARY_LIGHT,
+                                                                )
+                                                          : Border(),
+                                                ),
+                                                child: Text(
+                                                  controller
+                                                      .avaliableSlots[index],
+                                                  style: TextStyle(
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: controller
+                                                                .selectedSlot ==
+                                                            index
+                                                        ? isDark
+                                                            ? AppColors
+                                                                .BACKGROUND_DARK
+                                                            : AppColors
+                                                                .BLACK_COLOR
+                                                        : isDark
+                                                            ? AppColors
+                                                                .WHITE_COLOR
+                                                            : AppColors
+                                                                .BLACK_COLOR,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                    ),
-                                  );
-                                },
                               ),
                             ),
                           ],
@@ -217,6 +272,20 @@ class AppointmentBookingScreen extends StatelessWidget {
                                   },
                                 )
                               ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20.0),
+                      Obx(
+                        () => Visibility(
+                          visible: controller.isAdmin.value,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: DropDownItemsWidget(
+                              options: ['Confermato'],
+                              onTap: (selected) {},
                             ),
                           ),
                         ),

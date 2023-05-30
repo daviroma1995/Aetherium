@@ -84,21 +84,21 @@ class EventDetailsScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Positioned(
-                              top: 9.0,
-                              right: 11.0,
-                              child: Obx(
-                                () => GestureDetector(
-                                  onTap: controller.setFavorite,
-                                  child: Icon(
-                                    controller.isfavorite.value
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: AppColors.WHITE_COLOR,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // Positioned(
+                            //   top: 9.0,
+                            //   right: 11.0,
+                            //   child: Obx(
+                            //     () => GestureDetector(
+                            //       onTap: controller.setFavorite,
+                            //       child: Icon(
+                            //         controller.isfavorite.value
+                            //             ? Icons.favorite
+                            //             : Icons.favorite_border,
+                            //         color: AppColors.WHITE_COLOR,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                         const SizedBox(height: 20.0),

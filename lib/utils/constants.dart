@@ -2,6 +2,30 @@
 
 import 'package:flutter/material.dart';
 
+import '../models/language_model.dart';
+
+class AppConstants {
+  // Localiztion data
+
+  static const String countryCode = 'country_code';
+  static const String languageCode = 'language_code';
+
+  static List<LanguageModel> languages = [
+    LanguageModel(
+      imageUrl: 'en_img',
+      languageName: 'English',
+      languageCode: 'en',
+      countryCode: 'US',
+    ),
+    LanguageModel(
+      imageUrl: 'pk_img',
+      languageName: 'Urdu',
+      languageCode: 'ur',
+      countryCode: 'Pk',
+    )
+  ];
+}
+
 class AppColors {
   static const PRIMARY_COLOR = Color(0XFF43231B);
   static const SECONDARY_COLOR = Color(0XFFA08960);
@@ -197,6 +221,8 @@ class AppLanguages {
   static const APPOINTMENTS = 'Appointments';
   static const APPOINTMENT_DESCRIPTION =
       'Discover and book beauty & wellness professionals near you. Your scheduled appointments will show up here.';
+  static const EMPTY_AGENDA_MESSAGE =
+      'Clicca sul bottone in basso a destra pereffettuare una nuova prenotazione. Per qualsiasi dubbio o domanda, contattaci pure tramite mail o WhatsApp, puoi trovare tutte le informazioni nella sezione contatti, andando sul tuo profilo utente.';
   static const SERVICES_TREATMENTS = 'Services/Treatments';
   static const CHOOSE_DATE_AND_TIME = 'Choose Date & Time';
   static const AVAILABLE_SLOT = 'Available Slot';

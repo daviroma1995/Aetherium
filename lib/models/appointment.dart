@@ -8,23 +8,30 @@ class Appointment {
   String? number;
   String? email;
   String? notes;
+  String? startTime;
+  String? endTime;
   List<String>? employeeId;
   List<String>? serviceId;
   String? clientId;
   String? statusId;
   Timestamp? dateTimestamp;
+  List<String>? roomId;
+  int? duration;
   Appointment({
     this.id,
     this.date,
-    this.time,
     this.number,
     this.email,
     this.notes,
     this.employeeId,
     this.serviceId,
     this.clientId,
+    this.roomId,
     this.statusId,
     this.dateTimestamp,
+    this.startTime,
+    this.endTime,
+    this.duration,
   });
 
   Appointment.fromJson(Map<String, dynamic> json) {
@@ -35,10 +42,14 @@ class Appointment {
     email = json['email'];
     notes = json['notes'];
     employeeId = json['employee_id_list'].cast<String>();
-    serviceId = json['service_id_list'].cast<String>();
+    serviceId = json['treatment_id_list'].cast<String>();
+    roomId = json['room_id_list'].cast<String>();
     clientId = json['client_id'];
     statusId = json['status_id'];
     dateTimestamp = json['date_timestamp'];
+    startTime = json['start_time'];
+    endTime = json['end_time'];
+    duration = json['total_duration'];
   }
 
   Map<String, dynamic> toJson() {
@@ -49,10 +60,14 @@ class Appointment {
     data['email'] = email;
     data['notes'] = notes;
     data['employee_id_list'] = employeeId;
-    data['service_id_list'] = serviceId;
+    data['treatment_id_list'] = serviceId;
     data['client_id'] = clientId;
     data['status_id'] = statusId;
     data['date_timestamp'] = dateTimestamp;
+    data['start_time'] = startTime;
+    data['end_time'] = endTime;
+    data['room_id_list'] = roomId;
+    data['total_duration'] = duration;
     return data;
   }
 

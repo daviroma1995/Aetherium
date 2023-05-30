@@ -184,17 +184,20 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                                           MainAxisAlignment
                                                               .spaceBetween,
                                                       children: [
-                                                        Text(
-                                                          '${services[index].name} - ${services[index].duration} Min',
-                                                          style: TextStyle(
-                                                            fontSize: 14.0,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color: isDark
-                                                                ? AppColors
-                                                                    .GREY_COLOR
-                                                                : AppColors
-                                                                    .BLACK_COLOR,
+                                                        Expanded(
+                                                          child: Text(
+                                                            '${services[index].name} - ${services[index].duration} Min',
+                                                            style: TextStyle(
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color: isDark
+                                                                  ? AppColors
+                                                                      .GREY_COLOR
+                                                                  : AppColors
+                                                                      .BLACK_COLOR,
+                                                            ),
                                                           ),
                                                         ),
                                                         Text(

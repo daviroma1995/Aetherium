@@ -36,7 +36,7 @@ class AppointmentConfirmDetailController extends GetxController {
   String getTime(String id) {
     for (var treatment in allTreatments) {
       if (treatment.id == id) {
-        return treatment.duration!;
+        return treatment.duration!.toString();
       }
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -91,7 +91,7 @@ class AppointmentConfirmDetailController extends GetxController {
   String getTotalPrice(List<Treatment> services) {
     double price = 0;
     services.forEach((service) {
-      price += double.parse(service.price!);
+      price += double.parse(service.price!.toString());
     });
     return price.toString();
   }

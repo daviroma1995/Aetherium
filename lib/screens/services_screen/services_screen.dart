@@ -11,8 +11,7 @@ import '../../widgets/custom_dropdown_list_widget.dart';
 import '../../widgets/form_field_widget.dart';
 
 class ServicesScreen extends StatelessWidget {
-  final controller = Get.put(ServicesController());
-  ServicesScreen({
+  const ServicesScreen({
     Key? key,
     this.uid,
     this.clientEmail,
@@ -23,6 +22,8 @@ class ServicesScreen extends StatelessWidget {
   final String? number;
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(
+        ServicesController(uid: uid, clientEmail: clientEmail, number: number));
     final isDark = Theme.of(context).brightness == Brightness.dark;
     controller.uid = uid;
     controller.clientEmail = clientEmail;
