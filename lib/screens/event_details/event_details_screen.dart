@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
+
 import 'package:atherium_saloon_app/screens/event_details/event_details_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 
@@ -6,7 +8,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../utils/map_utils.dart';
 import '../../widgets/text_row_widget.dart';
 
 class EventDetailsScreen extends StatelessWidget {
@@ -16,6 +20,26 @@ class EventDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final Completer<GoogleMapController> _controller =
+        Completer<GoogleMapController>();
+
+    CameraPosition _kGooglePlex = CameraPosition(
+      target: LatLng(controller.args.latitude, controller.args.longitude),
+      zoom: 20.0,
+    );
+
+    CameraPosition _kLake = CameraPosition(
+        bearing: 192.8334901395799,
+        target: LatLng(controller.args.latitude, controller.args.longitude),
+        tilt: 29.440717697143555,
+        zoom: 20.151926040649414);
+    Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+    LatLng _center = LatLng(45.52307386080499, 10.2587832779112);
+    Future<void> _goToTheLake() async {
+      final GoogleMapController controller = await _controller.future;
+      controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+    }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -207,7 +231,29 @@ class EventDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16.0),
-                        Image.asset(AppAssets.MAP_IMAGE),
+                        GestureDetector(
+                          onTap: () {
+                            print('hello');
+                          },
+                          child: SizedBox(
+                            height: 250.0,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: GoogleMap(
+                                onTap: (argument) {
+                                  MapUtils.openMap(
+                                      argument.latitude, argument.longitude);
+                                },
+                                initialCameraPosition: _kGooglePlex,
+                                mapType: MapType.hybrid,
+                                onMapCreated: (GoogleMapController controller) {
+                                  _controller.complete(controller);
+                                },
+                                markers: markers.values.toSet(),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

@@ -54,6 +54,7 @@ class PermissionUtils {
     if (/*!status.isGranted || status.isDenied || */ status
             .isPermanentlyDenied &&
         waitTime <= 1) {
+      // ignore: use_build_context_synchronously
       var result = await showOkCancelAlertDialog(
           context: context,
           title: "Permission Error",
@@ -67,7 +68,6 @@ class PermissionUtils {
       return false;
     }
 
-    print(permission.status);
     return status.isGranted;
   }
 }

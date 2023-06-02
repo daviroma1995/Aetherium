@@ -1,10 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:atherium_saloon_app/screens/service_detail_screen/service_detail_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../utils/constants.dart';
 
+// ignore: must_be_immutable
 class CustomDropDownListWidget extends StatefulWidget {
   final String imageUrl;
   final String title;
@@ -83,8 +84,25 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                             height: 50.0,
                             width: 50.0,
                             child: ClipRRect(
-                                borderRadius: BorderRadius.circular(50.0),
-                                child: Image.asset(widget.imageUrl)),
+                              borderRadius: BorderRadius.circular(50.0),
+                              child: CachedNetworkImage(
+                                imageUrl: widget.imageUrl,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                        colorFilter: const ColorFilter.mode(
+                                            Colors.red, BlendMode.colorBurn)),
+                                  ),
+                                ),
+                                placeholder: (context, url) =>
+                                    const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
+                            ),
                           ),
                           const SizedBox(width: 10.0),
                           Expanded(
@@ -162,7 +180,6 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                                       widget.serviceIndex, index);
                                 },
                               );
-                              print(widget.selectedItems);
                             },
                             child: Container(
                               margin: const EdgeInsets.only(right: 15.0),

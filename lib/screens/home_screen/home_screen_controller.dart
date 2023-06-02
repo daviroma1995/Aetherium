@@ -40,6 +40,11 @@ class HomeScreenController extends GetxController {
 
   @override
   void onInit() async {
+    await loadHomeScreen();
+    super.onInit();
+  }
+
+  Future<void> loadHomeScreen() async {
     isLoading.value = true;
     _uid = LoginController.instance.auth.currentUser!.uid;
     treatmentCategories.value = await FirebaseServices.getTreatmentCategories();
@@ -73,7 +78,6 @@ class HomeScreenController extends GetxController {
       },
     );
     isLoading.value = false;
-    super.onInit();
   }
 
   @override
@@ -83,14 +87,17 @@ class HomeScreenController extends GetxController {
     print('Ready called');
   }
 
-  void navigateToAppointmentDetail(int index) {
-    Get.to(
+  void navigateToAppointmentDetail(int index) async {
+    var data = await Get.to(
       () => AppointmentDetailsScreen(
           appointment: appointments[index], isEditable: true),
       duration: const Duration(milliseconds: 600),
       transition: Transition.rightToLeft,
       arguments: appointments[index].clientId,
     );
+    if (data == true) {
+      await loadHomeScreen();
+    }
   }
 
   final searchController = TextEditingController();

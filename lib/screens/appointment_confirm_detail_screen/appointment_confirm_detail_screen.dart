@@ -236,7 +236,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                           builder: (controller) {
                                             return Text(
                                               '${controller.getTotalPrice(services)} \$',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             );
                                           },

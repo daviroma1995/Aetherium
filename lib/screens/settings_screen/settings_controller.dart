@@ -1,19 +1,47 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
 
+import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
+import 'package:atherium_saloon_app/screens/pdf_view_screen/pdf_view_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
+import '../../models/policies.dart';
 import '../../utils/constants.dart';
-import 'package:http/http.dart' as http;
 
 class SettingsController extends GetxController {
+  var data = <Policies>[];
+  var urls = <String>[];
+  @override
+  void onInit() async {
+    var query = await FirebaseFirestore.instance.collection('policies').get();
+    var docs = query.docs;
+    for (var doc in docs) {
+      var documentData = doc.data();
+      var url =
+          await FirebaseServices.getDownloadUrl(documentData['file_path']);
+      data.add(Policies.fromJson(documentData));
+      urls.add(url);
+    }
+
+    super.onInit();
+  }
+
   void handleBack() {
     Get.back();
   }
 
   navigationHandle(int index) async {
-    if (index == 1) {}
+    if (index == 1) {
+      Get.to(() => PdfViewScreen(
+            path: urls[0],
+            title: data[0].name!,
+          ));
+    } else if (index == 2) {
+      Get.to(() => PdfViewScreen(
+            path: urls[1],
+            title: data[1].name!,
+          ));
+    }
   }
 }
 

@@ -1,6 +1,36 @@
+import 'package:atherium_saloon_app/models/client.dart';
+import 'package:atherium_saloon_app/models/membership.dart';
+import 'package:atherium_saloon_app/models/membership_type.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class LoyalityCardController extends GetxController {
+  RxBool isLoading = true.obs;
   String uid = LoginController.instance.auth.currentUser?.uid ?? '';
+  late Membership? clientMembership;
+  late MembershipType? membershipType;
+  late Client client;
+  @override
+  void onInit() async {
+    var clientQuery =
+        await FirebaseFirestore.instance.collection('clients').doc(uid).get();
+    var clientDoc = clientQuery.data();
+    client = Client.fromJson(clientDoc!);
+    var data = await FirebaseFirestore.instance
+        .collection('client_memberships')
+        .doc(uid)
+        .get();
+    var document = data.data();
+    document!['id'] = data.id;
+    clientMembership = Membership.fromJson(document);
+    isLoading.value = false;
+    var membershiptypeData = await FirebaseFirestore.instance
+        .collection('membership_type')
+        .doc(clientMembership!.membershipTypeId)
+        .get();
+    var membershipDocument = membershiptypeData.data();
+    membershipType = MembershipType.fromJson(membershipDocument!);
+    super.onInit();
+  }
 }

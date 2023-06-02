@@ -8,9 +8,11 @@ import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../models/appointment.dart';
+import '../../models/treatment.dart';
 
 class PastAppointmentController extends GetxController {
   var pastAppointments = <Appointment>[].obs;
@@ -18,12 +20,24 @@ class PastAppointmentController extends GetxController {
   var employees = <Employee>[].obs;
   var appointmentEmployees = <Employee>[].obs;
   var appointmentStatus = <AppointmentStatus>[].obs;
+  var services = <Treatment>[].obs;
   RxBool isInititalized = false.obs;
   @override
   void onInit() async {
     super.onInit();
+    await loadData();
+  }
+
+  Future<void> loadData() async {
+    pastAppointments = <Appointment>[].obs;
+    employees = <Employee>[].obs;
+    appointmentEmployees = <Employee>[].obs;
+    appointmentStatus = <AppointmentStatus>[].obs;
+    services = <Treatment>[].obs;
+    isInititalized.value = false;
     var data = await FirebaseServices.getFilteredAppointments(
         collection: 'appointments');
+    var treatments = await FirebaseServices.getData(collection: 'treatments');
     var employeeData = await FirebaseServices.getData(collection: 'employees');
     var statusData =
         await FirebaseServices.getData(collection: 'appointment_status');
@@ -98,6 +112,13 @@ class PastAppointmentController extends GetxController {
         }
       }
     });
+    for (var treatment in treatments!) {
+      for (var pastAppointment in pastAppointments) {
+        if (treatment['id'] == pastAppointment.serviceId![0]) {
+          services.add(Treatment.fromJson(treatment));
+        }
+      }
+    }
     isInititalized.value = true;
   }
 
@@ -124,55 +145,14 @@ class PastAppointmentController extends GetxController {
       duration: const Duration(milliseconds: 400),
     );
   }
+
+  Future<void> deleteAppointment(int id) async {
+    await FirebaseFirestore.instance
+        .collection('appointments')
+        .doc(pastAppointments[id].id)
+        .delete();
+    Fluttertoast.showToast(
+        msg: 'Appointment deleted Successfully',
+        backgroundColor: AppColors.GREEN_COLOR);
+  }
 }
-
-enum Status {
-  canceled,
-  archived,
-  noshow,
-  confirmed,
-}
-
-// class UserAppointmetn {
-//   final String imageUrl;
-//   final String title;
-//   final String subTitle;
-//   final Status status;
-//   final String date;
-//   final String time;
-//   final List<Treatment> services;
-//   UserAppointmetn({
-//     required this.imageUrl,
-//     required this.title,
-//     required this.subTitle,
-//     required this.status,
-//     required this.date,
-//     required this.time,
-//     required this.services,
-//   });
-//   Color get color {
-//     switch (status) {
-//       case (Status.archived):
-//         return AppColors.ARCHIVED_COLOR;
-//       case (Status.canceled):
-//         return AppColors.CANCELED_COLOR;
-//       case (Status.confirmed):
-//         return AppColors.CONFIRMED_COLOR;
-//       case (Status.noshow):
-//         return AppColors.GREY_COLOR;
-//     }
-//   }
-
-//   String get appointmentStatus {
-//     switch (status) {
-//       case (Status.archived):
-//         return 'Archived';
-//       case (Status.canceled):
-//         return 'Canceled';
-//       case (Status.confirmed):
-//         return 'Confirmed';
-//       case (Status.noshow):
-//         return 'No-Show';
-//     }
-//   }
-// }

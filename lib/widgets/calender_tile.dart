@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import "package:intl/intl.dart";
 
@@ -23,23 +21,24 @@ class CalendarTile extends StatefulWidget {
   final Color? eventDoneColor;
   final bool? isExpended;
   final bool? isSwapped;
-  CalendarTile({
+  const CalendarTile({
+    super.key,
     this.onDateSelected,
     this.date,
     this.child,
     this.dateStyles,
     this.dayOfWeek,
     this.dayOfWeekStyle,
-    this.isDayOfWeek: false,
-    this.isSelected: false,
-    this.inMonth: true,
+    this.isDayOfWeek = false,
+    this.isSelected = false,
+    this.inMonth = true,
     this.events,
     this.selectedColor,
     this.todayColor,
     this.eventColor,
     this.eventDoneColor,
-    this.isExpended: false,
-    this.isSwapped: false,
+    this.isExpended = false,
+    this.isSwapped = false,
   });
 
   @override
@@ -66,7 +65,7 @@ class _CalendarTileState extends State<CalendarTile> {
                           ? AppColors.SECONDARY_LIGHT
                           : AppColors.SECONDARY_COLOR
                       : Colors.transparent,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(25.0),
                       topRight: Radius.circular(25.0))),
               child: InkWell(
@@ -83,7 +82,7 @@ class _CalendarTileState extends State<CalendarTile> {
                               ? AppColors.SECONDARY_LIGHT
                               : AppColors.SECONDARY_COLOR
                           : Colors.transparent,
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(25.0),
                         topRight: Radius.circular(25.0),
                       )),
@@ -117,7 +116,7 @@ class _CalendarTileState extends State<CalendarTile> {
           widget.onDateSelected?.call(widget.date!);
         },
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(25.0),
             bottomRight: Radius.circular(25.0),
           ),
@@ -192,7 +191,7 @@ class _CalendarTileState extends State<CalendarTile> {
   @override
   Widget build(BuildContext context) {
     if (widget.child != null) {
-      return new InkWell(
+      return InkWell(
         child: widget.child,
         onTap: () => widget.onDateSelected?.call(widget.date!),
       );

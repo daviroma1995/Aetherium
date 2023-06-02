@@ -1,3 +1,4 @@
+import 'package:atherium_saloon_app/screens/appointments_screen/appointments_screen.dart';
 import 'package:atherium_saloon_app/screens/past_appointment_screen/past_appointment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -5,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../utils/constants.dart';
 import '../../widgets/appointments_card_widget.dart';
+import '../../widgets/button_widget.dart';
 
 class PastAppointmentScreen extends StatelessWidget {
   final controller = Get.put(PastAppointmentController());
@@ -66,10 +68,47 @@ class PastAppointmentScreen extends StatelessWidget {
                                       child: InkWell(
                                         onTap: () =>
                                             controller.goToDetails(index),
+                                        onLongPress: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                var yesButton = ButtonWidget(
+                                                    color:
+                                                        AppColors.ERROR_COLOR,
+                                                    width: 60,
+                                                    buttonText: 'Yes',
+                                                    onTap: () async {
+                                                      await controller
+                                                          .deleteAppointment(
+                                                              index);
+                                                      // ignore: use_build_context_synchronously
+                                                      Get.back();
+                                                      controller.loadData();
+                                                    });
+                                                var noButton = TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('No'),
+                                                );
+                                                return AlertDialog(
+                                                  alignment: Alignment.center,
+                                                  title: const Text(
+                                                      'Are you sure?'),
+                                                  content: const Text(
+                                                      'Appointment will be deleted permanently'),
+                                                  actions: [
+                                                    yesButton,
+                                                    noButton
+                                                  ],
+                                                );
+                                              });
+                                        },
                                         child: AppointmentsCardWidget(
                                           imageUrl: AppAssets.EVENT_IMAGE_ONE,
                                           title: controller.employees[0].name!,
-                                          subTitle: 'Fragrances & Perfumes',
+                                          subTitle:
+                                              controller.services[index].name!,
                                           color: controller.getColor(controller
                                               .appointmentStatus[index].label!),
                                           status: controller

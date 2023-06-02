@@ -34,6 +34,5 @@ class AppBarCustom extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
-  Size get preferredSize => Size(double.infinity, 50.0);
+  Size get preferredSize => const Size(double.infinity, 50.0);
 }

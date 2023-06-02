@@ -1,11 +1,16 @@
+import 'dart:developer';
+
 import 'package:atherium_saloon_app/models/membership.dart';
 import 'package:atherium_saloon_app/screens/client_details_screen/client_details_screen.dart';
+import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import '../../models/client.dart';
 import '../../models/membership_type.dart';
 
@@ -104,7 +109,9 @@ class SelectClientController extends GetxController {
           .toList();
       for (var membership in data) {
         for (var membershipType in tiers) {
-          if (membership.membershipTypeId == membershipType.id) {
+          if (membership.membershipTypeId == membershipType.id &&
+              membership.clientId !=
+                  LoginController.instance.auth.currentUser!.uid) {
             tier.add(membershipType);
           }
         }
@@ -146,5 +153,34 @@ class SelectClientController extends GetxController {
     } else {
       Fluttertoast.showToast(msg: 'Please select a client to continiue');
     }
+  }
+
+  Future<void> longPress(int id) async {
+    var uid = clients[id].userId;
+    var email = clients[id].email;
+    await FirebaseFirestore.instance
+        .collection('appointments')
+        .where('client_id', isEqualTo: uid)
+        .get()
+        .then((event) async {
+      for (var element in event.docs) {
+        await FirebaseFirestore.instance
+            .collection('appointments')
+            .doc(element.id)
+            .delete();
+      }
+    });
+    await FirebaseFirestore.instance.collection('clients').doc(uid).delete();
+    await FirebaseFirestore.instance
+        .collection('client_memberships')
+        .doc(uid)
+        .delete();
+    var client = http.Client();
+    var response = await client.post(
+        Uri.parse(
+            'https://us-central1-aetherium-salon.cloudfunctions.net/deleteUser'),
+        body: {"uid": uid});
+    var data = response.body;
+    log(data.toString());
   }
 }

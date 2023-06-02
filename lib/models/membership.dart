@@ -21,11 +21,15 @@ class Membership {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['start_date'] = this.startDate;
-    data['points'] = this.points;
-    data['client_id'] = this.clientId;
-    data['membership_type_id'] = this.membershipTypeId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['start_date'] = startDate;
+    data['points'] = points;
+    data['client_id'] = clientId;
+    data['membership_type_id'] = membershipTypeId;
     return data;
+  }
+
+  double get percentage {
+    return points! / 300;
   }
 }

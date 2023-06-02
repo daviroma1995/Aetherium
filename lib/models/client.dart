@@ -42,17 +42,17 @@ class Client {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['first_name'] = this.firstName;
-    data['last_name'] = this.lastName;
-    data['gender'] = this.gender;
-    data['phone_number'] = this.phoneNumber;
-    data['email'] = this.email;
-    data['address'] = this.address;
-    data['photo'] = this.photo;
-    data['user_id'] = this.userId;
-    data['birthday'] = this.birthday;
-    data['isAdmin'] = this.isAdmin;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
+    data['gender'] = gender;
+    data['phone_number'] = phoneNumber;
+    data['email'] = email;
+    data['address'] = address;
+    data['photo'] = photo;
+    data['user_id'] = userId;
+    data['birthday'] = birthday;
+    data['isAdmin'] = isAdmin;
     return data;
   }
 

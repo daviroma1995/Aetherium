@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../models/appointment.dart';
 import '../../models/treatment.dart';
 import '../../network_utils/firebase_services.dart';
 
@@ -59,16 +58,15 @@ class AppointmentConfirmDetailController extends GetxController {
   var prices = [];
   String getToatlPrice() {
     var totalprice = 0;
-    prices.forEach((price) {
+    for (var price in prices) {
       totalprice += int.parse(price);
       price.value = totalprice.toString();
       update();
-    });
+    }
     return totalprice.toString();
   }
 
   String getPrice(String id) {
-    print(id);
     int tempPrice = 0;
     for (var treatment in allTreatments) {
       if (treatment.id == id) {
@@ -90,9 +88,9 @@ class AppointmentConfirmDetailController extends GetxController {
 
   String getTotalPrice(List<Treatment> services) {
     double price = 0;
-    services.forEach((service) {
+    for (var service in services) {
       price += double.parse(service.price!.toString());
-    });
+    }
     return price.toString();
   }
 
@@ -108,7 +106,6 @@ class AppointmentConfirmDetailController extends GetxController {
 
   void confirm() {
     if (args.id == null) {
-      print('new appointment');
       FirebaseFirestore.instance.collection('appointments').add(args.toJson());
       Get.to(
         () => const AppointmentConfirmScreen(),
@@ -117,8 +114,6 @@ class AppointmentConfirmDetailController extends GetxController {
         curve: Curves.linear,
       );
     } else {
-      print('update appointment');
-      var appointment = Appointment;
       FirebaseFirestore.instance
           .collection('appointments')
           .doc(args.id)

@@ -13,6 +13,7 @@ class AppointmentDetailsController extends GetxController {
   var allTreatments = <Treatment>[].obs;
   final appointmentServicesIds = Get.arguments;
   var servicesList = <Treatment>[].obs;
+  bool isChanged = false;
   RxInt price = 0.obs;
 
   @override
@@ -94,13 +95,14 @@ class AppointmentDetailsController extends GetxController {
     return '';
   }
 
-  void onEdit(Appointment appointment) {
-    Get.to(
+  void onEdit(Appointment appointment) async {
+    var data = await Get.to(
       () => ServicesScreen(uid: appointment.clientId),
       duration: const Duration(milliseconds: 700),
       curve: Curves.linear,
       transition: Transition.downToUp,
       arguments: appointment,
     );
+    isChanged = data;
   }
 }

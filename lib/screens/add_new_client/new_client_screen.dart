@@ -72,7 +72,8 @@ class AddNewClient extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
                               controller.nameErrorMessage.value,
-                              style: TextStyle(color: AppColors.ERROR_COLOR),
+                              style:
+                                  const TextStyle(color: AppColors.ERROR_COLOR),
                             ),
                           )
                         : const SizedBox()),
@@ -262,7 +263,7 @@ class AddNewClient extends StatelessWidget {
                               ? AppColors.PRIMARY_DARK
                               : AppColors.WHITE_COLOR,
                           border: isDark
-                              ? Border()
+                              ? const Border()
                               : Border.all(
                                   width: 1.0,
                                   color: AppColors.BORDER_COLOR,

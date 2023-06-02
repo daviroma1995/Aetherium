@@ -17,8 +17,8 @@ class Event {
   String? startTime;
   String? subtitle;
   String? title;
-  int? longitude;
-  int? latitude;
+  double? longitude;
+  double? latitude;
   bool? isfavorite;
 
   Event(

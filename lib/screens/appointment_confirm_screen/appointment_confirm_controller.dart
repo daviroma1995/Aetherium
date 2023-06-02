@@ -1,5 +1,3 @@
 import 'package:get/get.dart';
 
-class AppointmentConfirmController extends GetxController {
-  // TODO
-}
+class AppointmentConfirmController extends GetxController {}

@@ -33,15 +33,15 @@ class Treatment {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['description'] = this.desc;
-    data['treatment_category_id'] = this.treatmentCategoryId;
-    data['name'] = this.name;
-    data['price'] = this.price;
-    data['duration'] = this.duration;
-    data['isLimited'] = this.isLimited;
-    data['isEmployeeRequired'] = this.isEmployeeRequired;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['description'] = desc;
+    data['treatment_category_id'] = treatmentCategoryId;
+    data['name'] = name;
+    data['price'] = price;
+    data['duration'] = duration;
+    data['isLimited'] = isLimited;
+    data['isEmployeeRequired'] = isEmployeeRequired;
     return data;
   }
 }

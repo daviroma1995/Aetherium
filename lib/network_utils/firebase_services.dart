@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:atherium_saloon_app/models/appointment.dart';
+import 'package:atherium_saloon_app/models/consultation.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/models/shop_info.dart';
 import 'package:atherium_saloon_app/models/treatment_category.dart';
@@ -20,7 +21,7 @@ class FirebaseServices {
   static String uid = LoginController.instance.user?.uid ?? '';
   static Future<String> checkUserUid() async {
     late String uid;
-    await FirebaseAuth.instance.authStateChanges().listen(
+    FirebaseAuth.instance.authStateChanges().listen(
       (user) {
         if (user == null) {
           Get.offAll(() => LoginScreen());
@@ -48,6 +49,7 @@ class FirebaseServices {
     } on Exception catch (ex) {
       log(ex.toString());
     }
+    return null;
   }
 
   static Future<List<Map<String, dynamic>>?> getData({
@@ -66,6 +68,7 @@ class FirebaseServices {
     } on Exception catch (ex) {
       log(ex.toString());
     }
+    return null;
   }
 
   static Future<List<Map<String, dynamic>>?> getFilteredAppointments({
@@ -86,6 +89,7 @@ class FirebaseServices {
     } on Exception catch (ex) {
       log(ex.toString());
     }
+    return null;
   }
 
   static Future<List<Map<String, dynamic>>?> getLimitedData({
@@ -108,6 +112,7 @@ class FirebaseServices {
     } on Exception catch (ex) {
       log(ex.toString());
     }
+    return null;
   }
 
   static Future<void> toggleFavorite(
@@ -128,21 +133,18 @@ class FirebaseServices {
         .map(
       (event) {
         List<Event> listEvents = [];
-        event.docs.forEach(
-          (element) {
-            var document = element.data();
+        for (var element in event.docs) {
+          var document = element.data();
 
-            document['event_id'] = element.id;
-            Timestamp timestamp = document['end_timestamp'];
-            if (timestamp.seconds >=
-                Timestamp.fromDate(DateTime.now()).seconds) {
-              var data = Event.fromJson(document);
-              data.isfavorite =
-                  data.clientId!.where((id) => id == uid).toList().isNotEmpty;
-              listEvents.add(data);
-            }
-          },
-        );
+          document['event_id'] = element.id;
+          Timestamp timestamp = document['end_timestamp'];
+          if (timestamp.seconds >= Timestamp.fromDate(DateTime.now()).seconds) {
+            var data = Event.fromJson(document);
+            data.isfavorite =
+                data.clientId!.where((id) => id == uid).toList().isNotEmpty;
+            listEvents.add(data);
+          }
+        }
         return listEvents;
       },
     );
@@ -157,13 +159,11 @@ class FirebaseServices {
         .map(
       (event) {
         late Client currentClient;
-        event.docs.forEach(
-          (element) {
-            var document = element.data();
-            document['id'] = element.id;
-            currentClient = Client.fromJson(document);
-          },
-        );
+        for (var element in event.docs) {
+          var document = element.data();
+          document['id'] = element.id;
+          currentClient = Client.fromJson(document);
+        }
         return currentClient;
       },
     );
@@ -188,16 +188,14 @@ class FirebaseServices {
         .snapshots()
         .map((appointmentQuerySnapShot) {
       List<Appointment> appointmentsList = [];
-      appointmentQuerySnapShot.docs.forEach(
-        (queryDocumentSnapshot) {
-          var document = queryDocumentSnapshot.data();
-          document['id'] = queryDocumentSnapshot.id;
-          Timestamp timestamp = document['date_timestamp'];
-          if (timestamp.seconds >= Timestamp.now().seconds) {
-            appointmentsList.add(Appointment.fromJson(document));
-          }
-        },
-      );
+      for (var queryDocumentSnapshot in appointmentQuerySnapShot.docs) {
+        var document = queryDocumentSnapshot.data();
+        document['id'] = queryDocumentSnapshot.id;
+        Timestamp timestamp = document['date_timestamp'];
+        if (timestamp.seconds >= Timestamp.now().seconds) {
+          appointmentsList.add(Appointment.fromJson(document));
+        }
+      }
       return appointmentsList;
     });
   }
@@ -247,13 +245,11 @@ class FirebaseServices {
         .snapshots()
         .map((appointmentQuerySnapShot) {
       List<Appointment> appointmentsList = [];
-      appointmentQuerySnapShot.docs.forEach(
-        (queryDocumentSnapshot) {
-          var document = queryDocumentSnapshot.data();
-          document['id'] = queryDocumentSnapshot.id;
-          appointmentsList.add(Appointment.fromJson(document));
-        },
-      );
+      for (var queryDocumentSnapshot in appointmentQuerySnapShot.docs) {
+        var document = queryDocumentSnapshot.data();
+        document['id'] = queryDocumentSnapshot.id;
+        appointmentsList.add(Appointment.fromJson(document));
+      }
       return appointmentsList;
     });
   }
@@ -264,11 +260,11 @@ class FirebaseServices {
         .snapshots()
         .map((employeeQuerySnapshot) {
       List<Employee> emp = [];
-      employeeQuerySnapshot.docs.forEach((queryDocumentSnapshot) {
+      for (var queryDocumentSnapshot in employeeQuerySnapshot.docs) {
         var data = queryDocumentSnapshot.data();
         data['id'] = queryDocumentSnapshot.id;
         emp.add(Employee.fromJson(data));
-      });
+      }
       return emp;
     });
   }
@@ -281,11 +277,10 @@ class FirebaseServices {
         .snapshots()
         .map((shopInfoQuerySnapshot) {
       late ShopInfo shopInfo;
-      shopInfoQuerySnapshot.docs.forEach((documentSnapShot) {
+      for (var documentSnapShot in shopInfoQuerySnapshot.docs) {
         var data = documentSnapShot.data();
         shopInfo = ShopInfo.fromJson(data);
-        print(data);
-      });
+      }
       return shopInfo;
     });
   }
@@ -296,11 +291,11 @@ class FirebaseServices {
         .snapshots()
         .map((treatmentSnapshot) {
       List<TreatmentCategory> treatmentCategory = [];
-      treatmentSnapshot.docs.forEach((queryDocumentSnapshot) {
+      for (var queryDocumentSnapshot in treatmentSnapshot.docs) {
         var data = queryDocumentSnapshot.data();
         data['id'] = queryDocumentSnapshot.id;
         treatmentCategory.add(TreatmentCategory.fromJson(data));
-      });
+      }
       return treatmentCategory;
     });
   }
@@ -312,7 +307,6 @@ class FirebaseServices {
           .collection('treatment_categories')
           .get();
       for (var documentSnapShotp in data.docs) {
-        print(documentSnapShotp.data());
         var data = documentSnapShotp.data();
         data['id'] = documentSnapShotp.id;
         treatments.add(data);
@@ -325,7 +319,6 @@ class FirebaseServices {
     } catch (ex) {
       print(ex);
     }
-    print(treatments);
     return treatments;
   }
 
@@ -351,11 +344,11 @@ class FirebaseServices {
         .snapshots()
         .map((querySnapshot) {
       List<Treatment> treatments = [];
-      querySnapshot.docs.forEach((documentQuery) {
+      for (var documentQuery in querySnapshot.docs) {
         var data = documentQuery.data();
         data['id'] = documentQuery.id;
         treatments.add(Treatment.fromJson(data));
-      });
+      }
       return treatments;
     });
   }
@@ -365,7 +358,6 @@ class FirebaseServices {
     var secondTimestamp = Timestamp.fromDate(DateTime(DateTime.now().year,
         DateTime.now().month, DateTime.now().day, 24, 00, 00, 0, 0));
     List<Appointment> agendas = [];
-    print(secondTimestamp);
     if (!isAdmin) {
       try {
         var data = await FirebaseFirestore.instance
@@ -451,6 +443,7 @@ class FirebaseServices {
     } on Exception catch (ex) {
       log(ex.toString());
     }
+    return null;
   }
 
   static Future<List<Notification>> getUnreadNotifications() async {
@@ -543,8 +536,7 @@ class FirebaseServices {
       docData['id'] = doc.id;
       var iconRef = docData['icon'];
       try {
-        var ref = FirebaseStorage.instance.ref().child(iconRef);
-        var url = await ref.getDownloadURL();
+        var url = await getDownloadUrl(iconRef);
         docData['icon'] = url;
       } catch (ex) {
         log(ex.toString());
@@ -580,5 +572,24 @@ class FirebaseServices {
       });
       return treatments;
     });
+  }
+
+  static Future<String> getDownloadUrl(String reference) async {
+    var ref = FirebaseStorage.instance.ref().child(reference);
+    return await ref.getDownloadURL();
+  }
+
+  static Future<List<Consultation>> getConsultations(String id) async {
+    List<Consultation> consultations = [];
+    var query = await FirebaseFirestore.instance
+        .collection('consultations')
+        .where('client_id', isEqualTo: id)
+        .get();
+    var docs = query.docs;
+    for (var doc in docs) {
+      var data = doc.data();
+      consultations.add(Consultation.fromJson(data));
+    }
+    return consultations;
   }
 }

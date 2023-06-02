@@ -57,7 +57,7 @@ class CustomAppointmentCardWidget extends StatelessWidget {
                       fit: BoxFit.contain,
                       height: 24.0,
                       AppAssets.CALANDER_ICON,
-                      colorFilter: ColorFilter.mode(
+                      colorFilter: const ColorFilter.mode(
                           AppColors.WHITE_COLOR, BlendMode.srcIn),
                     ),
                   ),

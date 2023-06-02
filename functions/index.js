@@ -19,3 +19,15 @@ exports.createUserwithEmail = functions.https.onRequest(async (req, res) =>{
     res.status(500).send(err);
   }
 });
+
+exports.deleteUser = functions.https.onRequest(async (req, res) => {
+  const {uid} = req.body;
+  console.log(uid);
+  try {
+    const user = await admin.auth().deleteUser(uid);
+    res.status(200).send(user);
+  } catch (ex) {
+    console.log("Erro" + ex);
+    res.status(500).send(ex);
+  }
+});

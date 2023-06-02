@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/screens/upcoming_appointments_screen/upcoming_appointments_controller.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../utils/constants.dart';
 import '../../widgets/appointments_card_widget.dart';
+import '../../widgets/button_widget.dart';
 
 class UpcomingAppointmentsScreen extends StatelessWidget {
   final controller = Get.put(UpcomingAppointmentsController());
@@ -63,58 +66,117 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                     )
                   ],
                 )
-              : Column(
-                  children: [
-                    SizedBox(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: controller.upcommingAppointments.length + 1,
-                        itemBuilder: (context, index) {
-                          return index ==
-                                  controller.upcommingAppointments.length
-                              ? const SizedBox(height: 94.0)
-                              : Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        print('on Tap ');
-                                        Get.to(
-                                          () => AppointmentDetailsScreen(
-                                            appointment: controller
-                                                .upcommingAppointments[index],
-                                            isDetail: true,
-                                            isEditable: true,
-                                          ),
-                                          duration:
-                                              const Duration(milliseconds: 300),
-                                          transition: Transition.rightToLeft,
-                                          curve: Curves.linear,
+              : Obx(
+                  () => controller.isLoading.isTrue
+                      ? const SizedBox(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            SizedBox(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount:
+                                    controller.upcommingAppointments.length + 1,
+                                itemBuilder: (context, index) {
+                                  return index ==
+                                          controller
+                                              .upcommingAppointments.length
+                                      ? const SizedBox(height: 94.0)
+                                      : Column(
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                Get.to(
+                                                  () =>
+                                                      AppointmentDetailsScreen(
+                                                    appointment: controller
+                                                            .upcommingAppointments[
+                                                        index],
+                                                    isDetail: true,
+                                                    isEditable: true,
+                                                  ),
+                                                  duration: const Duration(
+                                                      milliseconds: 300),
+                                                  transition:
+                                                      Transition.rightToLeft,
+                                                  curve: Curves.linear,
+                                                );
+                                              },
+                                              onLongPress: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      var yesButton =
+                                                          ButtonWidget(
+                                                              color: AppColors
+                                                                  .ERROR_COLOR,
+                                                              width: 60,
+                                                              buttonText: 'Yes',
+                                                              onTap: () async {
+                                                                log('Pressed');
+                                                                await controller
+                                                                    .deleteAppointment(
+                                                                        index);
+                                                                // ignore: use_build_context_synchronously
+                                                                Get.back();
+                                                                await controller
+                                                                    .loadData();
+                                                              });
+                                                      var noButton = TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: const Text('No'),
+                                                      );
+                                                      return AlertDialog(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        title: const Text(
+                                                            'Are you sure?'),
+                                                        content: const Text(
+                                                            'Appointment will be deleted permanently'),
+                                                        actions: [
+                                                          yesButton,
+                                                          noButton
+                                                        ],
+                                                      );
+                                                    });
+                                              },
+                                              child: AppointmentsCardWidget(
+                                                imageUrl:
+                                                    AppAssets.EVENT_IMAGE_ONE,
+                                                title: controller
+                                                    .employeesData[index].name!,
+                                                subTitle: controller
+                                                    .services[index].name!,
+                                                color: controller.getColor(
+                                                    controller
+                                                        .status[index].label!),
+                                                status: controller
+                                                    .status[index].label,
+                                                date: controller
+                                                    .upcommingAppointments[
+                                                        index]
+                                                    .dateWithMonthName,
+                                                time: controller
+                                                    .upcommingAppointments[
+                                                        index]
+                                                    .time!,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 10.0),
+                                          ],
                                         );
-                                      },
-                                      child: AppointmentsCardWidget(
-                                        imageUrl: AppAssets.EVENT_IMAGE_ONE,
-                                        title: controller
-                                            .employeesData[index].name!,
-                                        subTitle:
-                                            controller.services[index].name!,
-                                        color: controller.getColor(
-                                            controller.status[index].label!),
-                                        status: controller.status[index].label,
-                                        date: controller
-                                            .upcommingAppointments[index]
-                                            .dateWithMonthName,
-                                        time: controller
-                                            .upcommingAppointments[index].time!,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10.0),
-                                  ],
-                                );
-                        },
-                      ),
-                    ),
-                  ],
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                 )),
         ),
       ),

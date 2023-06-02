@@ -17,7 +17,7 @@ import '../new_client_confirm_screen/new_client_confirm_screen.dart';
 
 class AddNewClientController extends GetxController {
   String uid = '';
-  String _apiLink =
+  final String _apiLink =
       'https://us-central1-aetherium-salon.cloudfunctions.net/createUserwithEmail';
   var currentClient = Client().obs;
   TextEditingController name = TextEditingController();
@@ -37,10 +37,6 @@ class AddNewClientController extends GetxController {
   RxString emailErrorMessage = ''.obs;
   RxString phoneErrorMessage = ''.obs;
   RxString addressErrorMessage = ''.obs;
-  @override
-  void onInit() async {
-    super.onInit();
-  }
 
   @override
   void onReady() async {
@@ -192,7 +188,7 @@ class AddNewClientController extends GetxController {
             Fluttertoast.showToast(
                 msg: 'User Created Successfully',
                 backgroundColor: AppColors.GREEN_COLOR);
-            Get.to(() => NewClientConfirmScreen());
+            Get.to(() => const NewClientConfirmScreen());
           } else if (value.statusCode == 500) {
             var data = value.body;
             var json = jsonDecode(data);

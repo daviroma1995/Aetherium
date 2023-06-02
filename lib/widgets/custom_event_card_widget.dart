@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../utils/constants.dart';
-import 'favorite_icon_widget.dart';
 
+// ignore: must_be_immutable
 class CustomEventCardWidget extends StatefulWidget {
   final int index;
   final String iamgeUrl;

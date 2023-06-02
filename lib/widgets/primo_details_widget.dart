@@ -102,7 +102,7 @@ class PrimoDetailsWidget extends StatelessWidget {
                   ),
             const SizedBox(height: 6.0),
             pointsGained == null
-                ? SizedBox()
+                ? const SizedBox()
                 : const Text(
                     'Points',
                     style: TextStyle(

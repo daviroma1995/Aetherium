@@ -16,6 +16,7 @@ import '../appointment_booking_screen/appointment_booking_screen.dart';
 class ServicesController extends GetxController {
   // late int args;
   ServicesController({this.uid, this.clientEmail, this.number});
+  bool isChanged = false;
   var args = Get.arguments;
   var services = <TreatmentCategory>[].obs;
   var subServices = <Treatment>[].obs;
@@ -200,8 +201,7 @@ class ServicesController extends GetxController {
   }
 
   void selectedServiceController(int serviceIndex, int subServiceIndex) async {
-    print(serviceIndex);
-    print(subServiceIndex);
+    isChanged = true;
     var listOfSubServices = subServices
         .where((subService) =>
             subService.treatmentCategoryId == services[serviceIndex].id)
