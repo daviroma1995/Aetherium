@@ -80,9 +80,17 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                     Expanded(
                       child: Row(
                         children: [
-                          SizedBox(
+                          Container(
                             height: 50.0,
                             width: 50.0,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: widget.isExpanded
+                                      ? AppColors.WHITE_COLOR
+                                      : AppColors.WHITE_COLOR,
+                                  width: 2.0),
+                              borderRadius: BorderRadius.circular(50.0),
+                            ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(50.0),
                               child: CachedNetworkImage(
@@ -94,7 +102,7 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                                         image: imageProvider,
                                         fit: BoxFit.cover,
                                         colorFilter: const ColorFilter.mode(
-                                            Colors.red, BlendMode.colorBurn)),
+                                            Colors.white, BlendMode.colorBurn)),
                                   ),
                                 ),
                                 placeholder: (context, url) =>

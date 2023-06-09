@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../appointments_screen/appointments_screen.dart';
+import '../login_screen/login_screen.dart';
 
 List<ProfileItem> profileItems = [
   const ProfileItem(
@@ -35,7 +36,12 @@ class ProfileController extends GetxController {
   var user = Client().obs;
   @override
   void onInit() async {
-    uid = LoginController.instance.user!.uid;
+    uid = LoginController.instance.auth.currentUser == null
+        ? ''
+        : LoginController.instance.auth.currentUser!.uid;
+    if (LoginController.instance.auth.currentUser == null) {
+      Get.offAll(() => LoginScreen());
+    }
     var data = await FirebaseServices.getCurrentUser();
     user.value = Client.fromJson(data);
     if (data['isAdmin'] == false) {

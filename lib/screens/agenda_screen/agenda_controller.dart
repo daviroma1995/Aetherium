@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
 
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -59,7 +58,7 @@ class AgendaController extends GetxController {
     selectedDate.value =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     print(selectedDate.value);
-    RxBool isMonthView = false.obs;
+    // RxBool isMonthView = false.obs;
     appointments.value = [];
     allAppointments.value = [];
     appointmentsCounter.value = <Event>[

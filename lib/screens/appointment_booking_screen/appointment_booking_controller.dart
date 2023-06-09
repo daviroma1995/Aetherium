@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 
+import '../../models/appointment_status.dart';
 import '../../models/timeslot.dart';
 import '../../models/treatment.dart';
 import '../../utils/constants.dart';
@@ -34,26 +35,25 @@ class AppointMentBookingController extends GetxController {
   var selectedTreatmentsMap = <Map<String, dynamic>>[];
   RxString selectedDate = DateFormat('MM/dd/yyyy').format(DateTime.now()).obs;
   var selectedEmloyees = <String>[].obs;
-  var statusIdz = <String>[].obs;
+  var appointmentStatusList = <AppointmentStatus>[].obs;
   var statusLabels = <String>[].obs;
-
   @override
   void onInit() async {
     super.onInit();
     isLoading.value = true;
     args.notes = args.notes ?? '';
     notes.text = args.notes;
-    treatments.bindStream(await FirebaseServices.treatments());
+    treatments.bindStream(FirebaseServices.treatments());
     var selectedEmployeeQuery = await FirebaseFirestore.instance
         .collection('employees')
         .where('treatment_id_list', arrayContainsAny: args.serviceId)
         .get();
-    selectedEmployeeQuery.docs.forEach((element) {
+    for (var element in selectedEmployeeQuery.docs) {
       selectedEmloyees.add(element.id);
       var data = element.data();
       data['id'] = element.id;
       employees.add(Employee.fromJson(data));
-    });
+    }
     print(selectedEmloyees);
     var data = await FirebaseServices.getDataWhere(
         collection: 'clients',
@@ -66,19 +66,29 @@ class AppointMentBookingController extends GetxController {
           .doc(args.serviceId[i])
           .get();
       var map = data.data()!;
+      map['id'] = data.id;
+      print(map);
       selectedTreatmentsMap.add(map);
     }
+
     await loadTimeslots(
         treatments: selectedTreatmentsMap, appointmentDate: selectedDate.value);
     if (currentUser.value.isAdmin == true) {
       isAdmin.value = true;
     }
-    print(slotdata);
-    args.time =
-        args.time ?? avaliableSlots.isNotEmpty ? avaliableSlots[0] : null;
+    await loadStatues();
+    for (var status in appointmentStatusList) {
+      statusLabels.add(status.label!.capitalize ?? '');
+    }
+
     args.dateTimestamp = args.dateTimestamp ??
         Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month,
             DateTime.now().day, 0, 0, 0, 0, 0));
+    args.time = args.time == null
+        ? avaliableSlots.isNotEmpty
+            ? avaliableSlots[0]
+            : null
+        : avaliableSlots[0];
     args.statusId = '88aa7cf3-c6b6-4cab-91eb-247aa6445a0a';
     args.date = selectedDate.value;
     isLoading.value = false;
@@ -166,5 +176,15 @@ class AppointMentBookingController extends GetxController {
       print(ex);
     }
     isLoading.value = false;
+  }
+
+  Future<void> loadStatues() async {
+    var statusQuery =
+        await FirebaseFirestore.instance.collection('appointment_status').get();
+    var docs = statusQuery.docs;
+    for (var doc in docs) {
+      var data = doc.data();
+      appointmentStatusList.add(AppointmentStatus.fromJson(data));
+    }
   }
 }

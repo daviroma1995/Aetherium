@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../utils/constants.dart';
 
-class AppBarCustom extends StatelessWidget with PreferredSizeWidget {
+class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
   final Function onTap;
   final String title;
   const AppBarCustom({

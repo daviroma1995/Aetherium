@@ -164,9 +164,10 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                                                         index]
                                                     .dateWithMonthName,
                                                 time: controller
-                                                    .upcommingAppointments[
-                                                        index]
-                                                    .time!,
+                                                        .upcommingAppointments[
+                                                            index]
+                                                        .time ??
+                                                    'Nill',
                                               ),
                                             ),
                                             const SizedBox(height: 10.0),

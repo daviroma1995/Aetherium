@@ -409,8 +409,9 @@ class HomeScreen extends StatelessWidget {
                                                       .appointments[index]
                                                       .dateString,
                                                   time: controller
-                                                      .appointments[index]
-                                                      .time!,
+                                                          .appointments[index]
+                                                          .time ??
+                                                      '',
                                                 ),
                                               );
                                             },

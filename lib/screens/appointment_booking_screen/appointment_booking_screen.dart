@@ -279,13 +279,20 @@ class AppointmentBookingScreen extends StatelessWidget {
                       const SizedBox(height: 20.0),
                       Obx(
                         () => Visibility(
-                          visible: controller.isAdmin.value,
+                          visible: controller.statusLabels.isNotEmpty,
                           child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 20.0),
                             child: DropDownItemsWidget(
-                              options: ['Confermato'],
-                              onTap: (selected) {},
+                              options: controller.statusLabels.value,
+                              onTap: (selected) {
+                                int id = controller.appointmentStatusList
+                                    .indexWhere((status) =>
+                                        status.label!.toLowerCase() ==
+                                        selected!.toLowerCase());
+                                controller.args.statusId =
+                                    controller.appointmentStatusList[id].id;
+                              },
                             ),
                           ),
                         ),

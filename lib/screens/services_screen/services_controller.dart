@@ -35,7 +35,8 @@ class ServicesController extends GetxController {
   @override
   void onInit() async {
     var _uid = uid ?? LoginController.instance.auth.currentUser!.uid;
-    services.bindStream(FirebaseServices.treatmentsCategory());
+    // services.bindStream(FirebaseServices.treatmentsCategory());
+    services.value = await FirebaseServices.getTreatmentCategories();
     subServices.bindStream(await FirebaseServices.getTreatmentsFiltered(_uid));
     client.bindStream(FirebaseServices.currentUserStream());
 
@@ -108,7 +109,7 @@ class ServicesController extends GetxController {
           for (var subservice in subServices) {
             if (serviceId == subservice.id) {
               treatmentCategoryId.add(subservice.treatmentCategoryId);
-              selectedServices.value.add(subservice.name!);
+              selectedServices.add(subservice.name!);
             }
           }
         }

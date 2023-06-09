@@ -13,6 +13,12 @@ class LoyalityCardController extends GetxController {
   late Client client;
   @override
   void onInit() async {
+    super.onInit();
+    await loadData();
+  }
+
+  Future<void> loadData() async {
+    isLoading.value = true;
     var clientQuery =
         await FirebaseFirestore.instance.collection('clients').doc(uid).get();
     var clientDoc = clientQuery.data();
@@ -31,6 +37,6 @@ class LoyalityCardController extends GetxController {
         .get();
     var membershipDocument = membershiptypeData.data();
     membershipType = MembershipType.fromJson(membershipDocument!);
-    super.onInit();
+    isLoading.value = false;
   }
 }

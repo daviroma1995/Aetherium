@@ -6,6 +6,7 @@ import 'package:atherium_saloon_app/screens/qr_code_screen/qr_code_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import 'package:atherium_saloon_app/data.dart';
@@ -49,20 +50,21 @@ class LoyalityCardScreen extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Obx(
-            () => controller.isLoading.value
-                ? SizedBox(
-                    height: Get.height - 100,
-                    width: Get.width,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : Visibility(
-                    visible: controller.isLoading.isFalse,
-                    child: Column(
+        child: Obx(
+          () => controller.isLoading.value
+              ? SizedBox(
+                  height: Get.height - 100,
+                  width: Get.width,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : Visibility(
+                  visible: controller.isLoading.isFalse,
+                  child: LiquidPullToRefresh(
+                    onRefresh: () async => await controller.loadData(),
+                    child: ListView(
+                      shrinkWrap: true,
                       // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
@@ -439,7 +441,7 @@ class LoyalityCardScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-          ),
+                ),
         ),
       ),
     );

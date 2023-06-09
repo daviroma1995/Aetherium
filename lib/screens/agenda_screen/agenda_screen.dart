@@ -10,6 +10,7 @@ import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/custom_title_row_widget.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
+// ignore: must_be_immutable
 class AgendaScreen extends StatelessWidget {
   DateTime selectedDay = DateTime.now();
   AgendaScreen({super.key});

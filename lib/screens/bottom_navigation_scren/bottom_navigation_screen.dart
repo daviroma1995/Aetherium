@@ -283,6 +283,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
               bottom: 25.0,
               child: GestureDetector(
                 onTap: () {
+                  if (controller.client.value.isAdmin == null) {}
                   if (controller.client.value.isAdmin!) {
                     if (controller.toggle.value == false) {
                       controller.forward();

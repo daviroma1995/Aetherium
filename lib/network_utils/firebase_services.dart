@@ -291,11 +291,21 @@ class FirebaseServices {
         .snapshots()
         .map((treatmentSnapshot) {
       List<TreatmentCategory> treatmentCategory = [];
-      for (var queryDocumentSnapshot in treatmentSnapshot.docs) {
+      var docs = treatmentSnapshot.docs;
+      for (var queryDocumentSnapshot in docs) {
         var data = queryDocumentSnapshot.data();
         data['id'] = queryDocumentSnapshot.id;
         treatmentCategory.add(TreatmentCategory.fromJson(data));
       }
+      void loadIamges() async {
+        for (int i = 0; i < treatmentCategory.length; i++) {
+          var iconUrl = await getDownloadUrl(treatmentCategory[i].iconUrl!);
+          treatmentCategory[i].iconUrl = iconUrl;
+        }
+      }
+
+      loadIamges();
+
       return treatmentCategory;
     });
   }
