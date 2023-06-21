@@ -59,7 +59,6 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                               "App Theme",
                               style: TextStyle(
                                 fontSize: 18,
-                                // TODO TEXT STYLE
                               ),
                             ),
                           )),
@@ -69,7 +68,7 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                         child: MaterialButton(
                           height: 0,
                           shape: const CircleBorder(),
-                          color: Colors.black, // TODO COLOR
+                          color: Colors.black,
                           onPressed: () {
                             Get.back();
                           },
@@ -97,7 +96,7 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                     const Text(
                       "Please select from the following three choices:\n",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 12), // TODO FONT
+                      style: TextStyle(fontSize: 12),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -117,7 +116,6 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                               }),
                           const Text(
                             "System Default",
-                            // TODO FONTS SYSTEM DEFAULT
                           ),
                         ],
                       ),
@@ -142,7 +140,6 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                             "Dark Theme",
                             style: TextStyle(
                               fontFamily: 'Lato',
-                              // TODO DARK THEME STYLE
                             ),
                           ),
                         ],

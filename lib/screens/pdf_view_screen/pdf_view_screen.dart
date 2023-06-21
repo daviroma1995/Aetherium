@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_print
+
 import 'package:atherium_saloon_app/screens/pdf_view_screen/pdf_controlelr.dart';
-import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';

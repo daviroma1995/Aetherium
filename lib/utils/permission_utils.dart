@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';

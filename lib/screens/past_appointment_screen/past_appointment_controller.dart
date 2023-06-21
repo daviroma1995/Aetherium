@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unused_local_variable
 import 'package:atherium_saloon_app/models/appointment_status.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
@@ -66,7 +66,8 @@ class PastAppointmentController extends GetxController {
       for (var appointment in data!) {
         if (currentUid == appointment['client_id']) {
           if (appointment['date_timestamp'].seconds + 86400 <=
-              Timestamp.now().seconds) {
+                  Timestamp.now().seconds &&
+              appointment['is_regular'] == true) {
             pastAppointments.add(Appointment.fromJson(appointment));
           }
         }
@@ -75,6 +76,7 @@ class PastAppointmentController extends GetxController {
         if (currentUid == appointment['client_id']) {
           for (int i = 0; i < statusData!.length; i++) {
             if (appointment['status_id'] == statusData[i]['id'] &&
+                appointment['is_regular'] == true &&
                 appointment['date_timestamp'].seconds + 86400 <=
                     Timestamp.now().seconds) {
               appointmentStatus.add(AppointmentStatus.fromJson(statusData[i]));
@@ -95,7 +97,7 @@ class PastAppointmentController extends GetxController {
       //   });
       // }
     }
-    pastAppointments.forEach((appointment) {
+    for (var appointment in pastAppointments) {
       // appointment.employeeId!.forEach((employeeId) {
       // for (int i = 0; i < employees!.length; i++) {
       //   if (employees[i]['id'] == employeeId) {
@@ -111,7 +113,7 @@ class PastAppointmentController extends GetxController {
           break;
         }
       }
-    });
+    }
     for (var treatment in treatments!) {
       for (var pastAppointment in pastAppointments) {
         if (treatment['id'] == pastAppointment.serviceId![0]) {

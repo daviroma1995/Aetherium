@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:atherium_saloon_app/models/appointment.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +16,7 @@ class AppointmentDetailsController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    allTreatments.bindStream(await FirebaseServices.treatments());
+    allTreatments.bindStream(FirebaseServices.treatments());
   }
 
   String totalPrice(List<String> service) {
@@ -27,13 +24,13 @@ class AppointmentDetailsController extends GetxController {
       update();
     });
     double totalPrice = 0.0;
-    allTreatments.forEach((element) {
+    for (var element in allTreatments) {
       for (int i = 0; i < service.length; i++) {
         if (service[i] == element.id) {
           totalPrice += double.parse(element.price!.toString());
         }
       }
-    });
+    }
 
     return totalPrice.toString();
   }
@@ -67,11 +64,11 @@ class AppointmentDetailsController extends GetxController {
   var prices = [];
   String getToatlPrice() {
     var totalprice = 0;
-    prices.forEach((price) {
+    for (var price in prices) {
       totalprice += int.parse(price);
       price.value = totalprice.toString();
       update();
-    });
+    }
     return totalprice.toString();
   }
 
@@ -81,6 +78,7 @@ class AppointmentDetailsController extends GetxController {
       if (treatment.id == id) {
         if (!prices.contains(treatment.price)) {
           prices.add(treatment.price);
+          // ignore: avoid_function_literals_in_foreach_calls, unused_local_variable
           var sum = prices.forEach((element) {
             tempPrice += double.parse(element);
           });

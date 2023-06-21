@@ -5,6 +5,7 @@ import 'package:atherium_saloon_app/screens/home_screen/home_screen.dart';
 import 'package:atherium_saloon_app/screens/profile_screen/profile_screen.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
+import 'package:atherium_saloon_app/widgets/simple_gesture_detector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -180,15 +181,17 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
         allowImplicitScrolling: true,
         onPageChanged: (value) {
           controller.reverse();
-          setState(() {
-            if (value == 2) {
-              _currentIndex = 3;
-            } else if (value == 3) {
-              _currentIndex = 4;
-            } else {
-              _currentIndex = value;
-            }
-          });
+          setState(
+            () {
+              if (value == 2) {
+                _currentIndex = 3;
+              } else if (value == 3) {
+                _currentIndex = 4;
+              } else {
+                _currentIndex = value;
+              }
+            },
+          );
         },
         controller: controller.pageController,
         children: [
@@ -292,7 +295,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
                     }
                   } else {
                     Get.to(
-                      () => ServicesScreen(),
+                      () => const ServicesScreen(),
                       duration: const Duration(milliseconds: 600),
                       transition: Transition.downToUp,
                       curve: Curves.easeInQuad,

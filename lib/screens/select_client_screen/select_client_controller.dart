@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, unused_local_variable
+
 import 'dart:developer';
 
 import 'package:atherium_saloon_app/models/membership.dart';
@@ -5,16 +7,15 @@ import 'package:atherium_saloon_app/screens/client_details_screen/client_details
 import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../models/client.dart';
 import '../../models/membership_type.dart';
 
 class SelectClientController extends GetxController {
+  var args = Get.arguments;
   var clients = <Client>[].obs;
   var selectedClients = <String>[];
   var searchedClients = <Client>[].obs;
@@ -85,6 +86,7 @@ class SelectClientController extends GetxController {
     tier.value = tiers;
     isLoaded.value = !isLoaded.value;
  */
+
     loadUsers();
   }
 
@@ -145,11 +147,14 @@ class SelectClientController extends GetxController {
 
   void goToServicesScreen() {
     if (selectedClients.isNotEmpty) {
-      Get.to(() => ServicesScreen(
-            uid: selectedClients[0],
-            clientEmail: email.value,
-            number: phone.value,
-          ));
+      Get.to(
+        () => ServicesScreen(
+          uid: selectedClients[0],
+          clientEmail: email.value,
+          number: phone.value,
+        ),
+        arguments: args,
+      );
     } else {
       Fluttertoast.showToast(msg: 'Please select a client to continiue');
     }

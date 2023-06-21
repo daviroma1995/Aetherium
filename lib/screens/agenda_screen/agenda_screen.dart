@@ -24,15 +24,32 @@ class AgendaScreen extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Obx(() => Calendar(
-                  events: controller.events,
-                  hideArrows: true,
-                  hideTodayIcon: true,
-                  initialDate: controller.selectedDate.value,
-                  onDateSelected: (value) {
-                    controller.selectedDate.value = value;
-                    controller.onDateChange(value);
-                  },
+            child: Obx(() => Visibility(
+                  visible: controller.reload.value,
+                  replacement: Obx(
+                    () => Calendar(
+                      events: controller.events,
+                      hideArrows: true,
+                      hideTodayIcon: true,
+                      initialDate: controller.selectedDate.value,
+                      onDateSelected: (value) {
+                        controller.selectedDate.value = value;
+                        controller.onDateChange(value);
+                      },
+                    ),
+                  ),
+                  child: Obx(
+                    () => Calendar(
+                      events: controller.events,
+                      hideArrows: true,
+                      hideTodayIcon: true,
+                      initialDate: controller.selectedDate.value,
+                      onDateSelected: (value) {
+                        controller.selectedDate.value = value;
+                        controller.onDateChange(value);
+                      },
+                    ),
+                  ),
                 )),
           ),
           const SizedBox(height: 13.0),
@@ -313,7 +330,7 @@ class AgendaCustomCardWidget extends StatelessWidget {
                     child: SvgPicture.asset(
                       userImageUrl,
                       height: 28,
-                      colorFilter: ColorFilter.mode(
+                      colorFilter: const ColorFilter.mode(
                           AppColors.WHITE_COLOR, BlendMode.srcIn),
                     ),
                   ),

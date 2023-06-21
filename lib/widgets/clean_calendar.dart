@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use
+
 import 'package:atherium_saloon_app/widgets/simple_gesture_detector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,6 +11,7 @@ import '../utils/constants.dart';
 import '../utils/date_utils.dart';
 import 'calender_tile.dart';
 
+// ignore: prefer_generic_function_type_aliases
 typedef DayBuilder(BuildContext context, DateTime day);
 
 class Range {
@@ -42,7 +45,7 @@ class Calendar extends StatefulWidget {
   final TextStyle? bottomBarTextStyle;
   final Color? bottomBarArrowColor;
   final Color? bottomBarColor;
-
+  bool? reload;
   Calendar({
     super.key,
     this.onMonthChanged,
@@ -67,6 +70,7 @@ class Calendar extends StatefulWidget {
     this.bottomBarTextStyle,
     this.bottomBarArrowColor,
     this.bottomBarColor,
+    this.reload,
   });
 
   @override
@@ -88,8 +92,28 @@ class _CalendarState extends State<Calendar> {
   @override
   void initState() {
     super.initState();
+    print('called');
     _selectedDate = widget.initialDate ?? DateTime.now();
     isExpanded = widget.isExpanded;
+    isSwapped = false;
+    selectedMonthsDays = _daysInMonth(_selectedDate);
+    selectedWeekDays = Utils.daysInRange(
+            _firstDayOfWeek(_selectedDate), _lastDayOfWeek(_selectedDate))
+        .toList();
+    initializeDateFormatting(widget.locale, null).then((_) => setState(() {
+          var monthFormat =
+              DateFormat("MMMM", widget.locale).format(_selectedDate);
+          displayMonth =
+              "${monthFormat[0].toUpperCase()}${monthFormat.substring(1)}";
+        }));
+  }
+
+  @override
+  void didUpdateWidget(covariant Calendar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print('called');
+    _selectedDate = widget.initialDate ?? DateTime.now();
+    isSwapped = false;
     selectedMonthsDays = _daysInMonth(_selectedDate);
     selectedWeekDays = Utils.daysInRange(
             _firstDayOfWeek(_selectedDate), _lastDayOfWeek(_selectedDate))
@@ -109,11 +133,13 @@ class _CalendarState extends State<Calendar> {
 
     if (!widget.hideArrows) {
       leftArrow = InkWell(
-        onTap: isExpanded ? previousMonth : previousWeek,
+        // onTap: isExpanded ? previousMonth : previousWeek,
+        onTap: previousMonth,
         child: const Icon(Icons.chevron_left),
       );
       rightArrow = InkWell(
-        onTap: isExpanded ? nextMonth : nextWeek,
+        // onTap: isExpanded ? nextMonth : nextWeek,
+        onTap: nextMonth,
         child: const Icon(Icons.chevron_right),
       );
     } else {
@@ -372,6 +398,7 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      key: UniqueKey(),
       mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -499,9 +526,13 @@ class _CalendarState extends State<Calendar> {
 
   void _onSwipeLeft() {
     if (isExpanded) {
-      nextMonth();
+      setState(() {
+        nextMonth();
+      });
     } else {
-      nextWeek();
+      setState(() {
+        nextWeek();
+      });
     }
   }
 
@@ -590,7 +621,7 @@ class ExpansionCrossFade extends StatelessWidget {
         secondCurve: const Interval(0.0, 1.0, curve: Curves.fastOutSlowIn),
         sizeCurve: Curves.decelerate,
         crossFadeState:
-            isExpanded! ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+            isExpanded! ? CrossFadeState.showSecond : CrossFadeState.showSecond,
         duration: const Duration(milliseconds: 300),
       ),
     );

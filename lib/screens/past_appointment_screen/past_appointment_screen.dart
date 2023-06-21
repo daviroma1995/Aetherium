@@ -1,4 +1,5 @@
-import 'package:atherium_saloon_app/screens/appointments_screen/appointments_screen.dart';
+// ignore_for_file: unused_local_variable
+
 import 'package:atherium_saloon_app/screens/past_appointment_screen/past_appointment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

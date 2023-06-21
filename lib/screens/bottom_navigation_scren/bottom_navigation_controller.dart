@@ -1,6 +1,8 @@
 import 'package:atherium_saloon_app/models/client.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
+import 'package:atherium_saloon_app/screens/login_screen/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,8 +22,10 @@ class BottomNavigationController extends GetxController {
   late AnimationController leftButtonController;
   @override
   void onInit() async {
-    // TODO: implement onInit
     super.onInit();
+    if (FirebaseAuth.instance.currentUser == null) {
+      Get.offAll(() => LoginScreen());
+    }
     var data = await FirebaseServices.getDataWhere(
         collection: 'clients',
         key: 'user_id',
@@ -30,14 +34,17 @@ class BottomNavigationController extends GetxController {
   }
 
   final screens = [
-    HomeScreen(),
-    AgendaScreen(),
+    KeepAlive(keepAlive: false, child: HomeScreen()),
+    KeepAlive(keepAlive: false, child: AgendaScreen()),
     LoyalityCardScreen(),
     ProfileScreen(),
   ];
   PageController pageController =
       PageController(initialPage: 0, keepPage: true);
   void changeTab(int index) {
+    // if (index == 1) {
+
+    // }
     if (index == 3) {
       pageController.animateToPage(2,
           duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);

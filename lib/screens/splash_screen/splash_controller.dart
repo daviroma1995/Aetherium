@@ -28,11 +28,11 @@ class SplashScreenController extends GetxController {
 
   void navigate() async {
     if (showOnBoarding == false && isLogedIn != true) {
-      Timer(Duration(milliseconds: 2000), () {
+      Timer(const Duration(milliseconds: 2000), () {
         Get.offAll(() => LoginScreen());
       });
     } else if (showOnBoarding == false && isLogedIn == true) {
-      Get.offAll(() => BottomNavigationScreen());
+      Get.offAll(() => const BottomNavigationScreen());
     } else {
       Get.offAll(() => SplashScreen());
       await Future.delayed(const Duration(seconds: 3));

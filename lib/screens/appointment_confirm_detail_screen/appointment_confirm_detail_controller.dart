@@ -72,6 +72,7 @@ class AppointmentConfirmDetailController extends GetxController {
       if (treatment.id == id) {
         if (!prices.contains(treatment.price)) {
           prices.add(treatment.price);
+          // ignore: avoid_function_literals_in_foreach_calls, unused_local_variable
           var sum = prices.forEach((element) {
             tempPrice += int.parse(element);
           });

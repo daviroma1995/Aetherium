@@ -44,13 +44,17 @@ class UpcomingAppointmentsController extends GetxController {
   // }
 
   Future<void> deleteAppointment(int id) async {
-    await FirebaseFirestore.instance
-        .collection('appointments')
-        .doc(upcommingAppointments[id].id)
-        .delete();
-    Fluttertoast.showToast(
-        msg: 'Appointment deleted Successfully',
-        backgroundColor: AppColors.GREEN_COLOR);
+    try {
+      await FirebaseFirestore.instance
+          .collection('appointments')
+          .doc(upcommingAppointments[id].id)
+          .delete();
+      Fluttertoast.showToast(
+          msg: 'Appointment deleted Successfully',
+          backgroundColor: AppColors.GREEN_COLOR);
+    } catch (ex) {
+      Fluttertoast.showToast(msg: 'Something went wrong');
+    }
   }
 
   Future<void> loadData() async {
@@ -69,6 +73,7 @@ class UpcomingAppointmentsController extends GetxController {
         AgendaController.instance.currentUser.value.isAdmin! == false) {
       for (var treatment in data) {
         if (treatment['client_id'] == uid &&
+            treatment['is_regular'] == true &&
             treatment['date_timestamp'].seconds + 86400 >=
                 Timestamp.now().seconds) {
           upcommingAppointments.add(Appointment.fromJson(treatment));
@@ -78,6 +83,7 @@ class UpcomingAppointmentsController extends GetxController {
         if (appointment['client_id'] == uid) {
           for (int i = 0; i < statusData!.length; i++) {
             if (appointment['status_id'] == statusData[i]['id'] &&
+                appointment['is_regular'] == true &&
                 appointment['date_timestamp'].seconds + 86400 >=
                     Timestamp.now().seconds) {
               status.add(AppointmentStatus.fromJson(statusData[i]));

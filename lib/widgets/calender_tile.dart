@@ -50,7 +50,6 @@ class _CalendarTileState extends State<CalendarTile> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (widget.isDayOfWeek) {
-      int index = 0;
       var inkWell = Column(
         children: [
           Expanded(

@@ -15,7 +15,6 @@ class NotificationsController extends GetxController {
     super.onInit();
   }
 
-  // TODO
   void handleBack() {
     Get.back();
   }

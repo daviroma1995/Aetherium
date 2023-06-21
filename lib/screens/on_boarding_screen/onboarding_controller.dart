@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class OnBoardingController extends GetxController {
-  @override
   RxInt index = 0.obs;
 
   PageController pageController = PageController();

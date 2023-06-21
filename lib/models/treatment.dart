@@ -25,7 +25,7 @@ class Treatment {
     id = json['id'];
     treatmentCategoryId = json['treatment_category_id'];
     name = json['name'];
-    desc = json['description'];
+    desc = json['desc'];
     price = json['price'].toString();
     duration = json['duration'].toString();
     isLimited = json['isLimited'];
@@ -35,7 +35,7 @@ class Treatment {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['description'] = desc;
+    data['desc'] = desc;
     data['treatment_category_id'] = treatmentCategoryId;
     data['name'] = name;
     data['price'] = price;

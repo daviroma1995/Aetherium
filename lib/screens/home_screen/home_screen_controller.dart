@@ -7,8 +7,6 @@ import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:atherium_saloon_app/utils/shared_preferences.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,9 +16,9 @@ import '../../models/employee.dart';
 import '../../models/event.dart';
 import '../../models/treatment.dart';
 import '../../network_utils/firebase_services.dart';
-import '../../utils/constants.dart';
 import '../event_details/event_details_screen.dart';
 import '../../models/notification.dart' as notification;
+import '../select_client_screen/select_client_screen.dart';
 
 class HomeScreenController extends GetxController {
   RxBool isLoading = true.obs;
@@ -40,51 +38,39 @@ class HomeScreenController extends GetxController {
 
   @override
   void onInit() async {
-    await loadHomeScreen();
     super.onInit();
+    await loadHomeScreen();
   }
 
   Future<void> loadHomeScreen() async {
     isLoading.value = true;
     _uid = LoginController.instance.auth.currentUser!.uid;
     treatmentCategories.value = await FirebaseServices.getTreatmentCategories();
-    log(treatmentCategories.toString());
+    // log(treatmentCategories.toString());
+    var map = await FirebaseServices.getCurrentUser();
+    currentUser.value = Client.fromJson(map);
+
+    appointmentsEmployee.bindStream(FirebaseServices.employeeStrem());
+    notifications.bindStream(FirebaseServices.getUnreadNotficationsStream());
+    events.bindStream(FirebaseServices.eventStream());
+
+    isInitialized.value = true;
+    LocalData.setIsLogedIn(true);
+    var treatments = await FirebaseServices.getData(collection: 'treatments');
+    var data = await FirebaseServices.getAppointments(
+        isAdmin: currentUser.value.isAdmin!);
+    appointments.value = data;
+    for (var appointment in appointments) {
+      for (int i = 0; i < treatments!.length; i++) {
+        if (appointment.serviceId![0] == treatments[i]['id']) {
+          services.add(Treatment.fromJson(treatments[i]));
+        }
+      }
+    }
     WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) async {
-        var map = await FirebaseServices.getCurrentUser();
-        currentUser.value = Client.fromJson(map);
-
-        appointmentsEmployee.bindStream(FirebaseServices.employeeStrem());
-        notifications
-            .bindStream(FirebaseServices.getUnreadNotficationsStream());
-        events.bindStream(FirebaseServices.eventStream());
-
-        isInitialized.value = true;
-        LocalData.setIsLogedIn(true);
-        var treatments =
-            await FirebaseServices.getData(collection: 'treatments');
-        var data = await FirebaseServices.getAppointments(
-            isAdmin: currentUser.value.isAdmin!);
-        appointments.value = data;
-        appointments.forEach(
-          (appointment) {
-            for (int i = 0; i < treatments!.length; i++) {
-              if (appointment.serviceId![0] == treatments[i]['id']) {
-                services.add(Treatment.fromJson(treatments[i]));
-              }
-            }
-          },
-        );
-      },
+      (timeStamp) async {},
     );
     isLoading.value = false;
-  }
-
-  @override
-  void onReady() async {
-    super.onReady();
-
-    print('Ready called');
   }
 
   void navigateToAppointmentDetail(int index) async {
@@ -141,8 +127,17 @@ class HomeScreenController extends GetxController {
   }
 
   void navigateToServices() {
+    if (!currentUser.value.isAdmin!) {
+      Get.to(
+        () => const ServicesScreen(),
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.linear,
+        transition: Transition.rightToLeft,
+      );
+      return;
+    }
     Get.to(
-      () => ServicesScreen(),
+      () => SelectClientScreen(),
       duration: const Duration(milliseconds: 600),
       curve: Curves.linear,
       transition: Transition.rightToLeft,
@@ -159,11 +154,19 @@ class HomeScreenController extends GetxController {
   }
 
   void serviceNavigation(int index) {
-    Get.to(() => ServicesScreen(),
-        arguments: index,
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.easeInCubic,
-        transition: Transition.downToUp);
+    if (!currentUser.value.isAdmin!) {
+      Get.to(() => const ServicesScreen(),
+          arguments: index,
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.easeInCubic,
+          transition: Transition.downToUp);
+    } else {
+      Get.to(() => SelectClientScreen(),
+          arguments: index,
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.easeInCubic,
+          transition: Transition.downToUp);
+    }
   }
 
   void eventNavigation(int index) async {
@@ -205,15 +208,13 @@ class HomeScreenController extends GetxController {
             isAdmin: currentUser.value.isAdmin!);
         appointments.value = data;
 
-        appointments.forEach(
-          (appointment) {
-            for (int i = 0; i < treatments!.length; i++) {
-              if (appointment.serviceId![0] == treatments[i]['id']) {
-                services.add(Treatment.fromJson(treatments[i]));
-              }
+        for (var appointment in appointments) {
+          for (int i = 0; i < treatments!.length; i++) {
+            if (appointment.serviceId![0] == treatments[i]['id']) {
+              services.add(Treatment.fromJson(treatments[i]));
             }
-          },
-        );
+          }
+        }
       },
     );
   }

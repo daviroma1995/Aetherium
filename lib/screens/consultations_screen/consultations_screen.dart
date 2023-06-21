@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
 
 import 'package:atherium_saloon_app/screens/full_screen_image/full_screen_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -54,7 +53,8 @@ class ConsultationsScreen extends StatelessWidget {
               const SizedBox(height: 13.0),
               Obx(
                 () => Visibility(
-                    visible: controller.urls.isEmpty,
+                    visible:
+                        controller.urls.isEmpty && controller.isLoading.value,
                     child: SizedBox(
                       height: 150.0,
                       width: Get.width,

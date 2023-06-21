@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,7 +18,7 @@ class ForgetPasswordController extends GetxController {
   void validateEmail() {
     String pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = new RegExp(pattern);
+    RegExp regExp = RegExp(pattern);
 
     if (emailController.text.isEmpty) {
       emailErrorMessage.value = AppLanguages.EMAIL_SHOULD_NOT_BE_EMPTY;

@@ -97,6 +97,16 @@
     "past":"Past",
     "upcomming":"Upcomming",
     "scheduled_appointments":"Scheduled Appointments",
-    "no_consultations":"No Consultations"
+    "no_consultations":"No Consultations",
+    "login_successfull": "Login successfull",
+    "you_entered_wrong_password":"You entered wrong password",
+    "are_you_sure": "Are you Sure?",
+    "user_account_will_be_deleted_permanently": "User account will be deleted permanently",
+    "yes":"yes",
+    "no": "No",
+    "user_deleted":"User deleted",
+    "appointment_will_be_deleted_permanently":"Appointment will be deleted permanently",
+    "appointment_deleted_successfully":"Appointment deleted successfully"
+
 
 }

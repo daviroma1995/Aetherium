@@ -1,4 +1,4 @@
-import 'dart:async';
+// ignore_for_file: sized_box_for_whitespace
 
 import 'package:atherium_saloon_app/screens/splash_screen/splash_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';

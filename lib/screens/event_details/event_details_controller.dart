@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 class EventDetailsControlelr extends GetxController {
   RxBool isfavorite = false.obs;
+  // ignore: prefer_typing_uninitialized_variables
   var args;
   late String uid;
   @override
@@ -25,13 +26,9 @@ class EventDetailsControlelr extends GetxController {
 
   void setFavorite() async {
     if (args.isfavorite == true) {
-      print('If Called: ${args.clientId}');
       args.clientId!.removeWhere((element) => element == uid);
-      print('If Called: ${args.clientId}');
     } else {
-      print('else Called: ${args.clientId}');
       args.clientId!.add(uid);
-      print('else Called: ${args.clientId} id: ${args.eventId}');
     }
     FirebaseServices.toggleFavorite(eventId: args.eventId!, data: args);
     args.isfavorite = !args.isfavorite;
@@ -47,6 +44,7 @@ class EventDetailsControlelr extends GetxController {
     if (int.parse(formatedTime) <= 12) {
       time = '$time AM';
     } else {
+      // ignore: unnecessary_string_interpolations
       time = '$time';
     }
     return time;

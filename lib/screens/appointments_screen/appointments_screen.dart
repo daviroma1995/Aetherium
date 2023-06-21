@@ -87,7 +87,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                 unselectedLabelStyle: const TextStyle(
                   fontWeight: FontWeight.w500,
                 ),
-                tabs: [
+                tabs: const [
                   Tab(
                     text: 'Past',
                   ),
@@ -176,11 +176,13 @@ class _CustomTabBarState extends State<CustomTabBar>
                 'Past',
                 style: TextStyle(
                   fontSize: 14.0,
+                  // ignore: dead_code
                   fontWeight: true ? FontWeight.w800 : FontWeight.w500,
                   color: true
                       ? !widget.isDark
                           ? AppColors.PRIMARY_COLOR
                           : AppColors.GREY_COLOR
+                      // ignore: dead_code
                       : AppColors.GREY_COLOR,
                   letterSpacing: .75,
                 ),
@@ -194,11 +196,13 @@ class _CustomTabBarState extends State<CustomTabBar>
                 'Upcomming',
                 style: TextStyle(
                   fontSize: 14.0,
+                  // ignore: dead_code
                   fontWeight: true ? FontWeight.w800 : FontWeight.w500,
                   color: true
                       ? !widget.isDark
                           ? AppColors.PRIMARY_COLOR
                           : AppColors.GREY_COLOR
+                      // ignore: dead_code
                       : AppColors.GREY_COLOR,
                   letterSpacing: .75,
                 ),

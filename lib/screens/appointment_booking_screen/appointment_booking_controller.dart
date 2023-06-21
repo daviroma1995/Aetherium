@@ -10,7 +10,6 @@ import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/appointment_status.dart';
@@ -23,6 +22,8 @@ int monthIndex = DateTime.now().month;
 
 class AppointMentBookingController extends GetxController {
   RxBool isLoading = false.obs;
+  RxBool calenderState = true.obs;
+  RxBool hideTodayController = true.obs;
   var args = Get.arguments;
   var employees = <Employee>[].obs;
   var treatments = <Treatment>[].obs;
@@ -37,12 +38,16 @@ class AppointMentBookingController extends GetxController {
   var selectedEmloyees = <String>[].obs;
   var appointmentStatusList = <AppointmentStatus>[].obs;
   var statusLabels = <String>[].obs;
+  var initialDate = DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, 0, 0, 0, 0, 0)
+      .obs;
   @override
   void onInit() async {
     super.onInit();
     isLoading.value = true;
     args.notes = args.notes ?? '';
     notes.text = args.notes;
+    args.isRegular = args.isRegular ?? true;
     treatments.bindStream(FirebaseServices.treatments());
     var selectedEmployeeQuery = await FirebaseFirestore.instance
         .collection('employees')
@@ -54,7 +59,7 @@ class AppointMentBookingController extends GetxController {
       data['id'] = element.id;
       employees.add(Employee.fromJson(data));
     }
-    print(selectedEmloyees);
+    args.employeeId = selectedEmloyees;
     var data = await FirebaseServices.getDataWhere(
         collection: 'clients',
         value: LoginController.instance.user?.uid ?? '',
@@ -67,7 +72,6 @@ class AppointMentBookingController extends GetxController {
           .get();
       var map = data.data()!;
       map['id'] = data.id;
-      print(map);
       selectedTreatmentsMap.add(map);
     }
 
@@ -92,6 +96,9 @@ class AppointMentBookingController extends GetxController {
     args.statusId = '88aa7cf3-c6b6-4cab-91eb-247aa6445a0a';
     args.date = selectedDate.value;
     isLoading.value = false;
+    args.roomId = args.roomId ?? slotdata[0].roomIdList;
+    args.startTime = args.startTime ?? slotdata[0].startTime;
+    args.endTime = args.endTime ?? slotdata[0].endTime;
   }
 
   double totalPrice = 0.0;
@@ -106,6 +113,9 @@ class AppointMentBookingController extends GetxController {
   void selectSlot(int index) {
     selectedSlot.value = index;
     args.time = avaliableSlots[index];
+    args.startTime = slotdata[index].startTime;
+    args.endTime = slotdata[index].endTime;
+    args.roomId = slotdata[index].roomIdList;
   }
 
   void next() {
@@ -116,7 +126,6 @@ class AppointMentBookingController extends GetxController {
     } else {
       DateTime time = DateTime(DateTime.now().year, DateTime.now().month,
           DateTime.now().day, 0, 0, 0, 0, 0);
-      print(time);
       args.dateTimestamp ??= Timestamp.fromDate(time);
 
       args.serviceId.forEach((service) {
@@ -145,20 +154,19 @@ class AppointMentBookingController extends GetxController {
       {required List<Map<String, dynamic>> treatments,
       required String appointmentDate}) async {
     isLoading.value = true;
-    print('printing');
+    // print(json.encode({"date": appointmentDate, "treatments": treatments}));
+
     slotdata = <Timeslot>[];
     avaliableSlots.value = <String>[];
     var client = http.Client();
     var url = Uri.parse(
         "https://us-central1-aetherium-salon.cloudfunctions.net/timeslots");
-    print('starting');
     try {
       var response = await client.post(url,
           body:
               json.encode({"date": appointmentDate, "treatments": treatments}));
       var responseBody = response.body;
       var resList = json.decode(responseBody);
-
       for (var data in resList) {
         var startTime = data['start_time'];
         var date = DateTime.parse(startTime);
@@ -166,14 +174,13 @@ class AppointMentBookingController extends GetxController {
         avaliableSlots.add(time);
         slotdata.add(Timeslot.fromJson(data));
       }
-      log(avaliableSlots.toString());
       if (avaliableSlots.isEmpty) {
         Fluttertoast.showToast(
-            msg: 'No slots avaialbe select another date',
+            msg: 'No slots availabel select another date',
             backgroundColor: AppColors.ERROR_COLOR);
       }
     } catch (ex) {
-      print(ex);
+      log(ex.toString());
     }
     isLoading.value = false;
   }

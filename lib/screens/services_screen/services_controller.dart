@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, avoid_function_literals_in_foreach_calls, unnecessary_overrides, avoid_print
+
 import 'dart:async';
 import 'dart:developer';
 
@@ -54,11 +56,11 @@ class ServicesController extends GetxController {
 
   List<String> getServiceTitle(List<Treatment> items, index) {
     var titles = <String>[];
-    items.forEach((element) {
+    for (var element in items) {
       if (services[index].id == element.treatmentCategoryId) {
         titles.add(element.name!);
       }
-    });
+    }
     return titles;
   }
 
@@ -133,17 +135,7 @@ class ServicesController extends GetxController {
             }
           }
         }
-      }
-      // if (args != 0) {
-      //   final prevService = services[0];
-      //   final currentService = services[args!];
-      //   final temp = prevService;
-      //   services[0] = currentService;
-      //   services[0].isExtended.value = true;
-      //   services[args!] = temp;
-      //   reset();
-      // }
-      catch (ex) {
+      } catch (ex) {
         log(ex.toString());
         var past = services[args];
         past.isExtended.value = true;
@@ -161,11 +153,6 @@ class ServicesController extends GetxController {
       services[i].isExtended.value = false;
     }
   }
-
-  // void checkBoxController(int index) {
-  //   subServices[index][index].isSelected!.value =
-  //       !subServices[index][index].isSelected!.value;
-  // }
 
   void dropDownController() {
     isExpanded.value = !isExpanded.value;
@@ -256,30 +243,3 @@ class ServicesController extends GetxController {
     searchedValue.value = search.text;
   }
 }
-
-// final selectedServices = <SubService>[];
-
-// class SubService {
-//   final String title;
-//   final RxBool? isSelected;
-//   final double price;
-//   final String time;
-//   SubService({
-//     required this.title,
-//     this.isSelected,
-//     required this.price,
-//     required this.time,
-//   });
-// }
-
-// class Service {
-//   final String title;
-//   final List<SubService> items;
-//   final RxBool isExtended;
-
-//   Service({
-//     required this.title,
-//     required this.items,
-//     required this.isExtended,
-//   });
-// }

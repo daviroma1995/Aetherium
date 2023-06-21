@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, invalid_use_of_protected_member
 
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_controller.dart';
 import 'package:atherium_saloon_app/screens/events_screen/events_screen.dart';
@@ -20,7 +20,7 @@ import '../../widgets/custom_event_card_widget.dart';
 import '../../widgets/custom_title_row_widget.dart';
 
 class HomeScreen extends StatelessWidget {
-  final controller = Get.put(HomeScreenController());
+  final HomeScreenController controller = Get.find();
   HomeScreen({super.key});
 
   @override
@@ -70,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                                   letterSpacing: .75,
                                 ),
                               )
-                            : Text(''),
+                            : const Text(''),
                       ),
                     ],
                   ),
@@ -265,7 +265,8 @@ class HomeScreen extends StatelessWidget {
                                             controller.treatmentCategories
                                                 .indexWhere((element) =>
                                                     element.name ==
-                                                    filteredServices.name));
+                                                    filteredServices.name),
+                                          );
                                   },
                                   child: Column(
                                     crossAxisAlignment:
@@ -304,14 +305,35 @@ class HomeScreen extends StatelessWidget {
                                                     ),
                                                   ),
                                                   placeholder: (context, url) =>
-                                                      CircularProgressIndicator(),
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          Icon(Icons.error),
+                                                      const CircularProgressIndicator(),
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Icon(Icons.error),
                                                 ),
                                               )
-                                            : SvgPicture.asset(
-                                                filteredServices.iconUrl!),
+                                            : ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: filteredServices
+                                                      .darkIconUrl!,
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  placeholder: (context, url) =>
+                                                      const CircularProgressIndicator(),
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Icon(Icons.error),
+                                                ),
+                                              ),
                                       ),
                                       const SizedBox(height: 10.0),
                                       Expanded(

@@ -92,7 +92,7 @@ class LoginScreen extends StatelessWidget {
                       if (!controller.isPasswordValid.value) {
                         return Text(
                           controller.passwordErrorMessage.value,
-                          style: TextStyle(color: AppColors.ERROR_COLOR),
+                          style: const TextStyle(color: AppColors.ERROR_COLOR),
                         );
                       } else {
                         return const SizedBox(height: 0.0);

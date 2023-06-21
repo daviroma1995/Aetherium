@@ -17,6 +17,7 @@ class Appointment {
   Timestamp? dateTimestamp;
   List<String>? roomId;
   int? duration;
+  bool? isRegular;
   Appointment({
     this.id,
     this.date,
@@ -32,6 +33,7 @@ class Appointment {
     this.startTime,
     this.endTime,
     this.duration,
+    this.isRegular,
   });
 
   Appointment.fromJson(Map<String, dynamic> json) {
@@ -50,6 +52,7 @@ class Appointment {
     startTime = json['start_time'];
     endTime = json['end_time'];
     duration = json['total_duration'];
+    isRegular = json['is_regular'];
   }
 
   Map<String, dynamic> toJson() {
@@ -68,6 +71,7 @@ class Appointment {
     data['end_time'] = endTime;
     data['room_id_list'] = roomId;
     data['total_duration'] = duration;
+    data['is_regular'] = isRegular;
     return data;
   }
 

@@ -1,7 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api, avoid_print
+
 import 'dart:developer';
 
 import 'package:atherium_saloon_app/models/membership.dart';
-import 'package:atherium_saloon_app/screens/client_details_screen/client_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -11,6 +12,8 @@ import 'package:get/get.dart';
 import '../../models/client.dart';
 
 class ScanScreen extends StatefulWidget {
+  const ScanScreen({super.key});
+
   @override
   _ScanScreenState createState() => _ScanScreenState();
 }
@@ -30,7 +33,7 @@ class _ScanScreenState extends State<ScanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('QR Scanner'),
+        title: const Text('QR Scanner'),
       ),
       body: Column(
         children: <Widget>[
@@ -70,6 +73,7 @@ class _ScanScreenState extends State<ScanScreen> {
           log('Data not found');
         }
 
+        // ignore: unused_local_variable
         var docData = docs[0].data();
         var id = docs[0].id;
         await FirebaseFirestore.instance

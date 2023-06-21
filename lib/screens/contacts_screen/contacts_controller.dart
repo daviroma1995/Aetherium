@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -27,14 +26,14 @@ class ContactsController extends GetxController {
     var whatsapp = shopinfo.value.phoneNumber;
     if (Platform.isAndroid) {
       // add the [https]
+      // ignore: unused_local_variable
       Uri url = Uri.parse(
           "https://wa.me/$whatsapp:/?text=${Uri.parse('')}"); // new line
-      print(launchUrl(url));
     } else {
       // add the [https]
+      // ignore: unused_local_variable
       Uri url = Uri.parse(
           "https://api.whatsapp.com/send?phone=$whatsapp=${Uri.parse('')}"); // new line
-      print(launchUrl(url));
     }
   }
 

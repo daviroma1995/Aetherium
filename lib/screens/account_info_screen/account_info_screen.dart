@@ -410,7 +410,7 @@ class AccountInfoScreen extends StatelessWidget {
                                               ? AppColors.PRIMARY_DARK
                                               : AppColors.WHITE_COLOR,
                                           border: isDark
-                                              ? Border()
+                                              ? const Border()
                                               : Border.all(
                                                   width: 1.0,
                                                   color: AppColors.BORDER_COLOR,

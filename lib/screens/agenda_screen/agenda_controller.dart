@@ -44,23 +44,38 @@ class AgendaController extends GetxController {
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
           .obs;
   RxBool reload = false.obs;
+
+  @override
+  void onClose() {
+    super.onClose();
+    print('Closed');
+  }
+
   @override
   void onInit() async {
     await loadData();
-    BottomNavigationController controller = Get.find();
-    controller.toggle.value = false;
+    // BottomNavigationController controller = Get.find();
+    // controller.toggle.value = false;
     super.onInit();
   }
 
   Future<void> loadData() async {
+    // Get.reload();
+    reload.value = true;
     day = DateFormat('EEEE').format(DateTime.now()).obs;
     date = DateFormat('dd/MM/yyyy').format(DateTime.now()).obs;
+    onDateChange(DateTime.now());
     selectedDate.value =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    print(selectedDate.value);
+    // print(selectedDate.value);
     // RxBool isMonthView = false.obs;
     appointments.value = [];
     allAppointments.value = [];
+    treatmentsData.value = [];
+    allTreatments.value = [];
+    employees.value = [];
+
+    events = {};
     appointmentsCounter.value = <Event>[
       Event(
           counter: 0,
@@ -69,11 +84,6 @@ class AgendaController extends GetxController {
                 DateTime.now().day, 0, 0, 0, 0, 0),
           )),
     ];
-    treatmentsData.value = [];
-    allTreatments.value = [];
-    employees.value = [];
-
-    events = {};
 
     var user = await FirebaseServices.getDataWhere(
         collection: 'clients',
@@ -131,14 +141,14 @@ class AgendaController extends GetxController {
         }
       }
     }
-    appointmentsCounter.forEach((element) {
+    for (var element in appointmentsCounter) {
       events.addAll({
         element.timestamp!.toDate(): List.generate(element.counter, (index) {
           return {'isDone': true};
         })
       });
-    });
-    reload.value = !reload.value;
+    }
+    reload.value = false;
   }
 
   RxString day = DateFormat('EEEE').format(DateTime.now()).obs;
@@ -188,10 +198,10 @@ class AgendaController extends GetxController {
     if (time[1] != ':') {
       var tempTime = time[0] + time[1];
       if (int.parse(tempTime.trim()) <= 11) {
-        time = '$time';
+        time = time;
       }
     } else {
-      time = '$time';
+      time = time;
     }
     return time;
   }
@@ -200,13 +210,13 @@ class AgendaController extends GetxController {
     String time = '';
 
     int duration = 0;
-    services.forEach((element) {
-      allTreatments.forEach((treatment) {
+    for (var element in services) {
+      for (var treatment in allTreatments) {
         if (treatment.id == element) {
           duration += int.parse(treatment.duration!);
         }
-      });
-    });
+      }
+    }
     String startHours = '';
     String startMints = '';
     String endTime = '';

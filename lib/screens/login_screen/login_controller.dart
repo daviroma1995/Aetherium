@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 
 import '../../utils/shared_preferences.dart';
 import '../forget_password_screen/foreget_password_screen.dart';
+import '../home_screen/home_screen_controller.dart';
 import '../splash_screen/splash_controller.dart';
 
 class LoginController extends GetxController {
@@ -38,8 +39,9 @@ class LoginController extends GetxController {
       SplashScreenController controller = Get.find();
       controller.navigate();
     } else {
+      final HomeScreenController controller = Get.find();
       Timer(const Duration(milliseconds: 2000), () {
-        Get.offAll(() => const BottomNavigationScreen());
+        Get.to(() => const BottomNavigationScreen());
       });
     }
   }
@@ -93,13 +95,14 @@ class LoginController extends GetxController {
 
   void logout() async {
     await LocalData.resetData();
-    await auth.signOut();
     Get.offAll(() => LoginScreen());
+    await auth.signOut();
   }
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  // ignore: unused_field
   late String? _currentUserUid;
   RxBool isObsecure = true.obs;
   RxBool isEmailValid = true.obs;
@@ -167,13 +170,6 @@ class LoginController extends GetxController {
       );
       loadingHandler();
       _currentUserUid = auth.currentUser!.uid;
-      // LocalData.setIsLogedIn(true);
-      // LocalData.setUid(_currentUserUid!);
-      // log(auth.currentUser!.emailVerified.toString());
-      // Get.offAll(
-      //   () => const BottomNavigationScreen(),
-      //   arguments: {"uid": _currentUserUid},
-      // );
     } on FirebaseAuthException catch (err) {
       if (err.code == "wrong-password") {
         loadingHandler();

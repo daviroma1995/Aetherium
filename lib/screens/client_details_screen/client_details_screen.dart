@@ -86,7 +86,7 @@ class ClientDetailsScreen extends StatelessWidget {
                           TextRowWidget(
                             textOne: '${client.firstName}',
                             textTwo: '${client.lastName}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16.0,
                               color: AppColors.GREY_COLOR,
@@ -108,7 +108,7 @@ class ClientDetailsScreen extends StatelessWidget {
                           TextRowWidget(
                             textOne: client.getBirthday(),
                             textTwo: '${client.gender}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16.0,
                               color: AppColors.GREY_COLOR,
@@ -130,7 +130,7 @@ class ClientDetailsScreen extends StatelessWidget {
                           TextRowWidget(
                             textOne: '${client.email}',
                             textTwo: '${client.phoneNumber}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16.0,
                               color: AppColors.GREY_COLOR,

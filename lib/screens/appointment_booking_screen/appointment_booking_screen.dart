@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:atherium_saloon_app/models/timeslot.dart';
 import 'package:atherium_saloon_app/widgets/form_field_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -67,43 +66,36 @@ class AppointmentBookingScreen extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Calendar(
-                          events: {},
-                          hideTodayIcon: true,
-                          // startOnMonday: true,
-                          initialDate: controller.args.dateTimestamp != null
-                              ? controller.args.dateTimestamp.toDate()
-                              : DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day,
-                                  0,
-                                  0,
-                                  0,
-                                  0,
-                                  0),
-                          onDateSelected: (value) async {
-                            controller.args.dateTimestamp = Timestamp.fromDate(
+                        child: Obx(
+                          () => Calendar(
+                            // ignore: prefer_const_literals_to_create_immutables
+                            reload: controller.calenderState.value,
+                            events: {},
+                            hideTodayIcon: true,
+                            // startOnMonday: true,
+                            initialDate: controller.args.dateTimestamp != null
+                                ? controller.args.dateTimestamp.toDate()
+                                : controller.initialDate.value,
+                            onDateSelected: (value) async {
+                              controller.args.dateTimestamp =
+                                  Timestamp.fromDate(DateTime(value.year,
+                                      value.month, value.day, 0, 0, 0, 0, 0));
+                              controller.selectedDate.value =
+                                  DateFormat("MM/dd/yyyy").format(
                                 DateTime(value.year, value.month, value.day, 0,
-                                    0, 0, 0, 0));
-                            controller.selectedDate.value =
-                                DateFormat("MM/dd/yyyy").format(DateTime(
-                                    value.year,
-                                    value.month,
-                                    value.day,
-                                    0,
-                                    0,
-                                    0,
-                                    0,
-                                    0));
-
-                            controller.args.date =
-                                controller.selectedDate.value;
-                            await controller.loadTimeslots(
-                                treatments: controller.selectedTreatmentsMap,
-                                appointmentDate: controller.selectedDate.value);
-                            print(value);
-                          },
+                                    0, 0, 0, 0),
+                              );
+                              controller.initialDate.value = value;
+                              controller.calenderState.value =
+                                  !controller.calenderState.value;
+                              controller.args.date =
+                                  controller.selectedDate.value;
+                              await controller.loadTimeslots(
+                                  treatments: controller.selectedTreatmentsMap,
+                                  appointmentDate:
+                                      controller.selectedDate.value);
+                            },
+                          ),
                         ),
                       ),
                       const SizedBox(height: 35.0),
@@ -176,6 +168,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                                               child: Container(
                                                 alignment: Alignment.center,
                                                 decoration: BoxDecoration(
+                                                  // ignore: unrelated_type_equality_checks
                                                   color: controller
                                                               .selectedSlot ==
                                                           index
@@ -190,6 +183,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                                                       BorderRadius.circular(
                                                           8.0),
                                                   border:
+                                                      // ignore: unrelated_type_equality_checks
                                                       controller.selectedSlot !=
                                                               index
                                                           ? isDark
@@ -198,7 +192,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                                                                   color: AppColors
                                                                       .SECONDARY_LIGHT,
                                                                 )
-                                                          : Border(),
+                                                          : const Border(),
                                                 ),
                                                 child: Text(
                                                   controller
@@ -206,6 +200,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                                                   style: TextStyle(
                                                     fontSize: 14.0,
                                                     fontWeight: FontWeight.w500,
+                                                    // ignore: unrelated_type_equality_checks
                                                     color: controller
                                                                 .selectedSlot ==
                                                             index
@@ -279,11 +274,13 @@ class AppointmentBookingScreen extends StatelessWidget {
                       const SizedBox(height: 20.0),
                       Obx(
                         () => Visibility(
-                          visible: controller.statusLabels.isNotEmpty,
+                          visible: controller.statusLabels.isNotEmpty &&
+                              controller.isAdmin.value,
                           child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 20.0),
                             child: DropDownItemsWidget(
+                              // ignore: invalid_use_of_protected_member
                               options: controller.statusLabels.value,
                               onTap: (selected) {
                                 int id = controller.appointmentStatusList

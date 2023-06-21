@@ -55,7 +55,7 @@ class LoyalityCardScreen extends StatelessWidget {
               ? SizedBox(
                   height: Get.height - 100,
                   width: Get.width,
-                  child: Center(
+                  child: const Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
@@ -101,7 +101,7 @@ class LoyalityCardScreen extends StatelessWidget {
                                               BorderRadius.circular(50.0),
                                           color: isDark
                                               ? AppColors.BACKGROUND_DARK
-                                              : AppColors.GREY_COLOR,
+                                              : AppColors.BORDER_COLOR,
                                         ),
                                         child: Text(
                                           controller.membershipType!.name!

@@ -19,7 +19,6 @@ class ClientDetailsController extends GetxController {
         key: 'id',
         value: clientMembership.value.membershipTypeId!);
     membershipType.value = MembershipType.fromJson(membershipData!);
-    print(data);
     loading.value = false;
     super.onInit();
   }

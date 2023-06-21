@@ -207,6 +207,7 @@ class FirebaseServices {
       var data = await FirebaseFirestore.instance
           .collection('appointments')
           .where('client_id', isEqualTo: uid)
+          .where('is_regular', isEqualTo: true)
           .orderBy('date_timestamp', descending: true)
           .limit(3)
           .get();
@@ -327,7 +328,7 @@ class FirebaseServices {
       //   treatments.add(TreatmentCategory.fromJson(data));
       // });
     } catch (ex) {
-      print(ex);
+      log(ex.toString());
     }
     return treatments;
   }
@@ -343,7 +344,7 @@ class FirebaseServices {
         treatments.add(Treatment.fromJson(data));
       });
     } catch (ex) {
-      print(ex);
+      log(ex.toString());
     }
     return treatments;
   }
@@ -365,6 +366,7 @@ class FirebaseServices {
 
   static Future<List<Appointment>> getAgendas(
       Timestamp timestamp, bool isAdmin) async {
+    // ignore: unused_local_variable
     var secondTimestamp = Timestamp.fromDate(DateTime(DateTime.now().year,
         DateTime.now().month, DateTime.now().day, 24, 00, 00, 0, 0));
     List<Appointment> agendas = [];
@@ -382,10 +384,10 @@ class FirebaseServices {
           agendas.add(Appointment.fromJson(data));
         }
       } catch (ex) {
-        print('Error: $ex');
+        log('Error: $ex');
       }
     } else {
-      print('else called');
+      log('else called');
       try {
         var data = await FirebaseFirestore.instance
             .collection('appointments')
@@ -397,7 +399,7 @@ class FirebaseServices {
           agendas.add(Appointment.fromJson(data));
         }
       } catch (ex) {
-        print('Error: $ex');
+        log('Error: $ex');
       }
     }
     return agendas;
@@ -411,6 +413,7 @@ class FirebaseServices {
             .collection('appointments')
             .where('client_id',
                 isEqualTo: LoginController.instance.user?.uid ?? '')
+            .where('is_regular', isEqualTo: true)
             .get();
         for (var querySnapShot in data.docs) {
           var data = querySnapShot.data();
@@ -418,10 +421,10 @@ class FirebaseServices {
           agendas.add(Appointment.fromJson(data));
         }
       } catch (ex) {
-        print('Error: $ex');
+        log('Error: $ex');
       }
     } else {
-      print('else called');
+      log('else called');
       try {
         var data =
             await FirebaseFirestore.instance.collection('appointments').get();
@@ -431,7 +434,7 @@ class FirebaseServices {
           agendas.add(Appointment.fromJson(data));
         }
       } catch (ex) {
-        print('Error: $ex');
+        log('Error: $ex');
       }
     }
     return agendas;
@@ -466,13 +469,13 @@ class FirebaseServices {
         .where('client_id', isEqualTo: LoginController.instance.user?.uid ?? '')
         .get()
         .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((DocumentSnapshot doc) {
+      for (var doc in querySnapshot.docs) {
         unreadNotifications.add(Notification.fromFirestore(doc));
-      });
+      }
       // Handle the list of unread notifications
       // For example, you can update the UI with the notifications
     }).catchError((error) {
-      print('Error getting documents: $error');
+      log('Error getting documents: $error');
     });
     return unreadNotifications;
   }
@@ -544,14 +547,6 @@ class FirebaseServices {
     for (var doc in listDocs) {
       var docData = doc.data();
       docData['id'] = doc.id;
-      var iconRef = docData['icon'];
-      try {
-        var url = await getDownloadUrl(iconRef);
-        docData['icon'] = url;
-      } catch (ex) {
-        log(ex.toString());
-      }
-      log(docData.toString());
       treatmentCategories.add(TreatmentCategory.fromJson(docData));
     }
 
@@ -560,6 +555,7 @@ class FirebaseServices {
 
   static Future<Stream<List<Treatment>>> getTreatmentsFiltered(
       String uid) async {
+    // ignore: unused_local_variable
     List<Treatment> services = <Treatment>[];
     var clientDocSnapshot = await FirebaseFirestore.instance
         .collection('client_memberships')
@@ -575,11 +571,11 @@ class FirebaseServices {
         .snapshots()
         .map((querySnapshot) {
       List<Treatment> treatments = [];
-      querySnapshot.docs.forEach((documentQuery) {
+      for (var documentQuery in querySnapshot.docs) {
         var data = documentQuery.data();
         data['id'] = documentQuery.id;
         treatments.add(Treatment.fromJson(data));
-      });
+      }
       return treatments;
     });
   }

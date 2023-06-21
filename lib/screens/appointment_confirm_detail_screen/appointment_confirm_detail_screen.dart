@@ -266,21 +266,21 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 20.0),
                                       ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount:
-                                              controller.args.employeeId.length,
-                                          itemBuilder: (context, index) {
-                                            return specialistCard(
-                                              title: homecontroller
-                                                  .getEmployeeName(controller
-                                                          .args
-                                                          .employeeId[index] ??
-                                                      '8f1cYZExVjeOo2sBDmQC'),
-                                              imageUrl: AppAssets.USER_IMAGE,
-                                              subtitle: 'Fragrances & Perfumes',
-                                              isDark: isDark,
-                                            );
-                                          }),
+                                        shrinkWrap: true,
+                                        itemCount:
+                                            controller.args.employeeId.length,
+                                        itemBuilder: (context, index) {
+                                          return specialistCard(
+                                            title: homecontroller
+                                                .getEmployeeName(controller.args
+                                                        .employeeId[index] ??
+                                                    '8f1cYZExVjeOo2sBDmQC'),
+                                            imageUrl: AppAssets.USER_IMAGE,
+                                            subtitle: 'Fragrances & Perfumes',
+                                            isDark: isDark,
+                                          );
+                                        },
+                                      ),
                                     ],
                                   ),
                                 const SizedBox(height: 20.0),
@@ -355,6 +355,7 @@ Container specialistCard({
   return Container(
     height: 82.0,
     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
+    margin: const EdgeInsets.only(bottom: 10.0),
     decoration: BoxDecoration(
       color: isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
       border: isDark

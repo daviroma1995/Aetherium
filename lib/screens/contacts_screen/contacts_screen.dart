@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_const_constructors
 import 'dart:async';
 
 import 'package:atherium_saloon_app/utils/map_utils.dart';
@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/constants.dart';
 
 import 'contacts_controller.dart';
 
+// ignore: must_be_immutable
 class ContactsScreen extends StatelessWidget {
   final controller = Get.put(ContactsController());
   final Completer<GoogleMapController> _controller =
@@ -28,7 +28,9 @@ class ContactsScreen extends StatelessWidget {
       tilt: 29.440717697143555,
       zoom: 20.151926040649414);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  // ignore: prefer_final_fields, unused_field
   LatLng _center = LatLng(45.52307386080499, 10.2587832779112);
+  // ignore: unused_element
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
@@ -268,6 +270,7 @@ class ContactsScreen extends StatelessWidget {
                                   const SizedBox(height: 20.0),
                                   GestureDetector(
                                     onTap: () {
+                                      // ignore: avoid_print
                                       print('hello');
                                     },
                                     child: SizedBox(
@@ -423,6 +426,7 @@ class ContactsScreen extends StatelessWidget {
           ),
         ),
         Text(
+          // ignore: unnecessary_string_interpolations
           from == null ? '$to' : '$from - $to',
           style: TextStyle(
             fontSize: 16.0,

@@ -80,7 +80,7 @@ class AppointmentConfirmScreen extends StatelessWidget {
                 buttonText: 'Close',
                 onTap: () {
                   Get.offUntil(
-                      GetPageRoute(page: () => AppointmentsScreen()),
+                      GetPageRoute(page: () => const AppointmentsScreen()),
                       (route) =>
                           (route as GetPageRoute).routeName ==
                           '/BottomNavigationScreen');

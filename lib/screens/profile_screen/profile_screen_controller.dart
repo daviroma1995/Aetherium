@@ -9,6 +9,7 @@ import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/screens/scan_screen/scan_screen.dart';
 import 'package:atherium_saloon_app/screens/settings_screen/settings_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
+import 'package:atherium_saloon_app/utils/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -95,10 +96,14 @@ class ProfileController extends GetxController {
       //   curve: Curves.ease,
       // );
       LoginController.instance.logout();
+      LocalData.setIsLogedIn(false);
+      Get.offAll(
+        () => LoginScreen(),
+      );
     }
     if (index == 0) {
       Get.to(
-        () => AppointmentsScreen(),
+        () => const AppointmentsScreen(),
         duration: const Duration(milliseconds: 500),
         transition: Transition.rightToLeft,
         curve: Curves.ease,
@@ -139,7 +144,7 @@ class ProfileController extends GetxController {
     if (user.value.isAdmin == true) {
       if (index == 5) {
         Get.to(
-          () => ScanScreen(),
+          () => const ScanScreen(),
           duration: const Duration(milliseconds: 500),
           transition: Transition.rightToLeft,
           curve: Curves.ease,

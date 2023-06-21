@@ -4,6 +4,7 @@ class TreatmentCategory {
   String? id;
   String? name;
   String? iconUrl;
+  String? darkIconUrl;
   RxBool isExtended = false.obs;
   TreatmentCategory({this.id, this.name, this.iconUrl});
 
@@ -11,6 +12,7 @@ class TreatmentCategory {
     id = json['id'];
     name = json['name'];
     iconUrl = json['icon'];
+    darkIconUrl = json['dark_icon'];
   }
 
   Map<String, dynamic> toJson() {
@@ -18,6 +20,7 @@ class TreatmentCategory {
     data['id'] = id;
     data['name'] = name;
     data['icon'] = iconUrl;
+    data['dark_icon'] = darkIconUrl;
     return data;
   }
 }

@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, no_leading_underscores_for_local_identifiers, unused_element, avoid_print
 import 'dart:async';
 
 import 'package:atherium_saloon_app/screens/event_details/event_details_controller.dart';
@@ -20,24 +20,25 @@ class EventDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final Completer<GoogleMapController> _controller =
+    final Completer<GoogleMapController> controller0 =
         Completer<GoogleMapController>();
 
-    CameraPosition _kGooglePlex = CameraPosition(
+    CameraPosition kGooglePlex = CameraPosition(
       target: LatLng(controller.args.latitude, controller.args.longitude),
       zoom: 20.0,
     );
 
-    CameraPosition _kLake = CameraPosition(
+    CameraPosition kLake = CameraPosition(
         bearing: 192.8334901395799,
         target: LatLng(controller.args.latitude, controller.args.longitude),
         tilt: 29.440717697143555,
         zoom: 20.151926040649414);
     Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-    LatLng _center = LatLng(45.52307386080499, 10.2587832779112);
+    // ignore: unused_local_variable, prefer_const_constructors
+    LatLng center = LatLng(45.52307386080499, 10.2587832779112);
     Future<void> _goToTheLake() async {
-      final GoogleMapController controller = await _controller.future;
-      controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+      final GoogleMapController controller = await controller0.future;
+      controller.animateCamera(CameraUpdate.newCameraPosition(kLake));
     }
 
     return Scaffold(
@@ -244,10 +245,10 @@ class EventDetailsScreen extends StatelessWidget {
                                   MapUtils.openMap(
                                       argument.latitude, argument.longitude);
                                 },
-                                initialCameraPosition: _kGooglePlex,
+                                initialCameraPosition: kGooglePlex,
                                 mapType: MapType.hybrid,
                                 onMapCreated: (GoogleMapController controller) {
-                                  _controller.complete(controller);
+                                  controller0.complete(controller);
                                 },
                                 markers: markers.values.toSet(),
                               ),
