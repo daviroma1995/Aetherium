@@ -38,9 +38,7 @@ class AppointmentBookingScreen extends StatelessWidget {
             children: [
               InkWell(
                 borderRadius: BorderRadius.circular(25.0),
-                onTap: () {
-                  Get.back();
-                },
+                onTap:  controller.back,
                 child: Container(
                   alignment: Alignment.center,
                   width: 25.0,
@@ -68,6 +66,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Obx(
                           () => Calendar(
+                            key: UniqueKey(),
                             // ignore: prefer_const_literals_to_create_immutables
                             reload: controller.calenderState.value,
                             events: {},

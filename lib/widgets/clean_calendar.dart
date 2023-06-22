@@ -92,7 +92,6 @@ class _CalendarState extends State<Calendar> {
   @override
   void initState() {
     super.initState();
-    print('called');
     _selectedDate = widget.initialDate ?? DateTime.now();
     isExpanded = widget.isExpanded;
     isSwapped = false;

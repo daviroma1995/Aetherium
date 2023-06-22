@@ -24,6 +24,7 @@ class AppointMentBookingController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool calenderState = true.obs;
   RxBool hideTodayController = true.obs;
+  RxBool shouldReset = false.obs;
   var args = Get.arguments;
   var employees = <Employee>[].obs;
   var treatments = <Treatment>[].obs;
@@ -43,8 +44,9 @@ class AppointMentBookingController extends GetxController {
       .obs;
   @override
   void onInit() async {
-    super.onInit();
     isLoading.value = true;
+    initialDate.value = args.dateTimestamp != null ? args.dateTimestamp.toDate() : initialDate.value;
+    selectedDate.value = args.dateTimestamp != null? DateFormat('MM/dd/yyyy').format(args.dateTimestamp.toDate()) : selectedDate.value; 
     args.notes = args.notes ?? '';
     notes.text = args.notes;
     args.isRegular = args.isRegular ?? true;
@@ -99,6 +101,8 @@ class AppointMentBookingController extends GetxController {
     args.roomId = args.roomId ?? slotdata[0].roomIdList;
     args.startTime = args.startTime ?? slotdata[0].startTime;
     args.endTime = args.endTime ?? slotdata[0].endTime;
+    super.onInit();
+
   }
 
   double totalPrice = 0.0;
@@ -193,5 +197,14 @@ class AppointMentBookingController extends GetxController {
       var data = doc.data();
       appointmentStatusList.add(AppointmentStatus.fromJson(data));
     }
+  }
+
+  void back(){            
+      // args.dateTimestamp = null;
+      // initialDate.value = DateTime(DateTime.now().year, DateTime.now().month,
+      // DateTime.now().day, 0, 0, 0, 0, 0);
+      calenderState.value = !calenderState.value;
+      Get.back();
+    
   }
 }
