@@ -1,4 +1,5 @@
 import 'package:atherium_saloon_app/screens/appointment_confirm_screen/appointment_confirm_screen.dart';
+import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -106,6 +107,8 @@ class AppointmentConfirmDetailController extends GetxController {
   }
 
   void confirm() {
+    HomeScreenController controller = Get.find();
+
     if (args.id == null) {
       FirebaseFirestore.instance.collection('appointments').add(args.toJson());
       Get.to(
@@ -114,6 +117,8 @@ class AppointmentConfirmDetailController extends GetxController {
         transition: Transition.leftToRight,
         curve: Curves.linear,
       );
+    controller.loadAppointments();
+
     } else {
       FirebaseFirestore.instance
           .collection('appointments')
@@ -125,6 +130,7 @@ class AppointmentConfirmDetailController extends GetxController {
         transition: Transition.leftToRight,
         curve: Curves.linear,
       );
+    controller.loadAppointments();
     }
   }
 }

@@ -110,7 +110,7 @@ class _CalendarState extends State<Calendar> {
   @override
   void didUpdateWidget(covariant Calendar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print('called');
+    
     _selectedDate = widget.initialDate ?? DateTime.now();
     isSwapped = false;
     selectedMonthsDays = _daysInMonth(_selectedDate);

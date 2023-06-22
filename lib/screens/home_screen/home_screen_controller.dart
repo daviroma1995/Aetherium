@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:atherium_saloon_app/models/treatment_category.dart';
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
@@ -56,20 +55,10 @@ class HomeScreenController extends GetxController {
 
     isInitialized.value = true;
     LocalData.setIsLogedIn(true);
-    var treatments = await FirebaseServices.getData(collection: 'treatments');
-    var data = await FirebaseServices.getAppointments(
-        isAdmin: currentUser.value.isAdmin!);
-    appointments.value = data;
-    for (var appointment in appointments) {
-      for (int i = 0; i < treatments!.length; i++) {
-        if (appointment.serviceId![0] == treatments[i]['id']) {
-          services.add(Treatment.fromJson(treatments[i]));
-        }
-      }
-    }
-    WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) async {},
-    );
+    loadAppointments();
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //   (timeStamp) async {},
+    // );
     isLoading.value = false;
   }
 
@@ -85,7 +74,19 @@ class HomeScreenController extends GetxController {
       await loadHomeScreen();
     }
   }
-
+  Future<void> loadAppointments() async{
+    var treatments = await FirebaseServices.getData(collection: 'treatments');
+    var data = await FirebaseServices.getAppointments(
+        isAdmin: currentUser.value.isAdmin!);
+    appointments.value = data;
+    for (var appointment in appointments) {
+      for (int i = 0; i < treatments!.length; i++) {
+        if (appointment.serviceId![0] == treatments[i]['id']) {
+          services.add(Treatment.fromJson(treatments[i]));
+        }
+      }
+    }
+  }
   final searchController = TextEditingController();
   void onChange(String value) {
     searchedService.value = value;
