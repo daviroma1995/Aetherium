@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
+import 'package:atherium_saloon_app/screens/notification_permission_screen/notification_permission_screen.dart';
 import 'package:atherium_saloon_app/screens/pdf_view_screen/pdf_view_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -31,6 +32,9 @@ class SettingsController extends GetxController {
   }
 
   navigationHandle(int index) async {
+    if(index == 0){
+      Get.to(() => NotificationPermissionScreen());
+    }
     if (index == 1) {
       Get.to(() => PdfViewScreen(
             path: urls[0],

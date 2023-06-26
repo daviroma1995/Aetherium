@@ -62,8 +62,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
 
   final controller = Get.put(BottomNavigationController());
   int _currentIndex = 0;
-  PageController pageController =
-      PageController(initialPage: 0, keepPage: true);
+  // PageController pageController =
+  //     PageController(initialPage: 0, keepPage: true);
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;

@@ -22,10 +22,12 @@ class PastAppointmentController extends GetxController {
   var appointmentStatus = <AppointmentStatus>[].obs;
   var services = <Treatment>[].obs;
   RxBool isInititalized = false.obs;
+  bool isAdmin = false;
   @override
   void onInit() async {
     super.onInit();
     await loadData();
+
   }
 
   Future<void> loadData() async {
@@ -41,7 +43,8 @@ class PastAppointmentController extends GetxController {
     var employeeData = await FirebaseServices.getData(collection: 'employees');
     var statusData =
         await FirebaseServices.getData(collection: 'appointment_status');
-
+    var currentClient = await FirebaseServices.getCurrentUser();
+    isAdmin = currentClient['isAdmin'];
     // for (var employee in employeeData!) {
     //   employees.add(Employee.fromJson(employee));
     // }
@@ -137,15 +140,20 @@ class PastAppointmentController extends GetxController {
     }
   }
 
-  goToDetails(int index) {
-    Get.to(
+  goToDetails(int index) async{
+    await Get.to(
       () => AppointmentDetailsScreen(
         appointment: pastAppointments[index],
         isDetail: true,
+        isPast: true,
+        isAdmin: isAdmin,
       ),
       transition: Transition.rightToLeft,
       duration: const Duration(milliseconds: 400),
-    );
+    )?.then((value) { if(value == true){
+        loadData();
+      }
+    });
   }
 
   Future<void> deleteAppointment(int id) async {

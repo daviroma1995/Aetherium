@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import 'package:atherium_saloon_app/screens/appointment_booking_screen/appointment_booking_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
-import 'package:atherium_saloon_app/widgets/button_widget.dart';
+import 'package:atherium_saloon_app/widgets/primary_button.dart';
 import 'package:intl/intl.dart';
 
 import '../../widgets/clean_calendar.dart';
@@ -132,8 +132,10 @@ class AppointmentBookingScreen extends StatelessWidget {
                                 () => controller.isLoading.value == true
                                     ? SizedBox(
                                         width: Get.width,
-                                        child: const Center(
-                                            child: CircularProgressIndicator()))
+                                        child:  Center(
+                                            child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+                                            )))
                                     : GridView.builder(
                                         physics:
                                             const NeverScrollableScrollPhysics(),
@@ -325,8 +327,10 @@ class AppointmentBookingScreen extends StatelessWidget {
                               : controller.employees.length,
                           itemBuilder: (contenxt, index) {
                             if (controller.employees.isEmpty) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
+                              return  Center(
+                                child: CircularProgressIndicator(
+                                color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,  
+                                ),
                               );
                             } else {
                               return Column(
@@ -355,7 +359,7 @@ class AppointmentBookingScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 13.0),
-                child: ButtonWidget(
+                child: PrimaryButton(
                   width: Get.width,
                   color: isDark
                       ? AppColors.SECONDARY_LIGHT

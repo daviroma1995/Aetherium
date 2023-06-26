@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import 'package:atherium_saloon_app/screens/services_screen/services_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
-import 'package:atherium_saloon_app/widgets/button_widget.dart';
+import 'package:atherium_saloon_app/widgets/primary_button.dart';
 
 import '../../widgets/custom_dropdown_list_widget.dart';
 import '../../widgets/form_field_widget.dart';
@@ -65,8 +65,11 @@ class ServicesScreen extends StatelessWidget {
         body: Obx(
           () => SafeArea(
             child: controller.services.isEmpty && controller.subServices.isEmpty
-                ? const Center(
-                    child: CircularProgressIndicator(),
+                ?  Center(
+                    child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                    ),
                   )
                 : Obx(
                     () => Visibility(
@@ -178,7 +181,7 @@ class ServicesScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 22.0, vertical: 20.0),
-                            child: ButtonWidget(
+                            child: PrimaryButton(
                                 width: Get.width,
                                 buttonText: 'Next',
                                 color: isDark

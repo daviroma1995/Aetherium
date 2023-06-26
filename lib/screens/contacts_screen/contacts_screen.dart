@@ -74,7 +74,10 @@ class ContactsScreen extends StatelessWidget {
         () => SafeArea(
           child: controller.shopinfo.value.email == null
               ? Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                  ),
                 )
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

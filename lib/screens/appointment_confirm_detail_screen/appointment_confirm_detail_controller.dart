@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../models/treatment.dart';
 import '../../network_utils/firebase_services.dart';
+import '../agenda_screen/agenda_controller.dart';
 
 class AppointmentConfirmDetailController extends GetxController {
   var args = Get.arguments;
@@ -107,7 +108,8 @@ class AppointmentConfirmDetailController extends GetxController {
   }
 
   void confirm() {
-    HomeScreenController controller = Get.find();
+    HomeScreenController homeController = Get.find();
+    AgendaController agendaController = Get.find();
 
     if (args.id == null) {
       FirebaseFirestore.instance.collection('appointments').add(args.toJson());
@@ -117,7 +119,8 @@ class AppointmentConfirmDetailController extends GetxController {
         transition: Transition.leftToRight,
         curve: Curves.linear,
       );
-    controller.loadAppointments();
+    homeController.loadAppointments();
+    agendaController.loadData();
 
     } else {
       FirebaseFirestore.instance
@@ -130,7 +133,8 @@ class AppointmentConfirmDetailController extends GetxController {
         transition: Transition.leftToRight,
         curve: Curves.linear,
       );
-    controller.loadAppointments();
+    homeController.loadAppointments();
+    agendaController.loadData();
     }
   }
 }

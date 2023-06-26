@@ -1,6 +1,7 @@
 import 'package:atherium_saloon_app/models/appointment.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
+import 'package:atherium_saloon_app/screens/update_appointment_status/update_appointment_status_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -102,5 +103,15 @@ class AppointmentDetailsController extends GetxController {
       arguments: appointment,
     );
     isChanged = data;
+  }
+
+  void editStatus(Appointment appointment) {
+    Get.to(
+      () => UpdateAppointmentStatusScreen(appointment: appointment), 
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.linear,
+      transition: Transition.downToUp,
+      arguments: appointment,
+    );
   }
 }

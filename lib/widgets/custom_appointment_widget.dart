@@ -79,13 +79,14 @@ class CustomAppointmentCardWidget extends StatelessWidget {
                                       : AppColors.BLACK_COLOR),
                         ),
                         const SizedBox(height: 6.0),
-                        FittedBox(
+                        Expanded(
                           child: Text(
                             subTitle,
                             maxLines: 1,
                             style: TextStyle(
                               fontFamily: 'Lato',
-                              fontSize: 14.0,
+                              fontSize: 12.0,
+                              overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.w500,
                               color: isDark
                                   ? AppColors.GREY_COLOR

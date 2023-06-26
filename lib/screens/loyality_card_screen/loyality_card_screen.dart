@@ -24,6 +24,8 @@ class LoyalityCardScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor:
             isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
@@ -55,8 +57,11 @@ class LoyalityCardScreen extends StatelessWidget {
               ? SizedBox(
                   height: Get.height - 100,
                   width: Get.width,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
+                  child:  Center(
+                    child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                    ),
                   ),
                 )
               : Visibility(

@@ -106,7 +106,10 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                                   ),
                                 ),
                                 placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
+                                     CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                                    ),
                                 errorWidget: (context, url, error) =>
                                     const Icon(Icons.error),
                               ),

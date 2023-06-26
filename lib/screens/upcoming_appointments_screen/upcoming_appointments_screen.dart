@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 import '../../utils/constants.dart';
 import '../../widgets/appointments_card_widget.dart';
-import '../../widgets/button_widget.dart';
+import '../../widgets/primary_button.dart';
 
 class UpcomingAppointmentsScreen extends StatelessWidget {
   final controller = Get.put(UpcomingAppointmentsController());
@@ -16,6 +16,7 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -68,9 +69,12 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                 )
               : Obx(
                   () => controller.isLoading.isTrue
-                      ? const SizedBox(
+                      ?  SizedBox(
                           child: Center(
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                            ),
                           ),
                         )
                       : Column(
@@ -111,7 +115,7 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                                                     context: context,
                                                     builder: (context) {
                                                       var yesButton =
-                                                          ButtonWidget(
+                                                          PrimaryButton(
                                                               color: AppColors
                                                                   .ERROR_COLOR,
                                                               width: 60,

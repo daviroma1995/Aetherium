@@ -223,7 +223,10 @@ class HomeScreen extends StatelessWidget {
                           height: 150.0,
                           width: Get.width,
                           child:
-                              const Center(child: CircularProgressIndicator()),
+                               Center(child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                              )),
                         ),
                       ),
                     ),
@@ -305,7 +308,10 @@ class HomeScreen extends StatelessWidget {
                                                     ),
                                                   ),
                                                   placeholder: (context, url) =>
-                                                      const CircularProgressIndicator(),
+                                                       CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                                                      ),
                                                   errorWidget: (context, url,
                                                           error) =>
                                                       const Icon(Icons.error),
@@ -328,7 +334,10 @@ class HomeScreen extends StatelessWidget {
                                                     ),
                                                   ),
                                                   placeholder: (context, url) =>
-                                                      const CircularProgressIndicator(),
+                                                       CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                                                      ),
                                                   errorWidget: (context, url,
                                                           error) =>
                                                       const Icon(Icons.error),
@@ -384,8 +393,11 @@ class HomeScreen extends StatelessWidget {
                               child: SizedBox(
                                 height: 103,
                                 width: Get.width,
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
+                                child:  Center(
+                                  child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                                  ),
                                 ),
                               ),
                             ),
@@ -397,7 +409,7 @@ class HomeScreen extends StatelessWidget {
                                 padding: const EdgeInsets.only(left: 22.0),
                                 child: Obx(
                                   () => controller.appointments.isNotEmpty &&
-                                          controller.services.isNotEmpty
+                                          controller.services.isNotEmpty && controller.appointmentsTreatmentCategoryList. isNotEmpty
                                       ? SizedBox(
                                           height: 103.0,
                                           child: ListView.builder(
@@ -423,10 +435,10 @@ class HomeScreen extends StatelessWidget {
                                                               .appointments[
                                                                   index]
                                                               .employeeId![0]),
-                                                  subTitle: controller
+                                                  subTitle: '${controller.appointmentsTreatmentCategoryList[index].name ?? ''} - ${controller
                                                       .getServices(controller
                                                           .appointments[index]
-                                                          .serviceId![0]),
+                                                          .serviceId![0])}',
                                                   date: controller
                                                       .appointments[index]
                                                       .dateString,
@@ -566,7 +578,10 @@ class HomeScreen extends StatelessWidget {
                                   : Container(
                                       alignment: Alignment.center,
                                       height: 190,
-                                      child: const CircularProgressIndicator(),
+                                      child:  CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                                      ),
                                     ),
                         ),
                       ),

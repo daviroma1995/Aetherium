@@ -1,5 +1,5 @@
 import 'package:atherium_saloon_app/utils/constants.dart';
-import 'package:atherium_saloon_app/widgets/button_widget.dart';
+import 'package:atherium_saloon_app/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -281,10 +281,12 @@ class AddNewClient extends StatelessWidget {
                         duration: const Duration(milliseconds: 250),
                         child: Visibility(
                           visible: controller.isLoading.value,
-                          child: const SizedBox(
+                          child:  SizedBox(
                             height: 150,
                             child: Center(
-                              child: CircularProgressIndicator(),
+                              child: CircularProgressIndicator(
+                                color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+                              ),
                             ),
                           ),
                         ),
@@ -292,7 +294,7 @@ class AddNewClient extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        ButtonWidget(
+                        PrimaryButton(
                           width: Get.width / 2 - 28,
                           buttonText: 'Cancel',
                           onTap: () async {
@@ -308,7 +310,7 @@ class AddNewClient extends StatelessWidget {
                               : AppColors.PRIMARY_COLOR,
                         ),
                         const SizedBox(width: 12.0),
-                        ButtonWidget(
+                        PrimaryButton(
                           width: Get.width / 2 - 28,
                           buttonText: 'Save',
                           onTap: () {

@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:atherium_saloon_app/screens/select_client_screen/select_client_controller.dart';
 
 import '../../utils/constants.dart';
-import '../../widgets/button_widget.dart';
+import '../../widgets/primary_button.dart';
 import '../../widgets/form_field_widget.dart';
 
 class SelectClientScreen extends StatelessWidget {
@@ -68,7 +68,10 @@ class SelectClientScreen extends StatelessWidget {
                   ),
                   child: Obx(
                     () => controller.clients.isEmpty || controller.tier.isEmpty
-                        ? const CircularProgressIndicator()
+                        ?  CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                        )
                         : controller.isLoaded.value
                             ? ListView.builder(
                                 itemCount: controller.clients
@@ -103,7 +106,7 @@ class SelectClientScreen extends StatelessWidget {
                                       showDialog(
                                           context: context,
                                           builder: (context) {
-                                            var yesButton = ButtonWidget(
+                                            var yesButton = PrimaryButton(
                                                 color: AppColors.ERROR_COLOR,
                                                 width: 60,
                                                 buttonText: 'Yes',
@@ -282,7 +285,7 @@ class SelectClientScreen extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22.0),
-          child: ButtonWidget(
+          child: PrimaryButton(
             color: isDark ? AppColors.PRIMARY_DARK : AppColors.PRIMARY_COLOR,
             buttonText: AppLanguages.AVANTI,
             width: Get.width,

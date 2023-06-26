@@ -1,6 +1,6 @@
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
-import 'package:atherium_saloon_app/widgets/button_widget.dart';
+import 'package:atherium_saloon_app/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -75,7 +75,7 @@ class NewClientConfirmScreen extends StatelessWidget {
               bottom: 47.0,
               left: 22.0,
               right: 22.0,
-              child: ButtonWidget(
+              child: PrimaryButton(
                 width: Get.width,
                 buttonText: 'Close',
                 onTap: () {

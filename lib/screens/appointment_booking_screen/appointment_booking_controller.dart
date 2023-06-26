@@ -94,7 +94,7 @@ class AppointMentBookingController extends GetxController {
         ? avaliableSlots.isNotEmpty
             ? avaliableSlots[0]
             : null
-        : avaliableSlots[0];
+        : avaliableSlots.isNotEmpty ? avaliableSlots[0] :null ;
     args.statusId = '88aa7cf3-c6b6-4cab-91eb-247aa6445a0a';
     args.date = selectedDate.value;
     isLoading.value = false;

@@ -128,6 +128,7 @@ class _CustomEventCardWidgetState extends State<CustomEventCardWidget> {
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       Center(
                     child: CircularProgressIndicator(
+                        color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
                         value: downloadProgress.progress),
                   ),
                   errorWidget: (context, url, error) => const Icon(Icons.error),

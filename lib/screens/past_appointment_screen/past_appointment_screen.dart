@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import '../../utils/constants.dart';
 import '../../widgets/appointments_card_widget.dart';
-import '../../widgets/button_widget.dart';
+import '../../widgets/primary_button.dart';
 
 class PastAppointmentScreen extends StatelessWidget {
   final controller = Get.put(PastAppointmentController());
@@ -15,6 +15,7 @@ class PastAppointmentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isDark = Theme.of(context).brightness == Brightness.dark;
     final dismisibleKey = GlobalKey();
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -73,7 +74,7 @@ class PastAppointmentScreen extends StatelessWidget {
                                           showDialog(
                                               context: context,
                                               builder: (context) {
-                                                var yesButton = ButtonWidget(
+                                                var yesButton = PrimaryButton(
                                                     color:
                                                         AppColors.ERROR_COLOR,
                                                     width: 60,
@@ -124,8 +125,11 @@ class PastAppointmentScreen extends StatelessWidget {
                                     );
                             },
                           )
-                        : const Center(
-                            child: CircularProgressIndicator(),
+                        :  Center(
+                            child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                            ),
                           ),
                   ),
           ],

@@ -7,7 +7,7 @@ import 'package:atherium_saloon_app/screens/appointment_confirm_detail_screen/ap
 
 import '../../models/treatment.dart';
 import '../../utils/constants.dart';
-import '../../widgets/button_widget.dart';
+import '../../widgets/primary_button.dart';
 import '../../widgets/text_row_widget.dart';
 import '../home_screen/home_screen_controller.dart';
 
@@ -173,9 +173,12 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                       itemBuilder: (context, index) {
                                         return Obx(
                                           () => controller.allTreatments.isEmpty
-                                              ? const Center(
+                                              ?  Center(
                                                   child:
-                                                      CircularProgressIndicator(),
+                                                      CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+                                                        
+                                                      ),
                                                 )
                                               : Column(
                                                   children: [
@@ -317,7 +320,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              ButtonWidget(
+                              PrimaryButton(
                                 width: Get.width - 56,
                                 buttonText: 'Confirm',
                                 buttonTextColor: isDark

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:atherium_saloon_app/screens/account_info_screen/account_info_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
-import 'package:atherium_saloon_app/widgets/button_widget.dart';
+import 'package:atherium_saloon_app/widgets/primary_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -31,8 +31,10 @@ class AccountInfoScreen extends StatelessWidget {
                 ? SizedBox(
                     height: Get.height,
                     width: Get.width,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
+                    child:  Center(
+                      child: CircularProgressIndicator(
+                        color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+                      ),
                     ),
                   )
                 : Column(
@@ -82,9 +84,11 @@ class AccountInfoScreen extends StatelessWidget {
                                                         (context, url) {
                                                       return Container(
                                                         color: Colors.grey,
-                                                        child: const Center(
+                                                        child:  Center(
                                                           child:
-                                                              CircularProgressIndicator(),
+                                                              CircularProgressIndicator(
+                                                                color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+                                                              ),
                                                         ),
                                                       );
                                                     },
@@ -430,11 +434,13 @@ class AccountInfoScreen extends StatelessWidget {
                                             const Duration(milliseconds: 250),
                                         child: Visibility(
                                           visible: controller.isLoading.value,
-                                          child: const SizedBox(
+                                          child:  SizedBox(
                                             height: 150,
                                             child: Center(
                                               child:
-                                                  CircularProgressIndicator(),
+                                                  CircularProgressIndicator(
+                                                    color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+                                                  ),
                                             ),
                                           ),
                                         ),
@@ -443,7 +449,7 @@ class AccountInfoScreen extends StatelessWidget {
                                     const SizedBox(height: 12.0),
                                     Row(
                                       children: [
-                                        ButtonWidget(
+                                        PrimaryButton(
                                           width: Get.width / 2 - 28,
                                           buttonText: 'Delete Account',
                                           onTap: () async {
@@ -472,7 +478,7 @@ class AccountInfoScreen extends StatelessWidget {
                                               : AppColors.PRIMARY_COLOR,
                                         ),
                                         const SizedBox(width: 12.0),
-                                        ButtonWidget(
+                                        PrimaryButton(
                                           width: Get.width / 2 - 28,
                                           buttonText: 'Save',
                                           onTap: () {
@@ -490,8 +496,10 @@ class AccountInfoScreen extends StatelessWidget {
                                     const SizedBox(height: 30.0)
                                   ],
                                 )
-                              : const Center(
-                                  child: CircularProgressIndicator(),
+                              :  Center(
+                                  child: CircularProgressIndicator(
+                                    color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+                                  ),
                                 ),
                         ),
                       ),

@@ -34,21 +34,21 @@ class BottomNavigationController extends GetxController {
   }
 
   final screens = [
-    KeepAlive(keepAlive: false, child: HomeScreen()),
-    KeepAlive(keepAlive: false, child: AgendaScreen()),
+    HomeScreen(),    
+    AgendaScreen(),
     LoyalityCardScreen(),
     ProfileScreen(),
   ];
-  PageController pageController =
-      PageController(initialPage: 0, keepPage: true);
+final PageController pageController =
+   PageController(initialPage: 0);
   void changeTab(int index) {
     // if (index == 1) {
 
     // }
     if (index == 3) {
+      currentIndex.value = 2;
       pageController.animateToPage(2,
           duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-      currentIndex.value = 2;
     } else if (index == 4) {
       pageController.animateToPage(3,
           duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 
-import '../../widgets/button_widget.dart';
+import '../../widgets/primary_button.dart';
 import '../../widgets/custom_label_widget.dart';
 import '../../widgets/form_field_widget.dart';
 import '../../widgets/top_bar_widget.dart';
@@ -113,18 +113,21 @@ class LoginScreen extends StatelessWidget {
                     Obx(() {
                       if (controller.isLoading.value == true) {
                         return Column(
-                          children: const [
+                          children:  [
                             Center(
-                              child: CircularProgressIndicator(),
+                              child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                              ),
                             ),
-                            SizedBox(height: 17.0)
+                          const  SizedBox(height: 17.0)
                           ],
                         );
                       } else {
                         return const SizedBox(height: 17.0);
                       }
                     }),
-                    ButtonWidget(
+                    PrimaryButton(
                       width: Get.width,
                       buttonText: AppLanguages.ACCEDI,
                       color: isDark

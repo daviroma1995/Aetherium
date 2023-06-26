@@ -269,7 +269,10 @@ class FirebaseServices {
       return emp;
     });
   }
+  
+  // static Stream<List<Treatment>> treatmentsStream(){
 
+  // }
   // Shop info stream
 
   static Stream<ShopInfo> shopInfoStream() {
@@ -587,6 +590,19 @@ class FirebaseServices {
 
   static Future<List<Consultation>> getConsultations(String id) async {
     List<Consultation> consultations = [];
+    var userQuery = await FirebaseFirestore.instance.collection('clients').doc(id).get();
+    var user = userQuery.data();
+    if(user?['isAdmin']){
+      var query = await FirebaseFirestore.instance
+        .collection('consultations')
+        .get();
+    var docs = query.docs;
+    for (var doc in docs) {
+      var data = doc.data();
+      consultations.add(Consultation.fromJson(data));
+    } 
+    return consultations;
+    }
     var query = await FirebaseFirestore.instance
         .collection('consultations')
         .where('client_id', isEqualTo: id)
@@ -598,4 +614,5 @@ class FirebaseServices {
     }
     return consultations;
   }
+  
 }

@@ -41,7 +41,9 @@ class ServicesController extends GetxController {
     services.value = await FirebaseServices.getTreatmentCategories();
     subServices.bindStream(await FirebaseServices.getTreatmentsFiltered(_uid));
     client.bindStream(FirebaseServices.currentUserStream());
-
+    appointment = args;
+    list.addAll(args.serviceId);
+    print(list);
     Timer(const Duration(milliseconds: 500), () {
       updateScreen();
     });
@@ -162,7 +164,8 @@ class ServicesController extends GetxController {
     if (appointment.serviceId == null ||
         args == null && appointment.serviceId!.isEmpty) {
       print('Empty');
-    } else {
+    }
+     else {
       Get.to(
         () => AppointmentBookingScreen(),
         duration: const Duration(milliseconds: 700),

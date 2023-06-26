@@ -7,7 +7,7 @@ import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navig
 
 import '../../models/appointment.dart';
 import '../../utils/constants.dart';
-import '../../widgets/button_widget.dart';
+import '../../widgets/primary_button.dart';
 import '../../widgets/text_row_widget.dart';
 import '../home_screen/home_screen_controller.dart';
 import 'appointment_details_controller.dart';
@@ -19,10 +19,14 @@ class AppointmentDetailsScreen extends StatelessWidget {
     Key? key,
     this.isDetail = false,
     this.isEditable = false,
+    this.isPast = false,
+    this.isAdmin = false,
     required this.appointment,
   }) : super(key: key);
-  final bool? isDetail;
-  final bool? isEditable;
+  final bool isDetail;
+  final bool isEditable;
+  final bool isPast;
+  final bool isAdmin;
   final Appointment appointment;
   @override
   Widget build(BuildContext context) {
@@ -44,7 +48,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
             children: [
               InkWell(
                 borderRadius: BorderRadius.circular(25.0),
-                onTap: isDetail! == false
+                onTap: isDetail == false
                     ? () {
                         Get.back(result: controller.isChanged);
                       }
@@ -184,9 +188,12 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                           return Obx(
                                             () => controller
                                                     .allTreatments.isEmpty
-                                                ? const Center(
+                                                ?  Center(
                                                     child:
-                                                        CircularProgressIndicator(),
+                                                        CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                                                        ),
                                                   )
                                                 : Column(
                                                     children: [
@@ -320,7 +327,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  ButtonWidget(
+                                  PrimaryButton(
                                     width: Get.width / 2 - 32,
                                     buttonText: 'Cancel',
                                     buttonTextColor: isDark
@@ -340,7 +347,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                       );
                                     },
                                   ),
-                                  ButtonWidget(
+                                  PrimaryButton(
                                     width: Get.width / 2 - 32,
                                     buttonText: 'Edit',
                                     buttonTextColor: isDark
@@ -357,6 +364,21 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            if(isPast )
+                            PrimaryButton(
+                                    width: Get.width  - 32,
+                                    buttonText: 'Edit',
+                                    buttonTextColor: isDark
+                                        ? AppColors.BACKGROUND_DARK
+                                        : AppColors.WHITE_COLOR,
+                                    color: isDark
+                                        ? AppColors.SECONDARY_LIGHT
+                                        : AppColors.PRIMARY_COLOR,
+                                    bordered: false,
+                                    onTap: () {
+                                      controller.editStatus(appointment);
+                                    },
+                                  )
                         ],
                       ),
                     ),

@@ -1,6 +1,6 @@
 import 'package:atherium_saloon_app/screens/forget_password_screen/forget_password_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
-import 'package:atherium_saloon_app/widgets/button_widget.dart';
+import 'package:atherium_saloon_app/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -72,18 +72,21 @@ class ForgetPasswordScreen extends StatelessWidget {
                         () => Visibility(
                           visible: controller.isLoading.value,
                           child: Column(
-                            children: const [
+                            children:  [
                               Center(
                                 child: Padding(
-                                  padding: EdgeInsets.only(bottom: 35.0),
-                                  child: CircularProgressIndicator(),
+                                  padding:const EdgeInsets.only(bottom: 35.0),
+                                  child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      ButtonWidget(
+                      PrimaryButton(
                         width: Get.width,
                         buttonText: AppLanguages.ACCEDI,
                         color: isDark

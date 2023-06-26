@@ -145,8 +145,11 @@ class EventsScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              placeholder: (context, url) => const Center(
-                                  child: CircularProgressIndicator()),
+                              placeholder: (context, url) =>  Center(
+                                  child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                                  )),
                               errorWidget: (context, url, error) =>
                                   const Icon(Icons.error),
                             ),

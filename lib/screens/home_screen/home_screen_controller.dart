@@ -34,7 +34,7 @@ class HomeScreenController extends GetxController {
   var services = <Treatment>[].obs;
   var treatmentCategories = <TreatmentCategory>[].obs;
   var searchedService = "".obs;
-
+  var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
   @override
   void onInit() async {
     super.onInit();
@@ -75,6 +75,7 @@ class HomeScreenController extends GetxController {
     }
   }
   Future<void> loadAppointments() async{
+    appointmentsTreatmentCategoryList.clear();
     var treatments = await FirebaseServices.getData(collection: 'treatments');
     var data = await FirebaseServices.getAppointments(
         isAdmin: currentUser.value.isAdmin!);
@@ -85,6 +86,10 @@ class HomeScreenController extends GetxController {
           services.add(Treatment.fromJson(treatments[i]));
         }
       }
+    }
+    for(var service in services){
+      int treatmentCategoryIndex = treatmentCategories.indexWhere((element) => service.treatmentCategoryId == element.id);
+      appointmentsTreatmentCategoryList.add(treatmentCategories[treatmentCategoryIndex]);
     }
   }
   final searchController = TextEditingController();

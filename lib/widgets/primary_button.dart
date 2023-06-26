@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ButtonWidget extends StatelessWidget {
+class PrimaryButton extends StatelessWidget {
   final double width;
   final Color color;
   final String buttonText;
@@ -8,7 +8,7 @@ class ButtonWidget extends StatelessWidget {
   final bool bordered;
   final Color borderColor;
   final Function onTap;
-  const ButtonWidget({
+  const PrimaryButton({
     super.key,
     required this.width,
     required this.buttonText,

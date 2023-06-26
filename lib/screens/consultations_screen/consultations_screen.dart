@@ -58,7 +58,10 @@ class ConsultationsScreen extends StatelessWidget {
                     child: SizedBox(
                       height: 150.0,
                       width: Get.width,
-                      child: const Center(child: CircularProgressIndicator()),
+                      child:  Center(child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                      )),
                     )),
               ),
               Obx(
@@ -105,14 +108,11 @@ class ConsultationsScreen extends StatelessWidget {
                                         height: 50.0,
                                         fit: BoxFit.cover,
                                         imageUrl: controller.urls[index],
+                                        
                                         errorWidget: (context, url, error) {
-                                          return ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                            child: Container(
-                                              width: 40.0,
-                                              height: 40.0,
-                                              color: Colors.grey,
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              color: isDark ? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
                                             ),
                                           );
                                         },

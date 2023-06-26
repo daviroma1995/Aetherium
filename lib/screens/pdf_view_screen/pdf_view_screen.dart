@@ -6,12 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
 
+import '../../utils/constants.dart';
+
 class PdfViewScreen extends StatelessWidget {
   const PdfViewScreen({super.key, required this.path, required this.title});
   final String path;
   final String title;
   @override
   Widget build(BuildContext context) {
+    var isDark = Theme.of(context).brightness == Brightness.dark;
     final controller = Get.put(PdfController(url: path));
     return Scaffold(
         appBar: AppBarCustom(
@@ -25,8 +28,11 @@ class PdfViewScreen extends StatelessWidget {
               ? SizedBox(
                   height: Get.height,
                   width: Get.width,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
+                  child:  Center(
+                    child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                    ),
                   ),
                 )
               : SafeArea(

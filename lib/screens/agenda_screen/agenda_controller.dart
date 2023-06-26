@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'dart:developer';
+
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -11,7 +13,7 @@ import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import '../../models/appointment.dart';
 import '../../models/client.dart';
 import '../../models/treatment.dart';
-import '../bottom_navigation_scren/bottom_navigation_controller.dart';
+import '../../models/treatment_category.dart';
 
 class Event {
   Timestamp? timestamp;
@@ -43,6 +45,8 @@ class AgendaController extends GetxController {
   var selectedDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
           .obs;
+  var treatmentCategories = <TreatmentCategory>[].obs;
+var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
   RxBool reload = false.obs;
 
   @override
@@ -53,9 +57,12 @@ class AgendaController extends GetxController {
 
   @override
   void onInit() async {
+    treatmentCategories.value = await FirebaseServices.getTreatmentCategories();
     await loadData();
+
     // BottomNavigationController controller = Get.find();
     // controller.toggle.value = false;
+
     super.onInit();
   }
 
@@ -74,7 +81,7 @@ class AgendaController extends GetxController {
     treatmentsData.value = [];
     allTreatments.value = [];
     employees.value = [];
-
+    appointmentsTreatmentCategoryList.value = [];
     events = {};
     appointmentsCounter.value = <Event>[
       Event(
@@ -84,6 +91,7 @@ class AgendaController extends GetxController {
                 DateTime.now().day, 0, 0, 0, 0, 0),
           )),
     ];
+    
 
     var user = await FirebaseServices.getDataWhere(
         collection: 'clients',
@@ -124,6 +132,7 @@ class AgendaController extends GetxController {
         }
       }
     }
+    
     for (int i = 0; i < allAppointments.length; i++) {
       for (int j = 0; j < appointmentsCounter.length; j++) {
         if (i == 0) {
@@ -148,6 +157,12 @@ class AgendaController extends GetxController {
         })
       });
     }
+    print(treatmentsData);
+    for(var service in treatmentsData){
+      log('Called');
+      int treatmentCategoryIndex = treatmentCategories.indexWhere((element) => service.treatmentCategoryId == element.id);
+      appointmentsTreatmentCategoryList.add(treatmentCategories[treatmentCategoryIndex]);
+    }
     reload.value = false;
   }
 
@@ -170,6 +185,7 @@ class AgendaController extends GetxController {
     appointments.value = data;
     employees.value = [];
     treatmentsData.value = [];
+    appointmentsTreatmentCategoryList.value = [];
     for (var agenda in data) {
       if (agenda.employeeId != null) {
         if (agenda.employeeId!.isNotEmpty) {
@@ -191,6 +207,12 @@ class AgendaController extends GetxController {
           }
         }
       }
+    }
+    print(treatmentsData);
+    for(var service in treatmentsData){
+      log('Called');
+      int treatmentCategoryIndex = treatmentCategories.indexWhere((element) => service.treatmentCategoryId == element.id);
+      appointmentsTreatmentCategoryList.add(treatmentCategories[treatmentCategoryIndex]);
     }
   }
 
