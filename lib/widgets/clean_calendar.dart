@@ -91,7 +91,7 @@ class _CalendarState extends State<Calendar> {
 
   @override
   void initState() {
-    super.initState();
+    if(mounted){
     _selectedDate = widget.initialDate ?? DateTime.now();
     isExpanded = widget.isExpanded;
     isSwapped = false;
@@ -105,24 +105,37 @@ class _CalendarState extends State<Calendar> {
           displayMonth =
               "${monthFormat[0].toUpperCase()}${monthFormat.substring(1)}";
         }));
+    super.initState();
+    }
   }
 
   @override
   void didUpdateWidget(covariant Calendar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    
+    if(mounted){
     _selectedDate = widget.initialDate ?? DateTime.now();
     isSwapped = false;
     selectedMonthsDays = _daysInMonth(_selectedDate);
     selectedWeekDays = Utils.daysInRange(
             _firstDayOfWeek(_selectedDate), _lastDayOfWeek(_selectedDate))
         .toList();
-    initializeDateFormatting(widget.locale, null).then((_) => setState(() {
+    
+    initializeDateFormatting(widget.locale, null).then((_) {
+      if(mounted){
+      setState(() {
           var monthFormat =
               DateFormat("MMMM", widget.locale).format(_selectedDate);
           displayMonth =
               "${monthFormat[0].toUpperCase()}${monthFormat.substring(1)}";
-        }));
+        });
+        }
+    });
+    super.didUpdateWidget(oldWidget);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Widget get nameAndIconRow {

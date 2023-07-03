@@ -36,20 +36,22 @@ class ServicesController extends GetxController {
   // On Init
   @override
   void onInit() async {
-    var _uid = uid ?? LoginController.instance.auth.currentUser!.uid;
+    var _uid = uid ?? FirebaseServices.cuid;
     // services.bindStream(FirebaseServices.treatmentsCategory());
     services.value = await FirebaseServices.getTreatmentCategories();
     subServices.bindStream(await FirebaseServices.getTreatmentsFiltered(_uid));
     client.bindStream(FirebaseServices.currentUserStream());
-    appointment = args;
+    if(args != null && args.id != ''){
+    appointment = args ?? Appointment();
     list.addAll(args.serviceId);
+    }
     print(list);
     Timer(const Duration(milliseconds: 500), () {
       updateScreen();
     });
     super.onInit();
   }
-
+  
   void updateScreen() async {
     if (args != null && services.isNotEmpty && subServices.isNotEmpty) {
       await reArrange();
@@ -89,7 +91,8 @@ class ServicesController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-
+    subServices.close();
+    client.close();
     // if (args != null && args != 0) {
     //   var current = services[0];
     //   var prev = services[args];
@@ -233,7 +236,7 @@ class ServicesController extends GetxController {
       args = null;
     } else {
       appointment.serviceId = list;
-      appointment.clientId = uid ?? LoginController.instance.user?.uid;
+      appointment.clientId = uid ?? FirebaseServices.cuid;
       appointment.email = clientEmail ?? client.value.email;
       appointment.number = number ?? client.value.phoneNumber;
       appointment.employeeId = ['8f1cYZExVjeOo2sBDmQC'];

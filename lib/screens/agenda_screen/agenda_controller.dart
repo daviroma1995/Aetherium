@@ -96,7 +96,7 @@ var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
     var user = await FirebaseServices.getDataWhere(
         collection: 'clients',
         key: 'user_id',
-        value: LoginController.instance.user?.uid ?? '');
+        value: FirebaseServices.cuid);
     currentUser.value = Client.fromJson(user ?? {});
     var employeesData = await FirebaseServices.getData(collection: 'employees');
     var treatments = await FirebaseServices.getData(collection: 'treatments');

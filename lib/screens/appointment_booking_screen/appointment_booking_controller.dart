@@ -25,6 +25,7 @@ class AppointMentBookingController extends GetxController {
   RxBool calenderState = true.obs;
   RxBool hideTodayController = true.obs;
   RxBool shouldReset = false.obs;
+  RxBool isExpaned = false.obs;
   var args = Get.arguments;
   var employees = <Employee>[].obs;
   var treatments = <Treatment>[].obs;
@@ -64,7 +65,7 @@ class AppointMentBookingController extends GetxController {
     args.employeeId = selectedEmloyees;
     var data = await FirebaseServices.getDataWhere(
         collection: 'clients',
-        value: LoginController.instance.user?.uid ?? '',
+        value:FirebaseServices.cuid,
         key: 'user_id');
     currentUser.value = Client.fromJson(data!);
     for (int i = 0; i < args.serviceId.length; i++) {
@@ -104,7 +105,11 @@ class AppointMentBookingController extends GetxController {
     super.onInit();
 
   }
-
+  @override
+  void onClose() {
+    super.onClose();
+    treatments.close();
+  }
   double totalPrice = 0.0;
   Rx<DateTime> date = DateTime.now().obs;
 
@@ -117,6 +122,7 @@ class AppointMentBookingController extends GetxController {
   void selectSlot(int index) {
     selectedSlot.value = index;
     args.time = avaliableSlots[index];
+    print(args.time);
     args.startTime = slotdata[index].startTime;
     args.endTime = slotdata[index].endTime;
     args.roomId = slotdata[index].roomIdList;
@@ -180,7 +186,7 @@ class AppointMentBookingController extends GetxController {
       }
       if (avaliableSlots.isEmpty) {
         Fluttertoast.showToast(
-            msg: 'No slots availabel select another date',
+            msg: 'No slots available select another date',
             backgroundColor: AppColors.ERROR_COLOR);
       }
     } catch (ex) {

@@ -53,12 +53,12 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
     super.initState();
   }
 
-  @override
-  void dispose() {
-    controller.leftButtonController.dispose();
-    controller.rightButtonController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   controller.leftButtonController.dispose();
+  //   controller.rightButtonController.dispose();
+  //   super.dispose();
+  // }
 
   final controller = Get.put(BottomNavigationController());
   int _currentIndex = 0;

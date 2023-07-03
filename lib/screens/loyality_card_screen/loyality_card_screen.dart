@@ -67,6 +67,7 @@ class LoyalityCardScreen extends StatelessWidget {
               : Visibility(
                   visible: controller.isLoading.isFalse,
                   child: LiquidPullToRefresh(
+                    backgroundColor: isDark ? AppColors.SECONDARY_LIGHT : AppColors.WHITE_COLOR,
                     onRefresh: () async => await controller.loadData(),
                     child: ListView(
                       shrinkWrap: true,

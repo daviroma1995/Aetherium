@@ -37,13 +37,16 @@ class HomeScreenController extends GetxController {
   var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
   @override
   void onInit() async {
+
     super.onInit();
     await loadHomeScreen();
+    
   }
 
-  Future<void> loadHomeScreen() async {
+  Future<void> loadHomeScreen() async{
+    
     isLoading.value = true;
-    _uid = LoginController.instance.auth.currentUser!.uid;
+    _uid = FirebaseServices.cuid;
     treatmentCategories.value = await FirebaseServices.getTreatmentCategories();
     // log(treatmentCategories.toString());
     var map = await FirebaseServices.getCurrentUser();
@@ -56,12 +59,22 @@ class HomeScreenController extends GetxController {
     isInitialized.value = true;
     LocalData.setIsLogedIn(true);
     loadAppointments();
+    
     // WidgetsBinding.instance.addPostFrameCallback(
     //   (timeStamp) async {},
     // );
     isLoading.value = false;
+    
   }
 
+  @override
+  void onClose() {
+    super.onClose();
+    appointmentsEmployee.close();
+    notifications.close();
+    events.close();
+  }
+  
   void navigateToAppointmentDetail(int index) async {
     var data = await Get.to(
       () => AppointmentDetailsScreen(
@@ -194,7 +207,7 @@ class HomeScreenController extends GetxController {
   }
 
   Future<void> onRefresh() async {
-    _uid = LoginController.instance.user?.uid ?? '';
+    _uid = FirebaseServices.cuid;
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
         var map = await FirebaseServices.getCurrentUser();

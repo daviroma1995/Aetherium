@@ -19,7 +19,11 @@ class AppointmentDetailsController extends GetxController {
     super.onInit();
     allTreatments.bindStream(FirebaseServices.treatments());
   }
-
+  @override
+  void onClose() {
+    super.onClose();
+    allTreatments.close();
+  }
   String totalPrice(List<String> service) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       update();

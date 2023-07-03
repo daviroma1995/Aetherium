@@ -1,7 +1,5 @@
 import 'package:atherium_saloon_app/models/client.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,16 +21,22 @@ class BottomNavigationController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    if (FirebaseAuth.instance.currentUser == null) {
-      Get.offAll(() => LoginScreen());
-    }
+  
+    if(FirebaseAuth.instance.currentUser != null){
     var data = await FirebaseServices.getDataWhere(
         collection: 'clients',
         key: 'user_id',
-        value: LoginController.instance.user?.uid ?? '');
-    client.value = Client.fromJson(data!);
+        value: FirebaseServices.cuid);
+    client.value = Client.fromJson(data ?? {});
+    }
   }
-
+  @override
+  void onClose() {
+    super.onClose();
+    rightButtonController.dispose();
+    leftButtonController.dispose();
+  }
+  
   final screens = [
     HomeScreen(),    
     AgendaScreen(),

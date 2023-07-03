@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/utils/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -46,7 +47,7 @@ class AccountInfoController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    uid = LoginController.instance.auth.currentUser!.uid;
+    uid = FirebaseServices.cuid;
     await getUserInfo();
     name.text = currentClient.value.firstName!;
     surName.text = currentClient.value.lastName!;
@@ -188,8 +189,8 @@ class AccountInfoController extends GetxController {
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLogedIn', false);
-    await LoginController.instance.auth.currentUser!.delete();
-    await LoginController.instance.auth.signOut();
+    await FirebaseAuth.instance.currentUser!.delete();
+    await FirebaseAuth.instance.signOut();
     Get.offAll(LoginScreen());
   }
 
@@ -221,7 +222,7 @@ class AccountInfoController extends GetxController {
           msg: 'User Updated Successfully',
           backgroundColor: AppColors.GREEN_COLOR);
       Get.back();
-      await LoginController.instance.auth.currentUser!
+      await FirebaseAuth.instance.currentUser!
           .verifyBeforeUpdateEmail(email.text);
       Fluttertoast.showToast(msg: 'Verify your email to update your email');
     }

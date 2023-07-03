@@ -20,7 +20,11 @@ class AppointmentConfirmDetailController extends GetxController {
     super.onInit();
     allTreatments.bindStream(FirebaseServices.treatments());
   }
-
+  @override
+  void onClose() {
+    super.onClose();
+    allTreatments.close();
+  }
   String getName(String id) {
     for (var treatment in allTreatments) {
       if (treatment.id == id) {

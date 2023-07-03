@@ -9,12 +9,10 @@ import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/screens/scan_screen/scan_screen.dart';
 import 'package:atherium_saloon_app/screens/settings_screen/settings_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
-import 'package:atherium_saloon_app/utils/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../appointments_screen/appointments_screen.dart';
-import '../login_screen/login_screen.dart';
 
 List<ProfileItem> profileItems = [
   const ProfileItem(
@@ -37,12 +35,10 @@ class ProfileController extends GetxController {
   var user = Client().obs;
   @override
   void onInit() async {
-    uid = LoginController.instance.auth.currentUser == null
-        ? ''
-        : LoginController.instance.auth.currentUser!.uid;
-    if (LoginController.instance.auth.currentUser == null) {
-      Get.offAll(() => LoginScreen());
-    }
+    uid = FirebaseServices.cuid;
+    // if (LoginController.instance.auth.currentUser == null) {
+    //   Get.offAll(() => LoginScreen());
+    // }
     var data = await FirebaseServices.getCurrentUser();
     user.value = Client.fromJson(data);
     if (data['isAdmin'] == false) {
@@ -95,11 +91,12 @@ class ProfileController extends GetxController {
       //   transition: Transition.circularReveal,
       //   curve: Curves.ease,
       // );
-      LoginController.instance.logout();
-      LocalData.setIsLogedIn(false);
-      Get.offAll(
-        () => LoginScreen(),
-      );
+      // Get.reloadAll();
+      final LoginController controller = Get.put(LoginController());
+      controller.logout();
+      // LocalData.setIsLogedIn(false);
+      // Get.offAll(() => LoginScreen());
+      
     }
     if (index == 0) {
       Get.to(

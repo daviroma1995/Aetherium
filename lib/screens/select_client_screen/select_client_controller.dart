@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:atherium_saloon_app/models/membership.dart';
+import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/client_details_screen/client_details_screen.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
@@ -113,7 +114,7 @@ class SelectClientController extends GetxController {
         for (var membershipType in tiers) {
           if (membership.membershipTypeId == membershipType.id &&
               membership.clientId !=
-                  LoginController.instance.auth.currentUser!.uid) {
+                  FirebaseServices.cuid) {
             tier.add(membershipType);
           }
         }

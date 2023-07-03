@@ -4,7 +4,6 @@ import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ import '../../models/treatment.dart';
 
 class PastAppointmentController extends GetxController {
   var pastAppointments = <Appointment>[].obs;
-  String currentUid = LoginController.instance.user?.uid ?? '';
+  String currentUid = FirebaseServices.cuid;
   var employees = <Employee>[].obs;
   var appointmentEmployees = <Employee>[].obs;
   var appointmentStatus = <AppointmentStatus>[].obs;

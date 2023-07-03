@@ -3,7 +3,6 @@ import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/models/treatment.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,7 +16,7 @@ class UpcomingAppointmentsController extends GetxController {
   var employeesData = <Employee>[].obs;
   var services = <Treatment>[].obs;
   var status = <AppointmentStatus>[].obs;
-  var uid = LoginController.instance.user?.uid;
+  var uid = FirebaseServices.cuid;
   RxBool isLoading = false.obs;
   @override
   void onInit() async {

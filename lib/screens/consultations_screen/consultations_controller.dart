@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:get/get.dart';
 
 import '../../models/consultation.dart';
@@ -12,7 +11,7 @@ class ConsultationsController extends GetxController {
 
   @override
   void onInit() async {
-    var uid = LoginController.instance.auth.currentUser!.uid;
+    var uid = FirebaseServices.cuid;
     consultations.value = await FirebaseServices.getConsultations(uid);
     if (consultations.isNotEmpty) {
       var filePathString = [];

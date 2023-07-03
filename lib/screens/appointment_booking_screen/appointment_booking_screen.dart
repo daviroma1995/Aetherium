@@ -65,13 +65,12 @@ class AppointmentBookingScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Obx(
-                          () => Calendar(
-                            key: UniqueKey(),
-                            // ignore: prefer_const_literals_to_create_immutables
-                            reload: controller.calenderState.value,
-                            events: {},
+                          () =>
+                          controller.calenderState.value ? 
+                          Calendar(
+                            events: const{},
                             hideTodayIcon: true,
-                            // startOnMonday: true,
+                            
                             initialDate: controller.args.dateTimestamp != null
                                 ? controller.args.dateTimestamp.toDate()
                                 : controller.initialDate.value,
@@ -84,6 +83,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                                 DateTime(value.year, value.month, value.day, 0,
                                     0, 0, 0, 0),
                               );
+                              print(controller.args.dateTimestamp.toDate());
                               controller.initialDate.value = value;
                               controller.calenderState.value =
                                   !controller.calenderState.value;
@@ -94,7 +94,36 @@ class AppointmentBookingScreen extends StatelessWidget {
                                   appointmentDate:
                                       controller.selectedDate.value);
                             },
-                          ),
+                          ):
+                          Calendar(
+                            // ignore: prefer_const_literals_to_create_immutables
+                            events: const{},
+                            hideTodayIcon: true,
+                            initialDate: controller.args.dateTimestamp != null
+                                ? controller.args.dateTimestamp.toDate()
+                                : controller.initialDate.value,
+                            onDateSelected: (value) async {
+                              controller.args.dateTimestamp =
+                                  Timestamp.fromDate(DateTime(value.year,
+                                      value.month, value.day, 0, 0, 0, 0, 0));
+                              controller.selectedDate.value =
+                                  DateFormat("MM/dd/yyyy").format(
+                                DateTime(value.year, value.month, value.day, 0,
+                                    0, 0, 0, 0),
+                              );
+                              print(controller.args.dateTimestamp.toDate());
+
+                              controller.initialDate.value = value;
+                              controller.calenderState.value =
+                                  !controller.calenderState.value;
+                              controller.args.date =
+                                  controller.selectedDate.value;
+                              await controller.loadTimeslots(
+                                  treatments: controller.selectedTreatmentsMap,
+                                  appointmentDate:
+                                      controller.selectedDate.value);
+                            },
+                          )
                         ),
                       ),
                       const SizedBox(height: 35.0),

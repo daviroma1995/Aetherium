@@ -21,7 +21,12 @@ class ContactsController extends GetxController {
       isInitialized.value = true;
     });
   }
-
+  @override
+  void onClose() {
+    super.onClose();
+    shopinfo.close();
+    beautySpecialists.close();
+  }
   void openwhatsapp() async {
     var whatsapp = shopinfo.value.phoneNumber;
     if (Platform.isAndroid) {

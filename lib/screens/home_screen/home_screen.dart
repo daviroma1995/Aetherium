@@ -20,7 +20,7 @@ import '../../widgets/custom_event_card_widget.dart';
 import '../../widgets/custom_title_row_widget.dart';
 
 class HomeScreen extends StatelessWidget {
-  final HomeScreenController controller = Get.find();
+  final HomeScreenController controller = Get.put(HomeScreenController());
   HomeScreen({super.key});
 
   @override
@@ -173,6 +173,8 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               child: LiquidPullToRefresh(
                 onRefresh: controller.onRefresh,
+                backgroundColor:
+                    isDark ? AppColors.SECONDARY_LIGHT : AppColors.WHITE_COLOR,
                 child: ListView(
                   physics: const BouncingScrollPhysics(),
                   children: [
@@ -222,11 +224,12 @@ class HomeScreen extends StatelessWidget {
                         child: SizedBox(
                           height: 150.0,
                           width: Get.width,
-                          child:
-                               Center(child: CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
-                              )),
+                          child: Center(
+                              child: CircularProgressIndicator(
+                            color: isDark
+                                ? AppColors.SECONDARY_COLOR
+                                : AppColors.GREY_COLOR,
+                          )),
                         ),
                       ),
                     ),
@@ -308,10 +311,12 @@ class HomeScreen extends StatelessWidget {
                                                     ),
                                                   ),
                                                   placeholder: (context, url) =>
-                                                       CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
-                                                      ),
+                                                      CircularProgressIndicator(
+                                                    color: isDark
+                                                        ? AppColors
+                                                            .SECONDARY_COLOR
+                                                        : AppColors.GREY_COLOR,
+                                                  ),
                                                   errorWidget: (context, url,
                                                           error) =>
                                                       const Icon(Icons.error),
@@ -334,10 +339,12 @@ class HomeScreen extends StatelessWidget {
                                                     ),
                                                   ),
                                                   placeholder: (context, url) =>
-                                                       CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
-                                                      ),
+                                                      CircularProgressIndicator(
+                                                    color: isDark
+                                                        ? AppColors
+                                                            .SECONDARY_COLOR
+                                                        : AppColors.GREY_COLOR,
+                                                  ),
                                                   errorWidget: (context, url,
                                                           error) =>
                                                       const Icon(Icons.error),
@@ -389,14 +396,15 @@ class HomeScreen extends StatelessWidget {
                           const SizedBox(height: 20.0),
                           Obx(
                             () => Visibility(
-                              visible: controller.isLoading.value == true,
+                              visible: controller.isLoading.value == true || controller.appointments.isEmpty,
                               child: SizedBox(
                                 height: 103,
                                 width: Get.width,
-                                child:  Center(
+                                child: Center(
                                   child: CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
+                                    color: isDark
+                                        ? AppColors.SECONDARY_COLOR
+                                        : AppColors.GREY_COLOR,
                                   ),
                                 ),
                               ),
@@ -404,12 +412,15 @@ class HomeScreen extends StatelessWidget {
                           ),
                           Obx(
                             () => Visibility(
-                              visible: controller.isLoading.value == false,
+                              visible: controller.isLoading.value == false && controller.appointments.isNotEmpty,
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 22.0),
                                 child: Obx(
                                   () => controller.appointments.isNotEmpty &&
-                                          controller.services.isNotEmpty && controller.appointmentsTreatmentCategoryList. isNotEmpty
+                                          controller.services.isNotEmpty &&
+                                          controller
+                                              .appointmentsTreatmentCategoryList
+                                              .isNotEmpty
                                       ? SizedBox(
                                           height: 103.0,
                                           child: ListView.builder(
@@ -435,10 +446,8 @@ class HomeScreen extends StatelessWidget {
                                                               .appointments[
                                                                   index]
                                                               .employeeId![0]),
-                                                  subTitle: '${controller.appointmentsTreatmentCategoryList[index].name ?? ''} - ${controller
-                                                      .getServices(controller
-                                                          .appointments[index]
-                                                          .serviceId![0])}',
+                                                  subTitle:
+                                                      '${controller.appointmentsTreatmentCategoryList[index].name ?? ''} - ${controller.getServices(controller.appointments[index].serviceId![0])}',
                                                   date: controller
                                                       .appointments[index]
                                                       .dateString,
@@ -578,9 +587,10 @@ class HomeScreen extends StatelessWidget {
                                   : Container(
                                       alignment: Alignment.center,
                                       height: 190,
-                                      child:  CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
+                                      child: CircularProgressIndicator(
+                                        color: isDark
+                                            ? AppColors.SECONDARY_COLOR
+                                            : AppColors.GREY_COLOR,
                                       ),
                                     ),
                         ),

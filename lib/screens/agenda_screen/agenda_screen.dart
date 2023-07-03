@@ -74,6 +74,9 @@ class AgendaScreen extends StatelessWidget {
                   ),
                 ),
                 child: LiquidPullToRefresh(
+                  backgroundColor: isDark
+                      ? AppColors.SECONDARY_LIGHT
+                      : AppColors.WHITE_COLOR,
                   onRefresh: () async => await controller.loadData(),
                   child: ListView(
                     shrinkWrap: true,
@@ -135,12 +138,7 @@ class AgendaScreen extends StatelessWidget {
                                         userName:
                                             controller.employees[index].name!,
                                         service:
-                                            '${controller.appointmentsTreatmentCategoryList.isNotEmpty ? controller.appointmentsTreatmentCategoryList[index].name : ''} - ${controller.treatmentsData.isNotEmpty
-                                                ? controller
-                                                        .treatmentsData[index]
-                                                        .name ??
-                                                    ''
-                                                : ''}',
+                                            '${controller.appointmentsTreatmentCategoryList.isNotEmpty ? controller.appointmentsTreatmentCategoryList[index].name : ''} - ${controller.treatmentsData.isNotEmpty ? controller.treatmentsData[index].name ?? '' : ''}',
                                         agendaColor: AppColors.SECONDARY_LIGHT,
                                         agendaBarsColor:
                                             AppColors.SECONDARY_LIGHT,
@@ -161,12 +159,14 @@ class AgendaScreen extends StatelessWidget {
                                       SvgPicture.asset(
                                           AppAssets.CALENDER_ICON_LIGHT),
                                       const SizedBox(height: 35.0),
-                                       Text(
+                                      Text(
                                         'Nessun appuntamento',
                                         style: TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w700,
-                                          color:isDark ? AppColors.WHITE_COLOR: AppColors.BLACK_COLOR,
+                                          color: isDark
+                                              ? AppColors.WHITE_COLOR
+                                              : AppColors.BLACK_COLOR,
                                         ),
                                       ),
                                       const SizedBox(height: 10.0),
@@ -353,7 +353,6 @@ class AgendaCustomCardWidget extends StatelessWidget {
                         Text(
                           service,
                           overflow: TextOverflow.ellipsis,
-
                           style: TextStyle(
                             fontSize: 10.0,
                             fontWeight: FontWeight.w500,

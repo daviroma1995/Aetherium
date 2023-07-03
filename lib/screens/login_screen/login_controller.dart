@@ -10,38 +10,33 @@ import 'package:get/get.dart';
 
 import '../../utils/shared_preferences.dart';
 import '../forget_password_screen/foreget_password_screen.dart';
-import '../home_screen/home_screen_controller.dart';
 import '../splash_screen/splash_controller.dart';
 
 class LoginController extends GetxController {
+  final auth = FirebaseAuth.instance;
   // Auth controller instance..
-  static LoginController instance = Get.find();
+  
   // email passowrd, udername
-  late Rx<User?> _user;
+  final User? _user = FirebaseAuth.instance.currentUser;
   // Firebase auth
-
+  
   User? get user {
-    return _user.value;
+    return _user;
   }
-
-  FirebaseAuth auth = FirebaseAuth.instance;
-
+  
   @override
   void onReady() {
     super.onReady();
-    _user = Rx<User?>(auth.currentUser);
-    _user.bindStream(auth.userChanges());
-    ever(_user, _initialScreen);
+    // _initialScreen();
   }
 
-  _initialScreen(User? user) {
-    if (user == null) {
-      SplashScreenController controller = Get.find();
+  _initialScreen() async{
+    if (_user == null) {
+      final controller = Get.put(SplashScreenController());
       controller.navigate();
     } else {
-      final HomeScreenController controller = Get.find();
       Timer(const Duration(milliseconds: 2000), () {
-        Get.to(() => const BottomNavigationScreen());
+        Get.offAll(() => const BottomNavigationScreen());
       });
     }
   }
@@ -94,11 +89,12 @@ class LoginController extends GetxController {
   }
 
   void logout() async {
-    await LocalData.resetData();
-    Get.offAll(() => LoginScreen());
+    LocalData.setIsLogedIn(false);
     await auth.signOut();
+    Get.offAll(() =>LoginScreen());
+  
   }
-
+  
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -170,6 +166,7 @@ class LoginController extends GetxController {
       );
       loadingHandler();
       _currentUserUid = auth.currentUser!.uid;
+      Get.offAll(() => const BottomNavigationScreen());
     } on FirebaseAuthException catch (err) {
       if (err.code == "wrong-password") {
         loadingHandler();

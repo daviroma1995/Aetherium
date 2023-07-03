@@ -5,26 +5,23 @@ import 'package:atherium_saloon_app/models/consultation.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/models/shop_info.dart';
 import 'package:atherium_saloon_app/models/treatment_category.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:get/get.dart';
 
 import '../models/client.dart';
 import '../models/event.dart';
 import '../models/notification.dart';
 import '../models/treatment.dart';
-import '../screens/login_screen/login_screen.dart';
 
 class FirebaseServices {
-  static String uid = LoginController.instance.user?.uid ?? '';
+  static String cuid = FirebaseAuth.instance.currentUser?.uid ?? '';
   static Future<String> checkUserUid() async {
     late String uid;
     FirebaseAuth.instance.authStateChanges().listen(
       (user) {
         if (user == null) {
-          Get.offAll(() => LoginScreen());
+          // Get.offAll(() => LoginScreen());
           return;
         }
         uid = user.uid;
@@ -124,7 +121,7 @@ class FirebaseServices {
   }
 
   static Stream<List<Event>> eventStream() {
-    var uid = LoginController.instance.user?.uid ?? '';
+    var uid = cuid;
     return FirebaseFirestore.instance
         .collection('events')
         .orderBy('end_timestamp', descending: true)
@@ -151,7 +148,7 @@ class FirebaseServices {
   }
 
   static Stream<Client> currentUserStream() {
-    var uid = LoginController.instance.user?.uid ?? '';
+    var uid = cuid;
     return FirebaseFirestore.instance
         .collection('clients')
         .where('user_id', isEqualTo: uid)
@@ -171,7 +168,7 @@ class FirebaseServices {
   // Get current user
 
   static Future<Map<String, dynamic>> getCurrentUser() async {
-    var uid = LoginController.instance.user?.uid ?? '';
+    var uid = cuid;
     var data =
         await FirebaseFirestore.instance.collection('clients').doc(uid).get();
     return data.data()!;
@@ -182,7 +179,7 @@ class FirebaseServices {
   static Stream<List<Appointment>> currentUserAppointmentsLimited() {
     return FirebaseFirestore.instance
         .collection('appointments')
-        .where('client_id', isEqualTo: uid)
+        .where('client_id', isEqualTo: cuid)
         .orderBy('date_timestamp', descending: true)
         .limit(3)
         .snapshots()
@@ -206,7 +203,7 @@ class FirebaseServices {
       List<Appointment> appointmentsList = [];
       var data = await FirebaseFirestore.instance
           .collection('appointments')
-          .where('client_id', isEqualTo: uid)
+          .where('client_id', isEqualTo: cuid)
           .where('is_regular', isEqualTo: true)
           .orderBy('date_timestamp', descending: true)
           .limit(3)
@@ -242,7 +239,7 @@ class FirebaseServices {
   static Stream<List<Appointment>> currentUserAppointments() {
     return FirebaseFirestore.instance
         .collection('appointments')
-        .where('client_id', isEqualTo: uid)
+        .where('client_id', isEqualTo: cuid)
         .snapshots()
         .map((appointmentQuerySnapShot) {
       List<Appointment> appointmentsList = [];
@@ -379,7 +376,7 @@ class FirebaseServices {
             .collection('appointments')
             .where('date_timestamp', isEqualTo: timestamp)
             .where('client_id',
-                isEqualTo: LoginController.instance.user?.uid ?? '')
+                isEqualTo: cuid)
             .get();
         for (var querySnapShot in data.docs) {
           var data = querySnapShot.data();
@@ -415,7 +412,7 @@ class FirebaseServices {
         var data = await FirebaseFirestore.instance
             .collection('appointments')
             .where('client_id',
-                isEqualTo: LoginController.instance.user?.uid ?? '')
+                isEqualTo: cuid)
             .where('is_regular', isEqualTo: true)
             .get();
         for (var querySnapShot in data.docs) {
@@ -469,7 +466,7 @@ class FirebaseServices {
     await firestore
         .collection('notifications')
         .where('status', isEqualTo: 'unread')
-        .where('client_id', isEqualTo: LoginController.instance.user?.uid ?? '')
+        .where('client_id', isEqualTo: cuid)
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
@@ -487,7 +484,7 @@ class FirebaseServices {
     return FirebaseFirestore.instance
         .collection('notifications')
         .where('status', isEqualTo: 'unread')
-        .where('client_id', isEqualTo: LoginController.instance.user?.uid ?? '')
+        .where('client_id', isEqualTo: cuid)
         .snapshots()
         .map((notification) {
       var notifications = <Notification>[];

@@ -14,7 +14,11 @@ class NotificationsController extends GetxController {
     notifications.bindStream(FirebaseServices.getUnreadNotficationsStream());
     super.onInit();
   }
-
+    @override
+  void onClose() {
+    super.onClose();
+    notifications.close();
+  }
   void handleBack() {
     Get.back();
   }
