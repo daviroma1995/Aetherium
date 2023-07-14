@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, invalid_use_of_protected_member
 
+import 'package:atherium_saloon_app/models/treatment_category.dart';
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_controller.dart';
 import 'package:atherium_saloon_app/screens/events_screen/events_screen.dart';
 
@@ -9,6 +10,7 @@ import 'package:atherium_saloon_app/screens/notifications_screen/notifications_s
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/form_field_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,10 +23,11 @@ import '../../widgets/custom_title_row_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   final HomeScreenController controller = Get.put(HomeScreenController());
-  HomeScreen({super.key});
-
+  HomeScreen(this.treatmentCategories, {super.key});
+  final List<TreatmentCategory> treatmentCategories;
   @override
   Widget build(BuildContext context) {
+    controller.treatmentCategories.value = treatmentCategories;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
@@ -47,14 +50,14 @@ class HomeScreen extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        AppLanguages.WELCOME,
+                        'welcome',
                         style: Theme.of(context)
                             .textTheme
                             .headlineLarge!
                             .copyWith(
                                 color:
                                     Theme.of(context).colorScheme.onBackground),
-                      ),
+                      ).tr(),
                       Obx(
                         () => controller.currentUser.value.firstName != null
                             ? Text(
@@ -158,7 +161,7 @@ class HomeScreen extends StatelessWidget {
                   textEdigintController: controller.searchController,
                   iconUrl: AppAssets.SEARCH_ICON,
                   iconColor: AppColors.GREY_COLOR,
-                  hintText: 'Search',
+                  hintText: tr('search'),
                   isValid: true,
                   autoFocus: false,
                   onSubmit: () {},
@@ -184,12 +187,12 @@ class HomeScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            'Services',
+                            'services',
                             style: TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.w700,
                             ),
-                          ),
+                          ).tr(),
                           GestureDetector(
                             onTap: () => controller.navigateToServices(),
                             child: Container(
@@ -205,14 +208,14 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ),
                               child: const Text(
-                                'See All',
+                                'see_all',
                                 style: TextStyle(
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w500,
                                   letterSpacing: .75,
                                   color: AppColors.GREY_COLOR,
                                 ),
-                              ),
+                              ).tr(),
                             ),
                           )
                         ],
@@ -243,6 +246,7 @@ class HomeScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 22.0, vertical: 20.0),
                             child: ListView.builder(
+                              physics: const BouncingScrollPhysics(),
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemExtent:
@@ -383,7 +387,7 @@ class HomeScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomTitle(
-                            title: AppLanguages.UPCOMING_APPOINTMENTS,
+                            title: 'upcomming_appointments',
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineLarge!
@@ -396,7 +400,7 @@ class HomeScreen extends StatelessWidget {
                           const SizedBox(height: 20.0),
                           Obx(
                             () => Visibility(
-                              visible: controller.isLoading.value == true || controller.appointments.isEmpty,
+                              visible: controller.isLoading.value == true,
                               child: SizedBox(
                                 height: 103,
                                 width: Get.width,
@@ -412,74 +416,68 @@ class HomeScreen extends StatelessWidget {
                           ),
                           Obx(
                             () => Visibility(
-                              visible: controller.isLoading.value == false && controller.appointments.isNotEmpty,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 22.0),
-                                child: Obx(
-                                  () => controller.appointments.isNotEmpty &&
-                                          controller.services.isNotEmpty &&
-                                          controller
-                                              .appointmentsTreatmentCategoryList
-                                              .isNotEmpty
-                                      ? SizedBox(
-                                          height: 103.0,
-                                          child: ListView.builder(
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount:
-                                                controller.appointments.length,
-                                            itemBuilder: (context, index) {
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  controller
-                                                      .navigateToAppointmentDetail(
-                                                          index);
-                                                },
-                                                child:
-                                                    CustomAppointmentCardWidget(
-                                                  imageUrl:
-                                                      AppAssets.USER_IMAGE,
-                                                  title: controller
-                                                      .getEmployeeName(
-                                                          controller
-                                                              .appointments[
-                                                                  index]
-                                                              .employeeId![0]),
-                                                  subTitle:
-                                                      '${controller.appointmentsTreatmentCategoryList[index].name ?? ''} - ${controller.getServices(controller.appointments[index].serviceId![0])}',
-                                                  date: controller
-                                                      .appointments[index]
-                                                      .dateString,
-                                                  time: controller
-                                                          .appointments[index]
-                                                          .time ??
-                                                      '',
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        )
-                                      : Container(
-                                          alignment: Alignment.center,
-                                          height: 100.0,
-                                          // alignment: Alignment.center,
-                                          child: const Text(
-                                            'No appointments',
-                                            style: TextStyle(
-                                                fontSize: 20.0,
-                                                color: Colors.black),
-                                          ),
-                                        ),
+                              replacement: Container(
+                                alignment: Alignment.center,
+                                height: 100.0,
+                                // alignment: Alignment.center,
+                                child: const Text(
+                                  'No appointments',
+                                  style: TextStyle(
+                                      fontSize: 20.0, color: Colors.black),
                                 ),
                               ),
+                              visible: controller.isLoading.value == false &&
+                                  controller.appointments.isNotEmpty &&
+                                  controller.services.isNotEmpty &&
+                                  controller.appointmentsTreatmentCategoryList
+                                      .isNotEmpty,
+                              child: Padding(
+                                  padding: const EdgeInsets.only(left: 22.0),
+                                  child: SizedBox(
+                                    height: 103.0,
+                                    child: ListView.builder(
+                                      physics: const BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: controller.appointments.length,
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            print(controller.appointments[index]
+                                                .dateTimestamp!
+                                                .toDate());
+                                            controller
+                                                .navigateToAppointmentDetail(
+                                                    index);
+                                          },
+                                          child: CustomAppointmentCardWidget(
+                                            imageUrl: AppAssets.USER_IMAGE,
+                                            title: controller.currentUser.value
+                                                        .isAdmin ??
+                                                    false
+                                                ? '${controller.listOfClients[index].firstName.toString().capitalize} - ${controller.listOfClients[index].lastName.toString().capitalize}'
+                                                : controller.getEmployeeName(
+                                                    controller
+                                                        .appointments[index]
+                                                        .employeeId![0]),
+                                            subTitle:
+                                                '${controller.appointmentsTreatmentCategoryList[index].name ?? ''} - ${controller.getServices(controller.appointments[index].serviceId![0])}',
+                                            date: controller
+                                                .appointments[index].dateString,
+                                            time: controller
+                                                    .appointments[index].time ??
+                                                '',
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  )),
                             ),
                           ),
                         ],
                       ),
                     ),
                     CustomTitle(
-                      title: 'Events',
+                      title: 'events',
                       style:
                           Theme.of(context).textTheme.headlineLarge!.copyWith(
                                 fontSize: 18.0,

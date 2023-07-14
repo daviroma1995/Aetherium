@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -41,8 +42,9 @@ class ClientDetailsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12.0),
-            Text(AppLanguages.CLIENT_DETAILS,
-                style: Theme.of(context).textTheme.headlineLarge),
+            Text('client_details',
+                    style: Theme.of(context).textTheme.headlineLarge)
+                .tr(),
           ],
         ),
       ),
@@ -72,8 +74,8 @@ class ClientDetailsScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TextRowWidget(
-                            textOne: 'Nome: ',
-                            textTwo: 'Cognome: ',
+                            textOne: '${tr('name')}:',
+                            textTwo: '${tr('surname')}:',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16.0,
@@ -94,8 +96,8 @@ class ClientDetailsScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 20.0),
                           TextRowWidget(
-                            textOne: 'Compleanno: ',
-                            textTwo: 'Genere: ',
+                            textOne: '${tr('birthday')}:',
+                            textTwo: '${tr('gender')}:',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16.0,
@@ -116,8 +118,8 @@ class ClientDetailsScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 20.0),
                           TextRowWidget(
-                            textOne: 'Email: ',
-                            textTwo: 'Numero: ',
+                            textOne: '${tr('email')}:',
+                            textTwo: '${tr('number')}:',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16.0,
@@ -138,7 +140,7 @@ class ClientDetailsScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 20.0),
                           Text(
-                            '${AppLanguages.ADDRESS}:',
+                            '${tr('address')}:',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16.0,
@@ -159,7 +161,7 @@ class ClientDetailsScreen extends StatelessWidget {
                           const SizedBox(height: 20.0),
                           TextRowWidget(
                             textOne: 'Tier: ',
-                            textTwo: 'Points: ',
+                            textTwo: '${tr('points')}:',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16.0,

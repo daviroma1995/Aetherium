@@ -6,6 +6,7 @@ import 'package:atherium_saloon_app/screens/profile_screen/profile_screen.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/simple_gesture_detector.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -50,6 +51,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
     _leftButtonYAnimation = Tween<double>(begin: 0.0, end: -50.0).animate(
         CurvedAnimation(
             parent: controller.leftButtonController, curve: Curves.bounceOut));
+    controller.treatmentCategories.value = Get.arguments;
     super.initState();
   }
 
@@ -62,11 +64,14 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
 
   final controller = Get.put(BottomNavigationController());
   int _currentIndex = 0;
+
   // PageController pageController =
   //     PageController(initialPage: 0, keepPage: true);
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       bottomNavigationBar: Theme(
@@ -118,7 +123,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
                         : AppColors.WHITE_COLOR,
                     BlendMode.srcIn),
               ),
-              label: 'Home',
+              label: tr('home'),
             ),
             BottomNavigationBarItem(
               backgroundColor:
@@ -133,7 +138,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
                         : AppColors.WHITE_COLOR,
                     BlendMode.srcIn),
               ),
-              label: 'Agenda',
+              label: tr('agenda'),
             ),
             BottomNavigationBarItem(
               backgroundColor:
@@ -157,7 +162,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
                         : AppColors.WHITE_COLOR,
                     BlendMode.srcIn),
               ),
-              label: 'Carta',
+              label: tr('card'),
             ),
             BottomNavigationBarItem(
               backgroundColor:
@@ -172,7 +177,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
                         : AppColors.WHITE_COLOR,
                     BlendMode.srcIn),
               ),
-              label: 'Profile',
+              label: tr('profile'),
             ),
           ],
         ),
@@ -195,7 +200,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
         },
         controller: controller.pageController,
         children: [
-          HomeScreen(),
+          HomeScreen(controller.treatmentCategories),
           AgendaScreen(),
           LoyalityCardScreen(),
           ProfileScreen(),

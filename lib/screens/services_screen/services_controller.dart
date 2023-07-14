@@ -17,9 +17,12 @@ import '../appointment_booking_screen/appointment_booking_screen.dart';
 
 class ServicesController extends GetxController {
   // late int args;
-  ServicesController({this.uid, this.clientEmail, this.number});
+  ServicesController({this.uid, this.clientEmail, this.number, int index = 0});
   bool isChanged = false;
+  bool isEditing = false;
   var args = Get.arguments;
+  String date = '';
+  String time = '';
   var services = <TreatmentCategory>[].obs;
   var subServices = <Treatment>[].obs;
   var selectedServices = <String>[].obs;
@@ -33,6 +36,7 @@ class ServicesController extends GetxController {
   String? clientEmail;
   String? number;
   int duration = 0;
+  Appointment newAppointment = Appointment();
   // On Init
   @override
   void onInit() async {
@@ -41,9 +45,11 @@ class ServicesController extends GetxController {
     services.value = await FirebaseServices.getTreatmentCategories();
     subServices.bindStream(await FirebaseServices.getTreatmentsFiltered(_uid));
     client.bindStream(FirebaseServices.currentUserStream());
-    if(args != null && args.id != ''){
-    appointment = args ?? Appointment();
-    list.addAll(args.serviceId);
+    if (args.runtimeType != int) {
+      if (args != null && args.id != '') {
+        appointment = args ?? Appointment();
+        list.addAll(args.serviceId);
+      }
     }
     print(list);
     Timer(const Duration(milliseconds: 500), () {
@@ -51,7 +57,7 @@ class ServicesController extends GetxController {
     });
     super.onInit();
   }
-  
+
   void updateScreen() async {
     if (args != null && services.isNotEmpty && subServices.isNotEmpty) {
       await reArrange();
@@ -167,10 +173,14 @@ class ServicesController extends GetxController {
     if (appointment.serviceId == null ||
         args == null && appointment.serviceId!.isEmpty) {
       print('Empty');
-    }
-     else {
+    } else {
       Get.to(
-        () => AppointmentBookingScreen(),
+        () => AppointmentBookingScreen(
+          isEditing: isEditing,
+          date: date,
+          time: time,
+          appointment: newAppointment,
+        ),
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeInQuad,
         transition: Transition.rightToLeft,

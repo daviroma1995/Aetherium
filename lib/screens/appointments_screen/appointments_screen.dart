@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,6 +28,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return DefaultTabController(
       length: 2,
+      initialIndex: 1,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -49,8 +51,9 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                 ),
               ),
               const SizedBox(width: 12.0),
-              Text(AppLanguages.APPOINTMENTS,
-                  style: Theme.of(context).textTheme.headlineLarge),
+              Text('appointments',
+                      style: Theme.of(context).textTheme.headlineLarge)
+                  .tr(),
             ],
           ),
           bottom: PreferredSize(
@@ -87,12 +90,12 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                 unselectedLabelStyle: const TextStyle(
                   fontWeight: FontWeight.w500,
                 ),
-                tabs: const [
+                tabs: [
                   Tab(
-                    text: 'Past',
+                    text: tr('past'),
                   ),
                   Tab(
-                    text: 'Upcoming',
+                    text: tr('upcomming'),
                   ),
                 ],
               ),
@@ -145,72 +148,72 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
   }
 }
 
-class CustomTabBar extends StatefulWidget {
-  final bool isDark;
-  final int index;
-  final Function onTap;
-  const CustomTabBar({
-    Key? key,
-    required this.isDark,
-    required this.index,
-    required this.onTap,
-  }) : super(key: key);
+// class CustomTabBar extends StatefulWidget {
+//   final bool isDark;
+//   final int index;
+//   final Function onTap;
+//   const CustomTabBar({
+//     Key? key,
+//     required this.isDark,
+//     required this.index,
+//     required this.onTap,
+//   }) : super(key: key);
 
-  @override
-  State<CustomTabBar> createState() => _CustomTabBarState();
-}
+//   @override
+//   State<CustomTabBar> createState() => _CustomTabBarState();
+// }
 
-class _CustomTabBarState extends State<CustomTabBar>
-    with TickerProviderStateMixin {
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: TabBar(
-        onTap: (value) => widget.onTap(value),
-        tabs: [
-          GestureDetector(
-            onTap: () => widget.onTap(0),
-            child: Tab(
-              child: Text(
-                'Past',
-                style: TextStyle(
-                  fontSize: 14.0,
-                  // ignore: dead_code
-                  fontWeight: true ? FontWeight.w800 : FontWeight.w500,
-                  color: true
-                      ? !widget.isDark
-                          ? AppColors.PRIMARY_COLOR
-                          : AppColors.GREY_COLOR
-                      // ignore: dead_code
-                      : AppColors.GREY_COLOR,
-                  letterSpacing: .75,
-                ),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () => widget.onTap(1),
-            child: Tab(
-              child: Text(
-                'Upcomming',
-                style: TextStyle(
-                  fontSize: 14.0,
-                  // ignore: dead_code
-                  fontWeight: true ? FontWeight.w800 : FontWeight.w500,
-                  color: true
-                      ? !widget.isDark
-                          ? AppColors.PRIMARY_COLOR
-                          : AppColors.GREY_COLOR
-                      // ignore: dead_code
-                      : AppColors.GREY_COLOR,
-                  letterSpacing: .75,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class _CustomTabBarState extends State<CustomTabBar>
+//     with TickerProviderStateMixin {
+//   @override
+//   Widget build(BuildContext context) {
+//     return DefaultTabController(
+//       length: 2,
+//       child: TabBar(
+//         onTap: (value) => widget.onTap(value),
+//         tabs: [
+//           GestureDetector(
+//             onTap: () => widget.onTap(0),
+//             child: Tab(
+//               child: Text(
+//                 'Past',
+//                 style: TextStyle(
+//                   fontSize: 14.0,
+//                   // ignore: dead_code
+//                   fontWeight: true ? FontWeight.w800 : FontWeight.w500,
+//                   color: true
+//                       ? !widget.isDark
+//                           ? AppColors.PRIMARY_COLOR
+//                           : AppColors.GREY_COLOR
+//                       // ignore: dead_code
+//                       : AppColors.GREY_COLOR,
+//                   letterSpacing: .75,
+//                 ),
+//               ),
+//             ),
+//           ),
+//           GestureDetector(
+//             onTap: () => widget.onTap(1),
+//             child: Tab(
+//               child: Text(
+//                 'Upcomming',
+//                 style: TextStyle(
+//                   fontSize: 14.0,
+//                   // ignore: dead_code
+//                   fontWeight: true ? FontWeight.w800 : FontWeight.w500,
+//                   color: true
+//                       ? !widget.isDark
+//                           ? AppColors.PRIMARY_COLOR
+//                           : AppColors.GREY_COLOR
+//                       // ignore: dead_code
+//                       : AppColors.GREY_COLOR,
+//                   letterSpacing: .75,
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

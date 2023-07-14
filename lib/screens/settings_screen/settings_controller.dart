@@ -4,6 +4,7 @@ import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/notification_permission_screen/notification_permission_screen.dart';
 import 'package:atherium_saloon_app/screens/pdf_view_screen/pdf_view_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 
 import '../../models/policies.dart';
@@ -32,7 +33,7 @@ class SettingsController extends GetxController {
   }
 
   navigationHandle(int index) async {
-    if(index == 0){
+    if (index == 0) {
       Get.to(() => NotificationPermissionScreen());
     }
     if (index == 1) {
@@ -58,10 +59,8 @@ class SettingItem {
   });
 }
 
-List<SettingItem> settingsItems = const [
-  SettingItem(
-      title: AppLanguages.NOTIFICATION_SETTINGS, iconUrl: AppAssets.BELL_ICON),
-  SettingItem(
-      title: AppLanguages.TERMS_OF_SERVICE, iconUrl: AppAssets.FILE_MINUS),
-  SettingItem(title: AppLanguages.PRIVACY, iconUrl: AppAssets.LOCK),
+List<SettingItem> settingsItems = [
+  SettingItem(title: tr('notifications'), iconUrl: AppAssets.BELL_ICON),
+  SettingItem(title: tr('terms_of_services'), iconUrl: AppAssets.FILE_MINUS),
+  SettingItem(title: tr('privacy'), iconUrl: AppAssets.LOCK),
 ];

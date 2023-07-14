@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -9,12 +10,14 @@ class DropDownItemsWidget extends StatefulWidget {
   final double? width;
   final List<dynamic> options;
   final Function(String?) onTap;
+  final String? selected;
   const DropDownItemsWidget({
     Key? key,
     this.height,
     this.width,
     required this.options,
     required this.onTap,
+    this.selected,
   }) : super(key: key);
 
   @override
@@ -24,7 +27,13 @@ class DropDownItemsWidget extends StatefulWidget {
 class _DropDownItemsWidgetState extends State<DropDownItemsWidget> {
   String selectedValue = '';
   bool _isExpanded = false;
-  String _selected = 'Select';
+  String? _selected = tr('select');
+  @override
+  void initState() {
+    super.initState();
+    _selected = widget.selected ?? tr('select');
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -49,7 +58,7 @@ class _DropDownItemsWidgetState extends State<DropDownItemsWidget> {
                 Row(
                   children: [
                     const SizedBox(width: 20.0),
-                    Text(_selected),
+                    Text(_selected ?? ''),
                   ],
                 ),
                 Row(

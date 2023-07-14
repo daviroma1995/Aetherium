@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:get/get.dart';
@@ -51,16 +52,16 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Stack(
                     children: [
-                      const Align(
+                      Align(
                           alignment: Alignment.topCenter,
                           child: Padding(
                             padding: EdgeInsets.only(top: 8),
-                            child: Text(
-                              "App Theme",
+                            child: const Text(
+                              'app_theme',
                               style: TextStyle(
                                 fontSize: 18,
                               ),
-                            ),
+                            ).tr(),
                           )),
                       Positioned(
                         top: 0,
@@ -94,10 +95,10 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                   children: [
                     const SizedBox(height: 25),
                     const Text(
-                      "Please select from the following three choices:\n",
+                      "Please_select_from_the_following_three_choices",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 12),
-                    ),
+                    ).tr(),
                     GestureDetector(
                       onTap: () {
                         setState(() {
@@ -115,8 +116,8 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                                 });
                               }),
                           const Text(
-                            "System Default",
-                          ),
+                            "system_default",
+                          ).tr(),
                         ],
                       ),
                     ),
@@ -137,11 +138,11 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                                 });
                               }),
                           const Text(
-                            "Dark Theme",
+                            "dark_theme",
                             style: TextStyle(
                               fontFamily: 'Lato',
                             ),
-                          ),
+                          ).tr(),
                         ],
                       ),
                     ),
@@ -162,8 +163,8 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                                 });
                               }),
                           const Text(
-                            "Light Theme",
-                          ),
+                            "light_theme",
+                          ).tr(),
                         ],
                       ),
                     ),
@@ -174,7 +175,7 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: MaterialButton(
-                  child: const Text('Apply'),
+                  child: const Text('apply').tr(),
                   onPressed: () {
                     if (themeValue == 0) {
                       AdaptiveTheme.of(context).setSystem();

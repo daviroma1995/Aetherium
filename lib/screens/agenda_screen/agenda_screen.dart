@@ -2,6 +2,7 @@
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/widgets/clean_calendar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -129,14 +130,19 @@ class AgendaScreen extends StatelessWidget {
                                                 .appointments[index].serviceId!,
                                             controller
                                                 .appointments[index].time!)[1],
-                                        duration: controller.getDuration(
-                                            controller
-                                                .appointments[index].serviceId!,
-                                            controller
-                                                .appointments[index].time!)[0],
+                                        duration:
+                                            '${controller.appointments[index].duration.toString()} Min',
+                                        // duration: controller.getDuration(
+                                        //     controller
+                                        //         .appointments[index].serviceId!,
+                                        //     controller
+                                        //         .appointments[index].time!)[0],
                                         userImageUrl: AppAssets.CALANDER_ICON,
-                                        userName:
-                                            controller.employees[index].name!,
+                                        userName: controller.currentUser.value
+                                                    .isAdmin ??
+                                                false
+                                            ? '${controller.listofClients[index].firstName.toString().capitalize} - ${controller.listofClients[index].lastName.toString().capitalize}'
+                                            : controller.employees[index].name!,
                                         service:
                                             '${controller.appointmentsTreatmentCategoryList.isNotEmpty ? controller.appointmentsTreatmentCategoryList[index].name : ''} - ${controller.treatmentsData.isNotEmpty ? controller.treatmentsData[index].name ?? '' : ''}',
                                         agendaColor: AppColors.SECONDARY_LIGHT,
@@ -160,7 +166,7 @@ class AgendaScreen extends StatelessWidget {
                                           AppAssets.CALENDER_ICON_LIGHT),
                                       const SizedBox(height: 35.0),
                                       Text(
-                                        'Nessun appuntamento',
+                                        'no_appointments',
                                         style: TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w700,
@@ -168,20 +174,20 @@ class AgendaScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.BLACK_COLOR,
                                         ),
-                                      ),
+                                      ).tr(),
                                       const SizedBox(height: 10.0),
-                                      const Padding(
-                                        padding: EdgeInsets.symmetric(
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
                                             horizontal: 22.0),
-                                        child: Text(
-                                          AppLanguages.EMPTY_AGENDA_MESSAGE,
+                                        child: const Text(
+                                          'empty_agenda_message',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 14.0,
                                             color: AppColors.GREY_COLOR,
                                           ),
-                                        ),
+                                        ).tr(),
                                       ),
                                     ],
                                   ),

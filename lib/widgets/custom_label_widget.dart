@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/constants.dart';
@@ -26,7 +27,7 @@ class CustomLabelWidget extends StatelessWidget {
                     color:
                         isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
                   ),
-        ),
+        ).tr(),
         const SizedBox(height: 10.0),
       ],
     );

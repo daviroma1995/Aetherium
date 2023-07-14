@@ -1,8 +1,8 @@
+import 'dart:io';
 
 import 'package:atherium_saloon_app/models/treatment_category.dart';
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/screens/appointments_screen/appointments_screen.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:atherium_saloon_app/utils/shared_preferences.dart';
@@ -34,37 +34,41 @@ class HomeScreenController extends GetxController {
   var services = <Treatment>[].obs;
   var treatmentCategories = <TreatmentCategory>[].obs;
   var searchedService = "".obs;
-  var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
+  var appointmentsTreatmentCategoryList = <TreatmentCategory>[].obs;
+  var listOfClients = <Client>[];
   @override
   void onInit() async {
-
     super.onInit();
     await loadHomeScreen();
-    
   }
 
-  Future<void> loadHomeScreen() async{
-    
-    isLoading.value = true;
+  Future<void> loadHomeScreen() async {
     _uid = FirebaseServices.cuid;
-    treatmentCategories.value = await FirebaseServices.getTreatmentCategories();
+    // treatmentCategories.value = await FirebaseServices.getTreatmentCategories();
     // log(treatmentCategories.toString());
     var map = await FirebaseServices.getCurrentUser();
     currentUser.value = Client.fromJson(map);
-
-    appointmentsEmployee.bindStream(FirebaseServices.employeeStrem());
-    notifications.bindStream(FirebaseServices.getUnreadNotficationsStream());
-    events.bindStream(FirebaseServices.eventStream());
-
+    try {
+      appointmentsEmployee.bindStream(FirebaseServices.employeeStrem());
+      notifications.bindStream(FirebaseServices.getUnreadNotficationsStream());
+      events.bindStream(FirebaseServices.eventStream());
+    } catch (ex) {
+      stdout.writeln(ex);
+    }
     isInitialized.value = true;
     LocalData.setIsLogedIn(true);
-    loadAppointments();
-    
-    // WidgetsBinding.instance.addPostFrameCallback(
-    //   (timeStamp) async {},
-    // );
+    await loadAppointments();
+    if (currentUser.value.isAdmin ?? false) {
+      var clients = await FirebaseServices.getData(collection: 'clients');
+      for (var appointment in appointments) {
+        if (clients != null) {
+          var client = clients
+              .firstWhere((element) => element['id'] == appointment.clientId);
+          listOfClients.add(Client.fromJson(client));
+        }
+      }
+    }
     isLoading.value = false;
-    
   }
 
   @override
@@ -74,11 +78,14 @@ class HomeScreenController extends GetxController {
     notifications.close();
     events.close();
   }
-  
+
   void navigateToAppointmentDetail(int index) async {
     var data = await Get.to(
       () => AppointmentDetailsScreen(
-          appointment: appointments[index], isEditable: true),
+        appointment: appointments[index],
+        isEditable: true,
+        isAdmin: currentUser.value.isAdmin ?? false,
+      ),
       duration: const Duration(milliseconds: 600),
       transition: Transition.rightToLeft,
       arguments: appointments[index].clientId,
@@ -87,7 +94,8 @@ class HomeScreenController extends GetxController {
       await loadHomeScreen();
     }
   }
-  Future<void> loadAppointments() async{
+
+  Future<void> loadAppointments() async {
     appointmentsTreatmentCategoryList.clear();
     var treatments = await FirebaseServices.getData(collection: 'treatments');
     var data = await FirebaseServices.getAppointments(
@@ -100,11 +108,14 @@ class HomeScreenController extends GetxController {
         }
       }
     }
-    for(var service in services){
-      int treatmentCategoryIndex = treatmentCategories.indexWhere((element) => service.treatmentCategoryId == element.id);
-      appointmentsTreatmentCategoryList.add(treatmentCategories[treatmentCategoryIndex]);
+    for (var service in services) {
+      int treatmentCategoryIndex = treatmentCategories
+          .indexWhere((element) => service.treatmentCategoryId == element.id);
+      appointmentsTreatmentCategoryList
+          .add(treatmentCategories[treatmentCategoryIndex]);
     }
   }
+
   final searchController = TextEditingController();
   void onChange(String value) {
     searchedService.value = value;

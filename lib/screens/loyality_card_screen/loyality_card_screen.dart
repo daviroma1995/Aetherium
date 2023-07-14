@@ -3,6 +3,7 @@ import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/full_screen_image/full_screen_image.dart';
 import 'package:atherium_saloon_app/screens/loyality_card_screen/loyality_card_controller.dart';
 import 'package:atherium_saloon_app/screens/qr_code_screen/qr_code_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -32,8 +33,9 @@ class LoyalityCardScreen extends StatelessWidget {
         title: Row(
           children: [
             const SizedBox(width: 5),
-            Text(AppLanguages.LOYALITY_CARD,
-                style: Theme.of(context).textTheme.headlineLarge),
+            Text('loyality_card',
+                    style: Theme.of(context).textTheme.headlineLarge)
+                .tr(),
             const SizedBox(width: 13.0),
             GestureDetector(
               onTap: () async {
@@ -57,17 +59,20 @@ class LoyalityCardScreen extends StatelessWidget {
               ? SizedBox(
                   height: Get.height - 100,
                   width: Get.width,
-                  child:  Center(
+                  child: Center(
                     child: CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
+                      color: isDark
+                          ? AppColors.SECONDARY_COLOR
+                          : AppColors.GREY_COLOR,
                     ),
                   ),
                 )
               : Visibility(
                   visible: controller.isLoading.isFalse,
                   child: LiquidPullToRefresh(
-                    backgroundColor: isDark ? AppColors.SECONDARY_LIGHT : AppColors.WHITE_COLOR,
+                    backgroundColor: isDark
+                        ? AppColors.SECONDARY_LIGHT
+                        : AppColors.WHITE_COLOR,
                     onRefresh: () async => await controller.loadData(),
                     child: ListView(
                       shrinkWrap: true,
@@ -89,14 +94,14 @@ class LoyalityCardScreen extends StatelessWidget {
                                   child: Row(
                                     children: [
                                       Text(
-                                        AppLanguages.POINTS_COLLECTED,
+                                        'points_collected',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineMedium!
                                             .copyWith(
                                                 fontSize: 18.0,
                                                 fontWeight: FontWeight.w700),
-                                      ),
+                                      ).tr(),
                                       const SizedBox(width: 10.0),
                                       Container(
                                         alignment: Alignment.center,
@@ -224,14 +229,16 @@ class LoyalityCardScreen extends StatelessWidget {
                                       top: 16.0,
                                       bottom: 16.0),
                                   child: PrimoDetailsWidget(
-                                    percent: loyalityCard.gainedPoints /
-                                        loyalityCard.totalPoints,
+                                    percent:
+                                        (controller.clientMembership!.points)! /
+                                            loyalityCard.totalPoints,
                                     primoTitle:
-                                        'Active ${controller.membershipType!.name!.capitalize}',
+                                        '${tr('active')} ${controller.membershipType!.name!.capitalize}',
                                     date:
                                         '${controller.clientMembership!.startDate}',
                                     progressColor: AppColors.PROGRESS_COLOR,
-                                    imageUrl: AppAssets.CUP_ICON,
+                                    imageUrl: controller.membershipType?.icon ??
+                                        AppAssets.CUP_ICON,
                                     onPressed: () {
                                       Get.to(
                                         () => QrCodeScreen(),
@@ -248,8 +255,8 @@ class LoyalityCardScreen extends StatelessWidget {
                                   padding: const EdgeInsets.only(
                                       left: 30.0, right: 30.0, bottom: 10.0),
                                   child: TextRowWidget(
-                                    textOne: AppLanguages.NAME,
-                                    textTwo: AppLanguages.SURNAME,
+                                    textOne: tr('name'),
+                                    textTwo: tr('surname'),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineLarge!
@@ -277,8 +284,8 @@ class LoyalityCardScreen extends StatelessWidget {
                                   padding: const EdgeInsets.only(
                                       left: 30.0, right: 30.0, bottom: 10.0),
                                   child: TextRowWidget(
-                                    textOne: AppLanguages.LEVEL,
-                                    textTwo: AppLanguages.EXPIRY_DATE,
+                                    textOne: tr('level'),
+                                    textTwo: tr('expiray_date'),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineLarge!
@@ -306,50 +313,50 @@ class LoyalityCardScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10.0),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? AppColors.PRIMARY_DARK
-                                  : AppColors.WHITE_COLOR,
-                              borderRadius: BorderRadius.circular(8.0),
-                              border: isDark
-                                  ? const Border()
-                                  : Border.all(
-                                      width: 1.0,
-                                      color: AppColors.BORDER_COLOR),
-                            ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10.0,
-                                      right: 20.0,
-                                      top: 16.0,
-                                      bottom: 16.0),
-                                  child: PrimoDetailsWidget(
-                                    percent: 1.0,
-                                    primoTitle: 'Basic',
-                                    date: '14 March 2023',
-                                    pointsGained: 300.toString(),
-                                    totalPoints: 300.toString(),
-                                    progressColor: AppColors.CONFIRMED_COLOR,
-                                    imageUrl: AppAssets.PRIMO_SUCCESS_ICON,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20.0),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                        //   child: Container(
+                        //     width: double.infinity,
+                        //     decoration: BoxDecoration(
+                        //       color: isDark
+                        //           ? AppColors.PRIMARY_DARK
+                        //           : AppColors.WHITE_COLOR,
+                        //       borderRadius: BorderRadius.circular(8.0),
+                        //       border: isDark
+                        //           ? const Border()
+                        //           : Border.all(
+                        //               width: 1.0,
+                        //               color: AppColors.BORDER_COLOR),
+                        //     ),
+                        //     child: Column(
+                        //       children: [
+                        //         Padding(
+                        //           padding: const EdgeInsets.only(
+                        //               left: 10.0,
+                        //               right: 20.0,
+                        //               top: 16.0,
+                        //               bottom: 16.0),
+                        //           child: PrimoDetailsWidget(
+                        //             percent: 1.0,
+                        //             primoTitle: 'Basic',
+                        //             date: '14 March 2023',
+                        //             pointsGained: 300.toString(),
+                        //             totalPoints: 300.toString(),
+                        //             progressColor: AppColors.CONFIRMED_COLOR,
+                        //             imageUrl: controller.membershipType!.icon!,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 20.0),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 22.0),
                           child: Row(
                             children: [
                               Text(
-                                AppLanguages.INVITE_FRIENDS,
+                                'invite_friends',
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineLarge!
@@ -357,7 +364,7 @@ class LoyalityCardScreen extends StatelessWidget {
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.w700,
                                     ),
-                              ),
+                              ).tr(),
                             ],
                           ),
                         ),
@@ -412,7 +419,7 @@ class LoyalityCardScreen extends StatelessWidget {
                                     child: Column(
                                       children: [
                                         Text(
-                                          AppLanguages.INVITATION_DESCRIPTION,
+                                          'invitation_description',
                                           style: Theme.of(context)
                                               .textTheme
                                               .headlineMedium!
@@ -420,7 +427,7 @@ class LoyalityCardScreen extends StatelessWidget {
                                                 fontSize: 14.0,
                                                 fontWeight: FontWeight.w500,
                                               ),
-                                        ),
+                                        ).tr(),
                                         const SizedBox(width: 15.0),
                                       ],
                                     ),

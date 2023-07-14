@@ -1,16 +1,26 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../models/appointment.dart';
+import '../../network_utils/firebase_services.dart';
 import '../../utils/constants.dart';
+import '../../utils/google_calendar.dart';
 import '../../widgets/primary_button.dart';
 import '../../widgets/text_row_widget.dart';
 import '../home_screen/home_screen_controller.dart';
 import 'appointment_details_controller.dart';
+// import 'package:flutter_googlecalendar/flutter_googlecalendar.dart';
+// import 'package:atherium_saloon_app/packages/google_calendar/lib/flutter_googlecalendar.dart';
 
 class AppointmentDetailsScreen extends StatelessWidget {
   final controller = Get.put(AppointmentDetailsController());
@@ -28,6 +38,8 @@ class AppointmentDetailsScreen extends StatelessWidget {
   final bool isPast;
   final bool isAdmin;
   final Appointment appointment;
+  final durationText = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
@@ -64,12 +76,12 @@ class AppointmentDetailsScreen extends StatelessWidget {
               const SizedBox(width: 12.0),
               Expanded(
                 child: Text(
-                  AppLanguages.AppuntamentoDettagli,
+                  'appointment_details',
                   style: Theme.of(context)
                       .textTheme
                       .headlineLarge!
                       .copyWith(fontSize: Get.width * .055),
-                ),
+                ).tr(),
               ),
             ],
           ),
@@ -109,8 +121,8 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   TextRowWidget(
-                                    textOne: 'Date: ',
-                                    textTwo: 'Time: ',
+                                    textOne: '${tr('date')}:',
+                                    textTwo: '${tr('time')}:',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -135,8 +147,8 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 16.0),
                                   TextRowWidget(
-                                    textOne: 'Number',
-                                    textTwo: 'Email',
+                                    textOne: '${tr('number')}:',
+                                    textTwo: '${tr('email')}:',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -165,7 +177,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Services Details',
+                                        'service_details',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineMedium!
@@ -176,7 +188,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                                     ? AppColors.WHITE_COLOR
                                                     : AppColors
                                                         .SECONDARY_COLOR),
-                                      ),
+                                      ).tr(),
                                       const SizedBox(height: 10.0),
                                       ListView.builder(
                                         shrinkWrap: true,
@@ -188,12 +200,15 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                           return Obx(
                                             () => controller
                                                     .allTreatments.isEmpty
-                                                ?  Center(
+                                                ? Center(
                                                     child:
                                                         CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
-                                                        ),
+                                                      color: isDark
+                                                          ? AppColors
+                                                              .SECONDARY_COLOR
+                                                          : AppColors
+                                                              .GREY_COLOR,
+                                                    ),
                                                   )
                                                 : Column(
                                                     children: [
@@ -245,9 +260,9 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Text(
-                                            'Total',
-                                            style: TextStyle(
+                                          Text(
+                                            tr('total'),
+                                            style: const TextStyle(
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           GetBuilder<
@@ -266,8 +281,43 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                   const SizedBox(height: 20.0),
+                                  Visibility(
+                                    visible: isEditable,
+                                    child: PrimaryButton(
+                                        width: Get.width,
+                                        color: isDark
+                                            ? AppColors.SECONDARY_LIGHT
+                                            : AppColors.PRIMARY_COLOR,
+                                        buttonText: 'add_to_google_calendar',
+                                        onTap: () async {
+                                          final startTime = DateTime.parse(
+                                                  appointment.startTime!)
+                                              .toUtc();
+                                          final rfcStartTime =
+                                              DateFormat("yyyyMMdd'T'HHmmss")
+                                                  .format(startTime);
+                                          final endTime = DateTime.parse(
+                                                  appointment.endTime!)
+                                              .toUtc();
+                                          final rfcEndTime =
+                                              DateFormat("yyyyMMdd'T'HHmmss")
+                                                  .format(endTime);
+                                          print('$startTime, $endTime');
+                                          print('$rfcStartTime , $rfcEndTime');
+                                          String url =
+                                              'https://calendar.google.com/calendar/u/0/r/eventedit?text=Meeting+with+Beauty+Specialist&dates=$rfcStartTime/$rfcEndTime&details=&location=G7F5%2B6GJ+Brescia,+Province+of+Brescia,+Italy&sf=true&output=xml';
+                                          try {
+                                            launchUrlString(url,
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          } catch (ex) {
+                                            print(ex);
+                                          }
+                                        }),
+                                  ),
+                                  const SizedBox(height: 20.0),
                                   Text(
-                                    'Beauty Specialist:',
+                                    '${tr('beauty_specialist')}:',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -282,6 +332,8 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                   ListView.builder(
                                       itemCount: appointment.employeeId!.length,
                                       shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
                                         return specialistCard(
                                           title: homecontroller.getEmployeeName(
@@ -293,7 +345,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                       }),
                                   const SizedBox(height: 20.0),
                                   Text(
-                                    AppLanguages.NOTES,
+                                    '${tr('note')}:',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -306,7 +358,10 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 20.0),
                                   Text(
-                                    appointment.notes ?? 'No Notes avaialbe',
+                                    appointment.notes == null ||
+                                            appointment.notes!.isEmpty
+                                        ? 'No Notes avaialbe'
+                                        : appointment.notes!,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16.0,
@@ -320,65 +375,137 @@ class AppointmentDetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
+                          if (isEditable && isAdmin)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      width: 60,
+                                      child: TextField(
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.digitsOnly
+                                        ],
+                                        controller: durationText,
+                                        decoration: InputDecoration(
+                                          hintText:
+                                              appointment.duration!.toString(),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 10.0,
+                                                  vertical: 0.0),
+                                          enabledBorder:
+                                              const OutlineInputBorder(),
+                                          focusedBorder:
+                                              const OutlineInputBorder(),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5.0),
+                                    const Text('Min'),
+                                  ],
+                                ),
+                                PrimaryButton(
+                                    width: Get.width * .5,
+                                    buttonText: 'increase_total_duration_by',
+                                    buttonTextColor: isDark
+                                        ? AppColors.BACKGROUND_DARK
+                                        : AppColors.WHITE_COLOR,
+                                    color: isDark
+                                        ? AppColors.SECONDARY_LIGHT
+                                        : AppColors.PRIMARY_COLOR,
+                                    onTap: () async {
+                                      if (durationText.text != '') {
+                                        bool duartionIsUpdated =
+                                            await controller.updateDuration(
+                                                appointment,
+                                                num.parse(durationText.text));
+                                        if (duartionIsUpdated) {
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  'Duration Increased by ${durationText.text} Minutes');
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                          durationText.text = '';
+                                          Get.find<HomeScreenController>()
+                                              .loadHomeScreen();
+                                          Get.find<AgendaController>()
+                                              .loadData();
+                                          return;
+                                        }
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'Duration is not updated Something went Wrong');
+                                        return;
+                                      }
+                                      Fluttertoast.showToast(
+                                          msg: 'The duration Field is Empty');
+                                    })
+                              ],
+                            ),
                           if (isEditable == true)
                             Padding(
                               padding: const EdgeInsets.only(top: 20.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              child: Column(
                                 children: [
-                                  PrimaryButton(
-                                    width: Get.width / 2 - 32,
-                                    buttonText: 'Cancel',
-                                    buttonTextColor: isDark
-                                        ? AppColors.SECONDARY_LIGHT
-                                        : AppColors.BLACK_COLOR,
-                                    borderColor: isDark
-                                        ? AppColors.SECONDARY_LIGHT
-                                        : AppColors.BLACK_COLOR,
-                                    bordered: true,
-                                    onTap: () {
-                                      Get.offAll(
-                                        const BottomNavigationScreen(),
-                                        duration:
-                                            const Duration(milliseconds: 600),
-                                        transition: Transition.leftToRight,
-                                        curve: Curves.linear,
-                                      );
-                                    },
+                                  const SizedBox(height: 16.0),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      PrimaryButton(
+                                        width: Get.width / 2 - 32,
+                                        buttonText: 'cancel',
+                                        buttonTextColor: isDark
+                                            ? AppColors.SECONDARY_LIGHT
+                                            : AppColors.BLACK_COLOR,
+                                        borderColor: isDark
+                                            ? AppColors.SECONDARY_LIGHT
+                                            : AppColors.BLACK_COLOR,
+                                        bordered: true,
+                                        onTap: () async {
+                                          Get.back(
+                                              result: controller.isChanged);
+                                          return controller.isChanged;
+                                        },
+                                      ),
+                                      PrimaryButton(
+                                        width: Get.width / 2 - 32,
+                                        buttonText: 'edit',
+                                        buttonTextColor: isDark
+                                            ? AppColors.BACKGROUND_DARK
+                                            : AppColors.WHITE_COLOR,
+                                        color: isDark
+                                            ? AppColors.SECONDARY_LIGHT
+                                            : AppColors.PRIMARY_COLOR,
+                                        bordered: false,
+                                        onTap: () {
+                                          controller.onEdit(appointment);
+                                        },
+                                      )
+                                    ],
                                   ),
-                                  PrimaryButton(
-                                    width: Get.width / 2 - 32,
-                                    buttonText: 'Edit',
-                                    buttonTextColor: isDark
-                                        ? AppColors.BACKGROUND_DARK
-                                        : AppColors.WHITE_COLOR,
-                                    color: isDark
-                                        ? AppColors.SECONDARY_LIGHT
-                                        : AppColors.PRIMARY_COLOR,
-                                    bordered: false,
-                                    onTap: () {
-                                      controller.onEdit(appointment);
-                                    },
-                                  )
                                 ],
                               ),
                             ),
-                            if(isPast )
+                          if (isPast && controller.isAdmin)
                             PrimaryButton(
-                                    width: Get.width  - 32,
-                                    buttonText: 'Edit',
-                                    buttonTextColor: isDark
-                                        ? AppColors.BACKGROUND_DARK
-                                        : AppColors.WHITE_COLOR,
-                                    color: isDark
-                                        ? AppColors.SECONDARY_LIGHT
-                                        : AppColors.PRIMARY_COLOR,
-                                    bordered: false,
-                                    onTap: () {
-                                      controller.editStatus(appointment);
-                                    },
-                                  )
+                              width: Get.width - 32,
+                              buttonText: 'Edit',
+                              buttonTextColor: isDark
+                                  ? AppColors.BACKGROUND_DARK
+                                  : AppColors.WHITE_COLOR,
+                              color: isDark
+                                  ? AppColors.SECONDARY_LIGHT
+                                  : AppColors.PRIMARY_COLOR,
+                              bordered: false,
+                              onTap: () {
+                                controller.editStatus(appointment);
+                              },
+                            )
                         ],
                       ),
                     ),

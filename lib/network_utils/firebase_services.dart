@@ -253,20 +253,24 @@ class FirebaseServices {
   }
 
   static Stream<List<Employee>> employeeStrem() {
-    return FirebaseFirestore.instance
-        .collection('employees')
-        .snapshots()
-        .map((employeeQuerySnapshot) {
-      List<Employee> emp = [];
-      for (var queryDocumentSnapshot in employeeQuerySnapshot.docs) {
-        var data = queryDocumentSnapshot.data();
-        data['id'] = queryDocumentSnapshot.id;
-        emp.add(Employee.fromJson(data));
-      }
-      return emp;
-    });
+    try {
+      return FirebaseFirestore.instance
+          .collection('employees')
+          .snapshots()
+          .map((employeeQuerySnapshot) {
+        List<Employee> emp = [];
+        for (var queryDocumentSnapshot in employeeQuerySnapshot.docs) {
+          var data = queryDocumentSnapshot.data();
+          data['id'] = queryDocumentSnapshot.id;
+          emp.add(Employee.fromJson(data));
+        }
+        return emp;
+      });
+    } catch (ex) {
+      return const Stream.empty();
+    }
   }
-  
+
   // static Stream<List<Treatment>> treatmentsStream(){
 
   // }
@@ -375,8 +379,7 @@ class FirebaseServices {
         var data = await FirebaseFirestore.instance
             .collection('appointments')
             .where('date_timestamp', isEqualTo: timestamp)
-            .where('client_id',
-                isEqualTo: cuid)
+            .where('client_id', isEqualTo: cuid)
             .get();
         for (var querySnapShot in data.docs) {
           var data = querySnapShot.data();
@@ -411,8 +414,7 @@ class FirebaseServices {
       try {
         var data = await FirebaseFirestore.instance
             .collection('appointments')
-            .where('client_id',
-                isEqualTo: cuid)
+            .where('client_id', isEqualTo: cuid)
             .where('is_regular', isEqualTo: true)
             .get();
         for (var querySnapShot in data.docs) {
@@ -587,18 +589,18 @@ class FirebaseServices {
 
   static Future<List<Consultation>> getConsultations(String id) async {
     List<Consultation> consultations = [];
-    var userQuery = await FirebaseFirestore.instance.collection('clients').doc(id).get();
+    var userQuery =
+        await FirebaseFirestore.instance.collection('clients').doc(id).get();
     var user = userQuery.data();
-    if(user?['isAdmin']){
-      var query = await FirebaseFirestore.instance
-        .collection('consultations')
-        .get();
-    var docs = query.docs;
-    for (var doc in docs) {
-      var data = doc.data();
-      consultations.add(Consultation.fromJson(data));
-    } 
-    return consultations;
+    if (user?['isAdmin']) {
+      var query =
+          await FirebaseFirestore.instance.collection('consultations').get();
+      var docs = query.docs;
+      for (var doc in docs) {
+        var data = doc.data();
+        consultations.add(Consultation.fromJson(data));
+      }
+      return consultations;
     }
     var query = await FirebaseFirestore.instance
         .collection('consultations')
@@ -611,5 +613,4 @@ class FirebaseServices {
     }
     return consultations;
   }
-  
 }

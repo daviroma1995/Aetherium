@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ import 'package:atherium_saloon_app/screens/services_screen/services_controller.
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/primary_button.dart';
 
+import '../../models/appointment.dart';
 import '../../widgets/custom_dropdown_list_widget.dart';
 import '../../widgets/form_field_widget.dart';
 
@@ -16,22 +18,36 @@ class ServicesScreen extends StatelessWidget {
     this.uid,
     this.clientEmail,
     this.number,
+    this.index,
+    this.isEditing = false,
+    this.date,
+    this.time,
+    this.appointment,
   }) : super(key: key);
   final String? uid;
   final String? clientEmail;
   final String? number;
+  final int? index;
+  final bool isEditing;
+  final String? date;
+  final String? time;
+  final Appointment? appointment;
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(
         ServicesController(uid: uid, clientEmail: clientEmail, number: number));
+    controller.isEditing = isEditing;
+    controller.date = date ?? '';
+    controller.time = time ?? '';
+    controller.newAppointment = appointment ?? Appointment();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     controller.uid = uid;
     controller.clientEmail = clientEmail;
     controller.number = number;
     return WillPopScope(
       onWillPop: () async {
-        Get.back(result: controller.isChanged);
-        return controller.isChanged;
+        Get.back(result: true);
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(
@@ -46,7 +62,7 @@ class ServicesScreen extends StatelessWidget {
               InkWell(
                 borderRadius: BorderRadius.circular(25.0),
                 onTap: () {
-                  Get.back(result: controller.isChanged);
+                  Get.back(result: true);
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -57,18 +73,20 @@ class ServicesScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12.0),
-              Text(AppLanguages.SERVICES_TREATMENTS,
-                  style: Theme.of(context).textTheme.headlineLarge),
+              Text('services_treatments',
+                      style: Theme.of(context).textTheme.headlineLarge)
+                  .tr(),
             ],
           ),
         ),
         body: Obx(
           () => SafeArea(
             child: controller.services.isEmpty && controller.subServices.isEmpty
-                ?  Center(
+                ? Center(
                     child: CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
+                      color: isDark
+                          ? AppColors.SECONDARY_COLOR
+                          : AppColors.GREY_COLOR,
                     ),
                   )
                 : Obx(
@@ -183,7 +201,7 @@ class ServicesScreen extends StatelessWidget {
                                 horizontal: 22.0, vertical: 20.0),
                             child: PrimaryButton(
                                 width: Get.width,
-                                buttonText: 'Next',
+                                buttonText: 'next',
                                 color: isDark
                                     ? AppColors.SECONDARY_LIGHT
                                     : AppColors.PRIMARY_COLOR,

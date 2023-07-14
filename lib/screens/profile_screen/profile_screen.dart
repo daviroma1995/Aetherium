@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,8 +24,9 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 13.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                child: Text(AppLanguages.PROFILE,
-                    style: Theme.of(context).textTheme.headlineLarge),
+                child: Text('profile',
+                        style: Theme.of(context).textTheme.headlineLarge)
+                    .tr(),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(

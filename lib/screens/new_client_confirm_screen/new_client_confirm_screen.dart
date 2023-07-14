@@ -1,9 +1,13 @@
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
+import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/primary_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+import '../../network_utils/firebase_services.dart';
 
 class NewClientConfirmScreen extends StatelessWidget {
   const NewClientConfirmScreen({super.key});
@@ -48,27 +52,28 @@ class NewClientConfirmScreen extends StatelessWidget {
                     ? SvgPicture.asset(AppAssets.DARK_CONFIRM_ICON)
                     : SvgPicture.asset(AppAssets.APPOINTMENT_CONFIRM),
                 const SizedBox(height: 44.0),
-                Text(AppLanguages.CONGRATS,
-                    style: Theme.of(context).textTheme.headlineLarge),
+                Text('congratulations',
+                        style: Theme.of(context).textTheme.headlineLarge)
+                    .tr(),
                 const SizedBox(height: 10.0),
                 const Text(
-                  AppLanguages.CLIENT_CREATION_MESSAGE_I,
+                  'client_creating_message_I',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.w500,
                     color: AppColors.GREY_COLOR,
                   ),
-                ),
+                ).tr(),
                 const Text(
-                  AppLanguages.CLIENT_CREATION_MESSAGE_II,
+                  'client_creation_message_II',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.w500,
                     color: AppColors.GREY_COLOR,
                   ),
-                ),
+                ).tr(),
               ],
             ),
             Positioned(
@@ -77,9 +82,15 @@ class NewClientConfirmScreen extends StatelessWidget {
               right: 22.0,
               child: PrimaryButton(
                 width: Get.width,
-                buttonText: 'Close',
-                onTap: () {
-                  Get.offAll(() => const BottomNavigationScreen());
+                buttonText: 'close',
+                onTap: () async {
+                  // Get.delete<HomeScreenController>();
+                  // var treatmentCategories =
+                  //     await FirebaseServices.getTreatmentCategories();
+                  // Get.offAll(() => const BottomNavigationScreen(),
+                  //     arguments: treatmentCategories);
+                  Get.back();
+                  Get.back();
                 },
                 color: isDark
                     ? AppColors.SECONDARY_LIGHT

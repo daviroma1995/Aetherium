@@ -5,6 +5,7 @@ import 'package:atherium_saloon_app/screens/account_info_screen/account_info_con
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/primary_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -31,9 +32,11 @@ class AccountInfoScreen extends StatelessWidget {
                 ? SizedBox(
                     height: Get.height,
                     width: Get.width,
-                    child:  Center(
+                    child: Center(
                       child: CircularProgressIndicator(
-                        color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+                        color: isDark
+                            ? AppColors.SECONDARY_COLOR
+                            : AppColors.GREY_COLOR,
                       ),
                     ),
                   )
@@ -84,11 +87,15 @@ class AccountInfoScreen extends StatelessWidget {
                                                         (context, url) {
                                                       return Container(
                                                         color: Colors.grey,
-                                                        child:  Center(
+                                                        child: Center(
                                                           child:
                                                               CircularProgressIndicator(
-                                                                color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-                                                              ),
+                                                            color: isDark
+                                                                ? AppColors
+                                                                    .SECONDARY_COLOR
+                                                                : AppColors
+                                                                    .GREY_COLOR,
+                                                          ),
                                                         ),
                                                       );
                                                     },
@@ -160,7 +167,7 @@ class AccountInfoScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomLabelWidget(
-                                      label: AppLanguages.NAME,
+                                      label: 'name',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
@@ -174,7 +181,7 @@ class AccountInfoScreen extends StatelessWidget {
                                     Obx(
                                       () => CustomInputFormField(
                                         textEdigintController: controller.name,
-                                        hintText: 'Name',
+                                        hintText: tr('name'),
                                         isValid: !controller.nameHasError.value,
                                         onSubmit: () {},
                                         autoFocus: true,
@@ -198,7 +205,7 @@ class AccountInfoScreen extends StatelessWidget {
                                         : const SizedBox()),
                                     const SizedBox(height: 12.0),
                                     CustomLabelWidget(
-                                      label: AppLanguages.SURNAME,
+                                      label: 'surname',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
@@ -213,7 +220,7 @@ class AccountInfoScreen extends StatelessWidget {
                                       () => CustomInputFormField(
                                         textEdigintController:
                                             controller.surName,
-                                        hintText: AppLanguages.SURNAME,
+                                        hintText: tr('surname'),
                                         isValid:
                                             !controller.surNameHasError.value,
                                         onSubmit: () {},
@@ -240,7 +247,7 @@ class AccountInfoScreen extends StatelessWidget {
                                         : const SizedBox()),
                                     const SizedBox(height: 12.0),
                                     CustomLabelWidget(
-                                      label: AppLanguages.EMAIL,
+                                      label: 'email',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
@@ -277,7 +284,7 @@ class AccountInfoScreen extends StatelessWidget {
                                         : const SizedBox()),
                                     const SizedBox(height: 12.0),
                                     CustomLabelWidget(
-                                      label: AppLanguages.PHONE_NUMBER,
+                                      label: 'telephone',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
@@ -290,6 +297,7 @@ class AccountInfoScreen extends StatelessWidget {
                                     ),
                                     CustomInputFormField(
                                       textEdigintController: controller.phone,
+                                      keyboardType: TextInputType.number,
                                       hintText: '+956 424 2687',
                                       isValid: !controller.phoneHasError.value,
                                       onSubmit: () {},
@@ -314,7 +322,7 @@ class AccountInfoScreen extends StatelessWidget {
                                         : const SizedBox()),
                                     const SizedBox(height: 12.0),
                                     CustomLabelWidget(
-                                      label: AppLanguages.GENDER,
+                                      label: 'gender',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
@@ -328,8 +336,8 @@ class AccountInfoScreen extends StatelessWidget {
                                     Obx(
                                       () => CustomDropDown(
                                         height: 50.0,
-                                        label: 'Select Gender',
-                                        options: ['Male', 'Female'],
+                                        label: tr('select_gender'),
+                                        options: [tr('male'), tr('female')],
                                         value: controller.genderValue.value,
                                         onChange: (value) {
                                           controller.changeValue(value);
@@ -351,7 +359,7 @@ class AccountInfoScreen extends StatelessWidget {
                                     ),
                                     CustomInputFormField(
                                       textEdigintController: controller.address,
-                                      hintText: 'Address',
+                                      hintText: tr('address'),
                                       isValid:
                                           !controller.addressHasError.value,
                                       onSubmit: () {},
@@ -377,7 +385,7 @@ class AccountInfoScreen extends StatelessWidget {
                                         : const SizedBox()),
                                     const SizedBox(height: 12.0),
                                     CustomLabelWidget(
-                                      label: AppLanguages.BIRTHDAY,
+                                      label: 'birthday',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
@@ -396,7 +404,7 @@ class AccountInfoScreen extends StatelessWidget {
                                           firstDate: DateTime.utc(
                                               1949, DateTime.january, 1),
                                           lastDate: DateTime.now(),
-                                          helpText: 'Select Date of Birth',
+                                          helpText: tr('select_date_of_birth'),
                                         );
                                         controller.dateOfBirth.value =
                                             DateTime.parse(
@@ -434,13 +442,14 @@ class AccountInfoScreen extends StatelessWidget {
                                             const Duration(milliseconds: 250),
                                         child: Visibility(
                                           visible: controller.isLoading.value,
-                                          child:  SizedBox(
+                                          child: SizedBox(
                                             height: 150,
                                             child: Center(
-                                              child:
-                                                  CircularProgressIndicator(
-                                                    color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-                                                  ),
+                                              child: CircularProgressIndicator(
+                                                color: isDark
+                                                    ? AppColors.SECONDARY_COLOR
+                                                    : AppColors.GREY_COLOR,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -451,22 +460,23 @@ class AccountInfoScreen extends StatelessWidget {
                                       children: [
                                         PrimaryButton(
                                           width: Get.width / 2 - 28,
-                                          buttonText: 'Delete Account',
+                                          buttonText: 'cancel',
                                           onTap: () async {
-                                            var isconfirmed =
-                                                await showOkCancelAlertDialog(
-                                              context: context,
-                                              title: 'Alert!',
-                                              message:
-                                                  'Are you sure you want to delete your account?',
-                                              okLabel: 'Yes',
-                                              cancelLabel: 'No',
-                                              style: AdaptiveStyle.adaptive,
-                                            );
-                                            if (isconfirmed ==
-                                                OkCancelResult.ok) {
-                                              controller.deleteUser();
-                                            }
+                                            Get.back();
+                                            // var isconfirmed =
+                                            //     await showOkCancelAlertDialog(
+                                            //   context: context,
+                                            //   title: 'Alert!',
+                                            //   message: tr(
+                                            //       'are_you_sure_you_want_to_delete_your_account'),
+                                            //   okLabel: tr('yes'),
+                                            //   cancelLabel: tr('no'),
+                                            //   style: AdaptiveStyle.adaptive,
+                                            // );
+                                            // if (isconfirmed ==
+                                            //     OkCancelResult.ok) {
+                                            //   controller.deleteUser();
+                                            // }
                                           },
                                           // color: Colors.black,
                                           bordered: true,
@@ -480,7 +490,7 @@ class AccountInfoScreen extends StatelessWidget {
                                         const SizedBox(width: 12.0),
                                         PrimaryButton(
                                           width: Get.width / 2 - 28,
-                                          buttonText: 'Save',
+                                          buttonText: 'save',
                                           onTap: () {
                                             controller.saveUser();
                                           },
@@ -496,9 +506,11 @@ class AccountInfoScreen extends StatelessWidget {
                                     const SizedBox(height: 30.0)
                                   ],
                                 )
-                              :  Center(
+                              : Center(
                                   child: CircularProgressIndicator(
-                                    color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+                                    color: isDark
+                                        ? AppColors.SECONDARY_COLOR
+                                        : AppColors.GREY_COLOR,
                                   ),
                                 ),
                         ),

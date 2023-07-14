@@ -113,8 +113,7 @@ class SelectClientController extends GetxController {
       for (var membership in data) {
         for (var membershipType in tiers) {
           if (membership.membershipTypeId == membershipType.id &&
-              membership.clientId !=
-                  FirebaseServices.cuid) {
+              membership.clientId != FirebaseServices.cuid) {
             tier.add(membershipType);
           }
         }

@@ -9,7 +9,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../models/appointment.dart';
+import '../../models/client.dart';
+import '../../models/treatment_category.dart';
 import '../../utils/constants.dart';
+import '../home_screen/home_screen_controller.dart';
 
 class UpcomingAppointmentsController extends GetxController {
   var upcommingAppointments = <Appointment>[].obs;
@@ -17,7 +20,11 @@ class UpcomingAppointmentsController extends GetxController {
   var services = <Treatment>[].obs;
   var status = <AppointmentStatus>[].obs;
   var uid = FirebaseServices.cuid;
+  var listOfClients = <Client>[];
   RxBool isLoading = false.obs;
+  bool isAdmin = AgendaController.instance.currentUser.value.isAdmin ?? false;
+  var listOfTreatmentCategory = <TreatmentCategory>[];
+  var treatmentCategoryList = <TreatmentCategory>[];
   @override
   void onInit() async {
     super.onInit();
@@ -48,6 +55,10 @@ class UpcomingAppointmentsController extends GetxController {
           .collection('appointments')
           .doc(upcommingAppointments[id].id)
           .delete();
+      var homeController = Get.find<HomeScreenController>();
+      homeController.loadHomeScreen();
+      var agenda = Get.find<AgendaController>();
+      agenda.loadData();
       Fluttertoast.showToast(
           msg: 'Appointment deleted Successfully',
           backgroundColor: AppColors.GREEN_COLOR);
@@ -62,12 +73,16 @@ class UpcomingAppointmentsController extends GetxController {
     employeesData = <Employee>[].obs;
     services = <Treatment>[].obs;
     status = <AppointmentStatus>[].obs;
+    listOfClients = [];
     var data = await FirebaseServices.getFilteredAppointments(
         collection: 'appointments');
     var employees = await FirebaseServices.getData(collection: 'employees');
     var treatments = await FirebaseServices.getData(collection: 'treatments');
+    var clients = await FirebaseServices.getData(collection: 'clients');
     var statusData =
         await FirebaseServices.getData(collection: 'appointment_status');
+    var homeController = Get.find<HomeScreenController>();
+    var listOftreatmentCategories = homeController.treatmentCategories;
     if (data != null &&
         AgendaController.instance.currentUser.value.isAdmin! == false) {
       for (var treatment in data) {
@@ -125,6 +140,18 @@ class UpcomingAppointmentsController extends GetxController {
         }
       }
     }
+    for (var appointment in upcommingAppointments) {
+      if (clients != null) {
+        var client = clients
+            .firstWhere((element) => element['id'] == appointment.clientId);
+        listOfClients.add(Client.fromJson(client));
+      }
+    }
+    services.forEach((service) {
+      var treatmentCategory = listOftreatmentCategories
+          .firstWhere((element) => element.id == service.treatmentCategoryId);
+      listOfTreatmentCategory.add(treatmentCategory);
+    });
     isLoading.value = false;
   }
 }

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/utils/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/constants.dart';
 import '../../utils/image_picker.dart';
 import '../../models/client.dart';
-import '../login_screen/login_controller.dart';
 import '../login_screen/login_screen.dart';
 
 class AccountInfoController extends GetxController {
@@ -97,7 +97,7 @@ class AccountInfoController extends GetxController {
   void validateName() {
     if (name.text.isEmpty) {
       nameHasError.value = true;
-      nameErrorMessage.value = 'Name is Required';
+      nameErrorMessage.value = tr('name_is_required');
     } else {
       nameHasError.value = false;
       nameErrorMessage.value = '';
@@ -107,7 +107,7 @@ class AccountInfoController extends GetxController {
   void validateSurName() {
     if (surName.text.isEmpty) {
       surNameHasError.value = true;
-      surNameErrorMessage.value = 'Surname is Required';
+      surNameErrorMessage.value = tr('surname_is_required');
     } else {
       surNameHasError.value = false;
       surNameErrorMessage.value = '';
@@ -117,10 +117,10 @@ class AccountInfoController extends GetxController {
   void validateEmail() {
     if (email.text.isEmpty) {
       emailHasError.value = true;
-      emailErrorMessage.value = 'Email is Required';
+      emailErrorMessage.value = tr('email_is_required');
     } else if (!email.text.isEmail) {
       emailHasError.value = true;
-      emailErrorMessage.value = 'Email is not valid';
+      emailErrorMessage.value = tr('email_is_not_valid');
     } else {
       emailHasError.value = false;
       emailErrorMessage.value = '';
@@ -130,7 +130,10 @@ class AccountInfoController extends GetxController {
   void validatePhone() {
     if (phone.text.isEmpty) {
       phoneHasError.value = true;
-      phoneErrorMessage.value = 'Phone is Required';
+      phoneErrorMessage.value = tr('phone_is_required');
+    } else if (phone.text.length < 13 || phone.text.length > 13) {
+      phoneHasError.value = true;
+      phoneErrorMessage.value = tr('not_a_valid_number');
     } else {
       phoneHasError.value = false;
       phoneErrorMessage.value = '';
@@ -140,7 +143,7 @@ class AccountInfoController extends GetxController {
   void validateAddress() {
     if (address.text.isEmpty) {
       addressHasError.value = true;
-      addressErrorMessage.value = 'Address is Required';
+      addressErrorMessage.value = tr('address_is_required');
     } else {
       addressHasError.value = false;
       addressErrorMessage.value = '';
@@ -189,6 +192,7 @@ class AccountInfoController extends GetxController {
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLogedIn', false);
+    FirebaseAuth.instance.currentUser!.reload();
     await FirebaseAuth.instance.currentUser!.delete();
     await FirebaseAuth.instance.signOut();
     Get.offAll(LoginScreen());
@@ -217,14 +221,18 @@ class AccountInfoController extends GetxController {
       await FirebaseFirestore.instance
           .collection('clients')
           .doc(uid)
-          .set(currentClient.value.toJson());
+          .set(currentClient.value.toJson(), SetOptions(merge: true));
       Fluttertoast.showToast(
-          msg: 'User Updated Successfully',
+          msg: tr('user_updated_sccessfully'),
           backgroundColor: AppColors.GREEN_COLOR);
+      try {
+        FirebaseAuth.instance.currentUser!.verifyBeforeUpdateEmail(email.text);
+        Fluttertoast.showToast(msg: 'Verify your email to update your email');
+      } catch (ex) {
+        print(ex);
+      }
+
       Get.back();
-      await FirebaseAuth.instance.currentUser!
-          .verifyBeforeUpdateEmail(email.text);
-      Fluttertoast.showToast(msg: 'Verify your email to update your email');
     }
   }
 

@@ -16,7 +16,7 @@ class Appointment {
   String? statusId;
   Timestamp? dateTimestamp;
   List<String>? roomId;
-  int? duration;
+  num? duration;
   bool? isRegular;
   Appointment({
     this.id,
@@ -76,12 +76,18 @@ class Appointment {
   }
 
   String get dateString {
-    var date = dateTimestamp?.toDate() ?? DateTime.now();
+    var date = DateTime.fromMillisecondsSinceEpoch(
+            dateTimestamp!.millisecondsSinceEpoch)
+        .toLocal();
+    // dateTimestamp?.toDate().toUtc() ?? DateTime.now();
     return DateFormat("MM/dd/yyyy").format(date);
   }
 
   String get dateWithMonthName {
-    var date = dateTimestamp?.toDate() ?? DateTime.now();
+    var date = DateTime.fromMillisecondsSinceEpoch(
+            dateTimestamp!.millisecondsSinceEpoch)
+        .toLocal();
+    // dateTimestamp?.toDate().toUtc() ?? DateTime.now();
     return DateFormat("dd MMM").format(date);
   }
 }

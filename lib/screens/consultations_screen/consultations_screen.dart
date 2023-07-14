@@ -2,6 +2,7 @@
 
 import 'package:atherium_saloon_app/screens/full_screen_image/full_screen_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -39,8 +40,9 @@ class ConsultationsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12.0),
-            Text(AppLanguages.CONSULTATIONS,
-                style: Theme.of(context).textTheme.headlineLarge),
+            Text('consultations',
+                    style: Theme.of(context).textTheme.headlineLarge)
+                .tr(),
           ],
         ),
       ),
@@ -58,9 +60,11 @@ class ConsultationsScreen extends StatelessWidget {
                     child: SizedBox(
                       height: 150.0,
                       width: Get.width,
-                      child:  Center(child: CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: isDark
+                            ? AppColors.SECONDARY_COLOR
+                            : AppColors.GREY_COLOR,
                       )),
                     )),
               ),
@@ -108,11 +112,12 @@ class ConsultationsScreen extends StatelessWidget {
                                         height: 50.0,
                                         fit: BoxFit.cover,
                                         imageUrl: controller.urls[index],
-                                        
                                         errorWidget: (context, url, error) {
                                           return Center(
                                             child: CircularProgressIndicator(
-                                              color: isDark ? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+                                              color: isDark
+                                                  ? AppColors.SECONDARY_COLOR
+                                                  : AppColors.GREY_COLOR,
                                             ),
                                           );
                                         },

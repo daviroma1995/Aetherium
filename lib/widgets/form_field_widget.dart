@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:atherium_saloon_app/utils/constants.dart';
@@ -22,26 +23,30 @@ class CustomInputFormField extends StatelessWidget {
   final int? maxLines;
   final int? minLInes;
   final Color? iconColor;
-  const CustomInputFormField({
-    Key? key,
-    this.iconUrl = '',
-    required this.hintText,
-    this.isObsecure = false,
-    this.isPassword = false,
-    required this.isValid,
-    required this.onSubmit,
-    this.onPressed,
-    this.autoFocus = false,
-    required this.textEdigintController,
-    this.paddingSymetric = 0.0,
-    this.paddingVertical = 0.0,
-    this.onchange,
-    this.onFocus,
-    this.initialValue,
-    this.maxLines,
-    this.minLInes,
-    this.iconColor,
-  }) : super(key: key);
+  final List<TextInputFormatter>? filters;
+  final TextInputType? keyboardType;
+  const CustomInputFormField(
+      {Key? key,
+      this.iconUrl = '',
+      required this.hintText,
+      this.isObsecure = false,
+      this.isPassword = false,
+      required this.isValid,
+      required this.onSubmit,
+      this.onPressed,
+      this.autoFocus = false,
+      required this.textEdigintController,
+      this.paddingSymetric = 0.0,
+      this.paddingVertical = 0.0,
+      this.onchange,
+      this.onFocus,
+      this.initialValue,
+      this.maxLines,
+      this.minLInes,
+      this.iconColor,
+      this.filters,
+      this.keyboardType})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +66,8 @@ class CustomInputFormField extends StatelessWidget {
           onChanged: (value) {
             onchange!(value);
           }, //=> onchange!(value) ?? (value) {},
+          inputFormatters: filters ?? [],
+          keyboardType: keyboardType,
           cursorColor: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
           controller: textEdigintController,
           maxLines: maxLines ?? 1,
@@ -84,8 +91,20 @@ class CustomInputFormField extends StatelessWidget {
                 ? IconButton(
                     onPressed: () => onPressed!(),
                     icon: isObsecure
-                        ? const Icon(Icons.visibility_off_outlined, size: 20.0)
-                        : const Icon(Icons.visibility_outlined, size: 20.0),
+                        ? Icon(
+                            Icons.visibility_off_outlined,
+                            size: 20.0,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.PRIMARY_COLOR,
+                          )
+                        : Icon(
+                            Icons.visibility_outlined,
+                            size: 20.0,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.PRIMARY_COLOR,
+                          ),
                   )
                 : null,
             contentPadding: EdgeInsets.symmetric(

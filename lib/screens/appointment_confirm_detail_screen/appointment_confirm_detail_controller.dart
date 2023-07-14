@@ -14,17 +14,20 @@ class AppointmentConfirmDetailController extends GetxController {
   final appointmentServicesIds = Get.arguments;
   var servicesList = <Treatment>[].obs;
   RxInt price = 0.obs;
-
+  String selectedStatus = '';
+  String previousStatus = '';
   @override
   void onInit() {
     super.onInit();
     allTreatments.bindStream(FirebaseServices.treatments());
   }
+
   @override
   void onClose() {
     super.onClose();
     allTreatments.close();
   }
+
   String getName(String id) {
     for (var treatment in allTreatments) {
       if (treatment.id == id) {
@@ -111,7 +114,7 @@ class AppointmentConfirmDetailController extends GetxController {
     return totalprice;
   }
 
-  void confirm() {
+  void confirm() async {
     HomeScreenController homeController = Get.find();
     AgendaController agendaController = Get.find();
 
@@ -123,22 +126,77 @@ class AppointmentConfirmDetailController extends GetxController {
         transition: Transition.leftToRight,
         curve: Curves.linear,
       );
-    homeController.loadAppointments();
-    agendaController.loadData();
-
+      homeController.loadHomeScreen();
+      agendaController.loadData();
     } else {
-      FirebaseFirestore.instance
-          .collection('appointments')
-          .doc(args.id)
-          .update(args.toJson());
+      FirebaseFirestore.instance.collection('appointments').doc(args.id).set({
+        'date': args.date,
+        'time': args.time,
+        'date_timestamp': args.dateTimestamp,
+        'notes': args.notes,
+        'start_time': args.startTime,
+        'end_time': args.endTime,
+        'total_duration': args.duration,
+        'employee_id_list': args.employeeId,
+        'treatment_id_list': args.serviceId,
+        'status_id': args.statusId,
+      }, SetOptions(merge: true));
+      homeController.loadHomeScreen();
+      agendaController.loadData();
+      print(selectedStatus != '');
+      print(selectedStatus.toLowerCase() == 'archiviato');
+      print('Selected : $selectedStatus');
+      print(previousStatus.toLowerCase() != 'archiviato');
+      print('Previous: $previousStatus');
+      var snapshot = await FirebaseFirestore.instance
+          .collection('client_memberships')
+          .doc(args.clientId)
+          .get();
+      var data = snapshot.data();
+      var points = data?['points'];
+      if (selectedStatus != '' &&
+          selectedStatus.toLowerCase() == 'archiviato' &&
+          previousStatus.toLowerCase() != 'archiviato' &&
+          points + 25 <= 300) {
+        print('if Called');
+        await FirebaseFirestore.instance
+            .collection('client_memberships')
+            .doc(args.clientId)
+            .update(
+          {
+            "points": FieldValue.increment(25),
+          },
+        );
+        homeController.loadHomeScreen();
+        agendaController.loadData();
+      } else if (previousStatus.toLowerCase() == 'archiviato' &&
+          selectedStatus.toLowerCase() != 'archiviato' &&
+          points - 25 >= 0) {
+        print('Else if called');
+        await FirebaseFirestore.instance
+            .collection('client_memberships')
+            .doc(args.clientId)
+            .update(
+          {
+            "points": FieldValue.increment(-25),
+          },
+        );
+        homeController.loadHomeScreen();
+        agendaController.loadData();
+      } else {
+        print('Else called');
+        print(selectedStatus);
+        print(previousStatus);
+        print(points);
+      }
       Get.to(
         () => const AppointmentConfirmScreen(),
         duration: const Duration(milliseconds: 400),
         transition: Transition.leftToRight,
         curve: Curves.linear,
       );
-    homeController.loadAppointments();
-    agendaController.loadData();
+      // await homeController.loadHomeScreen();
+      // await agendaController.loadData();
     }
   }
 }

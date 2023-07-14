@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:atherium_saloon_app/models/appointment.dart';
 import 'package:atherium_saloon_app/widgets/form_field_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -16,12 +18,24 @@ import '../../widgets/drop_down_item_widget.dart';
 class AppointmentBookingScreen extends StatelessWidget {
   final controller = Get.put(AppointMentBookingController());
   AppointmentBookingScreen({
+    this.isEditing = false,
+    this.date = '',
+    this.time = '',
+    this.appointment,
     Key? key,
   }) : super(key: key);
-
+  final bool isEditing;
+  final String date;
+  final String time;
+  final Appointment? appointment;
   @override
   Widget build(BuildContext context) {
+    final previousStatusId = appointment!.statusId;
+    controller.isEditing = isEditing;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    controller.dateString = date;
+    controller.timeString = time;
+    controller.appointment = appointment ?? Appointment();
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -38,7 +52,7 @@ class AppointmentBookingScreen extends StatelessWidget {
             children: [
               InkWell(
                 borderRadius: BorderRadius.circular(25.0),
-                onTap:  controller.back,
+                onTap: controller.back,
                 child: Container(
                   alignment: Alignment.center,
                   width: 25.0,
@@ -48,8 +62,9 @@ class AppointmentBookingScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12.0),
-              Text(AppLanguages.CHOOSE_DATE_AND_TIME,
-                  style: Theme.of(context).textTheme.headlineLarge),
+              Text('choose_date_and_time',
+                      style: Theme.of(context).textTheme.headlineLarge)
+                  .tr(),
             ],
           ),
         ),
@@ -64,67 +79,85 @@ class AppointmentBookingScreen extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Obx(
-                          () =>
-                          controller.calenderState.value ? 
-                          Calendar(
-                            events: const{},
-                            hideTodayIcon: true,
-                            
-                            initialDate: controller.args.dateTimestamp != null
-                                ? controller.args.dateTimestamp.toDate()
-                                : controller.initialDate.value,
-                            onDateSelected: (value) async {
-                              controller.args.dateTimestamp =
-                                  Timestamp.fromDate(DateTime(value.year,
-                                      value.month, value.day, 0, 0, 0, 0, 0));
-                              controller.selectedDate.value =
-                                  DateFormat("MM/dd/yyyy").format(
-                                DateTime(value.year, value.month, value.day, 0,
-                                    0, 0, 0, 0),
-                              );
-                              print(controller.args.dateTimestamp.toDate());
-                              controller.initialDate.value = value;
-                              controller.calenderState.value =
-                                  !controller.calenderState.value;
-                              controller.args.date =
-                                  controller.selectedDate.value;
-                              await controller.loadTimeslots(
-                                  treatments: controller.selectedTreatmentsMap,
-                                  appointmentDate:
-                                      controller.selectedDate.value);
-                            },
-                          ):
-                          Calendar(
-                            // ignore: prefer_const_literals_to_create_immutables
-                            events: const{},
-                            hideTodayIcon: true,
-                            initialDate: controller.args.dateTimestamp != null
-                                ? controller.args.dateTimestamp.toDate()
-                                : controller.initialDate.value,
-                            onDateSelected: (value) async {
-                              controller.args.dateTimestamp =
-                                  Timestamp.fromDate(DateTime(value.year,
-                                      value.month, value.day, 0, 0, 0, 0, 0));
-                              controller.selectedDate.value =
-                                  DateFormat("MM/dd/yyyy").format(
-                                DateTime(value.year, value.month, value.day, 0,
-                                    0, 0, 0, 0),
-                              );
-                              print(controller.args.dateTimestamp.toDate());
+                        child: Obx(() => controller.calenderState.value
+                            ? Calendar(
+                                events: const {},
+                                hideTodayIcon: true,
+                                initialDate:
+                                    controller.args.dateTimestamp != null
+                                        ? controller.args.dateTimestamp.toDate()
+                                        : controller.initialDate.value,
+                                onDateSelected: (value) async {
+                                  controller.args.dateTimestamp =
+                                      Timestamp.fromDate(DateTime(
+                                              value.year,
+                                              value.month,
+                                              value.day,
+                                              0,
+                                              0,
+                                              0,
+                                              0,
+                                              0)
+                                          .toLocal());
+                                  controller.selectedDate.value =
+                                      DateFormat("MM/dd/yyyy").format(
+                                    DateTime(value.year, value.month, value.day,
+                                            0, 0, 0, 0, 0)
+                                        .toLocal(),
+                                  );
+                                  print(controller.args.dateTimestamp.toDate());
+                                  controller.initialDate.value = value;
+                                  controller.calenderState.value =
+                                      !controller.calenderState.value;
+                                  controller.args.date =
+                                      controller.selectedDate.value;
+                                  await controller.loadTimeslots(
+                                      treatments:
+                                          controller.selectedTreatmentsMap,
+                                      appointmentDate:
+                                          controller.selectedDate.value);
+                                },
+                              )
+                            : Calendar(
+                                // ignore: prefer_const_literals_to_create_immutables
+                                events: const {},
+                                hideTodayIcon: true,
+                                initialDate:
+                                    controller.args.dateTimestamp != null
+                                        ? controller.args.dateTimestamp.toDate()
+                                        : controller.initialDate.value,
+                                onDateSelected: (value) async {
+                                  controller.args.dateTimestamp =
+                                      Timestamp.fromDate(DateTime(
+                                              value.year,
+                                              value.month,
+                                              value.day,
+                                              0,
+                                              0,
+                                              0,
+                                              0,
+                                              0)
+                                          .toLocal());
+                                  controller.selectedDate.value =
+                                      DateFormat("MM/dd/yyyy").format(
+                                    DateTime(value.year, value.month, value.day,
+                                            0, 0, 0, 0, 0)
+                                        .toLocal(),
+                                  );
+                                  print(controller.args.dateTimestamp.toDate());
 
-                              controller.initialDate.value = value;
-                              controller.calenderState.value =
-                                  !controller.calenderState.value;
-                              controller.args.date =
-                                  controller.selectedDate.value;
-                              await controller.loadTimeslots(
-                                  treatments: controller.selectedTreatmentsMap,
-                                  appointmentDate:
-                                      controller.selectedDate.value);
-                            },
-                          )
-                        ),
+                                  controller.initialDate.value = value;
+                                  controller.calenderState.value =
+                                      !controller.calenderState.value;
+                                  controller.args.date =
+                                      controller.selectedDate.value;
+                                  await controller.loadTimeslots(
+                                      treatments:
+                                          controller.selectedTreatmentsMap,
+                                      appointmentDate:
+                                          controller.selectedDate.value);
+                                },
+                              )),
                       ),
                       const SizedBox(height: 35.0),
                       Container(
@@ -142,7 +175,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 22.0),
                               child: Text(
-                                AppLanguages.AVAILABLE_SLOT,
+                                'available_slot',
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineMedium!
@@ -151,7 +184,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: .75,
                                     ),
-                              ),
+                              ).tr(),
                             ),
                             const SizedBox(height: 15.0),
                             Padding(
@@ -161,10 +194,12 @@ class AppointmentBookingScreen extends StatelessWidget {
                                 () => controller.isLoading.value == true
                                     ? SizedBox(
                                         width: Get.width,
-                                        child:  Center(
+                                        child: Center(
                                             child: CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-                                            )))
+                                          color: isDark
+                                              ? AppColors.SECONDARY_COLOR
+                                              : AppColors.GREY_COLOR,
+                                        )))
                                     : GridView.builder(
                                         physics:
                                             const NeverScrollableScrollPhysics(),
@@ -268,7 +303,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      'Note',
+                                      'note',
                                       style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w700,
@@ -277,13 +312,15 @@ class AppointmentBookingScreen extends StatelessWidget {
                                             : AppColors.SECONDARY_COLOR,
                                       ),
                                       textAlign: TextAlign.left,
-                                    ),
+                                    ).tr(),
                                   ],
                                 ),
                                 const SizedBox(height: 14.0),
                                 CustomInputFormField(
-                                  hintText:
-                                      controller.args.notes ?? 'Some Notes',
+                                  hintText: controller.args.notes == null ||
+                                          controller.args.notes == ''
+                                      ? 'Some Notes'
+                                      : controller.args.notes,
                                   isValid: true,
                                   onSubmit: () {},
                                   textEdigintController: controller.notes,
@@ -303,26 +340,39 @@ class AppointmentBookingScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 20.0),
                       Obx(
-                        () => Visibility(
-                          visible: controller.statusLabels.isNotEmpty &&
-                              controller.isAdmin.value,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20.0),
-                            child: DropDownItemsWidget(
-                              // ignore: invalid_use_of_protected_member
-                              options: controller.statusLabels.value,
-                              onTap: (selected) {
-                                int id = controller.appointmentStatusList
-                                    .indexWhere((status) =>
-                                        status.label!.toLowerCase() ==
-                                        selected!.toLowerCase());
-                                controller.args.statusId =
-                                    controller.appointmentStatusList[id].id;
-                              },
-                            ),
-                          ),
-                        ),
+                        () => controller.statusLabels.isNotEmpty &&
+                                controller.isAdmin.value &&
+                                controller.appointmentStatusList.isNotEmpty &&
+                                isEditing
+                            ? Visibility(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  child: DropDownItemsWidget(
+                                    // ignore: invalid_use_of_protected_member
+                                    options: controller.statusLabels.value,
+                                    selected: controller.getStatusLabel(),
+                                    onTap: (selected) {
+                                      var previousStatus = controller
+                                          .appointmentStatusList
+                                          .firstWhere((element) =>
+                                              element.id == previousStatusId);
+                                      controller.previousStatus =
+                                          previousStatus.label ?? '';
+                                      print(previousStatus.label);
+                                      int id = controller.appointmentStatusList
+                                          .indexWhere((status) =>
+                                              status.label!.toLowerCase() ==
+                                              selected!.toLowerCase());
+                                      controller.args.statusId = controller
+                                          .appointmentStatusList[id].id;
+                                      controller.selectedStatus =
+                                          selected ?? '';
+                                    },
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
                       ),
                       const SizedBox(height: 20.0),
                       Row(
@@ -332,7 +382,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 22.0),
                             child: Text(
-                              AppLanguages.BEAUTY_SPECIALIST,
+                              'beauty_specialist',
                               textAlign: TextAlign.start,
                               style: Theme.of(context)
                                   .textTheme
@@ -342,7 +392,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: .75,
                                   ),
-                            ),
+                            ).tr(),
                           ),
                         ],
                       ),
@@ -356,9 +406,11 @@ class AppointmentBookingScreen extends StatelessWidget {
                               : controller.employees.length,
                           itemBuilder: (contenxt, index) {
                             if (controller.employees.isEmpty) {
-                              return  Center(
+                              return Center(
                                 child: CircularProgressIndicator(
-                                color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,  
+                                  color: isDark
+                                      ? AppColors.SECONDARY_COLOR
+                                      : AppColors.GREY_COLOR,
                                 ),
                               );
                             } else {
@@ -385,19 +437,43 @@ class AppointmentBookingScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 13.0),
-                child: PrimaryButton(
-                  width: Get.width,
-                  color: isDark
-                      ? AppColors.SECONDARY_LIGHT
-                      : AppColors.PRIMARY_COLOR,
-                  buttonTextColor:
-                      !isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
-                  buttonText: 'Next',
-                  onTap: controller.next,
-                ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 13.0),
+                    child: PrimaryButton(
+                      width: Get.width / 2 - 40,
+                      bordered: true,
+                      borderColor: isDark
+                          ? AppColors.SECONDARY_LIGHT
+                          : AppColors.PRIMARY_COLOR,
+                      buttonTextColor: isDark
+                          ? AppColors.WHITE_COLOR
+                          : AppColors.PRIMARY_COLOR,
+                      buttonText: 'cancel',
+                      onTap: () {
+                        Get.back();
+                        Get.back(result: true);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 13.0),
+                    child: PrimaryButton(
+                      width: Get.width / 2 - 40,
+                      color: isDark
+                          ? AppColors.SECONDARY_LIGHT
+                          : AppColors.PRIMARY_COLOR,
+                      buttonTextColor: !isDark
+                          ? AppColors.WHITE_COLOR
+                          : AppColors.BLACK_COLOR,
+                      buttonText: 'next',
+                      onTap: controller.next,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

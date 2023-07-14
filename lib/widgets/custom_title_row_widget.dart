@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/constants.dart';
@@ -14,7 +15,7 @@ class CustomTitle extends StatelessWidget {
   const CustomTitle({
     Key? key,
     required this.title,
-    this.subTitle = 'See All',
+    this.subTitle = 'see_all',
     this.isUnderLined = true,
     this.style,
     this.borderColor = AppColors.GREY_COLOR,
@@ -36,7 +37,7 @@ class CustomTitle extends StatelessWidget {
                   fontSize: 18.0,
                   fontWeight: FontWeight.w700,
                 ),
-          ),
+          ).tr(),
           GestureDetector(
             onTap: () {
               if (onTap != null) {
@@ -67,7 +68,7 @@ class CustomTitle extends StatelessWidget {
                   letterSpacing: .75,
                   color: subtitleColor ?? borderColor,
                 ),
-              ),
+              ).tr(),
             ),
           )
         ],

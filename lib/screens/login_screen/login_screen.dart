@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -27,20 +28,21 @@ class LoginScreen extends StatelessWidget {
             children: [
               TopBar(
                 firstItem: Text(
-                  AppLanguages.WELCOME_TO,
+                  'welcome_to',
                   style: Theme.of(context).textTheme.headlineMedium,
-                ),
+                ).tr(),
                 secondItem: Text(
-                  AppLanguages.AETHERIUM,
+                  'aetherium',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         fontWeight: FontWeight.w800,
                       ),
-                ),
+                ).tr(),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                child: Text(AppLanguages.LOGIN,
-                    style: Theme.of(context).textTheme.headlineLarge),
+                child: Text('login',
+                        style: Theme.of(context).textTheme.headlineLarge)
+                    .tr(),
               ),
               const SizedBox(height: 27.0),
               Padding(
@@ -48,7 +50,7 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomLabelWidget(label: AppLanguages.EMAIL),
+                    const CustomLabelWidget(label: 'email'),
                     const SizedBox(height: 5.0),
                     Obx(
                       () => CustomInputFormField(
@@ -72,7 +74,7 @@ class LoginScreen extends StatelessWidget {
                       }
                     }),
                     const SizedBox(height: 17.0),
-                    const CustomLabelWidget(label: AppLanguages.PASSWORD),
+                    const CustomLabelWidget(label: 'password'),
                     const SizedBox(height: 5.0),
                     Obx(
                       () => CustomInputFormField(
@@ -101,26 +103,27 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(height: 17.0),
                     GestureDetector(
                       onTap: controller.navigateToForgetPassword,
-                      child: const Align(
+                      child: Align(
                         alignment: Alignment.centerRight,
-                        child: Text(
-                          '${AppLanguages.FORGET_PASSWORD}?',
+                        child: const Text(
+                          'forget_password?',
                           style: TextStyle(color: AppColors.GREY_DARK),
-                        ),
+                        ).tr(),
                       ),
                     ),
                     const SizedBox(height: 17.0),
                     Obx(() {
                       if (controller.isLoading.value == true) {
                         return Column(
-                          children:  [
+                          children: [
                             Center(
                               child: CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
+                                color: isDark
+                                    ? AppColors.SECONDARY_COLOR
+                                    : AppColors.GREY_COLOR,
                               ),
                             ),
-                          const  SizedBox(height: 17.0)
+                            const SizedBox(height: 17.0)
                           ],
                         );
                       } else {
@@ -129,7 +132,7 @@ class LoginScreen extends StatelessWidget {
                     }),
                     PrimaryButton(
                       width: Get.width,
-                      buttonText: AppLanguages.ACCEDI,
+                      buttonText: 'sign_in',
                       color: isDark
                           ? AppColors.SECONDARY_LIGHT
                           : AppColors.PRIMARY_COLOR,

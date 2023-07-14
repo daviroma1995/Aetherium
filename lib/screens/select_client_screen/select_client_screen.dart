@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -35,8 +36,9 @@ class SelectClientScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(AppLanguages.SELECT_CLIENT,
-                  style: Theme.of(context).textTheme.headlineLarge),
+              Text('select_client',
+                      style: Theme.of(context).textTheme.headlineLarge)
+                  .tr(),
             ],
           ),
         ),
@@ -47,7 +49,7 @@ class SelectClientScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 22.0),
                 child: CustomInputFormField(
                   textEdigintController: controller.search,
-                  hintText: 'Search',
+                  hintText: tr('search'),
                   iconColor: AppColors.TEXT_FIELD_HINT_TEXT,
                   isValid: true,
                   onSubmit: () {},
@@ -68,10 +70,11 @@ class SelectClientScreen extends StatelessWidget {
                   ),
                   child: Obx(
                     () => controller.clients.isEmpty || controller.tier.isEmpty
-                        ?  CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
-                        )
+                        ? CircularProgressIndicator(
+                            color: isDark
+                                ? AppColors.SECONDARY_COLOR
+                                : AppColors.GREY_COLOR,
+                          )
                         : controller.isLoaded.value
                             ? ListView.builder(
                                 itemCount: controller.clients
@@ -287,7 +290,7 @@ class SelectClientScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 22.0),
           child: PrimaryButton(
             color: isDark ? AppColors.PRIMARY_DARK : AppColors.PRIMARY_COLOR,
-            buttonText: AppLanguages.AVANTI,
+            buttonText: 'next',
             width: Get.width,
             onTap: () {
               controller.goToServicesScreen();

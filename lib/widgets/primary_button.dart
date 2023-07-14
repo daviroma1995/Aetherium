@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -45,7 +46,7 @@ class PrimaryButton extends StatelessWidget {
               fontWeight: FontWeight.w700,
               fontSize: 14.0,
             ),
-          ),
+          ).tr(),
         ),
       ),
     );

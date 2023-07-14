@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyA7pnUJIv1pA2yYyWnhYYvshLMk6xTwrBc',
-    appId: '1:216835986009:android:74c93acdfa6e2958c0d748',
+    appId: '1:216835986009:android:1906e84ecf9772cfc0d748',
     messagingSenderId: '216835986009',
     projectId: 'aetherium-salon',
     storageBucket: 'aetherium-salon.appspot.com',
@@ -59,10 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBj8Ffh2QZbEnHwBy3K_vqTKjguK5zcTGQ',
-    appId: '1:216835986009:ios:3b3dbbce734c5bdcc0d748',
+    appId: '1:216835986009:ios:88f38842da7ffe9bc0d748',
     messagingSenderId: '216835986009',
     projectId: 'aetherium-salon',
     storageBucket: 'aetherium-salon.appspot.com',
+    androidClientId: '216835986009-br3g3kil671rhqnf8774ofmb0lu6vcs9.apps.googleusercontent.com',
     iosClientId: '216835986009-tg5lod101ur4fkoj3jted3v63krjgsl5.apps.googleusercontent.com',
     iosBundleId: 'com.example.aetheriumSaloonApp',
   );

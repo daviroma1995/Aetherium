@@ -7,7 +7,10 @@ class MapUtils {
     String googleUrl =
         'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
     if (await canLaunchUrl(Uri.parse(googleUrl))) {
-      await launchUrl(Uri.parse(googleUrl));
+      await launchUrl(Uri.parse(googleUrl),
+          mode: LaunchMode.externalNonBrowserApplication,
+          webViewConfiguration: const WebViewConfiguration(
+              enableDomStorage: true, enableJavaScript: true));
     } else {
       throw 'Could not open the map.';
     }

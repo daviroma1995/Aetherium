@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, use_build_context_synchronously, no_leading_underscores_for_local_identifiers
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -38,8 +39,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12.0),
-            Text(AppLanguages.SETTINGS,
-                style: Theme.of(context).textTheme.headlineLarge),
+            Text('settings', style: Theme.of(context).textTheme.headlineLarge),
           ],
         ),
       ),
@@ -131,12 +131,12 @@ class SettingsScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 20),
                             const Text(
-                              AppLanguages.THEME,
+                              'change_theme',
                               style: TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w700,
                               ),
-                            )
+                            ).tr()
                           ],
                         ),
                         SvgPicture.asset(

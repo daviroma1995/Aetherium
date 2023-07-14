@@ -103,8 +103,8 @@ class AppointmentsCardWidget extends StatelessWidget {
           textAlign: TextAlign.start,
           style: const TextStyle(
             color: AppColors.GREY_COLOR,
-            fontSize: 12.0,
-            fontWeight: FontWeight.w500,
+            fontSize: 8.0,
+            fontWeight: FontWeight.w700,
             overflow: TextOverflow.ellipsis,
           ),
         ),

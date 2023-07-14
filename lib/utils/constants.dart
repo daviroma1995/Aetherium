@@ -1,4 +1,5 @@
 // ignore_for_file: constant_identifier_names
+import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 
@@ -256,6 +257,7 @@ class AppLanguages {
   static const AppuntamentoDettagli = 'Appuntamento - Dettagli';
   static const APPOINTMENTCONFERMA = 'Appuntamento - Conferma';
   static const SELECT_CLIENT = 'Seleziona Cliente';
+  static const INCREASE_TOTAL_DURATION = 'Increase Total Duration By';
 }
 
 class AppTextStyle {
@@ -269,4 +271,13 @@ class AppTextStyle {
     fontWeight: FontWeight.w800,
     color: AppColors.BLACK_COLOR,
   );
+}
+
+class Secret {
+  static const ANDROID_CLIENT_ID =
+      "216835986009-qs954okm7fe307m5b373i0p88m8eh3bq.apps.googleusercontent.com";
+  static const IOS_CLIENT_ID =
+      "216835986009-tg5lod101ur4fkoj3jted3v63krjgsl5.apps.googleusercontent.com";
+  static String getId() =>
+      Platform.isAndroid ? Secret.ANDROID_CLIENT_ID : Secret.IOS_CLIENT_ID;
 }

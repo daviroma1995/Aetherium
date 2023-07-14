@@ -44,4 +44,7 @@ class Treatment {
     data['isEmployeeRequired'] = isEmployeeRequired;
     return data;
   }
+
+  @override
+  String toString() => 'Treatment(Name: $name, Price: $price)';
 }

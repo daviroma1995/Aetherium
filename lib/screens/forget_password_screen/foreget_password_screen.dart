@@ -1,6 +1,7 @@
 import 'package:atherium_saloon_app/screens/forget_password_screen/forget_password_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/primary_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -30,8 +31,9 @@ class ForgetPasswordScreen extends StatelessWidget {
                   child: SvgPicture.asset(AppAssets.BACK_ARROW),
                 ),
                 space: 15.0,
-                secondItem: Text(AppLanguages.FORGET_PASSWORD,
-                    style: Theme.of(context).textTheme.headlineLarge),
+                secondItem: Text('forget_password',
+                        style: Theme.of(context).textTheme.headlineLarge)
+                    .tr(),
               ),
               const SizedBox(height: 35.0),
               Form(
@@ -41,8 +43,9 @@ class ForgetPasswordScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(AppLanguages.EMAIL,
-                          style: Theme.of(context).textTheme.bodyLarge),
+                      Text('email',
+                              style: Theme.of(context).textTheme.bodyLarge)
+                          .tr(),
                       const SizedBox(height: 10.0),
                       Obx(
                         () => CustomInputFormField(
@@ -72,13 +75,14 @@ class ForgetPasswordScreen extends StatelessWidget {
                         () => Visibility(
                           visible: controller.isLoading.value,
                           child: Column(
-                            children:  [
+                            children: [
                               Center(
                                 child: Padding(
-                                  padding:const EdgeInsets.only(bottom: 35.0),
+                                  padding: const EdgeInsets.only(bottom: 35.0),
                                   child: CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
+                                    color: isDark
+                                        ? AppColors.SECONDARY_COLOR
+                                        : AppColors.GREY_COLOR,
                                   ),
                                 ),
                               ),
@@ -88,7 +92,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                       ),
                       PrimaryButton(
                         width: Get.width,
-                        buttonText: AppLanguages.ACCEDI,
+                        buttonText: 'send',
                         color: isDark
                             ? AppColors.SECONDARY_LIGHT
                             : AppColors.PRIMARY_COLOR,

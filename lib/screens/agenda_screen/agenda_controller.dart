@@ -46,14 +46,15 @@ class AgendaController extends GetxController {
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
           .obs;
   var treatmentCategories = <TreatmentCategory>[].obs;
-var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
+  var appointmentsTreatmentCategoryList = <TreatmentCategory>[].obs;
+  var listofClients = <Client>[];
   RxBool reload = false.obs;
 
-  @override
-  void onClose() {
-    super.onClose();
-    print('Closed');
-  }
+  // @override
+  // void onClose() {
+  //   super.onClose();
+  //   print('Closed');
+  // }
 
   @override
   void onInit() async {
@@ -82,6 +83,7 @@ var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
     allTreatments.value = [];
     employees.value = [];
     appointmentsTreatmentCategoryList.value = [];
+    listofClients = [];
     events = {};
     appointmentsCounter.value = <Event>[
       Event(
@@ -91,12 +93,10 @@ var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
                 DateTime.now().day, 0, 0, 0, 0, 0),
           )),
     ];
-    
 
     var user = await FirebaseServices.getDataWhere(
-        collection: 'clients',
-        key: 'user_id',
-        value: FirebaseServices.cuid);
+        collection: 'clients', key: 'user_id', value: FirebaseServices.cuid);
+    var clients = await FirebaseServices.getData(collection: 'clients');
     currentUser.value = Client.fromJson(user ?? {});
     var employeesData = await FirebaseServices.getData(collection: 'employees');
     var treatments = await FirebaseServices.getData(collection: 'treatments');
@@ -132,7 +132,7 @@ var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
         }
       }
     }
-    
+
     for (int i = 0; i < allAppointments.length; i++) {
       for (int j = 0; j < appointmentsCounter.length; j++) {
         if (i == 0) {
@@ -157,11 +157,22 @@ var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
         })
       });
     }
+    if (currentUser.value.isAdmin ?? false) {
+      for (var appointment in appointments) {
+        if (clients != null) {
+          var client = clients
+              .firstWhere((element) => element['id'] == appointment.clientId);
+          listofClients.add(Client.fromJson(client));
+        }
+      }
+    }
     print(treatmentsData);
-    for(var service in treatmentsData){
+    for (var service in treatmentsData) {
       log('Called');
-      int treatmentCategoryIndex = treatmentCategories.indexWhere((element) => service.treatmentCategoryId == element.id);
-      appointmentsTreatmentCategoryList.add(treatmentCategories[treatmentCategoryIndex]);
+      int treatmentCategoryIndex = treatmentCategories
+          .indexWhere((element) => service.treatmentCategoryId == element.id);
+      appointmentsTreatmentCategoryList
+          .add(treatmentCategories[treatmentCategoryIndex]);
     }
     reload.value = false;
   }
@@ -176,6 +187,7 @@ var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
 
     var employeesData = await FirebaseServices.getData(collection: 'employees');
     var treatments = await FirebaseServices.getData(collection: 'treatments');
+    var clients = await FirebaseServices.getData(collection: 'clients');
     // var currentDate =
     //     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     var data = await FirebaseServices.getAgendas(
@@ -186,6 +198,7 @@ var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
     employees.value = [];
     treatmentsData.value = [];
     appointmentsTreatmentCategoryList.value = [];
+    listofClients = [];
     for (var agenda in data) {
       if (agenda.employeeId != null) {
         if (agenda.employeeId!.isNotEmpty) {
@@ -208,11 +221,22 @@ var appointmentsTreatmentCategoryList =  <TreatmentCategory>[].obs;
         }
       }
     }
+    if (currentUser.value.isAdmin ?? false) {
+      for (var appointment in appointments) {
+        if (clients != null) {
+          var client = clients
+              .firstWhere((element) => element['id'] == appointment.clientId);
+          listofClients.add(Client.fromJson(client));
+        }
+      }
+    }
     print(treatmentsData);
-    for(var service in treatmentsData){
+    for (var service in treatmentsData) {
       log('Called');
-      int treatmentCategoryIndex = treatmentCategories.indexWhere((element) => service.treatmentCategoryId == element.id);
-      appointmentsTreatmentCategoryList.add(treatmentCategories[treatmentCategoryIndex]);
+      int treatmentCategoryIndex = treatmentCategories
+          .indexWhere((element) => service.treatmentCategoryId == element.id);
+      appointmentsTreatmentCategoryList
+          .add(treatmentCategories[treatmentCategoryIndex]);
     }
   }
 

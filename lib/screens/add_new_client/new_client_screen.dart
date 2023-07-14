@@ -1,6 +1,8 @@
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/primary_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../widgets/custom_drop_down_widget.dart';
@@ -29,8 +31,9 @@ class AddNewClient extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(AppLanguages.NEWCLIENT,
-                  style: Theme.of(context).textTheme.headlineLarge),
+              Text('new_client',
+                      style: Theme.of(context).textTheme.headlineLarge)
+                  .tr(),
             ],
           ),
         ),
@@ -46,7 +49,7 @@ class AddNewClient extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomLabelWidget(
-                      label: AppLanguages.NAME,
+                      label: 'name',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.w700,
                             color: isDark
@@ -57,7 +60,7 @@ class AddNewClient extends StatelessWidget {
                     Obx(
                       () => CustomInputFormField(
                         textEdigintController: controller.name,
-                        hintText: 'Name',
+                        hintText: tr('name'),
                         isValid: !controller.nameHasError.value,
                         onSubmit: () {},
                         autoFocus: false,
@@ -79,7 +82,7 @@ class AddNewClient extends StatelessWidget {
                         : const SizedBox()),
                     const SizedBox(height: 12.0),
                     CustomLabelWidget(
-                      label: AppLanguages.SURNAME,
+                      label: 'surname',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.w700,
                             color: isDark
@@ -90,7 +93,7 @@ class AddNewClient extends StatelessWidget {
                     Obx(
                       () => CustomInputFormField(
                         textEdigintController: controller.surName,
-                        hintText: AppLanguages.SURNAME,
+                        hintText: tr('surname'),
                         isValid: !controller.surNameHasError.value,
                         onSubmit: () {},
                         onchange: (value) {
@@ -112,7 +115,7 @@ class AddNewClient extends StatelessWidget {
                         : const SizedBox()),
                     const SizedBox(height: 12.0),
                     CustomLabelWidget(
-                      label: AppLanguages.EMAIL,
+                      label: 'email',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.w700,
                             color: isDark
@@ -145,7 +148,7 @@ class AddNewClient extends StatelessWidget {
                         : const SizedBox()),
                     const SizedBox(height: 12.0),
                     CustomLabelWidget(
-                      label: AppLanguages.PHONE_NUMBER,
+                      label: 'telephone',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.w700,
                             color: isDark
@@ -155,6 +158,7 @@ class AddNewClient extends StatelessWidget {
                     ),
                     Obx(
                       () => CustomInputFormField(
+                        keyboardType: TextInputType.phone,
                         textEdigintController: controller.phone,
                         hintText: '+956 424 2687',
                         isValid: !controller.phoneHasError.value,
@@ -178,7 +182,7 @@ class AddNewClient extends StatelessWidget {
                         : const SizedBox()),
                     const SizedBox(height: 12.0),
                     CustomLabelWidget(
-                      label: AppLanguages.GENDER,
+                      label: 'gender',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.w700,
                             color: isDark
@@ -190,7 +194,7 @@ class AddNewClient extends StatelessWidget {
                       () => CustomDropDown(
                         height: 50.0,
                         label: 'Select Gender',
-                        options: ['Male', 'Female'],
+                        options: [tr('male'), tr('female')],
                         value: controller.genderValue.value,
                         onChange: (value) {
                           controller.changeValue(value);
@@ -199,7 +203,7 @@ class AddNewClient extends StatelessWidget {
                     ),
                     const SizedBox(height: 12.0),
                     CustomLabelWidget(
-                      label: AppLanguages.ADDRESS,
+                      label: 'address',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.w700,
                             color: isDark
@@ -232,7 +236,7 @@ class AddNewClient extends StatelessWidget {
                         : const SizedBox()),
                     const SizedBox(height: 12.0),
                     CustomLabelWidget(
-                      label: AppLanguages.BIRTHDAY,
+                      label: 'birthday',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.w700,
                             color: isDark
@@ -281,11 +285,13 @@ class AddNewClient extends StatelessWidget {
                         duration: const Duration(milliseconds: 250),
                         child: Visibility(
                           visible: controller.isLoading.value,
-                          child:  SizedBox(
+                          child: SizedBox(
                             height: 150,
                             child: Center(
                               child: CircularProgressIndicator(
-                                color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+                                color: isDark
+                                    ? AppColors.SECONDARY_COLOR
+                                    : AppColors.GREY_COLOR,
                               ),
                             ),
                           ),
@@ -296,7 +302,7 @@ class AddNewClient extends StatelessWidget {
                       children: [
                         PrimaryButton(
                           width: Get.width / 2 - 28,
-                          buttonText: 'Cancel',
+                          buttonText: 'cancel',
                           onTap: () async {
                             Get.back();
                           },
@@ -312,7 +318,7 @@ class AddNewClient extends StatelessWidget {
                         const SizedBox(width: 12.0),
                         PrimaryButton(
                           width: Get.width / 2 - 28,
-                          buttonText: 'Save',
+                          buttonText: 'save',
                           onTap: () {
                             controller.validateAndSave();
                           },

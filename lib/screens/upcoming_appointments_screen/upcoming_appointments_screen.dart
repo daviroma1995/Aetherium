@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/screens/upcoming_appointments_screen/upcoming_appointments_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -39,7 +40,7 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 48.0),
                           Text(
-                            'Scheduled Appointments',
+                            'scheduled_appointments',
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineMedium!
@@ -47,12 +48,13 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w700,
                                 ),
-                          ),
+                          ).tr(),
                           const SizedBox(height: 10.0),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 22.0),
-                            child: Text(
-                              AppLanguages.APPOINTMENT_DESCRIPTION,
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 22.0),
+                            child: const Text(
+                              'appointment_description',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
@@ -60,7 +62,7 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                                 color: AppColors.GREY_COLOR,
                                 letterSpacing: .75,
                               ),
-                            ),
+                            ).tr(),
                           ),
                         ],
                       ),
@@ -69,11 +71,12 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                 )
               : Obx(
                   () => controller.isLoading.isTrue
-                      ?  SizedBox(
+                      ? SizedBox(
                           child: Center(
                             child: CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
+                              color: isDark
+                                  ? AppColors.SECONDARY_COLOR
+                                  : AppColors.GREY_COLOR,
                             ),
                           ),
                         )
@@ -102,6 +105,7 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                                                         index],
                                                     isDetail: true,
                                                     isEditable: true,
+                                                    isAdmin: controller.isAdmin,
                                                   ),
                                                   duration: const Duration(
                                                       milliseconds: 300),
@@ -154,10 +158,13 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                                               child: AppointmentsCardWidget(
                                                 imageUrl:
                                                     AppAssets.EVENT_IMAGE_ONE,
-                                                title: controller
-                                                    .employeesData[index].name!,
-                                                subTitle: controller
-                                                    .services[index].name!,
+                                                title: controller.isAdmin
+                                                    ? '${controller.listOfClients[index].firstName.toString().capitalize} - ${controller.listOfClients[index].lastName.toString().capitalize}'
+                                                    : controller
+                                                        .employeesData[index]
+                                                        .name!,
+                                                subTitle:
+                                                    '${controller.listOfTreatmentCategory[index].name} - ${controller.services[index].name!}',
                                                 color: controller.getColor(
                                                     controller
                                                         .status[index].label!),

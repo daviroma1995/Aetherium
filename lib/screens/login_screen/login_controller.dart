@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,22 +17,22 @@ import '../splash_screen/splash_controller.dart';
 class LoginController extends GetxController {
   final auth = FirebaseAuth.instance;
   // Auth controller instance..
-  
+
   // email passowrd, udername
   final User? _user = FirebaseAuth.instance.currentUser;
   // Firebase auth
-  
+
   User? get user {
     return _user;
   }
-  
+
   @override
   void onReady() {
     super.onReady();
     // _initialScreen();
   }
 
-  _initialScreen() async{
+  _initialScreen() async {
     if (_user == null) {
       final controller = Get.put(SplashScreenController());
       controller.navigate();
@@ -75,9 +77,9 @@ class LoginController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         titleText: const Text(
-          'Sign In Failed',
+          'sign_in_failed',
           style: TextStyle(color: Colors.white),
-        ),
+        ).tr(),
         messageText: Text(
           e.toString(),
           style: const TextStyle(
@@ -91,10 +93,9 @@ class LoginController extends GetxController {
   void logout() async {
     LocalData.setIsLogedIn(false);
     await auth.signOut();
-    Get.offAll(() =>LoginScreen());
-  
+    Get.offAll(() => LoginScreen());
   }
-  
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -116,11 +117,11 @@ class LoginController extends GetxController {
     RegExp regExp = RegExp(pattern);
 
     if (emailController.text.isEmpty) {
-      emailErrorMessage.value = AppLanguages.EMAIL_SHOULD_NOT_BE_EMPTY;
+      emailErrorMessage.value = tr('email_should_not_be_empty');
       isEmailValid.value = false;
     } else if (!regExp.hasMatch(emailController.text)) {
       isEmailValid.value = false;
-      emailErrorMessage.value = AppLanguages.EMAIL_IS_NOT_VALID;
+      emailErrorMessage.value = tr('email_is_not_valid');
     } else {
       isEmailValid.value = true;
       emailErrorMessage.value = '';
@@ -130,8 +131,7 @@ class LoginController extends GetxController {
   void validatePassword() {
     if (passwordController.text.length < 8) {
       isPasswordValid.value = false;
-      passwordErrorMessage.value =
-          AppLanguages.PASSWORD_MUST_BE_8_CHARACTERS_LONG;
+      passwordErrorMessage.value = tr('password_must_be_8_characters_long');
     } else {
       isPasswordValid.value = true;
       passwordErrorMessage.value = '';
@@ -161,17 +161,21 @@ class LoginController extends GetxController {
       loadingHandler();
       await auth.signInWithEmailAndPassword(email: email, password: password);
       Fluttertoast.showToast(
-        msg: 'Login Successfull',
+        msg: tr('login_successfull'),
         backgroundColor: Colors.green,
       );
       loadingHandler();
       _currentUserUid = auth.currentUser!.uid;
-      Get.offAll(() => const BottomNavigationScreen());
+      var categories = await FirebaseServices.getTreatmentCategories();
+      Get.offAll(
+        () => const BottomNavigationScreen(),
+        arguments: categories,
+      );
     } on FirebaseAuthException catch (err) {
       if (err.code == "wrong-password") {
         loadingHandler();
         Fluttertoast.showToast(
-          msg: 'You entered wrong password',
+          msg: tr('you_entered_wrong_password'),
           backgroundColor: Colors.red,
           textColor: Colors.white,
         );

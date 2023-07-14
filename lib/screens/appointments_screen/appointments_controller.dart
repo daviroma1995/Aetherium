@@ -12,7 +12,7 @@ import '../services_screen/services_screen.dart';
 
 class AppointmentsController extends GetxController {
   var currentUser = Client().obs;
-  RxInt selectedTab = 0.obs;
+  RxInt selectedTab = 1.obs;
   @override
   void onInit() async {
     super.onInit();
@@ -27,13 +27,13 @@ class AppointmentsController extends GetxController {
     Navigator.pop(context);
   }
 
-  RxBool isCurrentPast = true.obs;
-  RxBool isCurrentUpcomming = false.obs;
+  RxBool isCurrentPast = false.obs;
+  RxBool isCurrentUpcomming = true.obs;
   RxList screens = [
     PastAppointmentScreen(),
     UpcomingAppointmentsScreen(),
   ].obs;
-  RxInt currentIndex = 0.obs;
+  RxInt currentIndex = 1.obs;
   void onTap(int index) {
     if (index == 0) {
       isCurrentPast.value = true;

@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:atherium_saloon_app/utils/map_utils.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -75,8 +76,9 @@ class ContactsScreen extends StatelessWidget {
           child: controller.shopinfo.value.email == null
               ? Center(
                   child: CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
+                    color: isDark
+                        ? AppColors.SECONDARY_COLOR
+                        : AppColors.GREY_COLOR,
                   ),
                 )
               : Column(
@@ -112,7 +114,7 @@ class ContactsScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    AppLanguages.EMAIL,
+                                    'email',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -123,7 +125,7 @@ class ContactsScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR,
                                         ),
-                                  ),
+                                  ).tr(),
                                   const SizedBox(height: 10.0),
                                   Obx(
                                     () => Text(
@@ -141,7 +143,7 @@ class ContactsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 30.0),
                                   Text(
-                                    AppLanguages.PHONE_NUMBER,
+                                    'telephone',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -152,7 +154,7 @@ class ContactsScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR,
                                         ),
-                                  ),
+                                  ).tr(),
                                   const SizedBox(height: 10.0),
                                   Row(
                                     mainAxisAlignment:
@@ -204,7 +206,7 @@ class ContactsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 30.0),
                                   Text(
-                                    AppLanguages.OPENING_HOURS_OF_THE_SHOP,
+                                    'opening_hours_of_the_shop',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -215,7 +217,7 @@ class ContactsScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR,
                                         ),
-                                  ),
+                                  ).tr(),
                                   const SizedBox(height: 30.0),
                                   ListView.builder(
                                     physics:
@@ -247,7 +249,7 @@ class ContactsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 20.0),
                                   Text(
-                                    AppLanguages.DESCRIPTION,
+                                    'description',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -258,10 +260,10 @@ class ContactsScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR,
                                         ),
-                                  ),
+                                  ).tr(),
                                   const SizedBox(height: 20.0),
                                   Text(
-                                    'Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
+                                    'contacts_description',
                                     style: TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.w400,
@@ -269,7 +271,7 @@ class ContactsScreen extends StatelessWidget {
                                           ? AppColors.GREY_COLOR
                                           : AppColors.BLACK_COLOR,
                                     ),
-                                  ),
+                                  ).tr(),
                                   const SizedBox(height: 20.0),
                                   GestureDetector(
                                     onTap: () {
@@ -299,7 +301,7 @@ class ContactsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 20.0),
                                   Text(
-                                    AppLanguages.BEAUTY_SPECIALIST,
+                                    'beauty_specialist',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -310,7 +312,7 @@ class ContactsScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR,
                                         ),
-                                  ),
+                                  ).tr(),
                                   const SizedBox(height: 20.0),
                                   ListView.builder(
                                     physics:
