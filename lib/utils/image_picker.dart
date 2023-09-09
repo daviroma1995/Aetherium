@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
@@ -11,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'constants.dart';
 import 'permission_utils.dart';
 
+// ignore: constant_identifier_names
 enum ActionStyle { normal, destructive, important, important_destructive }
 
 class CustomDialog extends StatelessWidget {
@@ -19,7 +22,8 @@ class CustomDialog extends StatelessWidget {
   final Function? function;
 
   const CustomDialog(
-      {this.title,
+      {super.key,
+      this.title,
       this.description,
       this.buttonText,
       this.image,
@@ -99,12 +103,13 @@ class CustomDialog extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class CameraGalleryBottomSheet extends StatelessWidget {
   Function? cameraClick;
   Function? galleryClick;
   Function(File? file)? onFileSelected;
 
-  CameraGalleryBottomSheet({this.cameraClick, this.galleryClick});
+  CameraGalleryBottomSheet({super.key, this.cameraClick, this.galleryClick});
 
   File? file;
   final picker = ImagePicker();
@@ -121,9 +126,9 @@ class CameraGalleryBottomSheet extends StatelessWidget {
           targetWidth: 900,
           targetHeight: (properties.height! * 900 / properties.width!).round());
 
+      // ignore: use_build_context_synchronously
       Navigator.pop(context, compressedFile);
     } else {
-      print('No image selected.');
       onFileSelected?.call(null);
     }
   }
@@ -184,7 +189,6 @@ Future<File?> kImagePicker(BuildContext context,
           permissionName: "Camera",
           context: Get.context!)
       .isAllowed) {
-    print("camera");
     return null;
   }
   // if (!await PermissionUtils(
@@ -197,16 +201,19 @@ Future<File?> kImagePicker(BuildContext context,
   // }
 
   if (Platform.isAndroid) {
+    // ignore: use_build_context_synchronously
     return await showModalBottomSheet(
         context: context, builder: (context) => CameraGalleryBottomSheet());
   }
   print("openinig");
   var input =
+      // ignore: use_build_context_synchronously
       await showModalActionSheet(context: context, title: title, actions: [
     const SheetAction(label: 'AppLanguages.TAKE_PHOTO', key: "0"),
     const SheetAction(label: 'AppLanguages.CHOOSE_FROM_LIBRARY', key: "1")
   ]);
   if (input?.isEmpty ?? true) return null;
+  // ignore: use_build_context_synchronously
   return _getImage(
       input == "0" ? ImageSource.camera : ImageSource.gallery, context);
 }

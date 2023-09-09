@@ -1,23 +1,34 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
+import 'package:atherium_saloon_app/screens/splash_screen/splash_screen.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/utils/shared_preferences.dart';
 import 'package:atherium_saloon_app/utils/theme.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
 import 'firebase_options.dart';
-import 'screens/splash_screen/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  ).then((value) => Get.put(LoginController()));
+  );
+  await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+    androidProvider: AndroidProvider.playIntegrity,
+    appleProvider: AppleProvider.deviceCheck,
+  );
   await LocalData.loadData();
-  runApp(const MyApp());
+  runApp(EasyLocalization(
+    supportedLocales: const [Locale('it'), Locale('en, US')],
+    path: 'assets/translations',
+    fallbackLocale: const Locale('it'),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -39,6 +50,8 @@ class MyApp extends StatelessWidget {
       dark: darkTheme,
       initial: AdaptiveThemeMode.light,
       builder: (theme, darkTheme) => GetMaterialApp(
+        supportedLocales: context.supportedLocales,
+        localizationsDelegates: context.localizationDelegates,
         debugShowCheckedModeBanner: false,
         title: 'Aetherium App',
         theme: theme,

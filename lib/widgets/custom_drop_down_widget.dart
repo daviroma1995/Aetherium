@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../utils/constants.dart';
 
+// ignore: must_be_immutable
 class CustomDropDown extends StatelessWidget {
   final List? options;
   dynamic value;
@@ -41,25 +42,25 @@ class CustomDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    if (sort)
+    if (sort) {
       (options ?? []).sort((a, b) {
         return isMap
             ? a['name'].toLowerCase().compareTo(b['name'].toLowerCase())
             : a.toString().toLowerCase().compareTo(b.toString().toLowerCase());
       });
+    }
     int index = (options == null)
         ? 0
         : options!
             .indexWhere((element) => element.toString() == value.toString());
     final scrollController = FixedExtentScrollController(initialItem: index);
-    print(CupertinoIcons.option);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (showLabel!)
           Text(
             label.toUpperCase(),
-            style: TextStyle(fontWeight: FontWeight.w700),
+            style: const TextStyle(fontWeight: FontWeight.w700),
           ),
         if (showLabel!) const SizedBox(height: 10),
         Container(
@@ -157,7 +158,7 @@ class CustomDropDown extends StatelessWidget {
                             SizedBox(
                               height: 225,
                               child: ScrollConfiguration(
-                                behavior: ScrollBehavior(),
+                                behavior: const ScrollBehavior(),
                                 child: CupertinoPicker(
                                   backgroundColor: isDark
                                       ? AppColors.BACKGROUND_DARK
@@ -177,7 +178,7 @@ class CustomDropDown extends StatelessWidget {
                                     (index) => Center(
                                       child: Text(
                                         options![index],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.w600),
                                       ),
@@ -197,8 +198,8 @@ class CustomDropDown extends StatelessWidget {
                     Center(
                       child: SvgPicture.asset(
                         'assets/images/svg/$hintIcon.svg',
-                        colorFilter: ColorFilter.mode(
-                            AppColors.BLACK_COLOR, BlendMode.srcIn),
+                        colorFilter: const ColorFilter.mode(
+                            AppColors.GREY_COLOR, BlendMode.srcIn),
                         height: iconHeight ?? 14,
                         width: iconWidth ?? 14,
                       ),
@@ -217,7 +218,7 @@ class CustomDropDown extends StatelessWidget {
                               ? (value is Map ? value['name'] : value)
                               : value ?? label.toUpperCase(),
                           maxLines: 2,
-                          style: TextStyle(fontWeight: FontWeight.w700),
+                          style: const TextStyle(fontWeight: FontWeight.w700),
                         ),
                         if (subHint != null)
                           Text(
@@ -240,7 +241,7 @@ class CustomDropDown extends StatelessWidget {
                         size: isFowrardArrow! ? 25 : 18,
                         color: isDark
                             ? AppColors.GREY_COLOR
-                            : AppColors.BLACK_COLOR)
+                            : AppColors.GREY_COLOR)
                 ],
               ),
             )),

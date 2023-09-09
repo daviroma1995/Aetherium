@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import "package:intl/intl.dart";
 
@@ -23,23 +21,24 @@ class CalendarTile extends StatefulWidget {
   final Color? eventDoneColor;
   final bool? isExpended;
   final bool? isSwapped;
-  CalendarTile({
+  const CalendarTile({
+    super.key,
     this.onDateSelected,
     this.date,
     this.child,
     this.dateStyles,
     this.dayOfWeek,
     this.dayOfWeekStyle,
-    this.isDayOfWeek: false,
-    this.isSelected: false,
-    this.inMonth: true,
+    this.isDayOfWeek = false,
+    this.isSelected = false,
+    this.inMonth = true,
     this.events,
     this.selectedColor,
     this.todayColor,
     this.eventColor,
     this.eventDoneColor,
-    this.isExpended: false,
-    this.isSwapped: false,
+    this.isExpended = false,
+    this.isSwapped = false,
   });
 
   @override
@@ -51,58 +50,77 @@ class _CalendarTileState extends State<CalendarTile> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (widget.isDayOfWeek) {
-      int index = 0;
-      var inkWell = InkWell(
-        onTap:(){
-          widget.onDateSelected?.call(widget.date!);
-          print("on clock");
-        },
-        child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color:
-                  widget.isSelected && !widget.isExpended! && !widget.isSwapped!
+      var inkWell = Column(
+        children: [
+          Expanded(
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(top: 12.0),
+              decoration: BoxDecoration(
+                  color: widget.isSelected &&
+                          !widget.isExpended! &&
+                          !widget.isSwapped!
                       ? isDark
                           ? AppColors.SECONDARY_LIGHT
                           : AppColors.SECONDARY_COLOR
                       : Colors.transparent,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25.0),
-                topRight: Radius.circular(25.0),
-              )),
-          child: Text(
-           widget.dayOfWeek!,
-            style: TextStyle(
-              color:
-                  widget.isSelected && !widget.isExpended! && !widget.isSwapped!
-                      ? isDark
-                          ? AppColors.BACKGROUND_DARK
-                          : AppColors.WHITE_COLOR
-                      : isDark
-                          ? AppColors.WHITE_COLOR
-                          : AppColors.BLACK_COLOR,
-              fontSize: 14.0,
-              fontWeight: FontWeight.w700,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(25.0),
+                      topRight: Radius.circular(25.0))),
+              child: InkWell(
+                onTap: () {
+                  widget.onDateSelected?.call(widget.date!);
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: widget.isSelected &&
+                              !widget.isExpended! &&
+                              !widget.isSwapped!
+                          ? isDark
+                              ? AppColors.SECONDARY_LIGHT
+                              : AppColors.SECONDARY_COLOR
+                          : Colors.transparent,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(25.0),
+                        topRight: Radius.circular(25.0),
+                      )),
+                  child: Text(
+                    widget.dayOfWeek!,
+                    style: TextStyle(
+                      color: widget.isSelected &&
+                              !widget.isExpended! &&
+                              !widget.isSwapped!
+                          ? isDark
+                              ? AppColors.BACKGROUND_DARK
+                              : AppColors.WHITE_COLOR
+                          : isDark
+                              ? AppColors.WHITE_COLOR
+                              : AppColors.BLACK_COLOR,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       );
       return inkWell;
     } else {
       int eventCount = 0;
       return InkWell(
-        onTap: (){
+        onTap: () {
           widget.onDateSelected?.call(widget.date!);
-          print("on clock");
         },
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(25.0),
             bottomRight: Radius.circular(25.0),
           ),
           child: Container(
-            height: 50,
-            width: 50,
+            padding: const EdgeInsets.only(bottom: 5.0),
             decoration: widget.isSelected && !widget.isSwapped!
                 ? BoxDecoration(
                     color: isDark
@@ -120,7 +138,6 @@ class _CalendarTileState extends State<CalendarTile> {
                 Expanded(
                   child: Container(
                     alignment: Alignment.center,
-                    height: 50.0,
                     child: Text(
                       DateFormat("d").format(widget.date!),
                       style: TextStyle(
@@ -137,6 +154,7 @@ class _CalendarTileState extends State<CalendarTile> {
                     ),
                   ),
                 ),
+                // const SizedBox(height: 5.0),
                 widget.events != null && widget.events!.isNotEmpty
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -144,8 +162,8 @@ class _CalendarTileState extends State<CalendarTile> {
                           eventCount++;
                           if (eventCount > 3) return Container();
                           return Container(
-                            margin: const EdgeInsets.only(
-                                left: 2.0, right: 2.0, top: 2.0),
+                            margin:
+                                const EdgeInsets.only(left: 2.0, right: 2.0),
                             width: 8.0,
                             height: 8.0,
                             decoration: BoxDecoration(
@@ -172,13 +190,11 @@ class _CalendarTileState extends State<CalendarTile> {
   @override
   Widget build(BuildContext context) {
     if (widget.child != null) {
-      return new InkWell(
+      return InkWell(
         child: widget.child,
-        onTap: ()=>widget.onDateSelected?.call(widget.date!),
+        onTap: () => widget.onDateSelected?.call(widget.date!),
       );
     }
-    return new Container(
-      child: renderDateOrDayOfWeek(context),
-    );
+    return renderDateOrDayOfWeek(context);
   }
 }

@@ -20,20 +20,19 @@ class ShopInfo {
     if (json['opening_hours'] != null) {
       openingHours = <OpeningHours>[];
       json['opening_hours'].forEach((v) {
-        openingHours!.add(new OpeningHours.fromJson(v));
+        openingHours!.add(OpeningHours.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['email'] = this.email;
-    data['telephone'] = this.telephone;
-    data['phone_number'] = this.phoneNumber;
-    data['description'] = this.description;
-    if (this.openingHours != null) {
-      data['opening_hours'] =
-          this.openingHours!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['email'] = email;
+    data['telephone'] = telephone;
+    data['phone_number'] = phoneNumber;
+    data['description'] = description;
+    if (openingHours != null) {
+      data['opening_hours'] = openingHours!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -53,10 +52,10 @@ class OpeningHours {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['day'] = this.day;
-    data['opening_time'] = this.openingTime;
-    data['closing_time'] = this.closingTime;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['day'] = day;
+    data['opening_time'] = openingTime;
+    data['closing_time'] = closingTime;
     return data;
   }
 }

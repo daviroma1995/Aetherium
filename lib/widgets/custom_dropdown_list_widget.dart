@@ -1,9 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../utils/constants.dart';
 
+// ignore: must_be_immutable
 class CustomDropDownListWidget extends StatefulWidget {
   final String imageUrl;
   final String title;
@@ -78,12 +80,40 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                     Expanded(
                       child: Row(
                         children: [
-                          SizedBox(
+                          Container(
                             height: 50.0,
                             width: 50.0,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: widget.isExpanded
+                                      ? AppColors.WHITE_COLOR
+                                      : AppColors.WHITE_COLOR,
+                                  width: 2.0),
+                              borderRadius: BorderRadius.circular(50.0),
+                            ),
                             child: ClipRRect(
-                                borderRadius: BorderRadius.circular(50.0),
-                                child: Image.asset(widget.imageUrl)),
+                              borderRadius: BorderRadius.circular(50.0),
+                              child: CachedNetworkImage(
+                                imageUrl: widget.imageUrl,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                        colorFilter: const ColorFilter.mode(
+                                            Colors.white, BlendMode.colorBurn)),
+                                  ),
+                                ),
+                                placeholder: (context, url) =>
+                                     CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                                    ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
+                            ),
                           ),
                           const SizedBox(width: 10.0),
                           Expanded(
@@ -97,6 +127,13 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w600,
                                     letterSpacing: .75,
+                                    color: !widget.isExpanded
+                                        ? isDark
+                                            ? AppColors.SECONDARY_LIGHT
+                                            : AppColors.PRIMARY_COLOR
+                                        : isDark
+                                            ? AppColors.WHITE_COLOR
+                                            : AppColors.BLACK_COLOR,
                                   ),
                             ),
                           ),
@@ -110,7 +147,14 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                         });
                       },
                       icon: !widget.isExpanded
-                          ? SvgPicture.asset(AppAssets.ARROW_DOWN)
+                          ? SvgPicture.asset(
+                              AppAssets.ARROW_DOWN,
+                              colorFilter: ColorFilter.mode(
+                                  isDark
+                                      ? AppColors.WHITE_COLOR
+                                      : AppColors.BLACK_COLOR,
+                                  BlendMode.srcIn),
+                            )
                           : SvgPicture.asset(
                               AppAssets.ARROW_UP,
                               colorFilter: ColorFilter.mode(
@@ -147,7 +191,6 @@ class _CustomDropDownListWidgetState extends State<CustomDropDownListWidget>
                                       widget.serviceIndex, index);
                                 },
                               );
-                              print(widget.selectedItems);
                             },
                             child: Container(
                               margin: const EdgeInsets.only(right: 15.0),

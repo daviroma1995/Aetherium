@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -41,7 +42,13 @@ class PrimoDetailsWidget extends StatelessWidget {
               percent: percent,
               backgroundColor:
                   isDark ? AppColors.BACKGROUND_DARK : AppColors.BORDER_COLOR,
-              center: SvgPicture.asset(imageUrl),
+              center: Container(
+                padding: const EdgeInsets.all(3.0),
+                alignment: Alignment.center,
+                margin: const EdgeInsets.only(left: 3.0),
+                child:
+                    CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover),
+              ),
               progressColor: progressColor,
             ),
             SizedBox(width: size.width * .034),
@@ -102,7 +109,7 @@ class PrimoDetailsWidget extends StatelessWidget {
                   ),
             const SizedBox(height: 6.0),
             pointsGained == null
-                ? SizedBox()
+                ? const SizedBox()
                 : const Text(
                     'Points',
                     style: TextStyle(

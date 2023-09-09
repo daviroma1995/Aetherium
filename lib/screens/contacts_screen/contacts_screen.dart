@@ -1,17 +1,18 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_const_constructors
 import 'dart:async';
 
 import 'package:atherium_saloon_app/utils/map_utils.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/constants.dart';
 
 import 'contacts_controller.dart';
 
+// ignore: must_be_immutable
 class ContactsScreen extends StatelessWidget {
   final controller = Get.put(ContactsController());
   final Completer<GoogleMapController> _controller =
@@ -28,7 +29,9 @@ class ContactsScreen extends StatelessWidget {
       tilt: 29.440717697143555,
       zoom: 20.151926040649414);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  // ignore: prefer_final_fields, unused_field
   LatLng _center = LatLng(45.52307386080499, 10.2587832779112);
+  // ignore: unused_element
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
@@ -72,7 +75,11 @@ class ContactsScreen extends StatelessWidget {
         () => SafeArea(
           child: controller.shopinfo.value.email == null
               ? Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    color: isDark
+                        ? AppColors.SECONDARY_COLOR
+                        : AppColors.GREY_COLOR,
+                  ),
                 )
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +114,7 @@ class ContactsScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    AppLanguages.EMAIL,
+                                    'email',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -118,7 +125,7 @@ class ContactsScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR,
                                         ),
-                                  ),
+                                  ).tr(),
                                   const SizedBox(height: 10.0),
                                   Obx(
                                     () => Text(
@@ -128,13 +135,15 @@ class ContactsScreen extends StatelessWidget {
                                       style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w500,
-                                        color: AppColors.GREY_COLOR,
+                                        color: isDark
+                                            ? AppColors.GREY_COLOR
+                                            : AppColors.BLACK_COLOR,
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 20.0),
+                                  const SizedBox(height: 30.0),
                                   Text(
-                                    AppLanguages.PHONE_NUMBER,
+                                    'telephone',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -145,7 +154,7 @@ class ContactsScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR,
                                         ),
-                                  ),
+                                  ).tr(),
                                   const SizedBox(height: 10.0),
                                   Row(
                                     mainAxisAlignment:
@@ -155,17 +164,17 @@ class ContactsScreen extends StatelessWidget {
                                     children: [
                                       Text(
                                         controller.shopinfo.value.phoneNumber!,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w500,
-                                          color: AppColors.GREY_COLOR,
+                                          color: isDark
+                                              ? AppColors.GREY_COLOR
+                                              : AppColors.BLACK_COLOR,
                                         ),
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          final Uri whatsapp = Uri.parse(
-                                              'https://wa.me/98412454967');
-                                          launchUrl(whatsapp);
+                                          controller.launchWhatsApp();
                                         },
                                         child: Container(
                                           width: 102.0,
@@ -197,7 +206,7 @@ class ContactsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 30.0),
                                   Text(
-                                    AppLanguages.OPENING_HOURS_OF_THE_SHOP,
+                                    'opening_hours_of_the_shop',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -208,7 +217,7 @@ class ContactsScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR,
                                         ),
-                                  ),
+                                  ).tr(),
                                   const SizedBox(height: 30.0),
                                   ListView.builder(
                                     physics:
@@ -238,9 +247,9 @@ class ContactsScreen extends StatelessWidget {
                                       );
                                     },
                                   ),
-                                  const SizedBox(height: 10.0),
+                                  const SizedBox(height: 20.0),
                                   Text(
-                                    AppLanguages.DESCRIPTION,
+                                    'description',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -251,19 +260,22 @@ class ContactsScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR,
                                         ),
-                                  ),
+                                  ).tr(),
                                   const SizedBox(height: 20.0),
-                                  const Text(
-                                    'Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
+                                  Text(
+                                    'contacts_description',
                                     style: TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.w400,
-                                      color: AppColors.GREY_COLOR,
+                                      color: isDark
+                                          ? AppColors.GREY_COLOR
+                                          : AppColors.BLACK_COLOR,
                                     ),
-                                  ),
+                                  ).tr(),
                                   const SizedBox(height: 20.0),
                                   GestureDetector(
                                     onTap: () {
+                                      // ignore: avoid_print
                                       print('hello');
                                     },
                                     child: SizedBox(
@@ -289,7 +301,7 @@ class ContactsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 20.0),
                                   Text(
-                                    AppLanguages.BEAUTY_SPECIALIST,
+                                    'beauty_specialist',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
@@ -300,7 +312,7 @@ class ContactsScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR,
                                         ),
-                                  ),
+                                  ).tr(),
                                   const SizedBox(height: 20.0),
                                   ListView.builder(
                                     physics:
@@ -389,10 +401,10 @@ class ContactsScreen extends StatelessWidget {
               const SizedBox(height: 6.0),
               Text(
                 subtitle,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.GREY_COLOR,
+                  color: isDark ? AppColors.GREY_COLOR : AppColors.GREY_COLOR,
                 ),
               ),
             ],
@@ -414,16 +426,17 @@ class ContactsScreen extends StatelessWidget {
           day,
           style: TextStyle(
             fontSize: 16.0,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w700,
             color: isDark ? AppColors.SECONDARY_COLOR : AppColors.BLACK_COLOR,
           ),
         ),
         Text(
+          // ignore: unnecessary_string_interpolations
           from == null ? '$to' : '$from - $to',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.w500,
-            color: AppColors.GREY_COLOR,
+            color: isDark ? AppColors.GREY_COLOR : AppColors.BLACK_COLOR,
           ),
         ),
       ],

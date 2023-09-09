@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 
 import '../utils/constants.dart';
 
@@ -37,7 +35,7 @@ class AppointmentsCardWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 22.0),
       child: ListTile(
-        contentPadding: EdgeInsets.only(
+        contentPadding: const EdgeInsets.only(
           left: 10.0,
           right: 10.0,
         ),
@@ -56,15 +54,12 @@ class AppointmentsCardWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(50.0),
             color: isDark ? AppColors.BACKGROUND_DARK : AppColors.PRIMARY_COLOR,
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(50.0),
-            child: SvgPicture.asset(
-              AppAssets.CALANDER_ICON,
-              height: 24.0,
-              fit: BoxFit.contain,
-              colorFilter: const ColorFilter.mode(
-                  AppColors.WHITE_COLOR, BlendMode.srcIn),
-            ),
+          child: SvgPicture.asset(
+            AppAssets.CALANDER_ICON,
+            height: 24.0,
+            fit: BoxFit.contain,
+            colorFilter:
+                const ColorFilter.mode(AppColors.WHITE_COLOR, BlendMode.srcIn),
           ),
         ),
         title: Row(
@@ -108,8 +103,8 @@ class AppointmentsCardWidget extends StatelessWidget {
           textAlign: TextAlign.start,
           style: const TextStyle(
             color: AppColors.GREY_COLOR,
-            fontSize: 12.0,
-            fontWeight: FontWeight.w500,
+            fontSize: 8.0,
+            fontWeight: FontWeight.w700,
             overflow: TextOverflow.ellipsis,
           ),
         ),

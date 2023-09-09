@@ -1,0 +1,16 @@
+{
+    "date":"06/09/2023",
+    "treatments":[
+        {
+            "treatment_category_id":"62xFfhC3JExctC2KaPyK",
+            "duration":90,
+            "is_employee_required":true,
+            "price":60,
+            "membership_type_id":"lYeZaxwl5qBGWSeuT3dN",
+            "name":"Anti Ossidante",
+            "room_id_list":["KZJwOKL71SFR2YM7lTZb"],
+            "desc":"",
+            "id":"BrYHJFmrrA188GjGLMQs"
+        }
+    ]
+}

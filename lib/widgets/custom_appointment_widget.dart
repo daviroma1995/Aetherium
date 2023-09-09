@@ -53,15 +53,12 @@ class CustomAppointmentCardWidget extends StatelessWidget {
                           : AppColors.PRIMARY_COLOR,
                       borderRadius: BorderRadius.circular(50.0),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100.0),
-                      child: SvgPicture.asset(
-                        fit: BoxFit.contain,
-                        height: 24.0,
-                        AppAssets.CALANDER_ICON,
-                        colorFilter: ColorFilter.mode(
-                            AppColors.WHITE_COLOR, BlendMode.srcIn),
-                      ),
+                    child: SvgPicture.asset(
+                      fit: BoxFit.contain,
+                      height: 24.0,
+                      AppAssets.CALANDER_ICON,
+                      colorFilter: const ColorFilter.mode(
+                          AppColors.WHITE_COLOR, BlendMode.srcIn),
                     ),
                   ),
                   const SizedBox(width: 10.0),
@@ -82,15 +79,18 @@ class CustomAppointmentCardWidget extends StatelessWidget {
                                       : AppColors.BLACK_COLOR),
                         ),
                         const SizedBox(height: 6.0),
-                        FittedBox(
+                        Expanded(
                           child: Text(
                             subTitle,
                             maxLines: 1,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Lato',
-                              fontSize: 14.0,
+                              fontSize: 12.0,
+                              overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.w500,
-                              color: AppColors.GREY_COLOR,
+                              color: isDark
+                                  ? AppColors.GREY_COLOR
+                                  : AppColors.BLACK_COLOR,
                               letterSpacing: 0.75,
                             ),
                           ),

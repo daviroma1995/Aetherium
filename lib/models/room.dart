@@ -12,10 +12,10 @@ class Room {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['description'] = this.description;
-    data['service_list'] = this.serviceList;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['description'] = description;
+    data['service_list'] = serviceList;
     return data;
   }
 }

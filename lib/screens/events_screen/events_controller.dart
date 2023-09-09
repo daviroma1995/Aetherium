@@ -20,7 +20,7 @@ class EventsController extends GetxController {
   }
 
   void setFavorite(int index) async {
-    final uid = LoginController.instance.user.uid;
+    final uid = FirebaseServices.cuid;
     if (events[index].isfavorite == true) {
       events[index].clientId!.removeWhere((element) => element == uid);
     } else {

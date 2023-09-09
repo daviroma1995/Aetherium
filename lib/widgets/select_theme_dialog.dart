@@ -1,11 +1,15 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:get/get.dart';
+
+import '../utils/constants.dart';
 
 class SelectThemeDialog extends StatefulWidget {
   const SelectThemeDialog({Key? key, this.themeMode}) : super(key: key);
   final AdaptiveThemeMode? themeMode;
   @override
+  // ignore: library_private_types_in_public_api
   _SelectThemeDialogState createState() => _SelectThemeDialogState();
 }
 
@@ -13,10 +17,7 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
   int themeValue = 0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print(widget.themeMode);
-    print(AdaptiveTheme.prefKey);
     themeValue = 0;
     if (widget.themeMode == AdaptiveThemeMode.dark) {
       themeValue = 1;
@@ -30,20 +31,22 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return AlertDialog(
-      backgroundColor: theme.backgroundColor,
+      backgroundColor:
+          isDark ? AppColors.BACKGROUND_DARK : theme.colorScheme.background,
       contentPadding: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20))),
       content: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
+              SizedBox(
                 height: 35,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -52,29 +55,28 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                       Align(
                           alignment: Alignment.topCenter,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Text(
-                              "App Theme",
+                            padding: EdgeInsets.only(top: 8),
+                            child: const Text(
+                              'app_theme',
                               style: TextStyle(
                                 fontSize: 18,
-                                // TODO TEXT STYLE
                               ),
-                            ),
+                            ).tr(),
                           )),
                       Positioned(
                         top: 0,
                         right: 0,
                         child: MaterialButton(
                           height: 0,
-                          shape: CircleBorder(),
-                          color: Colors.black, // TODO COLOR
+                          shape: const CircleBorder(),
+                          color: Colors.black,
                           onPressed: () {
                             Get.back();
                           },
                           minWidth: 0,
                           padding: EdgeInsets.zero,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
+                          child: const Padding(
+                            padding: EdgeInsets.all(4.0),
                             child: Icon(
                               Icons.clear,
                               size: 13,
@@ -91,12 +93,12 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                 padding: const EdgeInsets.symmetric(horizontal: 35),
                 child: Column(
                   children: [
-                    SizedBox(height: 25),
-                    Text(
-                      "Please select from the following three choices:\n",
+                    const SizedBox(height: 25),
+                    const Text(
+                      "Please_select_from_the_following_three_choices",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 12), // TODO FONT
-                    ),
+                      style: TextStyle(fontSize: 12),
+                    ).tr(),
                     GestureDetector(
                       onTap: () {
                         setState(() {
@@ -109,15 +111,13 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                               value: 0,
                               groupValue: themeValue,
                               onChanged: (selectedValue) {
-                                print("click");
                                 setState(() {
                                   themeValue = selectedValue as int;
                                 });
                               }),
-                          Text(
-                            "System Default",
-                            // TODO FONTS SYSTEM DEFAULT
-                          ),
+                          const Text(
+                            "system_default",
+                          ).tr(),
                         ],
                       ),
                     ),
@@ -137,13 +137,12 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                                   themeValue = selectedValue as int;
                                 });
                               }),
-                          Text(
-                            "Dark Theme",
+                          const Text(
+                            "dark_theme",
                             style: TextStyle(
                               fontFamily: 'Lato',
-                              // TODO DARK THEME STYLE
                             ),
-                          ),
+                          ).tr(),
                         ],
                       ),
                     ),
@@ -163,32 +162,33 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
                                   themeValue = selectedValue as int;
                                 });
                               }),
-                          Text(
-                            "Light Theme",
-                          ),
+                          const Text(
+                            "light_theme",
+                          ).tr(),
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: MaterialButton(
-                  child: Text('Apply'),
+                  child: const Text('apply').tr(),
                   onPressed: () {
                     if (themeValue == 0) {
                       AdaptiveTheme.of(context).setSystem();
                     } else if (themeValue == 1) {
                       AdaptiveTheme.of(context).setDark();
-                    } else
+                    } else {
                       AdaptiveTheme.of(context).setLight();
+                    }
                     Get.back();
                   },
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),

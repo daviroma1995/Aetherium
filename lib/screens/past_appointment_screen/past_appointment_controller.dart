@@ -1,47 +1,108 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unused_local_variable
+import 'package:atherium_saloon_app/models/appointment_status.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
+import 'package:atherium_saloon_app/models/treatment_category.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
+import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
+import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../models/appointment.dart';
+import '../../models/client.dart';
+import '../../models/treatment.dart';
 
 class PastAppointmentController extends GetxController {
   var pastAppointments = <Appointment>[].obs;
-  String currentUid = LoginController.instance.user.uid;
+  String currentUid = FirebaseServices.cuid;
   var employees = <Employee>[].obs;
   var appointmentEmployees = <Employee>[].obs;
+  var appointmentStatus = <AppointmentStatus>[].obs;
+  var services = <Treatment>[].obs;
   RxBool isInititalized = false.obs;
+  var listOfTreatmentCategory = <TreatmentCategory>[];
+  bool isAdmin = false;
+  var treatmentCategoryList = <TreatmentCategory>[];
+  var listOfClients = <Client>[];
   @override
   void onInit() async {
     super.onInit();
-    var data = await FirebaseServices.getData(collection: 'appointments');
+    await loadData();
+  }
+
+  Future<void> loadData() async {
+    pastAppointments = <Appointment>[].obs;
+    employees = <Employee>[].obs;
+    appointmentEmployees = <Employee>[].obs;
+    appointmentStatus = <AppointmentStatus>[].obs;
+    listOfTreatmentCategory = [];
+    services = <Treatment>[].obs;
+    isInititalized.value = false;
+    var data = await FirebaseServices.getFilteredAppointments(
+        collection: 'appointments');
+    var treatments = await FirebaseServices.getData(collection: 'treatments');
     var employeeData = await FirebaseServices.getData(collection: 'employees');
+    var statusData =
+        await FirebaseServices.getData(collection: 'appointment_status');
+    var currentClient = await FirebaseServices.getCurrentUser();
+    isAdmin = currentClient['isAdmin'];
+
     // for (var employee in employeeData!) {
     //   employees.add(Employee.fromJson(employee));
     // }
-
+    var homeController = Get.find<HomeScreenController>();
+    var listOftreatmentCategories = homeController.treatmentCategories;
     if (AgendaController.instance.currentUser.value.isAdmin!) {
+      var clients = await FirebaseServices.getData(collection: 'clients');
       for (var appointment in data!) {
-        if (appointment['date_timestamp'].seconds + 86400 <
-            Timestamp.fromDate(DateTime.now()).seconds) {
+        if (appointment['date_timestamp'].seconds + 86400 <=
+            Timestamp.now().seconds) {
           pastAppointments.add(Appointment.fromJson(appointment));
+        }
+      }
+      if (clients != null) {
+        pastAppointments.forEach((appointment) {
+          var client = clients
+              .firstWhere((element) => element['id'] == appointment.clientId);
+          listOfClients.add(Client.fromJson(client));
+        });
+      }
+      for (var appointment in data) {
+        for (int i = 0; i < statusData!.length; i++) {
+          if (appointment['status_id'] == statusData[i]['id'] &&
+              appointment['date_timestamp'].seconds + 86400 <=
+                  Timestamp.now().seconds) {
+            appointmentStatus.add(AppointmentStatus.fromJson(statusData[i]));
+          }
         }
       }
     } else {
       for (var appointment in data!) {
         if (currentUid == appointment['client_id']) {
-          if (appointment['date_timestamp'].seconds + 86400 <
-              Timestamp.fromDate(DateTime.now()).seconds) {
+          if (appointment['date_timestamp'].seconds + 86400 <=
+                  Timestamp.now().seconds &&
+              appointment['is_regular'] == true) {
             pastAppointments.add(Appointment.fromJson(appointment));
           }
         }
       }
+      for (var appointment in data) {
+        if (currentUid == appointment['client_id']) {
+          for (int i = 0; i < statusData!.length; i++) {
+            if (appointment['status_id'] == statusData[i]['id'] &&
+                appointment['is_regular'] == true &&
+                appointment['date_timestamp'].seconds + 86400 <=
+                    Timestamp.now().seconds) {
+              appointmentStatus.add(AppointmentStatus.fromJson(statusData[i]));
+            }
+          }
+        }
+      }
     }
-    print(pastAppointments);
     for (var element in employees) {
       // for (int i = 0; i < pastAppointments.length; i++) {
       //   // if (pastAppointments[i].employeeId == element.id) {
@@ -54,7 +115,7 @@ class PastAppointmentController extends GetxController {
       //   });
       // }
     }
-    pastAppointments.forEach((appointment) {
+    for (var appointment in pastAppointments) {
       // appointment.employeeId!.forEach((employeeId) {
       // for (int i = 0; i < employees!.length; i++) {
       //   if (employees[i]['id'] == employeeId) {
@@ -70,69 +131,63 @@ class PastAppointmentController extends GetxController {
           break;
         }
       }
+    }
+    for (var treatment in treatments!) {
+      for (var pastAppointment in pastAppointments) {
+        if (treatment['id'] == pastAppointment.serviceId![0]) {
+          services.add(Treatment.fromJson(treatment));
+        }
+      }
+    }
+    services.forEach((service) {
+      var treatmentCategory = listOftreatmentCategories
+          .firstWhere((element) => element.id == service.treatmentCategoryId);
+      listOfTreatmentCategory.add(treatmentCategory);
     });
     isInititalized.value = true;
   }
 
-  goToDetails(int index) {
-    Get.to(
+  Color getColor(String label) {
+    switch (label) {
+      case "archiviato":
+        return AppColors.ARCHIVED_COLOR;
+      case "cancellato":
+        return AppColors.CANCELED_COLOR;
+      case "confermato":
+        return AppColors.CONFIRMED_COLOR;
+      default:
+        return AppColors.NO_SHOW_COLOR;
+    }
+  }
+
+  goToDetails(int index) async {
+    await Get.to(
       () => AppointmentDetailsScreen(
         appointment: pastAppointments[index],
         isDetail: true,
+        isPast: true,
+        isAdmin: isAdmin,
       ),
       transition: Transition.rightToLeft,
       duration: const Duration(milliseconds: 400),
-    );
+    )?.then((value) {
+      if (value == true) {
+        loadData();
+      }
+    });
+  }
+
+  Future<void> deleteAppointment(int id) async {
+    await FirebaseFirestore.instance
+        .collection('appointments')
+        .doc(pastAppointments[id].id)
+        .delete();
+    var homeControlelr = Get.find<HomeScreenController>();
+    var agendaContrller = Get.find<AgendaController>();
+    homeControlelr.loadHomeScreen();
+    agendaContrller.loadData();
+    Fluttertoast.showToast(
+        msg: 'Appointment deleted Successfully',
+        backgroundColor: AppColors.GREEN_COLOR);
   }
 }
-
-enum Status {
-  canceled,
-  archived,
-  noshow,
-  confirmed,
-}
-
-// class UserAppointmetn {
-//   final String imageUrl;
-//   final String title;
-//   final String subTitle;
-//   final Status status;
-//   final String date;
-//   final String time;
-//   final List<Treatment> services;
-//   UserAppointmetn({
-//     required this.imageUrl,
-//     required this.title,
-//     required this.subTitle,
-//     required this.status,
-//     required this.date,
-//     required this.time,
-//     required this.services,
-//   });
-//   Color get color {
-//     switch (status) {
-//       case (Status.archived):
-//         return AppColors.ARCHIVED_COLOR;
-//       case (Status.canceled):
-//         return AppColors.CANCELED_COLOR;
-//       case (Status.confirmed):
-//         return AppColors.CONFIRMED_COLOR;
-//       case (Status.noshow):
-//         return AppColors.GREY_COLOR;
-//     }
-//   }
-
-//   String get appointmentStatus {
-//     switch (status) {
-//       case (Status.archived):
-//         return 'Archived';
-//       case (Status.canceled):
-//         return 'Canceled';
-//       case (Status.confirmed):
-//         return 'Confirmed';
-//       case (Status.noshow):
-//         return 'No-Show';
-//     }
-//   }
-// }

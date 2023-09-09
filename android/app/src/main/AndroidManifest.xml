@@ -1,13 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.aetherium_saloon_app">
+    package="com.fantechlabs.aetheriumsaloon">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 <uses-feature android:name="android.hardware.camera" />
 <uses-feature android:name="android.hardware.camera.autofocus" />
    <application
-        android:label="aetherium_saloon_app"
+        android:label="Aetherium Saloon"
+        android:usesCleartextTraffic="true"
         android:name="${applicationName}"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyD83bL6G9N1zJnKRPdA0cqINbg86Xko1Nc"/>

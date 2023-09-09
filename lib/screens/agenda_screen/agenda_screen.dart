@@ -2,14 +2,16 @@
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/widgets/clean_calendar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import 'package:atherium_saloon_app/data.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/custom_title_row_widget.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
+// ignore: must_be_immutable
 class AgendaScreen extends StatelessWidget {
   DateTime selectedDay = DateTime.now();
   AgendaScreen({super.key});
@@ -23,14 +25,33 @@ class AgendaScreen extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Calendar(
-              events: controller.events,
-              hideArrows: true,
-              hideTodayIcon: true,
-              onDateSelected: (value) {
-                controller.onDateChange(value);
-              },
-            ),
+            child: Obx(() => Visibility(
+                  visible: controller.reload.value,
+                  replacement: Obx(
+                    () => Calendar(
+                      events: controller.events,
+                      hideArrows: true,
+                      hideTodayIcon: true,
+                      initialDate: controller.selectedDate.value,
+                      onDateSelected: (value) {
+                        controller.selectedDate.value = value;
+                        controller.onDateChange(value);
+                      },
+                    ),
+                  ),
+                  child: Obx(
+                    () => Calendar(
+                      events: controller.events,
+                      hideArrows: true,
+                      hideTodayIcon: true,
+                      initialDate: controller.selectedDate.value,
+                      onDateSelected: (value) {
+                        controller.selectedDate.value = value;
+                        controller.onDateChange(value);
+                      },
+                    ),
+                  ),
+                )),
           ),
           const SizedBox(height: 13.0),
           Expanded(
@@ -53,9 +74,14 @@ class AgendaScreen extends StatelessWidget {
                     topRight: Radius.circular(30.0),
                   ),
                 ),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
+                child: LiquidPullToRefresh(
+                  backgroundColor: isDark
+                      ? AppColors.SECONDARY_LIGHT
+                      : AppColors.WHITE_COLOR,
+                  onRefresh: () async => await controller.loadData(),
+                  child: ListView(
+                    shrinkWrap: true,
+                    // physics: const BouncingScrollPhysics(),
                     children: [
                       Obx(
                         () => CustomTitle(
@@ -69,6 +95,9 @@ class AgendaScreen extends StatelessWidget {
                           title: controller.day.value,
                           subTitle: controller.date.value,
                           isUnderLined: false,
+                          subtitleColor: isDark
+                              ? AppColors.GREY_COLOR
+                              : AppColors.BLACK_COLOR,
                         ),
                       ),
                       const SizedBox(height: 17.0),
@@ -76,7 +105,7 @@ class AgendaScreen extends StatelessWidget {
                         () => controller.appointments.isNotEmpty
                             ? ListView.builder(
                                 shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: controller.appointments.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
@@ -96,21 +125,74 @@ class AgendaScreen extends StatelessWidget {
                                       child: AgendaCustomCardWidget(
                                         startTime: controller.getTime(controller
                                             .appointments[index].time!),
-                                        endTime: agendas[index].endTime,
-                                        duration: agendas[index].duration,
-                                        userImageUrl: agendas[index].iamgeUrl,
-                                        userName: agendas[index].userName,
-                                        service: agendas[index].service,
-                                        agendaColor: isDark
-                                            ? agendas[index].darkolor
-                                            : agendas[index].color,
-                                        agendaBarsColor: agendas[index].color,
+                                        endTime: controller.getDuration(
+                                            controller
+                                                .appointments[index].serviceId!,
+                                            controller
+                                                .appointments[index].time!)[1],
+                                        duration:
+                                            '${controller.appointments[index].duration.toString()} Min',
+                                        // duration: controller.getDuration(
+                                        //     controller
+                                        //         .appointments[index].serviceId!,
+                                        //     controller
+                                        //         .appointments[index].time!)[0],
+                                        userImageUrl: AppAssets.CALANDER_ICON,
+                                        userName: controller.currentUser.value
+                                                    .isAdmin ??
+                                                false
+                                            ? '${controller.listofClients[index].firstName.toString().capitalize} - ${controller.listofClients[index].lastName.toString().capitalize}'
+                                            : controller.employees[index].name!,
+                                        service:
+                                            '${controller.appointmentsTreatmentCategoryList.isNotEmpty ? controller.appointmentsTreatmentCategoryList[index].name : ''} - ${controller.treatmentsData.isNotEmpty ? controller.treatmentsData[index].name ?? '' : ''}',
+                                        agendaColor: AppColors.SECONDARY_LIGHT,
+                                        agendaBarsColor:
+                                            AppColors.SECONDARY_LIGHT,
                                       ),
                                     ),
                                   );
                                 },
                               )
-                            : Container(),
+                            : SizedBox(
+                                width: Get.width,
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SizedBox(height: Get.height * .05),
+                                      SvgPicture.asset(
+                                          AppAssets.CALENDER_ICON_LIGHT),
+                                      const SizedBox(height: 35.0),
+                                      Text(
+                                        'no_appointments',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w700,
+                                          color: isDark
+                                              ? AppColors.WHITE_COLOR
+                                              : AppColors.BLACK_COLOR,
+                                        ),
+                                      ).tr(),
+                                      const SizedBox(height: 10.0),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 22.0),
+                                        child: const Text(
+                                          'empty_agenda_message',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14.0,
+                                            color: AppColors.GREY_COLOR,
+                                          ),
+                                        ).tr(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                       ),
                     ],
                   ),
@@ -156,62 +238,76 @@ class AgendaCustomCardWidget extends StatelessWidget {
           color: agendaBarsColor,
         ),
         const SizedBox(width: 16.0),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                SvgPicture.asset(
-                  AppAssets.CLOCK_ICON,
-                  colorFilter: ColorFilter.mode(
-                      isDark ? AppColors.WHITE_COLOR : AppColors.PRIMARY_COLOR,
-                      BlendMode.srcIn),
-                ),
-                const SizedBox(width: 5.0),
-                Column(
-                  children: [
-                    Text(
-                      startTime,
-                      style:
-                          Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                    ),
-                    Text(
-                      endTime,
-                      style:
-                          Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            const SizedBox(height: 7.0),
-            Row(
-              children: [
-                Container(
-                  height: 8.0,
-                  width: 8.0,
-                  decoration: BoxDecoration(
-                    color: agendaBarsColor,
-                    borderRadius: BorderRadius.circular(25.0),
+        SizedBox(
+          width: 75.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    AppAssets.CLOCK_ICON,
+                    colorFilter: ColorFilter.mode(
+                        isDark
+                            ? AppColors.WHITE_COLOR
+                            : AppColors.PRIMARY_COLOR,
+                        BlendMode.srcIn),
                   ),
-                ),
-                const SizedBox(width: 12.0),
-                Text(
-                  duration,
-                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500,
+                  const SizedBox(width: 5.0),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        startTime,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
-                ),
-              ],
-            ),
-          ],
+                      Text(
+                        endTime,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(height: 7.0),
+              Row(
+                children: [
+                  Container(
+                    height: 8.0,
+                    width: 8.0,
+                    decoration: BoxDecoration(
+                      color: agendaBarsColor,
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                  ),
+                  const SizedBox(width: 5.0),
+                  Expanded(
+                    child: Text(
+                      duration,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w500,
+                              ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
         const SizedBox(width: 17.0),
         Expanded(
@@ -231,13 +327,17 @@ class AgendaCustomCardWidget extends StatelessWidget {
                   Container(
                     width: 50.0,
                     height: 50.0,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(width: 1.3, color: AppColors.WHITE_COLOR),
-                      borderRadius: BorderRadius.circular(100.0),
-                    ),
-                    child: CircleAvatar(
-                      backgroundImage: AssetImage(userImageUrl),
+                        borderRadius: BorderRadius.circular(100.0),
+                        color: isDark
+                            ? AppColors.PRIMARY_DARK
+                            : AppColors.PRIMARY_COLOR),
+                    child: SvgPicture.asset(
+                      userImageUrl,
+                      height: 28,
+                      colorFilter: const ColorFilter.mode(
+                          AppColors.WHITE_COLOR, BlendMode.srcIn),
                     ),
                   ),
                   const SizedBox(width: 10.0),
@@ -252,18 +352,18 @@ class AgendaCustomCardWidget extends StatelessWidget {
                             fontSize: 16.0,
                             fontWeight: FontWeight.w700,
                             color: isDark
-                                ? AppColors.WHITE_COLOR
+                                ? AppColors.BLACK_COLOR
                                 : AppColors.PRIMARY_COLOR,
                           ),
                         ),
                         Text(
                           service,
-                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 12.0,
+                            fontSize: 10.0,
                             fontWeight: FontWeight.w500,
                             color: isDark
-                                ? AppColors.GREY_COLOR
+                                ? AppColors.SECONDARY_COLOR
                                 : AppColors.PRIMARY_COLOR,
                           ),
                         ),

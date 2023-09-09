@@ -25,25 +25,26 @@ class Treatment {
     id = json['id'];
     treatmentCategoryId = json['treatment_category_id'];
     name = json['name'];
-    desc = json['description'];
+    desc = json['desc'];
     price = json['price'].toString();
     duration = json['duration'].toString();
     isLimited = json['isLimited'];
-    availableDays = json['availableDays'].cast<String>();
     isEmployeeRequired = json['isEmployeeRequired'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['description'] = this.desc;
-    data['treatment_category_id'] = this.treatmentCategoryId;
-    data['name'] = this.name;
-    data['price'] = this.price;
-    data['duration'] = this.duration;
-    data['isLimited'] = this.isLimited;
-    data['availableDays'] = this.availableDays;
-    data['isEmployeeRequired'] = this.isEmployeeRequired;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['desc'] = desc;
+    data['treatment_category_id'] = treatmentCategoryId;
+    data['name'] = name;
+    data['price'] = price;
+    data['duration'] = duration;
+    data['isLimited'] = isLimited;
+    data['isEmployeeRequired'] = isEmployeeRequired;
     return data;
   }
+
+  @override
+  String toString() => 'Treatment(Name: $name, Price: $price)';
 }

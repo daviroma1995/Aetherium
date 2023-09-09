@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../utils/constants.dart';
-import 'favorite_icon_widget.dart';
 
+// ignore: must_be_immutable
 class CustomEventCardWidget extends StatefulWidget {
   final int index;
   final String iamgeUrl;
   final String title;
   final String subTitle;
+  final Color? subtitleColor;
   final String time;
   bool isFavorite;
   final Function onIconTap;
@@ -20,6 +21,7 @@ class CustomEventCardWidget extends StatefulWidget {
     required this.iamgeUrl,
     required this.title,
     required this.subTitle,
+    this.subtitleColor,
     required this.time,
     required this.isFavorite,
     required this.onIconTap,
@@ -72,10 +74,11 @@ class _CustomEventCardWidgetState extends State<CustomEventCardWidget> {
                     const SizedBox(height: 6.0),
                     Text(
                       widget.subTitle,
-                      style: const TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
                         fontSize: 13.0,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.GREY_COLOR,
+                        color: widget.subtitleColor ?? AppColors.GREY_COLOR,
                       ),
                     ),
                     const SizedBox(height: 6.0),
@@ -125,6 +128,7 @@ class _CustomEventCardWidgetState extends State<CustomEventCardWidget> {
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       Center(
                     child: CircularProgressIndicator(
+                        color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
                         value: downloadProgress.progress),
                   ),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -132,22 +136,22 @@ class _CustomEventCardWidgetState extends State<CustomEventCardWidget> {
               ),
             ),
           ),
-          Positioned(
-            top: 9.0,
-            right: 10.0,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  widget.isFavorite = !widget.isFavorite;
-                });
-                widget.onIconTap();
-              },
-              child: Icon(
-                widget.isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: AppColors.WHITE_COLOR,
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: 9.0,
+          //   right: 10.0,
+          //   child: GestureDetector(
+          //     onTap: () {
+          //       setState(() {
+          //         widget.isFavorite = !widget.isFavorite;
+          //       });
+          //       widget.onIconTap();
+          //     },
+          //     child: Icon(
+          //       widget.isFavorite ? Icons.favorite : Icons.favorite_border,
+          //       color: AppColors.WHITE_COLOR,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

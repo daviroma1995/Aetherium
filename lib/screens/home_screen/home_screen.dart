@@ -1,5 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, invalid_use_of_protected_member
 
+import 'package:atherium_saloon_app/models/treatment_category.dart';
+import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_controller.dart';
 import 'package:atherium_saloon_app/screens/events_screen/events_screen.dart';
 
 import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
@@ -7,24 +9,33 @@ import 'package:atherium_saloon_app/screens/notifications_screen/notifications_s
 
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/form_field_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 import '../../widgets/custom_appointment_widget.dart';
 import '../../widgets/custom_event_card_widget.dart';
 import '../../widgets/custom_title_row_widget.dart';
 
 class HomeScreen extends StatelessWidget {
-  final controller = Get.put(HomeScreenController());
-  HomeScreen({super.key});
-
+  final HomeScreenController controller = Get.put(HomeScreenController());
+  HomeScreen(this.treatmentCategories, {super.key});
+  final List<TreatmentCategory> treatmentCategories;
   @override
   Widget build(BuildContext context) {
+    controller.treatmentCategories.value = treatmentCategories;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
-      body: SafeArea(
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+        BottomNavigationController ctrl = Get.find();
+        ctrl.reverse();
+      },
+      child: SafeArea(
         child: Column(
           children: [
             Padding(
@@ -39,14 +50,14 @@ class HomeScreen extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        AppLanguages.WELCOME,
+                        'welcome',
                         style: Theme.of(context)
                             .textTheme
                             .headlineLarge!
                             .copyWith(
                                 color:
                                     Theme.of(context).colorScheme.onBackground),
-                      ),
+                      ).tr(),
                       Obx(
                         () => controller.currentUser.value.firstName != null
                             ? Text(
@@ -62,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                                   letterSpacing: .75,
                                 ),
                               )
-                            : Text(''),
+                            : const Text(''),
                       ),
                     ],
                   ),
@@ -94,34 +105,43 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Positioned(
-                            right: 0,
-                            top: 0.0,
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 17.0,
-                              height: 17.0,
-                              decoration: BoxDecoration(
-                                  color: isDark
-                                      ? AppColors.SECONDARY_LIGHT
-                                      : AppColors.SECONDARY_COLOR,
-                                  borderRadius: BorderRadius.circular(110.0),
-                                  border: isDark
-                                      ? const Border()
-                                      : Border.all(
-                                          color: AppColors.WHITE_COLOR,
-                                          width: 1.1,
-                                        )),
-                              child: FittedBox(
-                                child: Text(
-                                  '3',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: isDark
-                                        ? AppColors.BACKGROUND_DARK
-                                        : AppColors.WHITE_COLOR,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 11.0,
+                          Obx(
+                            () => Visibility(
+                              visible: controller.notifications.isNotEmpty,
+                              child: Positioned(
+                                right: 0,
+                                top: 0.0,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 17.0,
+                                  height: 17.0,
+                                  decoration: BoxDecoration(
+                                      color: isDark
+                                          ? AppColors.SECONDARY_LIGHT
+                                          : AppColors.SECONDARY_COLOR,
+                                      borderRadius:
+                                          BorderRadius.circular(110.0),
+                                      border: isDark
+                                          ? const Border()
+                                          : Border.all(
+                                              color: AppColors.WHITE_COLOR,
+                                              width: 1.1,
+                                            )),
+                                  child: Obx(
+                                    () => FittedBox(
+                                      child: Text(
+                                        controller.notifications.length
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          color: isDark
+                                              ? AppColors.BACKGROUND_DARK
+                                              : AppColors.WHITE_COLOR,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 11.0,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -140,7 +160,8 @@ class HomeScreen extends StatelessWidget {
                 child: CustomInputFormField(
                   textEdigintController: controller.searchController,
                   iconUrl: AppAssets.SEARCH_ICON,
-                  hintText: 'Search',
+                  iconColor: AppColors.GREY_COLOR,
+                  hintText: tr('search'),
                   isValid: true,
                   autoFocus: false,
                   onSubmit: () {},
@@ -153,9 +174,12 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20.0),
             Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
+              child: LiquidPullToRefresh(
+                onRefresh: controller.onRefresh,
+                backgroundColor:
+                    isDark ? AppColors.SECONDARY_LIGHT : AppColors.WHITE_COLOR,
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 22.0, right: 22.0),
@@ -163,12 +187,12 @@ class HomeScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            'Services',
+                            'services',
                             style: TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.w700,
                             ),
-                          ),
+                          ).tr(),
                           GestureDetector(
                             onTap: () => controller.navigateToServices(),
                             child: Container(
@@ -184,94 +208,171 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ),
                               child: const Text(
-                                'See All',
+                                'see_all',
                                 style: TextStyle(
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w500,
                                   letterSpacing: .75,
                                   color: AppColors.GREY_COLOR,
                                 ),
-                              ),
+                              ).tr(),
                             ),
                           )
                         ],
                       ),
                     ),
                     Obx(
-                      () => SizedBox(
-                        width: Get.width,
-                        height: 138.0,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 22.0, vertical: 20.0),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemExtent:
-                                MediaQuery.of(context).size.width * .231,
-                            itemCount: services
-                                .where((element) => element['service_title']
-                                    .toLowerCase()
-                                    .contains(controller.searchedService.value
-                                        .toLowerCase()))
-                                .toList()
-                                .length,
-                            itemBuilder: (context, index) {
-                              var filteredServices = services
-                                  .where((element) => element['service_title']
+                      () => Visibility(
+                        visible: controller.treatmentCategories.isEmpty,
+                        child: SizedBox(
+                          height: 150.0,
+                          width: Get.width,
+                          child: Center(
+                              child: CircularProgressIndicator(
+                            color: isDark
+                                ? AppColors.SECONDARY_COLOR
+                                : AppColors.GREY_COLOR,
+                          )),
+                        ),
+                      ),
+                    ),
+                    Obx(
+                      () => Visibility(
+                        visible: controller.treatmentCategories.isNotEmpty,
+                        child: SizedBox(
+                          width: Get.width,
+                          height: 150,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 22.0, vertical: 20.0),
+                            child: ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemExtent:
+                                  MediaQuery.of(context).size.width * .231,
+                              itemCount: controller.treatmentCategories
+                                  .where((element) => element.name!
                                       .toLowerCase()
                                       .contains(controller.searchedService.value
                                           .toLowerCase()))
-                                  .toList()[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  controller.searchedService.value == ''
-                                      ? controller.serviceNavigation(index)
-                                      : controller.serviceNavigation(
-                                          services.indexWhere((element) =>
-                                              element['service_title'] ==
-                                              filteredServices[
-                                                  'service_title']));
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 60.0,
-                                      width: 60.0,
-                                      decoration: BoxDecoration(
-                                        border: !isDark
-                                            ? Border.all(
-                                                color: AppColors.BORDER_COLOR)
-                                            : const Border(),
-                                        borderRadius:
-                                            BorderRadius.circular(130.0),
-                                        color: !isDark
-                                            ? AppColors.WHITE_COLOR
-                                            : AppColors.PRIMARY_DARK,
+                                  .toList()
+                                  .length,
+                              itemBuilder: (context, index) {
+                                var filteredServices = controller
+                                    .treatmentCategories
+                                    .where((element) => element.name!
+                                        .toLowerCase()
+                                        .contains(controller
+                                            .searchedService.value
+                                            .toLowerCase()))
+                                    .toList()[index];
+                                return GestureDetector(
+                                  onTap: () {
+                                    controller.searchedService.value == ''
+                                        ? controller.serviceNavigation(index)
+                                        : controller.serviceNavigation(
+                                            controller.treatmentCategories
+                                                .indexWhere((element) =>
+                                                    element.name ==
+                                                    filteredServices.name),
+                                          );
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        height: 60.0,
+                                        width: 60.0,
+                                        decoration: BoxDecoration(
+                                          border: !isDark
+                                              ? Border.all(
+                                                  color: AppColors.BORDER_COLOR)
+                                              : const Border(),
+                                          borderRadius:
+                                              BorderRadius.circular(130.0),
+                                          color: !isDark
+                                              ? AppColors.WHITE_COLOR
+                                              : AppColors.PRIMARY_DARK,
+                                        ),
+                                        child: !isDark
+                                            ? ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      filteredServices.iconUrl!,
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  placeholder: (context, url) =>
+                                                      CircularProgressIndicator(
+                                                    color: isDark
+                                                        ? AppColors
+                                                            .SECONDARY_COLOR
+                                                        : AppColors.GREY_COLOR,
+                                                  ),
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Icon(Icons.error),
+                                                ),
+                                              )
+                                            : ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: filteredServices
+                                                      .darkIconUrl!,
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  placeholder: (context, url) =>
+                                                      CircularProgressIndicator(
+                                                    color: isDark
+                                                        ? AppColors
+                                                            .SECONDARY_COLOR
+                                                        : AppColors.GREY_COLOR,
+                                                  ),
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Icon(Icons.error),
+                                                ),
+                                              ),
                                       ),
-                                      child: !isDark
-                                          ? SvgPicture.asset(
-                                              filteredServices['service_image'])
-                                          : SvgPicture.asset(
-                                              filteredServices['dark_image']),
-                                    ),
-                                    const SizedBox(height: 10.0),
-                                    Text(
-                                      filteredServices['service_title'],
-                                      maxLines: 1,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 12.0,
-                                        letterSpacing: .98,
+                                      const SizedBox(height: 10.0),
+                                      Expanded(
+                                        child: Text(
+                                          filteredServices.name!,
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 12.0,
+                                            letterSpacing: .98,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ),
@@ -286,7 +387,7 @@ class HomeScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomTitle(
-                            title: AppLanguages.UPCOMING_APPOINTMENTS,
+                            title: 'upcomming_appointments',
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineLarge!
@@ -297,61 +398,86 @@ class HomeScreen extends StatelessWidget {
                             onTap: controller.navigateToAppointments,
                           ),
                           const SizedBox(height: 20.0),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 22.0),
-                            child: Obx(
-                              () => controller.appointments.isNotEmpty &&
-                                      controller.services.isNotEmpty
-                                  ? SizedBox(
-                                      height: 103.0,
-                                      child: ListView.builder(
-                                        physics: const BouncingScrollPhysics(),
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount:
-                                            controller.appointments.length,
-                                        itemBuilder: (context, index) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              controller
-                                                  .navigateToAppointmentDetail(
-                                                      index);
-                                            },
-                                            child: CustomAppointmentCardWidget(
-                                              imageUrl: AppAssets.USER_IMAGE,
-                                              title: controller.getEmployeeName(
-                                                  controller.appointments[index]
-                                                      .employeeId![0]),
-                                              subTitle: controller.getServices(
-                                                  controller.appointments[index]
-                                                      .serviceId![0]),
-                                              date: controller
-                                                  .appointments[index]
-                                                  .dateString,
-                                              time: controller
-                                                  .appointments[index].time!,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    )
-                                  : Container(
-                                      alignment: Alignment.center,
-                                      height: 100.0,
-                                      // alignment: Alignment.center,
-                                      child: const Text(
-                                        'No appointments',
-                                        style: TextStyle(
-                                            fontSize: 20.0,
-                                            color: Colors.black),
-                                      ),
+                          Obx(
+                            () => Visibility(
+                              visible: controller.isLoading.value == true,
+                              child: SizedBox(
+                                height: 103,
+                                width: Get.width,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: isDark
+                                        ? AppColors.SECONDARY_COLOR
+                                        : AppColors.GREY_COLOR,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Obx(
+                            () => Visibility(
+                              replacement: Container(
+                                alignment: Alignment.center,
+                                height: 100.0,
+                                // alignment: Alignment.center,
+                                child: const Text(
+                                  'No appointments',
+                                  style: TextStyle(
+                                      fontSize: 20.0, color: Colors.black),
+                                ),
+                              ),
+                              visible: controller.isLoading.value == false &&
+                                  controller.appointments.isNotEmpty &&
+                                  controller.services.isNotEmpty &&
+                                  controller.appointmentsTreatmentCategoryList
+                                      .isNotEmpty,
+                              child: Padding(
+                                  padding: const EdgeInsets.only(left: 22.0),
+                                  child: SizedBox(
+                                    height: 103.0,
+                                    child: ListView.builder(
+                                      physics: const BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: controller.appointments.length,
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            print(controller.appointments[index]
+                                                .dateTimestamp!
+                                                .toDate());
+                                            controller
+                                                .navigateToAppointmentDetail(
+                                                    index);
+                                          },
+                                          child: CustomAppointmentCardWidget(
+                                            imageUrl: AppAssets.USER_IMAGE,
+                                            title: controller.currentUser.value
+                                                        .isAdmin ??
+                                                    false
+                                                ? '${controller.listOfClients[index].firstName.toString().capitalize} - ${controller.listOfClients[index].lastName.toString().capitalize}'
+                                                : controller.getEmployeeName(
+                                                    controller
+                                                        .appointments[index]
+                                                        .employeeId![0]),
+                                            subTitle:
+                                                '${controller.appointmentsTreatmentCategoryList[index].name ?? ''} - ${controller.getServices(controller.appointments[index].serviceId![0])}',
+                                            date: controller
+                                                .appointments[index].dateString,
+                                            time: controller
+                                                    .appointments[index].time ??
+                                                '',
+                                          ),
+                                        );
+                                      },
                                     ),
+                                  )),
                             ),
                           ),
                         ],
                       ),
                     ),
                     CustomTitle(
-                      title: 'Events',
+                      title: 'events',
                       style:
                           Theme.of(context).textTheme.headlineLarge!.copyWith(
                                 fontSize: 18.0,
@@ -360,9 +486,10 @@ class HomeScreen extends StatelessWidget {
                       borderColor:
                           isDark ? AppColors.GREY_COLOR : AppColors.GREY_COLOR,
                       onTap: () async {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         final result = await Get.to(
                           () => EventsScreen(),
-                          duration: Duration(milliseconds: 600),
+                          duration: const Duration(milliseconds: 400),
                           transition: Transition.rightToLeft,
                           arguments: controller.events,
                         );
@@ -409,6 +536,9 @@ class HomeScreen extends StatelessWidget {
                                                       .events[index].subtitle!,
                                                   time: controller
                                                       .events[index].dateString,
+                                                  subtitleColor: isDark
+                                                      ? AppColors.GREY_COLOR
+                                                      : AppColors.BLACK_COLOR,
                                                   isFavorite: controller
                                                           .events[index]
                                                           .isfavorite ??
@@ -420,6 +550,9 @@ class HomeScreen extends StatelessWidget {
                                                   index: index,
                                                   iamgeUrl: controller
                                                       .events[index].imageUrl!,
+                                                  subtitleColor: isDark
+                                                      ? AppColors.GREY_COLOR
+                                                      : AppColors.BLACK_COLOR,
                                                   title: controller
                                                       .events[index].title!,
                                                   subTitle: controller
@@ -452,7 +585,11 @@ class HomeScreen extends StatelessWidget {
                                   : Container(
                                       alignment: Alignment.center,
                                       height: 190,
-                                      child: const CircularProgressIndicator(),
+                                      child: CircularProgressIndicator(
+                                        color: isDark
+                                            ? AppColors.SECONDARY_COLOR
+                                            : AppColors.GREY_COLOR,
+                                      ),
                                     ),
                         ),
                       ),

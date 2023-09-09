@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-class ButtonWidget extends StatelessWidget {
+class PrimaryButton extends StatelessWidget {
   final double width;
   final Color color;
   final String buttonText;
@@ -8,7 +9,7 @@ class ButtonWidget extends StatelessWidget {
   final bool bordered;
   final Color borderColor;
   final Function onTap;
-  const ButtonWidget({
+  const PrimaryButton({
     super.key,
     required this.width,
     required this.buttonText,
@@ -45,7 +46,7 @@ class ButtonWidget extends StatelessWidget {
               fontWeight: FontWeight.w700,
               fontSize: 14.0,
             ),
-          ),
+          ).tr(),
         ),
       ),
     );

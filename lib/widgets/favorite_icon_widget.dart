@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../utils/constants.dart';
 
+// ignore: must_be_immutable
 class FavoriteIcon extends StatefulWidget {
   final Function ontap;
   bool isFavorite;

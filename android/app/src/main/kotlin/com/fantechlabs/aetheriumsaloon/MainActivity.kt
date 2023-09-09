@@ -1,4 +1,4 @@
-package com.example.aetherium_saloon_app
+package com.fantechlabs.aetheriumsaloon
 
 import io.flutter.embedding.android.FlutterActivity
 

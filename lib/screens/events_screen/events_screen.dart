@@ -92,6 +92,7 @@ class EventsScreen extends StatelessWidget {
                                   const SizedBox(height: 6.0),
                                   Text(
                                     controller.events[index].subtitle!,
+                                    overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500,
@@ -107,7 +108,7 @@ class EventsScreen extends StatelessWidget {
                                         colorFilter: ColorFilter.mode(
                                             isDark
                                                 ? AppColors.SECONDARY_LIGHT
-                                                : AppColors.BLACK_COLOR,
+                                                : AppColors.PRIMARY_COLOR,
                                             BlendMode.srcIn),
                                       ),
                                       const SizedBox(width: 6.0),
@@ -119,7 +120,7 @@ class EventsScreen extends StatelessWidget {
                                           letterSpacing: .75,
                                           color: isDark
                                               ? AppColors.SECONDARY_LIGHT
-                                              : AppColors.BLACK_COLOR,
+                                              : AppColors.PRIMARY_COLOR,
                                         ),
                                       )
                                     ],
@@ -144,47 +145,50 @@ class EventsScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              placeholder: (context, url) =>
-                                  Center(child: CircularProgressIndicator()),
+                              placeholder: (context, url) =>  Center(
+                                  child: CircularProgressIndicator(
+                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+
+                                  )),
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                             ),
                           ),
-                          Obx(
-                            () => controller.shouldUpdate.value == true
-                                ? Positioned(
-                                    top: 10,
-                                    right: 10,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        controller.setFavorite(index);
-                                      },
-                                      child: Icon(
-                                        controller.events[index].isfavorite ==
-                                                true
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        color: AppColors.WHITE_COLOR,
-                                      ),
-                                    ),
-                                  )
-                                : Positioned(
-                                    top: 10,
-                                    right: 10,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        controller.setFavorite(index);
-                                      },
-                                      child: Icon(
-                                        controller.events[index].isfavorite ==
-                                                true
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        color: AppColors.WHITE_COLOR,
-                                      ),
-                                    ),
-                                  ),
-                          ),
+                          // Obx(
+                          //   () => controller.shouldUpdate.value == true
+                          //       ? Positioned(
+                          //           top: 10,
+                          //           right: 10,
+                          //           child: GestureDetector(
+                          //             onTap: () {
+                          //               controller.setFavorite(index);
+                          //             },
+                          //             child: Icon(
+                          //               controller.events[index].isfavorite ==
+                          //                       true
+                          //                   ? Icons.favorite
+                          //                   : Icons.favorite_border,
+                          //               color: AppColors.WHITE_COLOR,
+                          //             ),
+                          //           ),
+                          //         )
+                          //       : Positioned(
+                          //           top: 10,
+                          //           right: 10,
+                          //           child: GestureDetector(
+                          //             onTap: () {
+                          //               controller.setFavorite(index);
+                          //             },
+                          //             child: Icon(
+                          //               controller.events[index].isfavorite ==
+                          //                       true
+                          //                   ? Icons.favorite
+                          //                   : Icons.favorite_border,
+                          //               color: AppColors.WHITE_COLOR,
+                          //             ),
+                          //           ),
+                          //         ),
+                          // ),
                         ],
                       ),
                     ),

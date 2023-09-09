@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
@@ -54,6 +56,7 @@ class PermissionUtils {
     if (/*!status.isGranted || status.isDenied || */ status
             .isPermanentlyDenied &&
         waitTime <= 1) {
+      // ignore: use_build_context_synchronously
       var result = await showOkCancelAlertDialog(
           context: context,
           title: "Permission Error",
@@ -67,7 +70,6 @@ class PermissionUtils {
       return false;
     }
 
-    print(permission.status);
     return status.isGranted;
   }
 }

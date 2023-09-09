@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:atherium_saloon_app/utils/constants.dart';
@@ -21,25 +22,31 @@ class CustomInputFormField extends StatelessWidget {
   final String? initialValue;
   final int? maxLines;
   final int? minLInes;
-  const CustomInputFormField({
-    Key? key,
-    this.iconUrl = '',
-    required this.hintText,
-    this.isObsecure = false,
-    this.isPassword = false,
-    required this.isValid,
-    required this.onSubmit,
-    this.onPressed,
-    this.autoFocus = true,
-    required this.textEdigintController,
-    this.paddingSymetric = 0.0,
-    this.paddingVertical = 0.0,
-    this.onchange,
-    this.onFocus,
-    this.initialValue,
-    this.maxLines,
-    this.minLInes,
-  }) : super(key: key);
+  final Color? iconColor;
+  final List<TextInputFormatter>? filters;
+  final TextInputType? keyboardType;
+  const CustomInputFormField(
+      {Key? key,
+      this.iconUrl = '',
+      required this.hintText,
+      this.isObsecure = false,
+      this.isPassword = false,
+      required this.isValid,
+      required this.onSubmit,
+      this.onPressed,
+      this.autoFocus = false,
+      required this.textEdigintController,
+      this.paddingSymetric = 0.0,
+      this.paddingVertical = 0.0,
+      this.onchange,
+      this.onFocus,
+      this.initialValue,
+      this.maxLines,
+      this.minLInes,
+      this.iconColor,
+      this.filters,
+      this.keyboardType})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,20 +63,11 @@ class CustomInputFormField extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: TextField(
-          onTap: () {
-            if (onFocus == null) {
-              () {};
-            } else {
-              onFocus!();
-            }
-          },
           onChanged: (value) {
-            if (onchange == null) {
-              () {};
-            } else {
-              return onchange!(value);
-            }
+            onchange!(value);
           }, //=> onchange!(value) ?? (value) {},
+          inputFormatters: filters ?? [],
+          keyboardType: keyboardType,
           cursorColor: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
           controller: textEdigintController,
           maxLines: maxLines ?? 1,
@@ -82,7 +80,10 @@ class CustomInputFormField extends StatelessWidget {
             filled: true,
             fillColor: isDark ? AppColors.PRIMARY_DARK : AppColors.WHITE_COLOR,
             hintText: hintText,
-            hintStyle: Theme.of(context).textTheme.bodyMedium,
+            hintStyle: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: AppColors.TEXT_FIELD_HINT_TEXT),
             border: const OutlineInputBorder(
               borderSide: BorderSide.none,
             ),
@@ -90,8 +91,20 @@ class CustomInputFormField extends StatelessWidget {
                 ? IconButton(
                     onPressed: () => onPressed!(),
                     icon: isObsecure
-                        ? const Icon(Icons.visibility_off_outlined, size: 20.0)
-                        : const Icon(Icons.visibility_outlined, size: 20.0),
+                        ? Icon(
+                            Icons.visibility_off_outlined,
+                            size: 20.0,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.PRIMARY_COLOR,
+                          )
+                        : Icon(
+                            Icons.visibility_outlined,
+                            size: 20.0,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.PRIMARY_COLOR,
+                          ),
                   )
                 : null,
             contentPadding: EdgeInsets.symmetric(
@@ -104,8 +117,9 @@ class CustomInputFormField extends StatelessWidget {
                         colorFilter: isDark
                             ? const ColorFilter.mode(
                                 AppColors.GREY_COLOR, BlendMode.srcIn)
-                            : const ColorFilter.mode(
-                                AppColors.GREY_DARK, BlendMode.srcIn)),
+                            : ColorFilter.mode(
+                                iconColor ?? AppColors.PRIMARY_COLOR,
+                                BlendMode.srcIn)),
                   )
                 : null,
           ),

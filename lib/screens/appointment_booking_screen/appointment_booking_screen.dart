@@ -1,25 +1,41 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:atherium_saloon_app/models/appointment.dart';
 import 'package:atherium_saloon_app/widgets/form_field_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:atherium_saloon_app/screens/appointment_booking_screen/appointment_booking_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
-import 'package:atherium_saloon_app/widgets/button_widget.dart';
+import 'package:atherium_saloon_app/widgets/primary_button.dart';
+import 'package:intl/intl.dart';
 
 import '../../widgets/clean_calendar.dart';
+import '../../widgets/drop_down_item_widget.dart';
 
 class AppointmentBookingScreen extends StatelessWidget {
   final controller = Get.put(AppointMentBookingController());
   AppointmentBookingScreen({
+    this.isEditing = false,
+    this.date = '',
+    this.time = '',
+    this.appointment,
     Key? key,
   }) : super(key: key);
-
+  final bool isEditing;
+  final String date;
+  final String time;
+  final Appointment? appointment;
   @override
   Widget build(BuildContext context) {
+    final previousStatusId = appointment!.statusId;
+    controller.isEditing = isEditing;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    controller.dateString = date;
+    controller.timeString = time;
+    controller.appointment = appointment ?? Appointment();
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -36,9 +52,7 @@ class AppointmentBookingScreen extends StatelessWidget {
             children: [
               InkWell(
                 borderRadius: BorderRadius.circular(25.0),
-                onTap: () {
-                  Get.back();
-                },
+                onTap: controller.back,
                 child: Container(
                   alignment: Alignment.center,
                   width: 25.0,
@@ -48,8 +62,9 @@ class AppointmentBookingScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12.0),
-              Text(AppLanguages.CHOOSE_DATE_AND_TIME,
-                  style: Theme.of(context).textTheme.headlineLarge),
+              Text('choose_date_and_time',
+                      style: Theme.of(context).textTheme.headlineLarge)
+                  .tr(),
             ],
           ),
         ),
@@ -62,18 +77,87 @@ class AppointmentBookingScreen extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      const SizedBox(height: 20.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Calendar(
-                          events: {},
-                          hideTodayIcon: true,
-                          // startOnMonday: true,
-                          onDateSelected: (value) {
-                            controller.args.dateTimestamp =
-                                Timestamp.fromDate(value);
-                          },
-                        ),
+                        child: Obx(() => controller.calenderState.value
+                            ? Calendar(
+                                events: const {},
+                                hideTodayIcon: true,
+                                initialDate:
+                                    controller.args.dateTimestamp != null
+                                        ? controller.args.dateTimestamp.toDate()
+                                        : controller.initialDate.value,
+                                onDateSelected: (value) async {
+                                  controller.args.dateTimestamp =
+                                      Timestamp.fromDate(DateTime(
+                                              value.year,
+                                              value.month,
+                                              value.day,
+                                              0,
+                                              0,
+                                              0,
+                                              0,
+                                              0)
+                                          .toLocal());
+                                  controller.selectedDate.value =
+                                      DateFormat("MM/dd/yyyy").format(
+                                    DateTime(value.year, value.month, value.day,
+                                            0, 0, 0, 0, 0)
+                                        .toLocal(),
+                                  );
+                                  print(controller.args.dateTimestamp.toDate());
+                                  controller.initialDate.value = value;
+                                  controller.calenderState.value =
+                                      !controller.calenderState.value;
+                                  controller.args.date =
+                                      controller.selectedDate.value;
+                                  await controller.loadTimeslots(
+                                      treatments:
+                                          controller.selectedTreatmentsMap,
+                                      appointmentDate:
+                                          controller.selectedDate.value);
+                                },
+                              )
+                            : Calendar(
+                                // ignore: prefer_const_literals_to_create_immutables
+                                events: const {},
+                                hideTodayIcon: true,
+                                initialDate:
+                                    controller.args.dateTimestamp != null
+                                        ? controller.args.dateTimestamp.toDate()
+                                        : controller.initialDate.value,
+                                onDateSelected: (value) async {
+                                  controller.args.dateTimestamp =
+                                      Timestamp.fromDate(DateTime(
+                                              value.year,
+                                              value.month,
+                                              value.day,
+                                              0,
+                                              0,
+                                              0,
+                                              0,
+                                              0)
+                                          .toLocal());
+                                  controller.selectedDate.value =
+                                      DateFormat("MM/dd/yyyy").format(
+                                    DateTime(value.year, value.month, value.day,
+                                            0, 0, 0, 0, 0)
+                                        .toLocal(),
+                                  );
+                                  print(controller.args.dateTimestamp.toDate());
+
+                                  controller.initialDate.value = value;
+                                  controller.calenderState.value =
+                                      !controller.calenderState.value;
+                                  controller.args.date =
+                                      controller.selectedDate.value;
+                                  await controller.loadTimeslots(
+                                      treatments:
+                                          controller.selectedTreatmentsMap,
+                                      appointmentDate:
+                                          controller.selectedDate.value);
+                                },
+                              )),
                       ),
                       const SizedBox(height: 35.0),
                       Container(
@@ -91,7 +175,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 22.0),
                               child: Text(
-                                AppLanguages.AVAILABLE_SLOT,
+                                'available_slot',
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineMedium!
@@ -100,112 +184,197 @@ class AppointmentBookingScreen extends StatelessWidget {
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: .75,
                                     ),
-                              ),
+                              ).tr(),
                             ),
                             const SizedBox(height: 15.0),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 22.0),
-                              child: GridView.builder(
-                                gridDelegate:
-                                    const SliverGridDelegateWithMaxCrossAxisExtent(
-                                        mainAxisExtent: 37.0,
-                                        maxCrossAxisExtent: 110.0,
-                                        crossAxisSpacing: 12.0,
-                                        mainAxisSpacing: 7.0),
-                                itemCount: avaliableSlots.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return Obx(
-                                    () => InkWell(
-                                      onTap: () => controller.selectSlot(index),
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: controller.selectedSlot ==
-                                                  index
-                                              ? AppColors.SECONDARY_LIGHT
-                                              : isDark
-                                                  ? AppColors.BACKGROUND_DARK
-                                                  : AppColors.BACKGROUND_COLOR,
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          border:
-                                              controller.selectedSlot != index
-                                                  ? isDark
-                                                      ? const Border()
-                                                      : Border.all(
-                                                          color: AppColors
-                                                              .SECONDARY_LIGHT,
-                                                        )
-                                                  : Border(),
-                                        ),
-                                        child: Text(
-                                          avaliableSlots[index],
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w500,
-                                            color: controller.selectedSlot ==
-                                                    index
-                                                ? isDark
-                                                    ? AppColors.BACKGROUND_DARK
-                                                    : AppColors.BLACK_COLOR
-                                                : isDark
-                                                    ? AppColors.WHITE_COLOR
-                                                    : AppColors.BLACK_COLOR,
-                                          ),
-                                        ),
+                              child: Obx(
+                                () => controller.isLoading.value == true
+                                    ? SizedBox(
+                                        width: Get.width,
+                                        child: Center(
+                                            child: CircularProgressIndicator(
+                                          color: isDark
+                                              ? AppColors.SECONDARY_COLOR
+                                              : AppColors.GREY_COLOR,
+                                        )))
+                                    : GridView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                                                mainAxisExtent: 37.0,
+                                                maxCrossAxisExtent: 110.0,
+                                                crossAxisSpacing: 12.0,
+                                                mainAxisSpacing: 7.0),
+                                        itemCount:
+                                            controller.avaliableSlots.length,
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) {
+                                          return Obx(
+                                            () => InkWell(
+                                              onTap: () {
+                                                controller.selectSlot(index);
+                                                var startTime = controller
+                                                    .slotdata[index].startTime;
+                                                var endTime = controller
+                                                    .slotdata[index].endTime;
+                                                var roomIdList = controller
+                                                    .slotdata[index].roomIdList;
+                                                controller.args.roomId =
+                                                    roomIdList;
+                                                controller.args.startTime =
+                                                    startTime;
+                                                controller.args.endTime =
+                                                    endTime;
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  // ignore: unrelated_type_equality_checks
+                                                  color: controller
+                                                              .selectedSlot ==
+                                                          index
+                                                      ? AppColors
+                                                          .SECONDARY_LIGHT
+                                                      : isDark
+                                                          ? AppColors
+                                                              .BACKGROUND_DARK
+                                                          : AppColors
+                                                              .BACKGROUND_COLOR,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                  border:
+                                                      // ignore: unrelated_type_equality_checks
+                                                      controller.selectedSlot !=
+                                                              index
+                                                          ? isDark
+                                                              ? const Border()
+                                                              : Border.all(
+                                                                  color: AppColors
+                                                                      .SECONDARY_LIGHT,
+                                                                )
+                                                          : const Border(),
+                                                ),
+                                                child: Text(
+                                                  controller
+                                                      .avaliableSlots[index],
+                                                  style: TextStyle(
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w500,
+                                                    // ignore: unrelated_type_equality_checks
+                                                    color: controller
+                                                                .selectedSlot ==
+                                                            index
+                                                        ? isDark
+                                                            ? AppColors
+                                                                .BACKGROUND_DARK
+                                                            : AppColors
+                                                                .BLACK_COLOR
+                                                        : isDark
+                                                            ? AppColors
+                                                                .WHITE_COLOR
+                                                            : AppColors
+                                                                .BLACK_COLOR,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                    ),
-                                  );
-                                },
                               ),
                             ),
                           ],
                         ),
                       ),
                       Obx(
-                        () => controller.isAdmin.value
-                            ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 22.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                        () => Visibility(
+                          visible: controller.isAdmin.value,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 22.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Note',
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w700,
-                                            color: isDark
-                                                ? AppColors.WHITE_COLOR
-                                                : AppColors.SECONDARY_COLOR,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 14.0),
-                                    CustomInputFormField(
-                                      hintText: 'Some Notes',
-                                      isValid: true,
-                                      onSubmit: () {},
-                                      textEdigintController:
-                                          TextEditingController(),
-                                      paddingSymetric: 16.0,
-                                      paddingVertical: 16.0,
-                                      autoFocus: false,
-                                      maxLines: 15,
-                                      minLInes: 8,
-                                    )
+                                    Text(
+                                      'note',
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w700,
+                                        color: isDark
+                                            ? AppColors.WHITE_COLOR
+                                            : AppColors.SECONDARY_COLOR,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ).tr(),
                                   ],
                                 ),
-                              )
-                            : Container(),
+                                const SizedBox(height: 14.0),
+                                CustomInputFormField(
+                                  hintText: controller.args.notes == null ||
+                                          controller.args.notes == ''
+                                      ? 'Some Notes'
+                                      : controller.args.notes,
+                                  isValid: true,
+                                  onSubmit: () {},
+                                  textEdigintController: controller.notes,
+                                  paddingSymetric: 16.0,
+                                  paddingVertical: 16.0,
+                                  autoFocus: false,
+                                  maxLines: 15,
+                                  minLInes: 8,
+                                  onchange: (value) {
+                                    controller.args.notes = value;
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                      const SizedBox(height: 41.0),
+                      const SizedBox(height: 20.0),
+                      Obx(
+                        () => controller.statusLabels.isNotEmpty &&
+                                controller.isAdmin.value &&
+                                controller.appointmentStatusList.isNotEmpty &&
+                                isEditing
+                            ? Visibility(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  child: DropDownItemsWidget(
+                                    // ignore: invalid_use_of_protected_member
+                                    options: controller.statusLabels.value,
+                                    selected: controller.getStatusLabel(),
+                                    onTap: (selected) {
+                                      var previousStatus = controller
+                                          .appointmentStatusList
+                                          .firstWhere((element) =>
+                                              element.id == previousStatusId);
+                                      controller.previousStatus =
+                                          previousStatus.label ?? '';
+                                      print(previousStatus.label);
+                                      int id = controller.appointmentStatusList
+                                          .indexWhere((status) =>
+                                              status.label!.toLowerCase() ==
+                                              selected!.toLowerCase());
+                                      controller.args.statusId = controller
+                                          .appointmentStatusList[id].id;
+                                      controller.selectedStatus =
+                                          selected ?? '';
+                                    },
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+                      ),
+                      const SizedBox(height: 20.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -213,7 +382,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 22.0),
                             child: Text(
-                              AppLanguages.BEAUTY_SPECIALIST,
+                              'beauty_specialist',
                               textAlign: TextAlign.start,
                               style: Theme.of(context)
                                   .textTheme
@@ -223,7 +392,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: .75,
                                   ),
-                            ),
+                            ).tr(),
                           ),
                         ],
                       ),
@@ -237,8 +406,12 @@ class AppointmentBookingScreen extends StatelessWidget {
                               : controller.employees.length,
                           itemBuilder: (contenxt, index) {
                             if (controller.employees.isEmpty) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  color: isDark
+                                      ? AppColors.SECONDARY_COLOR
+                                      : AppColors.GREY_COLOR,
+                                ),
                               );
                             } else {
                               return Column(
@@ -264,19 +437,43 @@ class AppointmentBookingScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 13.0),
-                child: ButtonWidget(
-                  width: Get.width,
-                  color: isDark
-                      ? AppColors.SECONDARY_LIGHT
-                      : AppColors.PRIMARY_COLOR,
-                  buttonTextColor:
-                      !isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
-                  buttonText: 'Next',
-                  onTap: controller.next,
-                ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 13.0),
+                    child: PrimaryButton(
+                      width: Get.width / 2 - 40,
+                      bordered: true,
+                      borderColor: isDark
+                          ? AppColors.SECONDARY_LIGHT
+                          : AppColors.PRIMARY_COLOR,
+                      buttonTextColor: isDark
+                          ? AppColors.WHITE_COLOR
+                          : AppColors.PRIMARY_COLOR,
+                      buttonText: 'cancel',
+                      onTap: () {
+                        Get.back();
+                        Get.back(result: true);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 13.0),
+                    child: PrimaryButton(
+                      width: Get.width / 2 - 40,
+                      color: isDark
+                          ? AppColors.SECONDARY_LIGHT
+                          : AppColors.PRIMARY_COLOR,
+                      buttonTextColor: !isDark
+                          ? AppColors.WHITE_COLOR
+                          : AppColors.BLACK_COLOR,
+                      buttonText: 'next',
+                      onTap: controller.next,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -336,10 +533,10 @@ Container specialistCard({
             const SizedBox(height: 6.0),
             Text(
               subtitle,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14.0,
                 fontWeight: FontWeight.w500,
-                color: AppColors.GREY_COLOR,
+                color: isDark ? AppColors.GREY_COLOR : AppColors.BLACK_COLOR,
               ),
             ),
           ],

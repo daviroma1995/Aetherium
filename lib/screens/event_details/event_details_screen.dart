@@ -1,4 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, no_leading_underscores_for_local_identifiers, unused_element, avoid_print
+import 'dart:async';
+
 import 'package:atherium_saloon_app/screens/event_details/event_details_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 
@@ -6,7 +8,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../utils/map_utils.dart';
 import '../../widgets/text_row_widget.dart';
 
 class EventDetailsScreen extends StatelessWidget {
@@ -16,6 +20,27 @@ class EventDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final Completer<GoogleMapController> controller0 =
+        Completer<GoogleMapController>();
+
+    CameraPosition kGooglePlex = CameraPosition(
+      target: LatLng(controller.args.latitude, controller.args.longitude),
+      zoom: 20.0,
+    );
+
+    CameraPosition kLake = CameraPosition(
+        bearing: 192.8334901395799,
+        target: LatLng(controller.args.latitude, controller.args.longitude),
+        tilt: 29.440717697143555,
+        zoom: 20.151926040649414);
+    Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+    // ignore: unused_local_variable, prefer_const_constructors
+    LatLng center = LatLng(45.52307386080499, 10.2587832779112);
+    Future<void> _goToTheLake() async {
+      final GoogleMapController controller = await controller0.future;
+      controller.animateCamera(CameraUpdate.newCameraPosition(kLake));
+    }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -84,21 +109,21 @@ class EventDetailsScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Positioned(
-                              top: 9.0,
-                              right: 11.0,
-                              child: Obx(
-                                () => GestureDetector(
-                                  onTap: controller.setFavorite,
-                                  child: Icon(
-                                    controller.isfavorite.value
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: AppColors.WHITE_COLOR,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // Positioned(
+                            //   top: 9.0,
+                            //   right: 11.0,
+                            //   child: Obx(
+                            //     () => GestureDetector(
+                            //       onTap: controller.setFavorite,
+                            //       child: Icon(
+                            //         controller.isfavorite.value
+                            //             ? Icons.favorite
+                            //             : Icons.favorite_border,
+                            //         color: AppColors.WHITE_COLOR,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                         const SizedBox(height: 20.0),
@@ -113,16 +138,18 @@ class EventDetailsScreen extends StatelessWidget {
                                   fontSize: 16.0,
                                   color: isDark
                                       ? AppColors.WHITE_COLOR
-                                      : AppColors.BLACK_COLOR),
+                                      : AppColors.SECONDARY_COLOR),
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 10.0),
                         TextRowWidget(
                           textOne: Get.arguments.dateString,
                           textTwo: 'Online',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,
-                            color: AppColors.GREY_COLOR,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.BLACK_COLOR,
                           ),
                         ),
                         const SizedBox(height: 16.0),
@@ -137,17 +164,19 @@ class EventDetailsScreen extends StatelessWidget {
                                 fontSize: 16.0,
                                 color: isDark
                                     ? AppColors.WHITE_COLOR
-                                    : AppColors.BLACK_COLOR,
+                                    : AppColors.SECONDARY_COLOR,
                               ),
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 10.0),
                         TextRowWidget(
                           textOne: Get.arguments.startTimeString,
                           textTwo: Get.arguments.endTimeString,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,
-                            color: AppColors.GREY_COLOR,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.BLACK_COLOR,
                           ),
                         ),
                         const SizedBox(height: 16.0),
@@ -162,17 +191,19 @@ class EventDetailsScreen extends StatelessWidget {
                                 fontSize: 16.0,
                                 color: isDark
                                     ? AppColors.WHITE_COLOR
-                                    : AppColors.BLACK_COLOR,
+                                    : AppColors.SECONDARY_COLOR,
                               ),
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 10.0),
                         TextRowWidget(
                           textOne: Get.arguments.durationString,
                           textTwo: '',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,
-                            color: AppColors.GREY_COLOR,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.BLACK_COLOR,
                           ),
                         ),
                         const SizedBox(height: 20.0),
@@ -186,7 +217,7 @@ class EventDetailsScreen extends StatelessWidget {
                                 fontSize: 16.0,
                                 color: isDark
                                     ? AppColors.WHITE_COLOR
-                                    : AppColors.BLACK_COLOR,
+                                    : AppColors.SECONDARY_COLOR,
                               ),
                         ),
                         const SizedBox(height: 20.0),
@@ -195,11 +226,35 @@ class EventDetailsScreen extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 16.0,
-                            color: AppColors.GREY_COLOR,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : AppColors.BLACK_COLOR,
                           ),
                         ),
                         const SizedBox(height: 16.0),
-                        Image.asset(AppAssets.MAP_IMAGE),
+                        GestureDetector(
+                          onTap: () {
+                            print('hello');
+                          },
+                          child: SizedBox(
+                            height: 250.0,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: GoogleMap(
+                                onTap: (argument) {
+                                  MapUtils.openMap(
+                                      argument.latitude, argument.longitude);
+                                },
+                                initialCameraPosition: kGooglePlex,
+                                mapType: MapType.hybrid,
+                                onMapCreated: (GoogleMapController controller) {
+                                  controller0.complete(controller);
+                                },
+                                markers: markers.values.toSet(),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

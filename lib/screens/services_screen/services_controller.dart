@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, avoid_function_literals_in_foreach_calls, unnecessary_overrides, avoid_print
+
 import 'dart:async';
 import 'dart:developer';
 
@@ -15,7 +17,12 @@ import '../appointment_booking_screen/appointment_booking_screen.dart';
 
 class ServicesController extends GetxController {
   // late int args;
+  ServicesController({this.uid, this.clientEmail, this.number, int index = 0});
+  bool isChanged = false;
+  bool isEditing = false;
   var args = Get.arguments;
+  String date = '';
+  String time = '';
   var services = <TreatmentCategory>[].obs;
   var subServices = <Treatment>[].obs;
   var selectedServices = <String>[].obs;
@@ -24,17 +31,31 @@ class ServicesController extends GetxController {
   RxString searchedValue = ''.obs;
   var client = Client().obs;
   var list = <String>[];
+  var checkedServices = <Treatment>[].obs;
+  String? uid;
+  String? clientEmail;
+  String? number;
+  int duration = 0;
+  Appointment newAppointment = Appointment();
   // On Init
   @override
   void onInit() async {
-    super.onInit();
-    print(args);
-    services.bindStream(FirebaseServices.treatmentsCategory());
-    subServices.bindStream(FirebaseServices.treatments());
+    var _uid = uid ?? FirebaseServices.cuid;
+    // services.bindStream(FirebaseServices.treatmentsCategory());
+    services.value = await FirebaseServices.getTreatmentCategories();
+    subServices.bindStream(await FirebaseServices.getTreatmentsFiltered(_uid));
     client.bindStream(FirebaseServices.currentUserStream());
-    Timer(Duration(milliseconds: 500), () {
+    if (args.runtimeType != int) {
+      if (args != null && args.id != '') {
+        appointment = args ?? Appointment();
+        list.addAll(args.serviceId);
+      }
+    }
+    print(list);
+    Timer(const Duration(milliseconds: 500), () {
       updateScreen();
     });
+    super.onInit();
   }
 
   void updateScreen() async {
@@ -45,11 +66,11 @@ class ServicesController extends GetxController {
 
   List<String> getServiceTitle(List<Treatment> items, index) {
     var titles = <String>[];
-    items.forEach((element) {
+    for (var element in items) {
       if (services[index].id == element.treatmentCategoryId) {
         titles.add(element.name!);
       }
-    });
+    }
     return titles;
   }
 
@@ -57,7 +78,7 @@ class ServicesController extends GetxController {
     var titles = <String>[];
     items.forEach((element) {
       if (services[index].id == element.treatmentCategoryId) {
-        titles.add(element.price!);
+        titles.add(element.price!.toString());
       }
     });
     return titles;
@@ -67,7 +88,7 @@ class ServicesController extends GetxController {
     var titles = <String>[];
     items.forEach((element) {
       if (services[index].id == element.treatmentCategoryId) {
-        titles.add(element.duration!);
+        titles.add(element.duration!.toString());
       }
     });
     return titles;
@@ -76,7 +97,8 @@ class ServicesController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-
+    subServices.close();
+    client.close();
     // if (args != null && args != 0) {
     //   var current = services[0];
     //   var prev = services[args];
@@ -95,43 +117,45 @@ class ServicesController extends GetxController {
     if (args == null) {
       return;
     } else {
-      for (var serviceId in args.serviceId) {
-        for (var subservice in subServices) {
-          if (serviceId == subservice.id) {
-            treatmentCategoryId.add(subservice.treatmentCategoryId);
-            selectedServices.value.add(subservice.name!);
-          }
-        }
-      }
-      for (var treatementId in treatmentCategoryId) {
-        for (var service in services) {
-          if (service.id == treatementId) {
-            service.isExtended.value = true;
-
-            for (int serviceIndex = 0;
-                serviceIndex < treatmentCategoryId.length;
-                serviceIndex++) {
-              final prevService = services[serviceIndex];
-              final index =
-                  services.indexWhere((element) => element.id == treatementId);
-              final currentService = services[index];
-              final temp = prevService;
-              services[serviceIndex] = currentService;
-              services[serviceIndex].isExtended.value = true;
-              services[index] = temp;
+      try {
+        for (var serviceId in args.serviceId) {
+          for (var subservice in subServices) {
+            if (serviceId == subservice.id) {
+              treatmentCategoryId.add(subservice.treatmentCategoryId);
+              selectedServices.add(subservice.name!);
             }
           }
         }
+        for (var treatementId in treatmentCategoryId) {
+          for (var service in services) {
+            if (service.id == treatementId) {
+              service.isExtended.value = true;
+
+              for (int serviceIndex = 0;
+                  serviceIndex < treatmentCategoryId.length;
+                  serviceIndex++) {
+                final prevService = services[serviceIndex];
+                final index = services
+                    .indexWhere((element) => element.id == treatementId);
+                final currentService = services[index];
+                final temp = prevService;
+                services[serviceIndex] = currentService;
+                services[serviceIndex].isExtended.value = true;
+                services[index] = temp;
+              }
+            }
+          }
+        }
+      } catch (ex) {
+        log(ex.toString());
+        var past = services[args];
+        past.isExtended.value = true;
+        var newData = services[0];
+        var temp = newData;
+        services[0] = past;
+        services[args] = temp;
+        args = null;
       }
-      // if (args != 0) {
-      //   final prevService = services[0];
-      //   final currentService = services[args!];
-      //   final temp = prevService;
-      //   services[0] = currentService;
-      //   services[0].isExtended.value = true;
-      //   services[args!] = temp;
-      //   reset();
-      // }
     }
   }
 
@@ -140,11 +164,6 @@ class ServicesController extends GetxController {
       services[i].isExtended.value = false;
     }
   }
-
-  // void checkBoxController(int index) {
-  //   subServices[index][index].isSelected!.value =
-  //       !subServices[index][index].isSelected!.value;
-  // }
 
   void dropDownController() {
     isExpanded.value = !isExpanded.value;
@@ -156,7 +175,12 @@ class ServicesController extends GetxController {
       print('Empty');
     } else {
       Get.to(
-        () => AppointmentBookingScreen(),
+        () => AppointmentBookingScreen(
+          isEditing: isEditing,
+          date: date,
+          time: time,
+          appointment: newAppointment,
+        ),
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeInQuad,
         transition: Transition.rightToLeft,
@@ -180,52 +204,30 @@ class ServicesController extends GetxController {
     );
   }
 
-  void selectedServiceController(int serviceIndex, int subServiceIndex) {
-    // if (selectedServices
-    //     .where((element) =>
-    //         element.title ==
-    //         (services[serviceIndex].items[subServiceIndex].title))
-    //     .isEmpty) {
-    //   selectedServices.add(services[serviceIndex].items[subServiceIndex]);
-    // } else {
-    //   selectedServices.removeWhere((element) =>
-    //       element.title == services[serviceIndex].items[subServiceIndex].title);
-    // }
-    print(serviceIndex);
-    print(subServiceIndex);
+  void selectedServiceController(int serviceIndex, int subServiceIndex) async {
+    isChanged = true;
     var listOfSubServices = subServices
         .where((subService) =>
             subService.treatmentCategoryId == services[serviceIndex].id)
         .toList();
     if (list.isEmpty) {
       list.add(listOfSubServices[subServiceIndex].id!);
+
+      duration += int.parse(listOfSubServices[subServiceIndex].duration!);
+      print(checkedServices);
     } else {
       if (list.contains(listOfSubServices[subServiceIndex].id!)) {
         list.removeWhere(
             (element) => element == listOfSubServices[subServiceIndex].id!);
+
+        duration -= int.parse(listOfSubServices[subServiceIndex].duration!);
+        print(checkedServices);
       } else {
         list.add(listOfSubServices[subServiceIndex].id!);
+        duration += int.parse(listOfSubServices[subServiceIndex].duration!);
+        print(checkedServices);
       }
     }
-    // selectedServices.forEach((service) {
-    //   subServices.forEach((subService) {
-    //     if (subService.name == service) {
-    //       list.isEmpty
-    //           ? list.add(subService.id!)
-    //           : {
-    //               list.forEach((id) {
-    //                 if (id == subService.id) {
-    //                   log('Equal');
-    //                   list.removeWhere((element) => element == subService.id);
-    //                 } else {
-    //                   list.add(subService.id!);
-    //                 }
-
-    //               })
-    //             };
-    //     }
-    //   });
-    // });
 
     if (args != null) {
       list = args.serviceId;
@@ -244,10 +246,11 @@ class ServicesController extends GetxController {
       args = null;
     } else {
       appointment.serviceId = list;
-      appointment.clientId = LoginController.instance.user.uid;
-      appointment.email = client.value.email;
-      appointment.number = client.value.phoneNumber;
+      appointment.clientId = uid ?? FirebaseServices.cuid;
+      appointment.email = clientEmail ?? client.value.email;
+      appointment.number = number ?? client.value.phoneNumber;
       appointment.employeeId = ['8f1cYZExVjeOo2sBDmQC'];
+      appointment.duration = duration;
     }
   }
 
@@ -256,30 +259,3 @@ class ServicesController extends GetxController {
     searchedValue.value = search.text;
   }
 }
-
-// final selectedServices = <SubService>[];
-
-// class SubService {
-//   final String title;
-//   final RxBool? isSelected;
-//   final double price;
-//   final String time;
-//   SubService({
-//     required this.title,
-//     this.isSelected,
-//     required this.price,
-//     required this.time,
-//   });
-// }
-
-// class Service {
-//   final String title;
-//   final List<SubService> items;
-//   final RxBool isExtended;
-
-//   Service({
-//     required this.title,
-//     required this.items,
-//     required this.isExtended,
-//   });
-// }

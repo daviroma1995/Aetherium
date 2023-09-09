@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -7,7 +8,7 @@ import 'package:atherium_saloon_app/screens/appointment_confirm_detail_screen/ap
 
 import '../../models/treatment.dart';
 import '../../utils/constants.dart';
-import '../../widgets/button_widget.dart';
+import '../../widgets/primary_button.dart';
 import '../../widgets/text_row_widget.dart';
 import '../home_screen/home_screen_controller.dart';
 
@@ -19,13 +20,20 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
     required this.isDetail,
     required this.isEditable,
     required this.services,
+    this.selectedStatus,
+    this.previousStatus,
   }) : super(key: key);
   final bool isDetail;
   final bool isEditable;
   final List<Treatment> services;
+  final String? selectedStatus;
+  final String? previousStatus;
+
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
+    controller.selectedStatus = selectedStatus ?? '';
+    controller.previousStatus = previousStatus ?? '';
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -52,12 +60,12 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
             const SizedBox(width: 12.0),
             Expanded(
               child: Text(
-                AppLanguages.APPOINTMENTCONFERMA,
+                'confirm_appointment',
                 style: Theme.of(context)
                     .textTheme
                     .headlineLarge!
                     .copyWith(fontSize: Get.width * .055),
-              ),
+              ).tr(),
             ),
           ],
         ),
@@ -97,8 +105,8 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextRowWidget(
-                                  textOne: 'Date: ',
-                                  textTwo: 'Time: ',
+                                  textOne: '${tr('date')}:',
+                                  textTwo: '${tr('time')}:',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium!
@@ -109,7 +117,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR),
                                 ),
-                                const SizedBox(height: 20.0),
+                                const SizedBox(height: 10.0),
                                 TextRowWidget(
                                   textOne: controller.args.dateString ??
                                       'Date Here ido',
@@ -124,8 +132,8 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 16.0),
                                 TextRowWidget(
-                                  textOne: 'Number',
-                                  textTwo: 'Email',
+                                  textOne: '${tr('number')}:',
+                                  textTwo: '${tr('email')}:',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium!
@@ -136,7 +144,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                               ? AppColors.WHITE_COLOR
                                               : AppColors.SECONDARY_COLOR),
                                 ),
-                                const SizedBox(height: 20.0),
+                                const SizedBox(height: 10.0),
                                 TextRowWidget(
                                   textOne: controller.args.number,
                                   textTwo: controller.args.email,
@@ -153,7 +161,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Services Details',
+                                      '${tr('service_details')}:',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineMedium!
@@ -164,7 +172,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                                   ? AppColors.WHITE_COLOR
                                                   : AppColors.SECONDARY_COLOR),
                                     ),
-                                    const SizedBox(height: 20.0),
+                                    const SizedBox(height: 10.0),
                                     ListView.builder(
                                       shrinkWrap: true,
                                       physics:
@@ -173,9 +181,14 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                       itemBuilder: (context, index) {
                                         return Obx(
                                           () => controller.allTreatments.isEmpty
-                                              ? const Center(
+                                              ? Center(
                                                   child:
-                                                      CircularProgressIndicator(),
+                                                      CircularProgressIndicator(
+                                                    color: isDark
+                                                        ? AppColors
+                                                            .SECONDARY_COLOR
+                                                        : AppColors.GREY_COLOR,
+                                                  ),
                                                 )
                                               : Column(
                                                   children: [
@@ -184,17 +197,20 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                                           MainAxisAlignment
                                                               .spaceBetween,
                                                       children: [
-                                                        Text(
-                                                          '${services[index].name} - ${services[index].duration} Min',
-                                                          style: TextStyle(
-                                                            fontSize: 14.0,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color: isDark
-                                                                ? AppColors
-                                                                    .GREY_COLOR
-                                                                : AppColors
-                                                                    .BLACK_COLOR,
+                                                        Expanded(
+                                                          child: Text(
+                                                            '${services[index].name} - ${services[index].duration} Min',
+                                                            style: TextStyle(
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color: isDark
+                                                                  ? AppColors
+                                                                      .GREY_COLOR
+                                                                  : AppColors
+                                                                      .BLACK_COLOR,
+                                                            ),
                                                           ),
                                                         ),
                                                         Text(
@@ -223,26 +239,33 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text('Total'),
+                                        const Text(
+                                          'Total',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                         GetBuilder<
                                             AppointmentConfirmDetailController>(
                                           builder: (controller) {
                                             return Text(
-                                                '${controller.getTotalPrice(services)} \$');
+                                              '${controller.getTotalPrice(services)} \$',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            );
                                           },
                                         )
                                       ],
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 20.0),
+                                const SizedBox(height: 40.0),
                                 if (controller.args.employeeId != null)
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Beauty Specialist:',
+                                        '${tr('beauty_specialist')}:',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineMedium!
@@ -256,26 +279,26 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 20.0),
                                       ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount:
-                                              controller.args.employeeId.length,
-                                          itemBuilder: (context, index) {
-                                            return specialistCard(
-                                              title: homecontroller
-                                                  .getEmployeeName(controller
-                                                          .args
-                                                          .employeeId[index] ??
-                                                      '8f1cYZExVjeOo2sBDmQC'),
-                                              imageUrl: AppAssets.USER_IMAGE,
-                                              subtitle: 'Fragrances & Perfumes',
-                                              isDark: isDark,
-                                            );
-                                          }),
+                                        shrinkWrap: true,
+                                        itemCount:
+                                            controller.args.employeeId.length,
+                                        itemBuilder: (context, index) {
+                                          return specialistCard(
+                                            title: homecontroller
+                                                .getEmployeeName(controller.args
+                                                        .employeeId[index] ??
+                                                    '8f1cYZExVjeOo2sBDmQC'),
+                                            imageUrl: AppAssets.USER_IMAGE,
+                                            subtitle: 'Fragrances & Perfumes',
+                                            isDark: isDark,
+                                          );
+                                        },
+                                      ),
                                     ],
                                   ),
                                 const SizedBox(height: 20.0),
                                 Text(
-                                  AppLanguages.NOTES,
+                                  '${tr('note')}:',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium!
@@ -288,7 +311,10 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 20.0),
                                 Text(
-                                  controller.args.notes ?? 'No Notes Added',
+                                  controller.args.notes == null ||
+                                          controller.args.notes == ''
+                                      ? 'No Notes Added'
+                                      : controller.args.notes,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16.0,
@@ -307,9 +333,9 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              ButtonWidget(
+                              PrimaryButton(
                                 width: Get.width - 56,
-                                buttonText: 'Confirm',
+                                buttonText: 'confirm',
                                 buttonTextColor: isDark
                                     ? AppColors.BLACK_COLOR
                                     : AppColors.WHITE_COLOR,
@@ -345,6 +371,7 @@ Container specialistCard({
   return Container(
     height: 82.0,
     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
+    margin: const EdgeInsets.only(bottom: 10.0),
     decoration: BoxDecoration(
       color: isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
       border: isDark

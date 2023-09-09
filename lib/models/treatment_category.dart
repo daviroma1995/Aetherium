@@ -3,21 +3,24 @@ import 'package:get/get.dart';
 class TreatmentCategory {
   String? id;
   String? name;
-  String? description;
+  String? iconUrl;
+  String? darkIconUrl;
   RxBool isExtended = false.obs;
-  TreatmentCategory({this.id, this.name, this.description});
+  TreatmentCategory({this.id, this.name, this.iconUrl});
 
   TreatmentCategory.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    description = json['description'];
+    iconUrl = json['icon'];
+    darkIconUrl = json['dark_icon'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['description'] = this.description;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['icon'] = iconUrl;
+    data['dark_icon'] = darkIconUrl;
     return data;
   }
 }

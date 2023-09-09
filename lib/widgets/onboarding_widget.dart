@@ -1,4 +1,5 @@
 import 'package:atherium_saloon_app/utils/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -45,7 +46,7 @@ class OnBoardingPageWidget extends StatelessWidget {
                     fontSize: 18.0,
                     color: AppColors.BACKGROUND_COLOR,
                   ),
-                ),
+                ).tr(),
                 const SizedBox(height: 5.0),
                 Text(
                   description,
@@ -54,7 +55,7 @@ class OnBoardingPageWidget extends StatelessWidget {
                     color: AppColors.GREY_COLOR,
                     fontSize: 16.0,
                   ),
-                ),
+                ).tr(),
               ],
             ),
           ),

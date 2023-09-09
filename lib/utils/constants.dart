@@ -1,6 +1,31 @@
 // ignore_for_file: constant_identifier_names
+import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
+
+import '../models/language_model.dart';
+
+class AppConstants {
+  // Localiztion data
+
+  static const String countryCode = 'country_code';
+  static const String languageCode = 'language_code';
+
+  static List<LanguageModel> languages = [
+    LanguageModel(
+      imageUrl: 'en_img',
+      languageName: 'English',
+      languageCode: 'en',
+      countryCode: 'US',
+    ),
+    LanguageModel(
+      imageUrl: 'pk_img',
+      languageName: 'Urdu',
+      languageCode: 'ur',
+      countryCode: 'Pk',
+    )
+  ];
+}
 
 class AppColors {
   static const PRIMARY_COLOR = Color(0XFF43231B);
@@ -27,6 +52,7 @@ class AppColors {
   static const PROGRESS_COLOR = Color(0XFFB8A27B);
   static const CARD_COLOR = Color(0XFFFDF9F8);
   static const SHADOW_COLOR = Color.fromRGBO(186, 186, 186, .25);
+  static const TEXT_FIELD_HINT_TEXT = Color(0xff939393);
 
   static const GREEN_COLOR = Color(0xff57CE63);
 }
@@ -68,6 +94,7 @@ class AppAssets {
   static const PROFILE_IMAGE_TWO = 'assets/images/png/profile_image_2.png';
   static const CLOCK_ICON = 'assets/images/icons/clock_icon.svg';
   static const CALANDER_ICON = 'assets/images/icons/calender_icon.svg';
+  static const CALANDER_ICON_BUTTON = 'assets/images/icons/calender_button.svg';
   static const PLUS_ICON = 'assets/images/icons/plus_icon.svg';
   static const HOME_ICON = 'assets/images/icons/home.svg';
   static const HOME_ICON_SOLID = 'assets/images/icons/home_solid.svg';
@@ -86,6 +113,7 @@ class AppAssets {
   static const CONSULTATIONS_ICON = 'assets/images/icons/clipboard.svg';
 
   static const PROFILE_INFO_ICON = 'assets/images/icons/info.svg';
+  static const USER_PLUS = 'assets/images/icons/user_plus.svg';
 
   static const EVENT_IMAGE_ONE =
       'https://images.unsplash.com/photo-1605497788044-5a32c7078486?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80';
@@ -128,11 +156,15 @@ class AppAssets {
   static const DARK_CONFIRM_ICON = 'assets/images/icons/dark_confirm_icon.svg';
   static const INFO_ICON = 'assets/images/icons/info.svg';
   static const THEME_MODE = 'assets/images/icons/theme_mode.svg';
+  static const PLUSS_BTN = 'assets/images/icons/add_btn.svg';
+  static const CROSS_BTN = 'assets/images/icons/x-circle.svg';
+  static const SCAN_ICON = 'assets/images/icons/scan_icon.svg';
 }
 
 class AppLanguages {
   static const THEME = 'Change Theme';
   static const NEXT = 'Next';
+  static const SCAN = 'Scan';
   static const APP_NAME = 'Aetherium Saloon';
   static const WELCOME_TO = 'Welcome to';
   static const AETHERIUM = 'AETHERIUM';
@@ -170,10 +202,12 @@ class AppLanguages {
   static const MY_APPOINTMENTS = 'My Appointments';
   static const UPCOMING_APPOINTMENTS = 'Upcoming Appointments';
 
+  static const NEWCLIENT = 'Nuovo Cliente';
+  static const CLIENT_DETAILS = 'Dettaglio Cliente';
   static const SETTINGS = 'Settings';
   static const CONSULTATIONS = 'Consultations';
-  static const NOTIFICATIONS = 'Notifications';
-  static const NOTIFICATION_SETTINGS = 'Notification Settings';
+  static const NOTIFICATIONS = 'Notifiche';
+  static const NOTIFICATION_SETTINGS = 'Notification';
 
   static const ACCOUNT_INFO_DETAIL = 'My Information';
   static const LOGOUT = 'Logout';
@@ -188,23 +222,28 @@ class AppLanguages {
   static const APPOINTMENTS = 'Appointments';
   static const APPOINTMENT_DESCRIPTION =
       'Discover and book beauty & wellness professionals near you. Your scheduled appointments will show up here.';
-  static const SERVICES_TREATMENTS = 'Services/treatments';
+  static const EMPTY_AGENDA_MESSAGE =
+      'Clicca sul bottone in basso a destra pereffettuare una nuova prenotazione. Per qualsiasi dubbio o domanda, contattaci pure tramite mail o WhatsApp, puoi trovare tutte le informazioni nella sezione contatti, andando sul tuo profilo utente.';
+  static const SERVICES_TREATMENTS = 'Services/Treatments';
   static const CHOOSE_DATE_AND_TIME = 'Choose Date & Time';
   static const AVAILABLE_SLOT = 'Available Slot';
   static const ADDED_APPOINTMENT = 'Added Appointment';
   static const CONFIRM_APPOINTMENT = 'Confirm Appointment';
-  static const CONGRATS = 'Congrats!';
+  static const CONGRATS = 'Congratulazioni!';
 
   static const YOUR_APPOINTMENT = 'Your appointment';
+  static const CLIENT_CREATION_MESSAGE_I = 'Il tuo cliente è stato creato,';
+  static const CLIENT_CREATION_MESSAGE_II = ' complimenti!';
+
   static const BOOKING_IS_SUCCESSFULLY = 'booking is successfully!';
 
-  static const APPOINTMENT_DETAILS = 'Appointments - Details';
+  static const APPOINTMENT_DETAILS = 'Appointlments - Details';
   static const SERVICE_TREATMENT_DURATION = 'Service/Treatment Duration';
   static const SERVICE_TREATMENT_CATEGORY = 'Service Treatment Category';
   static const PRICE = 'Price';
   static const TOTAL_PRICE = 'Total Price';
   static const SHOP_PHONE = 'shop Ph';
-  static const NOTES = 'Notes:';
+  static const NOTES = 'Note:';
   static const APPOINTMENT_DETAILS_DESC =
       'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit.';
   static const CANCEL = 'Cancel';
@@ -217,6 +256,8 @@ class AppLanguages {
   static const BEAUTY_SPECIALIST = 'Beauty Specialist';
   static const AppuntamentoDettagli = 'Appuntamento - Dettagli';
   static const APPOINTMENTCONFERMA = 'Appuntamento - Conferma';
+  static const SELECT_CLIENT = 'Seleziona Cliente';
+  static const INCREASE_TOTAL_DURATION = 'Increase Total Duration By';
 }
 
 class AppTextStyle {
@@ -230,4 +271,13 @@ class AppTextStyle {
     fontWeight: FontWeight.w800,
     color: AppColors.BLACK_COLOR,
   );
+}
+
+class Secret {
+  static const ANDROID_CLIENT_ID =
+      "216835986009-qs954okm7fe307m5b373i0p88m8eh3bq.apps.googleusercontent.com";
+  static const IOS_CLIENT_ID =
+      "216835986009-tg5lod101ur4fkoj3jted3v63krjgsl5.apps.googleusercontent.com";
+  static String getId() =>
+      Platform.isAndroid ? Secret.ANDROID_CLIENT_ID : Secret.IOS_CLIENT_ID;
 }

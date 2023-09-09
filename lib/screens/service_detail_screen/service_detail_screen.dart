@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_string_interpolations
 import 'package:atherium_saloon_app/screens/service_detail_screen/service_detail_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +42,10 @@ class ServiceDetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12.0),
-            Text(treatmentData.name!,
-                style: Theme.of(context).textTheme.headlineLarge),
+            Expanded(
+              child: Text(treatmentData.name!,
+                  style: Theme.of(context).textTheme.headlineLarge),
+            ),
           ],
         ),
       ),
@@ -87,7 +89,7 @@ class ServiceDetailScreen extends StatelessWidget {
                         TextRowWidget(
                           textOne: '${treatmentData.duration!} min',
                           textTwo: '${treatmentData.price}€',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,
                             color: AppColors.GREY_COLOR,
@@ -106,7 +108,7 @@ class ServiceDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20.0),
                         Text(
-                          '${treatmentData.desc ?? 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.'}',
+                          '${treatmentData.desc}',
                           style: const TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 16.0,

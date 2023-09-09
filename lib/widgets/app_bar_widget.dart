@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../utils/constants.dart';
 
-class AppBarCustom extends StatelessWidget with PreferredSizeWidget {
+class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
   final Function onTap;
   final String title;
   const AppBarCustom({
@@ -26,7 +26,8 @@ class AppBarCustom extends StatelessWidget with PreferredSizeWidget {
               child: SvgPicture.asset(AppAssets.BACK_ARROW),
             ),
             const SizedBox(width: 15.0),
-            Text(title, style: Theme.of(context).textTheme.headlineLarge),
+            Expanded(child: Text(title,overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineLarge),
+            ),
           ],
         ),
       ),
@@ -34,6 +35,5 @@ class AppBarCustom extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
-  Size get preferredSize => Size(double.infinity, 50.0);
+  Size get preferredSize => const Size(double.infinity, 50.0);
 }
