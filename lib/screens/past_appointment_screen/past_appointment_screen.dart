@@ -23,7 +23,7 @@ class PastAppointmentScreen extends StatelessWidget {
       child: Obx(
         () => Column(
           children: [
-            controller.pastAppointments.isEmpty
+            controller.pastAppointments.isEmpty && controller.isInititalized.value == true
                 ? SizedBox(
                     height: Get.height - 250.0,
                     width: Get.width,
@@ -66,24 +66,19 @@ class PastAppointmentScreen extends StatelessWidget {
                               return index == controller.pastAppointments.length
                                   ? const SizedBox(height: 72.0)
                                   : Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 10.0),
+                                      padding: const EdgeInsets.only(bottom: 10.0),
                                       child: InkWell(
-                                        onTap: () =>
-                                            controller.goToDetails(index),
+                                        onTap: () => controller.goToDetails(index),
                                         onLongPress: () {
                                           showDialog(
                                               context: context,
                                               builder: (context) {
                                                 var yesButton = PrimaryButton(
-                                                    color:
-                                                        AppColors.ERROR_COLOR,
+                                                    color: AppColors.ERROR_COLOR,
                                                     width: 60,
                                                     buttonText: 'Yes',
                                                     onTap: () async {
-                                                      await controller
-                                                          .deleteAppointment(
-                                                              index);
+                                                      await controller.deleteAppointment(index);
                                                       // ignore: use_build_context_synchronously
                                                       Get.back();
                                                       controller.loadData();
@@ -96,14 +91,9 @@ class PastAppointmentScreen extends StatelessWidget {
                                                 );
                                                 return AlertDialog(
                                                   alignment: Alignment.center,
-                                                  title: const Text(
-                                                      'Are you sure?'),
-                                                  content: const Text(
-                                                      'Appointment will be deleted permanently'),
-                                                  actions: [
-                                                    yesButton,
-                                                    noButton
-                                                  ],
+                                                  title: const Text('Are you sure?'),
+                                                  content: const Text('Appointment will be deleted permanently'),
+                                                  actions: [yesButton, noButton],
                                                 );
                                               });
                                         },
@@ -114,25 +104,21 @@ class PastAppointmentScreen extends StatelessWidget {
                                               : '${controller.employees[0].name}',
                                           subTitle:
                                               '${controller.listOfTreatmentCategory[index].name} - ${controller.services[index].name!}',
-                                          color: controller.getColor(controller
-                                              .appointmentStatus[index].label!),
-                                          status: controller
-                                              .appointmentStatus[index].label,
-                                          date: controller
-                                              .pastAppointments[index]
-                                              .dateWithMonthName,
-                                          time: controller
-                                              .pastAppointments[index].time!,
+                                          color: controller.getColor(controller.appointmentStatus[index].label!),
+                                          status: controller.appointmentStatus[index].label,
+                                          date: controller.pastAppointments[index].dateWithMonthName,
+                                          time: controller.pastAppointments[index].time!,
                                         ),
                                       ),
                                     );
                             },
                           )
-                        : Center(
-                            child: CircularProgressIndicator(
-                              color: isDark
-                                  ? AppColors.SECONDARY_COLOR
-                                  : AppColors.GREY_COLOR,
+                        : SizedBox(
+                            height: Get.height / 1.5,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: isDark ? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
+                              ),
                             ),
                           ),
                   ),

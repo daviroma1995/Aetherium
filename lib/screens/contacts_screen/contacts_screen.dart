@@ -66,8 +66,8 @@ class ContactsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12.0),
-            Text(AppLanguages.CONTACTS,
-                style: Theme.of(context).textTheme.headlineLarge),
+            Text('contacts', style: Theme.of(context).textTheme.headlineLarge)
+                .tr(),
           ],
         ),
       ),
@@ -230,8 +230,8 @@ class ContactsScreen extends StatelessWidget {
                                         children: [
                                           openingHours(
                                               isDark: isDark,
-                                              day: controller.shopinfo.value
-                                                  .openingHours![index].day!,
+                                              day: tr(controller.shopinfo.value
+                                                  .openingHours![index].day!),
                                               from: controller
                                                   .shopinfo
                                                   .value

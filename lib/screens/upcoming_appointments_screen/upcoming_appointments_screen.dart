@@ -22,7 +22,7 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Obx(() => controller.upcommingAppointments.isEmpty
+          child: Obx(() => controller.upcommingAppointments.isEmpty && controller.isLoading.value == false
               ? Column(
                   children: [
                     Container(
@@ -35,24 +35,19 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                         children: [
                           SvgPicture.asset(
                             AppAssets.CALENDER_ICON_LIGHT,
-                            colorFilter: const ColorFilter.mode(
-                                AppColors.BORDER_COLOR, BlendMode.srcIn),
+                            colorFilter: const ColorFilter.mode(AppColors.BORDER_COLOR, BlendMode.srcIn),
                           ),
                           const SizedBox(height: 48.0),
                           Text(
                             'scheduled_appointments',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .copyWith(
+                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w700,
                                 ),
                           ).tr(),
                           const SizedBox(height: 10.0),
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 22.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 22.0),
                             child: const Text(
                               'appointment_description',
                               textAlign: TextAlign.center,
@@ -72,11 +67,10 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
               : Obx(
                   () => controller.isLoading.isTrue
                       ? SizedBox(
+                          height: Get.height / 1.5,
                           child: Center(
                             child: CircularProgressIndicator(
-                              color: isDark
-                                  ? AppColors.SECONDARY_COLOR
-                                  : AppColors.GREY_COLOR,
+                              color: isDark ? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
                             ),
                           ),
                         )
@@ -86,31 +80,23 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 physics: const BouncingScrollPhysics(),
-                                itemCount:
-                                    controller.upcommingAppointments.length + 1,
+                                itemCount: controller.upcommingAppointments.length + 1,
                                 itemBuilder: (context, index) {
-                                  return index ==
-                                          controller
-                                              .upcommingAppointments.length
+                                  return index == controller.upcommingAppointments.length
                                       ? const SizedBox(height: 94.0)
                                       : Column(
                                           children: [
                                             InkWell(
                                               onTap: () {
                                                 Get.to(
-                                                  () =>
-                                                      AppointmentDetailsScreen(
-                                                    appointment: controller
-                                                            .upcommingAppointments[
-                                                        index],
+                                                  () => AppointmentDetailsScreen(
+                                                    appointment: controller.upcommingAppointments[index],
                                                     isDetail: true,
                                                     isEditable: true,
                                                     isAdmin: controller.isAdmin,
                                                   ),
-                                                  duration: const Duration(
-                                                      milliseconds: 300),
-                                                  transition:
-                                                      Transition.rightToLeft,
+                                                  duration: const Duration(milliseconds: 300),
+                                                  transition: Transition.rightToLeft,
                                                   curve: Curves.linear,
                                                 );
                                               },
@@ -118,67 +104,42 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                                                 showDialog(
                                                     context: context,
                                                     builder: (context) {
-                                                      var yesButton =
-                                                          PrimaryButton(
-                                                              color: AppColors
-                                                                  .ERROR_COLOR,
-                                                              width: 60,
-                                                              buttonText: 'Yes',
-                                                              onTap: () async {
-                                                                log('Pressed');
-                                                                await controller
-                                                                    .deleteAppointment(
-                                                                        index);
-                                                                // ignore: use_build_context_synchronously
-                                                                Get.back();
-                                                                await controller
-                                                                    .loadData();
-                                                              });
+                                                      var yesButton = PrimaryButton(
+                                                          color: AppColors.ERROR_COLOR,
+                                                          width: 60,
+                                                          buttonText: 'Yes',
+                                                          onTap: () async {
+                                                            log('Pressed');
+                                                            await controller.deleteAppointment(index);
+                                                            // ignore: use_build_context_synchronously
+                                                            Get.back();
+                                                            await controller.loadData();
+                                                          });
                                                       var noButton = TextButton(
                                                         onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
+                                                          Navigator.of(context).pop();
                                                         },
                                                         child: const Text('No'),
                                                       );
                                                       return AlertDialog(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        title: const Text(
-                                                            'Are you sure?'),
-                                                        content: const Text(
-                                                            'Appointment will be deleted permanently'),
-                                                        actions: [
-                                                          yesButton,
-                                                          noButton
-                                                        ],
+                                                        alignment: Alignment.center,
+                                                        title: const Text('Are you sure?'),
+                                                        content: const Text('Appointment will be deleted permanently'),
+                                                        actions: [yesButton, noButton],
                                                       );
                                                     });
                                               },
                                               child: AppointmentsCardWidget(
-                                                imageUrl:
-                                                    AppAssets.EVENT_IMAGE_ONE,
+                                                imageUrl: AppAssets.EVENT_IMAGE_ONE,
                                                 title: controller.isAdmin
                                                     ? '${controller.listOfClients[index].firstName.toString().capitalize} - ${controller.listOfClients[index].lastName.toString().capitalize}'
-                                                    : controller
-                                                        .employeesData[index]
-                                                        .name!,
+                                                    : controller.employeesData[index].name!,
                                                 subTitle:
                                                     '${controller.listOfTreatmentCategory[index].name} - ${controller.services[index].name!}',
-                                                color: controller.getColor(
-                                                    controller
-                                                        .status[index].label!),
-                                                status: controller
-                                                    .status[index].label,
-                                                date: controller
-                                                    .upcommingAppointments[
-                                                        index]
-                                                    .dateWithMonthName,
-                                                time: controller
-                                                        .upcommingAppointments[
-                                                            index]
-                                                        .time ??
-                                                    'Nill',
+                                                color: controller.getColor(controller.status[index].label!),
+                                                status: controller.status[index].label,
+                                                date: controller.upcommingAppointments[index].dateWithMonthName,
+                                                time: controller.upcommingAppointments[index].time ?? 'Nill',
                                               ),
                                             ),
                                             const SizedBox(height: 10.0),

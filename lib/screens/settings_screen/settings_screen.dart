@@ -20,8 +20,7 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor:
-            isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+        backgroundColor: isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
         elevation: 0.0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -34,8 +33,7 @@ class SettingsScreen extends StatelessWidget {
                 alignment: Alignment.center,
                 width: 25.0,
                 height: 25.0,
-                child: SvgPicture.asset(AppAssets.BACK_ARROW,
-                    height: 14.0, width: 14.0),
+                child: SvgPicture.asset(AppAssets.BACK_ARROW, height: 14.0, width: 14.0),
               ),
             ),
             const SizedBox(width: 12.0),
@@ -51,16 +49,14 @@ class SettingsScreen extends StatelessWidget {
               SizedBox(
                 width: Get.width,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 22.0, vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 10.0),
                   child: Column(
                     children: settingsItems.map(
                       (e) {
                         int index = settingsItems.indexOf(e);
                         return Padding(
                           padding: EdgeInsets.only(
-                            bottom:
-                                index != settingsItems.length - 1 ? 10.0 : 0.0,
+                            bottom: index != settingsItems.length - 1 ? 10.0 : 0.0,
                           ),
                           child: CustomListTIle(
                               index: index,
@@ -98,9 +94,7 @@ class SettingsScreen extends StatelessWidget {
                               color: AppColors.BORDER_COLOR,
                             ),
                       borderRadius: BorderRadius.circular(8.0),
-                      color: isDark
-                          ? AppColors.PRIMARY_DARK
-                          : AppColors.BACKGROUND_COLOR,
+                      color: isDark ? AppColors.PRIMARY_DARK : AppColors.BACKGROUND_COLOR,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,35 +108,28 @@ class SettingsScreen extends StatelessWidget {
                                 height: 50.0,
                                 width: 50.0,
                                 decoration: BoxDecoration(
-                                  color: isDark
-                                      ? AppColors.SECONDARY_LIGHT
-                                      : AppColors.SECONDARY_COLOR,
+                                  color: isDark ? AppColors.SECONDARY_LIGHT : AppColors.SECONDARY_COLOR,
                                 ),
                                 child: SvgPicture.asset(
                                   AppAssets.THEME_MODE,
                                   width: 30.0,
-                                  colorFilter: ColorFilter.mode(
-                                      isDark
-                                          ? AppColors.BLACK_COLOR
-                                          : AppColors.WHITE_COLOR,
-                                      BlendMode.srcIn),
+                                  colorFilter:
+                                      ColorFilter.mode(isDark ? AppColors.BLACK_COLOR : AppColors.WHITE_COLOR, BlendMode.srcIn),
                                 ),
                               ),
                             ),
                             const SizedBox(width: 20),
-                            const Text(
-                              'change_theme',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ).tr()
+                            Text('change_theme',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium!
+                                        .copyWith(fontSize: 16.0, fontWeight: FontWeight.w700))
+                                .tr()
                           ],
                         ),
                         SvgPicture.asset(
                           AppAssets.RIGHT_ARROW,
-                          colorFilter: const ColorFilter.mode(
-                              AppColors.GREY_COLOR, BlendMode.srcIn),
+                          colorFilter: const ColorFilter.mode(AppColors.GREY_COLOR, BlendMode.srcIn),
                         )
                       ],
                     ),

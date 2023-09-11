@@ -180,5 +180,14 @@
     "system_default":"System Default",
     "dark_theme":"Dark Theme",
     "light_theme":"Light Theme",
-    "apply":"Apply"
+    "apply":"Apply",
+    "some_notes":"Some nots",
+    "fragrances_and_perfumes":"Fragrances & Perfumes", 
+    "duration_increased":"Duration increased by",
+    "duration": "duration",
+    "duration_empty": "The Duration field is empty",
+    "location":"Location",
+    "start_time":"Start Time",
+    "end_time":"End Time"
+    
 }

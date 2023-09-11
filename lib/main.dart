@@ -39,9 +39,7 @@ class MyApp extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: context.isDarkMode
-            ? AppColors.BACKGROUND_COLOR
-            : AppColors.BACKGROUND_DARK,
+        statusBarColor: context.isDarkMode ? AppColors.BACKGROUND_COLOR : AppColors.BACKGROUND_DARK,
         statusBarIconBrightness: isDark ? Brightness.dark : Brightness.light,
       ),
     );

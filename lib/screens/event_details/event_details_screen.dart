@@ -5,6 +5,7 @@ import 'package:atherium_saloon_app/screens/event_details/event_details_controll
 import 'package:atherium_saloon_app/utils/constants.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -128,8 +129,8 @@ class EventDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20.0),
                         TextRowWidget(
-                          textOne: 'Date:',
-                          textTwo: 'Location:',
+                          textOne: '${tr('date')}:',
+                          textTwo: '${tr('location')}:',
                           style: Theme.of(context)
                               .textTheme
                               .displayMedium!
@@ -154,8 +155,8 @@ class EventDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 16.0),
                         TextRowWidget(
-                          textOne: 'Start Time: ',
-                          textTwo: 'End Time: ',
+                          textOne: '${tr('start_time')}:',
+                          textTwo: '${tr('end_time')}:',
                           style: Theme.of(context)
                               .textTheme
                               .displayMedium!
@@ -181,7 +182,7 @@ class EventDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 16.0),
                         TextRowWidget(
-                          textOne: 'Duration',
+                          textOne: '${tr('duration')}:',
                           textTwo: '',
                           style: Theme.of(context)
                               .textTheme
@@ -208,7 +209,7 @@ class EventDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20.0),
                         Text(
-                          'Description: ',
+                          '${tr('description')}:',
                           style: Theme.of(context)
                               .textTheme
                               .displayMedium!

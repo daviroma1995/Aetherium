@@ -54,20 +54,14 @@ class HomeScreen extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .headlineLarge!
-                            .copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground),
+                            .copyWith(color: Theme.of(context).colorScheme.onBackground),
                       ).tr(),
                       Obx(
                         () => controller.currentUser.value.firstName != null
                             ? Text(
-                                controller.currentUser.value.isAdmin!
-                                    ? ' Admin'
-                                    : ' ${controller.currentUser.value.firstName}',
+                                controller.currentUser.value.isAdmin! ? ' Admin' : ' ${controller.currentUser.value.firstName}',
                                 style: TextStyle(
-                                  color: isDark
-                                      ? AppColors.WHITE_COLOR
-                                      : AppColors.SECONDARY_COLOR,
+                                  color: isDark ? AppColors.WHITE_COLOR : AppColors.SECONDARY_COLOR,
                                   fontSize: 22.0,
                                   fontWeight: FontWeight.w800,
                                   letterSpacing: .75,
@@ -98,9 +92,7 @@ class HomeScreen extends StatelessWidget {
                               AppAssets.BELL_ICON,
                               fit: BoxFit.cover,
                               colorFilter: ColorFilter.mode(
-                                isDark
-                                    ? AppColors.GREY_COLOR
-                                    : AppColors.BLACK_COLOR,
+                                isDark ? AppColors.GREY_COLOR : AppColors.BLACK_COLOR,
                                 BlendMode.srcIn,
                               ),
                             ),
@@ -116,11 +108,8 @@ class HomeScreen extends StatelessWidget {
                                   width: 17.0,
                                   height: 17.0,
                                   decoration: BoxDecoration(
-                                      color: isDark
-                                          ? AppColors.SECONDARY_LIGHT
-                                          : AppColors.SECONDARY_COLOR,
-                                      borderRadius:
-                                          BorderRadius.circular(110.0),
+                                      color: isDark ? AppColors.SECONDARY_LIGHT : AppColors.SECONDARY_COLOR,
+                                      borderRadius: BorderRadius.circular(110.0),
                                       border: isDark
                                           ? const Border()
                                           : Border.all(
@@ -130,13 +119,10 @@ class HomeScreen extends StatelessWidget {
                                   child: Obx(
                                     () => FittedBox(
                                       child: Text(
-                                        controller.notifications.length
-                                            .toString(),
+                                        controller.notifications.length.toString(),
                                         style: TextStyle(
                                           fontFamily: 'Poppins',
-                                          color: isDark
-                                              ? AppColors.BACKGROUND_DARK
-                                              : AppColors.WHITE_COLOR,
+                                          color: isDark ? AppColors.BACKGROUND_DARK : AppColors.WHITE_COLOR,
                                           fontWeight: FontWeight.w700,
                                           fontSize: 11.0,
                                         ),
@@ -176,8 +162,7 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               child: LiquidPullToRefresh(
                 onRefresh: controller.onRefresh,
-                backgroundColor:
-                    isDark ? AppColors.SECONDARY_LIGHT : AppColors.WHITE_COLOR,
+                backgroundColor: isDark ? AppColors.SECONDARY_LIGHT : AppColors.WHITE_COLOR,
                 child: ListView(
                   physics: const BouncingScrollPhysics(),
                   children: [
@@ -229,9 +214,7 @@ class HomeScreen extends StatelessWidget {
                           width: Get.width,
                           child: Center(
                               child: CircularProgressIndicator(
-                            color: isDark
-                                ? AppColors.SECONDARY_COLOR
-                                : AppColors.GREY_COLOR,
+                            color: isDark ? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
                           )),
                         ),
                       ),
@@ -243,29 +226,21 @@ class HomeScreen extends StatelessWidget {
                           width: Get.width,
                           height: 150,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 22.0, vertical: 20.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 20.0),
                             child: ListView.builder(
                               physics: const BouncingScrollPhysics(),
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
-                              itemExtent:
-                                  MediaQuery.of(context).size.width * .231,
+                              itemExtent: MediaQuery.of(context).size.width * .231,
                               itemCount: controller.treatmentCategories
-                                  .where((element) => element.name!
-                                      .toLowerCase()
-                                      .contains(controller.searchedService.value
-                                          .toLowerCase()))
+                                  .where((element) =>
+                                      element.name!.toLowerCase().contains(controller.searchedService.value.toLowerCase()))
                                   .toList()
                                   .length,
                               itemBuilder: (context, index) {
-                                var filteredServices = controller
-                                    .treatmentCategories
-                                    .where((element) => element.name!
-                                        .toLowerCase()
-                                        .contains(controller
-                                            .searchedService.value
-                                            .toLowerCase()))
+                                var filteredServices = controller.treatmentCategories
+                                    .where((element) =>
+                                        element.name!.toLowerCase().contains(controller.searchedService.value.toLowerCase()))
                                     .toList()[index];
                                 return GestureDetector(
                                   onTap: () {
@@ -273,40 +248,27 @@ class HomeScreen extends StatelessWidget {
                                         ? controller.serviceNavigation(index)
                                         : controller.serviceNavigation(
                                             controller.treatmentCategories
-                                                .indexWhere((element) =>
-                                                    element.name ==
-                                                    filteredServices.name),
+                                                .indexWhere((element) => element.name == filteredServices.name),
                                           );
                                   },
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Container(
                                         alignment: Alignment.center,
                                         height: 60.0,
                                         width: 60.0,
                                         decoration: BoxDecoration(
-                                          border: !isDark
-                                              ? Border.all(
-                                                  color: AppColors.BORDER_COLOR)
-                                              : const Border(),
-                                          borderRadius:
-                                              BorderRadius.circular(130.0),
-                                          color: !isDark
-                                              ? AppColors.WHITE_COLOR
-                                              : AppColors.PRIMARY_DARK,
+                                          border: !isDark ? Border.all(color: AppColors.BORDER_COLOR) : const Border(),
+                                          borderRadius: BorderRadius.circular(130.0),
+                                          color: !isDark ? AppColors.WHITE_COLOR : AppColors.PRIMARY_DARK,
                                         ),
                                         child: !isDark
                                             ? ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(100),
+                                                borderRadius: BorderRadius.circular(100),
                                                 child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      filteredServices.iconUrl!,
-                                                  imageBuilder: (context,
-                                                          imageProvider) =>
-                                                      Container(
+                                                  imageUrl: filteredServices.iconUrl!,
+                                                  imageBuilder: (context, imageProvider) => Container(
                                                     decoration: BoxDecoration(
                                                       image: DecorationImage(
                                                         image: imageProvider,
@@ -314,27 +276,17 @@ class HomeScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                   ),
-                                                  placeholder: (context, url) =>
-                                                      CircularProgressIndicator(
-                                                    color: isDark
-                                                        ? AppColors
-                                                            .SECONDARY_COLOR
-                                                        : AppColors.GREY_COLOR,
+                                                  placeholder: (context, url) => CircularProgressIndicator(
+                                                    color: isDark ? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
                                                   ),
-                                                  errorWidget: (context, url,
-                                                          error) =>
-                                                      const Icon(Icons.error),
+                                                  errorWidget: (context, url, error) => const Icon(Icons.error),
                                                 ),
                                               )
                                             : ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(100),
+                                                borderRadius: BorderRadius.circular(100),
                                                 child: CachedNetworkImage(
-                                                  imageUrl: filteredServices
-                                                      .darkIconUrl!,
-                                                  imageBuilder: (context,
-                                                          imageProvider) =>
-                                                      Container(
+                                                  imageUrl: filteredServices.darkIconUrl!,
+                                                  imageBuilder: (context, imageProvider) => Container(
                                                     decoration: BoxDecoration(
                                                       image: DecorationImage(
                                                         image: imageProvider,
@@ -342,16 +294,10 @@ class HomeScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                   ),
-                                                  placeholder: (context, url) =>
-                                                      CircularProgressIndicator(
-                                                    color: isDark
-                                                        ? AppColors
-                                                            .SECONDARY_COLOR
-                                                        : AppColors.GREY_COLOR,
+                                                  placeholder: (context, url) => CircularProgressIndicator(
+                                                    color: isDark ? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
                                                   ),
-                                                  errorWidget: (context, url,
-                                                          error) =>
-                                                      const Icon(Icons.error),
+                                                  errorWidget: (context, url, error) => const Icon(Icons.error),
                                                 ),
                                               ),
                                       ),
@@ -379,19 +325,14 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Container(
                       padding: const EdgeInsets.only(bottom: 31.0),
-                      color: isDark
-                          ? AppColors.PRIMARY_DARK
-                          : const Color(0xFFFDF9F8),
+                      color: isDark ? AppColors.PRIMARY_DARK : const Color(0xFFFDF9F8),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomTitle(
                             title: 'upcomming_appointments',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineLarge!
-                                .copyWith(
+                            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -406,9 +347,7 @@ class HomeScreen extends StatelessWidget {
                                 width: Get.width,
                                 child: Center(
                                   child: CircularProgressIndicator(
-                                    color: isDark
-                                        ? AppColors.SECONDARY_COLOR
-                                        : AppColors.GREY_COLOR,
+                                    color: isDark ? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
                                   ),
                                 ),
                               ),
@@ -420,17 +359,15 @@ class HomeScreen extends StatelessWidget {
                                 alignment: Alignment.center,
                                 height: 100.0,
                                 // alignment: Alignment.center,
-                                child: const Text(
-                                  'No appointments',
-                                  style: TextStyle(
-                                      fontSize: 20.0, color: Colors.black),
+                                child: Text(
+                                  tr('no_appointments'),
+                                  style: const TextStyle(fontSize: 20.0, color: Colors.black),
                                 ),
                               ),
                               visible: controller.isLoading.value == false &&
                                   controller.appointments.isNotEmpty &&
                                   controller.services.isNotEmpty &&
-                                  controller.appointmentsTreatmentCategoryList
-                                      .isNotEmpty,
+                                  controller.appointmentsTreatmentCategoryList.isNotEmpty,
                               child: Padding(
                                   padding: const EdgeInsets.only(left: 22.0),
                                   child: SizedBox(
@@ -442,30 +379,18 @@ class HomeScreen extends StatelessWidget {
                                       itemBuilder: (context, index) {
                                         return GestureDetector(
                                           onTap: () {
-                                            print(controller.appointments[index]
-                                                .dateTimestamp!
-                                                .toDate());
-                                            controller
-                                                .navigateToAppointmentDetail(
-                                                    index);
+                                            print(controller.appointments[index].dateTimestamp!.toDate());
+                                            controller.navigateToAppointmentDetail(index);
                                           },
                                           child: CustomAppointmentCardWidget(
                                             imageUrl: AppAssets.USER_IMAGE,
-                                            title: controller.currentUser.value
-                                                        .isAdmin ??
-                                                    false
+                                            title: controller.currentUser.value.isAdmin ?? false
                                                 ? '${controller.listOfClients[index].firstName.toString().capitalize} - ${controller.listOfClients[index].lastName.toString().capitalize}'
-                                                : controller.getEmployeeName(
-                                                    controller
-                                                        .appointments[index]
-                                                        .employeeId![0]),
+                                                : controller.getEmployeeName(controller.appointments[index].employeeId![0]),
                                             subTitle:
                                                 '${controller.appointmentsTreatmentCategoryList[index].name ?? ''} - ${controller.getServices(controller.appointments[index].serviceId![0])}',
-                                            date: controller
-                                                .appointments[index].dateString,
-                                            time: controller
-                                                    .appointments[index].time ??
-                                                '',
+                                            date: controller.appointments[index].dateString,
+                                            time: controller.appointments[index].time ?? '',
                                           ),
                                         );
                                       },
@@ -478,13 +403,11 @@ class HomeScreen extends StatelessWidget {
                     ),
                     CustomTitle(
                       title: 'events',
-                      style:
-                          Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w700,
-                              ),
-                      borderColor:
-                          isDark ? AppColors.GREY_COLOR : AppColors.GREY_COLOR,
+                      style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                      borderColor: isDark ? AppColors.GREY_COLOR : AppColors.GREY_COLOR,
                       onTap: () async {
                         FocusManager.instance.primaryFocus?.unfocus();
                         final result = await Get.to(
@@ -508,62 +431,39 @@ class HomeScreen extends StatelessWidget {
                       child: SizedBox(
                         height: 190.0,
                         child: Obx(
-                          () => controller.isInitialized.value &&
-                                  controller.events.isNotEmpty
+                          () => controller.isInitialized.value && controller.events.isNotEmpty
                               ? ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   physics: const BouncingScrollPhysics(),
                                   itemCount: controller.events.value.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 10.0),
+                                      padding: const EdgeInsets.only(right: 10.0),
                                       child: GestureDetector(
                                         onTap: () {
                                           controller.eventNavigation(index);
                                         },
                                         child: Obx(
-                                          () => controller
-                                                      .shoueldReload.value ==
-                                                  false
+                                          () => controller.shoueldReload.value == false
                                               ? CustomEventCardWidget(
                                                   index: index,
-                                                  iamgeUrl: controller
-                                                      .events[index].imageUrl!,
-                                                  title: controller
-                                                      .events[index].title!,
-                                                  subTitle: controller
-                                                      .events[index].subtitle!,
-                                                  time: controller
-                                                      .events[index].dateString,
-                                                  subtitleColor: isDark
-                                                      ? AppColors.GREY_COLOR
-                                                      : AppColors.BLACK_COLOR,
-                                                  isFavorite: controller
-                                                          .events[index]
-                                                          .isfavorite ??
-                                                      false,
-                                                  onIconTap: () => controller
-                                                      .setFavorite(index),
+                                                  iamgeUrl: controller.events[index].imageUrl!,
+                                                  title: controller.events[index].title!,
+                                                  subTitle: controller.events[index].subtitle!,
+                                                  time: controller.events[index].dateString,
+                                                  subtitleColor: isDark ? AppColors.GREY_COLOR : AppColors.BLACK_COLOR,
+                                                  isFavorite: controller.events[index].isfavorite ?? false,
+                                                  onIconTap: () => controller.setFavorite(index),
                                                 )
                                               : CustomEventCardWidget(
                                                   index: index,
-                                                  iamgeUrl: controller
-                                                      .events[index].imageUrl!,
-                                                  subtitleColor: isDark
-                                                      ? AppColors.GREY_COLOR
-                                                      : AppColors.BLACK_COLOR,
-                                                  title: controller
-                                                      .events[index].title!,
-                                                  subTitle: controller
-                                                      .events[index].subtitle!,
-                                                  time: controller
-                                                      .events[index].dateString,
-                                                  isFavorite: controller
-                                                      .events[index]
-                                                      .isfavorite!,
-                                                  onIconTap: () => controller
-                                                      .setFavorite(index),
+                                                  iamgeUrl: controller.events[index].imageUrl!,
+                                                  subtitleColor: isDark ? AppColors.GREY_COLOR : AppColors.BLACK_COLOR,
+                                                  title: controller.events[index].title!,
+                                                  subTitle: controller.events[index].subtitle!,
+                                                  time: controller.events[index].dateString,
+                                                  isFavorite: controller.events[index].isfavorite!,
+                                                  onIconTap: () => controller.setFavorite(index),
                                                 ),
                                         ),
                                       ),
@@ -576,19 +476,15 @@ class HomeScreen extends StatelessWidget {
                                       alignment: Alignment.center,
                                       width: Get.width,
                                       child: Text(
-                                        'No Events Found',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineLarge,
+                                        tr('no_events_available'),
+                                        style: Theme.of(context).textTheme.headlineLarge,
                                       ),
                                     )
                                   : Container(
                                       alignment: Alignment.center,
                                       height: 190,
                                       child: CircularProgressIndicator(
-                                        color: isDark
-                                            ? AppColors.SECONDARY_COLOR
-                                            : AppColors.GREY_COLOR,
+                                        color: isDark ? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
                                       ),
                                     ),
                         ),

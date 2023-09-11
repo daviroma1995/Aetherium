@@ -246,7 +246,7 @@ class _CalendarState extends State<Calendar> {
     for (var day in widget.weekDays) {
       var fullday = '';
       if (day == 'Sun') {
-        fullday = 'sun';
+        fullday = 'Suday';
       }
       if (day == 'Mon') {
         fullday = 'Monday';

@@ -19,8 +19,7 @@ class AppointmentsScreen extends StatefulWidget {
   State<AppointmentsScreen> createState() => _AppointmentsScreenState();
 }
 
-class _AppointmentsScreenState extends State<AppointmentsScreen>
-    with TickerProviderStateMixin {
+class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProviderStateMixin {
   final controller = Get.put(AppointmentsController());
 
   @override
@@ -32,28 +31,24 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor:
-              isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+          backgroundColor: isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
           elevation: 0.0,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
-                borderRadius: BorderRadius.circular(25.0),
+                borderRadius: BorderRadius.circular(40.0),
                 onTap: () => controller.handleBack(context),
                 child: Container(
                   alignment: Alignment.center,
-                  width: 25.0,
-                  height: 25.0,
-                  child: SvgPicture.asset(AppAssets.BACK_ARROW,
-                      height: 14.0, width: 14.0),
+                  width: 40.0,
+                  height: 40.0,
+                  child: SvgPicture.asset(AppAssets.BACK_ARROW, height: 14.0, width: 14.0),
                 ),
               ),
               const SizedBox(width: 12.0),
-              Text('appointments',
-                      style: Theme.of(context).textTheme.headlineLarge)
-                  .tr(),
+              Text('appointments', style: Theme.of(context).textTheme.headlineLarge).tr(),
             ],
           ),
           bottom: PreferredSize(
@@ -62,23 +57,17 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
               margin: const EdgeInsets.symmetric(horizontal: 22.0),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color:
-                    isDark ? AppColors.BACKGROUND_DARK : AppColors.WHITE_COLOR,
+                color: isDark ? AppColors.BACKGROUND_DARK : AppColors.WHITE_COLOR,
                 border: Border(
-                  bottom: BorderSide(
-                      color: isDark
-                          ? AppColors.PRIMARY_DARK
-                          : AppColors.GREY_COLOR),
+                  bottom: BorderSide(color: isDark ? AppColors.PRIMARY_DARK : AppColors.GREY_COLOR),
                 ),
               ),
               child: TabBar(
                 dragStartBehavior: DragStartBehavior.start,
-                indicatorColor:
-                    isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
+                indicatorColor: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
                 padding: EdgeInsets.zero,
                 indicatorWeight: 1.0,
-                labelColor:
-                    isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
+                labelColor: isDark ? AppColors.WHITE_COLOR : AppColors.BLACK_COLOR,
                 unselectedLabelColor: AppColors.GREY_COLOR,
                 labelStyle: const TextStyle(
                   fontSize: 14.0,
@@ -131,9 +120,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
             height: 66,
             width: 66,
             decoration: BoxDecoration(
-              color: isDark
-                  ? AppColors.BACKGROUND_DARK
-                  : AppColors.SECONDARY_COLOR,
+              color: isDark ? AppColors.BACKGROUND_DARK : AppColors.SECONDARY_COLOR,
               border: Border.all(width: 6.0, color: AppColors.BORDER_COLOR),
               borderRadius: BorderRadius.circular(100.0),
             ),

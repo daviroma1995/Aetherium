@@ -55,19 +55,18 @@ class HomeScreenController extends GetxController {
     } catch (ex) {
       stdout.writeln(ex);
     }
-    isInitialized.value = true;
     LocalData.setIsLogedIn(true);
     await loadAppointments();
     if (currentUser.value.isAdmin ?? false) {
       var clients = await FirebaseServices.getData(collection: 'clients');
       for (var appointment in appointments) {
         if (clients != null) {
-          var client = clients
-              .firstWhere((element) => element['id'] == appointment.clientId);
+          var client = clients.firstWhere((element) => element['id'] == appointment.clientId);
           listOfClients.add(Client.fromJson(client));
         }
       }
     }
+    isInitialized.value = true;
     isLoading.value = false;
   }
 
@@ -98,8 +97,7 @@ class HomeScreenController extends GetxController {
   Future<void> loadAppointments() async {
     appointmentsTreatmentCategoryList.clear();
     var treatments = await FirebaseServices.getData(collection: 'treatments');
-    var data = await FirebaseServices.getAppointments(
-        isAdmin: currentUser.value.isAdmin!);
+    var data = await FirebaseServices.getAppointments(isAdmin: currentUser.value.isAdmin!);
     appointments.value = data;
     for (var appointment in appointments) {
       for (int i = 0; i < treatments!.length; i++) {
@@ -109,10 +107,8 @@ class HomeScreenController extends GetxController {
       }
     }
     for (var service in services) {
-      int treatmentCategoryIndex = treatmentCategories
-          .indexWhere((element) => service.treatmentCategoryId == element.id);
-      appointmentsTreatmentCategoryList
-          .add(treatmentCategories[treatmentCategoryIndex]);
+      int treatmentCategoryIndex = treatmentCategories.indexWhere((element) => service.treatmentCategoryId == element.id);
+      appointmentsTreatmentCategoryList.add(treatmentCategories[treatmentCategoryIndex]);
     }
   }
 
@@ -132,8 +128,7 @@ class HomeScreenController extends GetxController {
     } else {
       events[index].clientId!.add(_uid);
     }
-    FirebaseServices.toggleFavorite(
-        eventId: events[index].eventId!, data: events[index]);
+    FirebaseServices.toggleFavorite(eventId: events[index].eventId!, data: events[index]);
     events[index].isfavorite = !events[index].isfavorite!;
   }
   // Get Employee name
@@ -225,17 +220,14 @@ class HomeScreenController extends GetxController {
         currentUser.value = Client.fromJson(map);
 
         appointmentsEmployee.bindStream(FirebaseServices.employeeStrem());
-        notifications
-            .bindStream(FirebaseServices.getUnreadNotficationsStream());
+        notifications.bindStream(FirebaseServices.getUnreadNotficationsStream());
         events.bindStream(FirebaseServices.eventStream());
 
         isInitialized.value = true;
         LocalData.setIsLogedIn(true);
-        var treatments =
-            await FirebaseServices.getData(collection: 'treatments');
+        var treatments = await FirebaseServices.getData(collection: 'treatments');
 
-        var data = await FirebaseServices.getAppointments(
-            isAdmin: currentUser.value.isAdmin!);
+        var data = await FirebaseServices.getAppointments(isAdmin: currentUser.value.isAdmin!);
         appointments.value = data;
 
         for (var appointment in appointments) {

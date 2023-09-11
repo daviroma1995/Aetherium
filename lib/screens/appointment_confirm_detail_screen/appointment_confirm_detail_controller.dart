@@ -148,10 +148,7 @@ class AppointmentConfirmDetailController extends GetxController {
       print('Selected : $selectedStatus');
       print(previousStatus.toLowerCase() != 'archiviato');
       print('Previous: $previousStatus');
-      var snapshot = await FirebaseFirestore.instance
-          .collection('client_memberships')
-          .doc(args.clientId)
-          .get();
+      var snapshot = await FirebaseFirestore.instance.collection('client_memberships').doc(args.clientId).get();
       var data = snapshot.data();
       var points = data?['points'];
       if (selectedStatus != '' &&
@@ -159,36 +156,35 @@ class AppointmentConfirmDetailController extends GetxController {
           previousStatus.toLowerCase() != 'archiviato' &&
           points + 25 <= 300) {
         print('if Called');
-        await FirebaseFirestore.instance
-            .collection('client_memberships')
-            .doc(args.clientId)
-            .update(
+        await FirebaseFirestore.instance.collection('client_memberships').doc(args.clientId).update(
           {
             "points": FieldValue.increment(25),
           },
         );
-        homeController.loadHomeScreen();
-        agendaController.loadData();
+        await homeController.loadHomeScreen();
+        await agendaController.loadData();
       } else if (previousStatus.toLowerCase() == 'archiviato' &&
           selectedStatus.toLowerCase() != 'archiviato' &&
           points - 25 >= 0) {
         print('Else if called');
-        await FirebaseFirestore.instance
-            .collection('client_memberships')
-            .doc(args.clientId)
-            .update(
+        await FirebaseFirestore.instance.collection('client_memberships').doc(args.clientId).update(
           {
             "points": FieldValue.increment(-25),
           },
         );
-        homeController.loadHomeScreen();
-        agendaController.loadData();
+        await homeController.loadHomeScreen();
+        await agendaController.loadData();
       } else {
         print('Else called');
         print(selectedStatus);
         print(previousStatus);
         print(points);
+        await homeController.loadHomeScreen();
+        await agendaController.loadData();
       }
+      await homeController.loadHomeScreen();
+      await agendaController.loadData();
+      homeController.refresh();
       Get.to(
         () => const AppointmentConfirmScreen(),
         duration: const Duration(milliseconds: 400),
@@ -198,5 +194,41 @@ class AppointmentConfirmDetailController extends GetxController {
       // await homeController.loadHomeScreen();
       // await agendaController.loadData();
     }
+  }
+
+  String getEndTime(String startTime, num duration) {
+    String hours;
+    String minutes;
+    if (startTime[1] != ':') {
+      hours = startTime[0] + startTime[1];
+      if (startTime.length == 5) {
+        minutes = startTime[3] + startTime[4];
+      } else {
+        minutes = startTime[3];
+      }
+    } else {
+      hours = startTime[0];
+      if (startTime.length == 4) {
+        minutes = startTime[2] + startTime[3];
+      } else {
+        minutes = startTime[2];
+      }
+    }
+    String endHours = (duration ~/ 60).toString().replaceAll('-', '')[0];
+    String endMinutes = (duration % 60).toString();
+
+    var endTimeHours = int.parse(hours) + int.parse(endHours);
+    var endTimeMinutes = int.parse(minutes) + int.parse(endMinutes);
+    if (endTimeMinutes >= 60) {
+      endTimeHours += 1;
+      endTimeMinutes -= 60;
+    }
+    if (endTimeHours >= 24) {
+      endTimeHours = endTimeHours - 24;
+    }
+    String totalEndHours = endTimeHours < 9 ? '0$endTimeHours' : endTimeHours.toString();
+    String totalMinutes = endTimeMinutes < 9 ? '0$endTimeMinutes' : endTimeMinutes.toString();
+
+    return '$totalEndHours:$totalMinutes';
   }
 }

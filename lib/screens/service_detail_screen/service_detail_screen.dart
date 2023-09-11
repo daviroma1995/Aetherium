@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_string_interpolations
 import 'package:atherium_saloon_app/screens/service_detail_screen/service_detail_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -75,8 +76,8 @@ class ServiceDetailScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextRowWidget(
-                          textOne: 'Duration: ',
-                          textTwo: 'Prezzo: ',
+                          textOne: '${tr('duration')}:',
+                          textTwo: '${tr('price')}:',
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 16.0,
@@ -97,7 +98,7 @@ class ServiceDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20.0),
                         Text(
-                          'Description: ',
+                          '${tr('description')}:',
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 16.0,

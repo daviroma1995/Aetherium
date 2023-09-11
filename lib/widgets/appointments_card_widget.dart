@@ -68,10 +68,10 @@ class AppointmentsCardWidget extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                maxLines: 1,
+                maxLines: 2,
                 textAlign: TextAlign.start,
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      fontSize: 15.0,
+                      fontSize: 13.0,
                       fontWeight: FontWeight.w700,
                     ),
               ),

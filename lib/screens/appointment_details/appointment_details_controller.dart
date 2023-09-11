@@ -14,12 +14,12 @@ import '../../models/treatment.dart';
 
 class AppointmentDetailsController extends GetxController {
   var allTreatments = <Treatment>[].obs;
+  RxString endTime = ''.obs;
   final appointmentServicesIds = Get.arguments;
   var servicesList = <Treatment>[].obs;
   bool isChanged = false;
   RxInt price = 0.obs;
-  bool isAdmin =
-      Get.find<AgendaController>().currentUser.value.isAdmin ?? false;
+  bool isAdmin = Get.find<AgendaController>().currentUser.value.isAdmin ?? false;
   @override
   void onInit() async {
     super.onInit();
@@ -137,8 +137,7 @@ class AppointmentDetailsController extends GetxController {
       await FirebaseFirestore.instance
           .collection('appointments')
           .doc(appointment.id)
-          .set({"total_duration": FieldValue.increment(duration)},
-              SetOptions(merge: true));
+          .set({"total_duration": FieldValue.increment(duration)}, SetOptions(merge: true));
       var homeController = Get.find<HomeScreenController>();
       homeController.loadAppointments();
       var agendaController = Get.find<AgendaController>();
@@ -148,5 +147,41 @@ class AppointmentDetailsController extends GetxController {
       stdout.writeln('Error: $ex');
       return false;
     }
+  }
+
+  String getEndTime(String startTime, num duration) {
+    String hours;
+    String minutes;
+    if (startTime[1] != ':') {
+      hours = startTime[0] + startTime[1];
+      if (startTime.length == 5) {
+        minutes = startTime[3] + startTime[4];
+      } else {
+        minutes = startTime[3];
+      }
+    } else {
+      hours = startTime[0];
+      if (startTime.length == 4) {
+        minutes = startTime[2] + startTime[3];
+      } else {
+        minutes = startTime[2];
+      }
+    }
+    String endHours = (duration / 60).toString()[0];
+    String endMinutes = (duration % 60).toString();
+
+    var endTimeHours = num.parse(hours) + num.parse(endHours);
+    var endTimeMinutes = num.parse(minutes) + num.parse(endMinutes);
+    if (endTimeMinutes >= 60) {
+      endTimeHours += 1;
+      endTimeMinutes -= 60;
+    }
+    if (endTimeHours >= 24) {
+      endTimeHours = endTimeHours - 24;
+    }
+    String totalEndHours = endTimeHours < 9 ? '0$endTimeHours' : endTimeHours.toString();
+    String totalMinutes = endTimeMinutes < 9 ? '0$endTimeMinutes' : endTimeMinutes.toString();
+    endTime.value = '$totalEndHours:$totalMinutes';
+    return '$totalEndHours:$totalMinutes';
   }
 }

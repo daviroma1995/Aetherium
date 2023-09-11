@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 
 import '../../models/appointment.dart';
 import '../../models/client.dart';
@@ -32,8 +31,7 @@ class AgendaController extends GetxController {
     Event(
       counter: 0,
       timestamp: Timestamp.fromDate(
-        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
-            0, 0, 0, 0, 0),
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0, 0, 0),
       ),
     )
   ].obs;
@@ -42,9 +40,7 @@ class AgendaController extends GetxController {
   var employees = <Employee>[].obs;
   var currentUser = Client().obs;
   var events = <DateTime, List<Map<String, dynamic>>>{};
-  var selectedDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-          .obs;
+  var selectedDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).obs;
   var treatmentCategories = <TreatmentCategory>[].obs;
   var appointmentsTreatmentCategoryList = <TreatmentCategory>[].obs;
   var listofClients = <Client>[];
@@ -73,8 +69,7 @@ class AgendaController extends GetxController {
     day = DateFormat('EEEE').format(DateTime.now()).obs;
     date = DateFormat('dd/MM/yyyy').format(DateTime.now()).obs;
     onDateChange(DateTime.now());
-    selectedDate.value =
-        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    selectedDate.value = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     // print(selectedDate.value);
     // RxBool isMonthView = false.obs;
     appointments.value = [];
@@ -89,13 +84,11 @@ class AgendaController extends GetxController {
       Event(
           counter: 0,
           timestamp: Timestamp.fromDate(
-            DateTime(DateTime.now().year, DateTime.now().month,
-                DateTime.now().day, 0, 0, 0, 0, 0),
+            DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0, 0, 0),
           )),
     ];
 
-    var user = await FirebaseServices.getDataWhere(
-        collection: 'clients', key: 'user_id', value: FirebaseServices.cuid);
+    var user = await FirebaseServices.getDataWhere(collection: 'clients', key: 'user_id', value: FirebaseServices.cuid);
     var clients = await FirebaseServices.getData(collection: 'clients');
     currentUser.value = Client.fromJson(user ?? {});
     var employeesData = await FirebaseServices.getData(collection: 'employees');
@@ -103,12 +96,9 @@ class AgendaController extends GetxController {
     treatments?.forEach((element) {
       allTreatments.add(Treatment.fromJson(element));
     });
-    var allAppoints = await FirebaseServices.getAgendasAll(
-        currentUser.value.isAdmin ?? false);
+    var allAppoints = await FirebaseServices.getAgendasAll(currentUser.value.isAdmin ?? false);
     allAppointments.value = allAppoints;
-    var data = await FirebaseServices.getAgendas(
-        Timestamp.fromDate(selectedDate.value),
-        currentUser.value.isAdmin ?? false);
+    var data = await FirebaseServices.getAgendas(Timestamp.fromDate(selectedDate.value), currentUser.value.isAdmin ?? false);
     appointments.value = data;
     for (var agenda in data) {
       if (agenda.employeeId != null) {
@@ -136,16 +126,12 @@ class AgendaController extends GetxController {
     for (int i = 0; i < allAppointments.length; i++) {
       for (int j = 0; j < appointmentsCounter.length; j++) {
         if (i == 0) {
-          appointmentsCounter.value = [
-            Event(counter: 1, timestamp: allAppointments[0].dateTimestamp)
-          ];
-        } else if (appointmentsCounter[j].timestamp ==
-            allAppointments[i].dateTimestamp) {
+          appointmentsCounter.value = [Event(counter: 1, timestamp: allAppointments[0].dateTimestamp)];
+        } else if (appointmentsCounter[j].timestamp == allAppointments[i].dateTimestamp) {
           appointmentsCounter[j].counter += 1;
           break;
         } else if (j == appointmentsCounter.length - 1) {
-          appointmentsCounter.add(
-              Event(counter: 1, timestamp: allAppointments[i].dateTimestamp));
+          appointmentsCounter.add(Event(counter: 1, timestamp: allAppointments[i].dateTimestamp));
           break;
         }
       }
@@ -160,8 +146,7 @@ class AgendaController extends GetxController {
     if (currentUser.value.isAdmin ?? false) {
       for (var appointment in appointments) {
         if (clients != null) {
-          var client = clients
-              .firstWhere((element) => element['id'] == appointment.clientId);
+          var client = clients.firstWhere((element) => element['id'] == appointment.clientId);
           listofClients.add(Client.fromJson(client));
         }
       }
@@ -169,10 +154,8 @@ class AgendaController extends GetxController {
     print(treatmentsData);
     for (var service in treatmentsData) {
       log('Called');
-      int treatmentCategoryIndex = treatmentCategories
-          .indexWhere((element) => service.treatmentCategoryId == element.id);
-      appointmentsTreatmentCategoryList
-          .add(treatmentCategories[treatmentCategoryIndex]);
+      int treatmentCategoryIndex = treatmentCategories.indexWhere((element) => service.treatmentCategoryId == element.id);
+      appointmentsTreatmentCategoryList.add(treatmentCategories[treatmentCategoryIndex]);
     }
     reload.value = false;
   }
@@ -191,8 +174,7 @@ class AgendaController extends GetxController {
     // var currentDate =
     //     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     var data = await FirebaseServices.getAgendas(
-        Timestamp.fromDate(DateTime(selectedDate.year, selectedDate.month,
-            selectedDate.day, 0, 0, 0, 0, 0)),
+        Timestamp.fromDate(DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 0, 0, 0, 0, 0)),
         currentUser.value.isAdmin!);
     appointments.value = data;
     employees.value = [];
@@ -224,8 +206,7 @@ class AgendaController extends GetxController {
     if (currentUser.value.isAdmin ?? false) {
       for (var appointment in appointments) {
         if (clients != null) {
-          var client = clients
-              .firstWhere((element) => element['id'] == appointment.clientId);
+          var client = clients.firstWhere((element) => element['id'] == appointment.clientId);
           listofClients.add(Client.fromJson(client));
         }
       }
@@ -233,10 +214,8 @@ class AgendaController extends GetxController {
     print(treatmentsData);
     for (var service in treatmentsData) {
       log('Called');
-      int treatmentCategoryIndex = treatmentCategories
-          .indexWhere((element) => service.treatmentCategoryId == element.id);
-      appointmentsTreatmentCategoryList
-          .add(treatmentCategories[treatmentCategoryIndex]);
+      int treatmentCategoryIndex = treatmentCategories.indexWhere((element) => service.treatmentCategoryId == element.id);
+      appointmentsTreatmentCategoryList.add(treatmentCategories[treatmentCategoryIndex]);
     }
   }
 
@@ -294,5 +273,41 @@ class AgendaController extends GetxController {
 
     // time = '$hours: Hours $minutes Mints';
     return [time, endTime];
+  }
+
+  String getEndTime(String startTime, num duration) {
+    String hours;
+    String minutes;
+    if (startTime[1] != ':') {
+      hours = startTime[0] + startTime[1];
+      if (startTime.length == 5) {
+        minutes = startTime[3] + startTime[4];
+      } else {
+        minutes = startTime[3];
+      }
+    } else {
+      hours = startTime[0];
+      if (startTime.length == 4) {
+        minutes = startTime[2] + startTime[3];
+      } else {
+        minutes = startTime[2];
+      }
+    }
+    String endHours = (duration / 60).toString()[0];
+    String endMinutes = (duration % 60).toString();
+
+    var endTimeHours = num.parse(hours) + num.parse(endHours);
+    var endTimeMinutes = num.parse(minutes) + num.parse(endMinutes);
+    if (endTimeMinutes >= 60) {
+      endTimeHours += 1;
+      endTimeMinutes -= 60;
+    }
+    if (endTimeHours >= 24) {
+      endTimeHours = endTimeHours - 24;
+    }
+    String totalEndHours = endTimeHours < 9 ? '0$endTimeHours' : endTimeHours.toString();
+    String totalMinutes = endTimeMinutes < 9 ? '0$endTimeMinutes' : endTimeMinutes.toString();
+
+    return '$totalEndHours:$totalMinutes';
   }
 }

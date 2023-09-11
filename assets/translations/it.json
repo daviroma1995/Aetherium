@@ -25,7 +25,7 @@
     "male": "Maschio",
     "female": "Femmina",
     "other": "Altro",
-    "close":"Vicina",
+    "close":"Chiudi",
     "settings":"Impostazioni",
     "password": "Passowrd",
     "forget_password":"Password dimenticata",
@@ -46,7 +46,7 @@
     "name":"Nome",
     "surname":"Cognome",
     "level":"Livello",
-    "date":"Date",
+    "date":"Data",
     "expiray_date":"Data di scadenza",
     "invite_friends":"Invita i tuoi amici",
     "invitation_description":"Porta un amico in negozio per ricevere 25 punti",
@@ -162,9 +162,16 @@
     "Wednesday":"Mercoledì",
     "Thursday":"Giovedì",
     "Friday":"venerdì",
-    "Saturday":"sabato",
-    "Sunday":"domenica",
-    
+    "Saturday":"Sabato",
+    "Sunday":"Domenica",
+
+    "Mon": "Lun",
+    "Tue": "Mar",
+    "Wed": "Mer",
+    "Thu": "Gio",
+    "Fri": "Ven",
+    "Sat": "Sab",
+    "Sun": "Dom",
    
     "January":"Gennaio",
     "February":"Febbraio",
@@ -185,5 +192,13 @@
     "system_default":"Default",
     "dark_theme":"Tema scuro",
     "light_theme":"Tema chiaro",
-    "apply":"Applica"
+    "apply":"Applica",
+    "some_notes":"Delle Note",
+    "fragrances_and_perfumes":"Estetista", 
+    "duration_increased":"La durata è aumentata di",
+    "duration": "Durata",
+    "duration_empty": "Il campo durata è vuoto",
+    "location":"Posizione",
+    "start_time":"Inizio",
+    "end_time":"Fine"
 }

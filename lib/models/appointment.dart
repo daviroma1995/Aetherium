@@ -76,17 +76,13 @@ class Appointment {
   }
 
   String get dateString {
-    var date = DateTime.fromMillisecondsSinceEpoch(
-            dateTimestamp!.millisecondsSinceEpoch)
-        .toLocal();
+    var date = DateTime.fromMillisecondsSinceEpoch(dateTimestamp!.millisecondsSinceEpoch).toLocal();
     // dateTimestamp?.toDate().toUtc() ?? DateTime.now();
-    return DateFormat("MM/dd/yyyy").format(date);
+    return DateFormat("dd/MM/yyyy").format(date);
   }
 
   String get dateWithMonthName {
-    var date = DateTime.fromMillisecondsSinceEpoch(
-            dateTimestamp!.millisecondsSinceEpoch)
-        .toLocal();
+    var date = DateTime.fromMillisecondsSinceEpoch(dateTimestamp!.millisecondsSinceEpoch).toLocal();
     // dateTimestamp?.toDate().toUtc() ?? DateTime.now();
     return DateFormat("dd MMM").format(date);
   }

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import "package:intl/intl.dart";
 
@@ -100,7 +101,7 @@ class _CalendarTileState extends State<CalendarTile> {
                       fontSize: 14.0,
                       fontWeight: FontWeight.w700,
                     ),
-                  ),
+                  ).tr(),
                 ),
               ),
             ),

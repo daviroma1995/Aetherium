@@ -16,8 +16,7 @@ class QrCodeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor:
-            isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
+        backgroundColor: isDark ? AppColors.BACKGROUND_DARK : AppColors.BACKGROUND_COLOR,
         elevation: 0.0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -30,8 +29,7 @@ class QrCodeScreen extends StatelessWidget {
                 alignment: Alignment.center,
                 width: 25.0,
                 height: 25.0,
-                child: SvgPicture.asset(AppAssets.BACK_ARROW,
-                    height: 14.0, width: 14.0),
+                child: SvgPicture.asset(AppAssets.BACK_ARROW, height: 14.0, width: 14.0),
               ),
             ),
             const SizedBox(width: 12.0),
@@ -40,7 +38,7 @@ class QrCodeScreen extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: QrImage(
+        child: QrImageView(
           data: Get.arguments ?? 'ERROR',
           size: 300,
           backgroundColor: Colors.white,

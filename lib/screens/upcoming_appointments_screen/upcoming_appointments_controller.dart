@@ -51,17 +51,12 @@ class UpcomingAppointmentsController extends GetxController {
 
   Future<void> deleteAppointment(int id) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('appointments')
-          .doc(upcommingAppointments[id].id)
-          .delete();
+      await FirebaseFirestore.instance.collection('appointments').doc(upcommingAppointments[id].id).delete();
       var homeController = Get.find<HomeScreenController>();
       homeController.loadHomeScreen();
       var agenda = Get.find<AgendaController>();
       agenda.loadData();
-      Fluttertoast.showToast(
-          msg: 'Appointment deleted Successfully',
-          backgroundColor: AppColors.GREEN_COLOR);
+      Fluttertoast.showToast(msg: 'Appointment deleted Successfully', backgroundColor: AppColors.GREEN_COLOR);
     } catch (ex) {
       Fluttertoast.showToast(msg: 'Something went wrong');
     }
@@ -74,22 +69,18 @@ class UpcomingAppointmentsController extends GetxController {
     services = <Treatment>[].obs;
     status = <AppointmentStatus>[].obs;
     listOfClients = [];
-    var data = await FirebaseServices.getFilteredAppointments(
-        collection: 'appointments');
+    var data = await FirebaseServices.getFilteredAppointments(collection: 'appointments');
     var employees = await FirebaseServices.getData(collection: 'employees');
     var treatments = await FirebaseServices.getData(collection: 'treatments');
     var clients = await FirebaseServices.getData(collection: 'clients');
-    var statusData =
-        await FirebaseServices.getData(collection: 'appointment_status');
+    var statusData = await FirebaseServices.getData(collection: 'appointment_status');
     var homeController = Get.find<HomeScreenController>();
     var listOftreatmentCategories = homeController.treatmentCategories;
-    if (data != null &&
-        AgendaController.instance.currentUser.value.isAdmin! == false) {
+    if (data != null && AgendaController.instance.currentUser.value.isAdmin! == false) {
       for (var treatment in data) {
         if (treatment['client_id'] == uid &&
             treatment['is_regular'] == true &&
-            treatment['date_timestamp'].seconds + 86400 >=
-                Timestamp.now().seconds) {
+            treatment['date_timestamp'].seconds + 86400 >= Timestamp.now().seconds) {
           upcommingAppointments.add(Appointment.fromJson(treatment));
         }
       }
@@ -98,8 +89,7 @@ class UpcomingAppointmentsController extends GetxController {
           for (int i = 0; i < statusData!.length; i++) {
             if (appointment['status_id'] == statusData[i]['id'] &&
                 appointment['is_regular'] == true &&
-                appointment['date_timestamp'].seconds + 86400 >=
-                    Timestamp.now().seconds) {
+                appointment['date_timestamp'].seconds + 86400 >= Timestamp.now().seconds) {
               status.add(AppointmentStatus.fromJson(statusData[i]));
             }
           }
@@ -107,16 +97,14 @@ class UpcomingAppointmentsController extends GetxController {
       }
     } else {
       for (var treatment in data!) {
-        if (treatment['date_timestamp'].seconds + 86400 >=
-            Timestamp.now().seconds) {
+        if (treatment['date_timestamp'].seconds + 86400 >= Timestamp.now().seconds) {
           upcommingAppointments.add(Appointment.fromJson(treatment));
         }
       }
       for (var appointment in data) {
         for (int i = 0; i < statusData!.length; i++) {
           if (appointment['status_id'] == statusData[i]['id'] &&
-              appointment['date_timestamp'].seconds + 86400 >=
-                  Timestamp.now().seconds) {
+              appointment['date_timestamp'].seconds + 86400 >= Timestamp.now().seconds) {
             status.add(AppointmentStatus.fromJson(statusData[i]));
             break;
           }
@@ -125,10 +113,12 @@ class UpcomingAppointmentsController extends GetxController {
     }
     for (var appointment in upcommingAppointments) {
       for (int i = 0; i < employees!.length; i++) {
-        if (employees[i]['id'] == appointment.employeeId![0]) {
-          var employee = Employee.fromJson(employees[i]);
-          employeesData.add(employee);
-          break;
+        if (appointment.employeeId != null && appointment.employeeId!.isNotEmpty) {
+          if (employees[i]['id'] == appointment.employeeId?[0]) {
+            var employee = Employee.fromJson(employees[i]);
+            employeesData.add(employee);
+            break;
+          }
         }
       }
     }
@@ -142,16 +132,14 @@ class UpcomingAppointmentsController extends GetxController {
     }
     for (var appointment in upcommingAppointments) {
       if (clients != null) {
-        var client = clients
-            .firstWhere((element) => element['id'] == appointment.clientId);
+        var client = clients.firstWhere((element) => element['id'] == appointment.clientId);
         listOfClients.add(Client.fromJson(client));
       }
     }
-    services.forEach((service) {
-      var treatmentCategory = listOftreatmentCategories
-          .firstWhere((element) => element.id == service.treatmentCategoryId);
+    for (var service in services) {
+      var treatmentCategory = listOftreatmentCategories.firstWhere((element) => element.id == service.treatmentCategoryId);
       listOfTreatmentCategory.add(treatmentCategory);
-    });
+    }
     isLoading.value = false;
   }
 }
