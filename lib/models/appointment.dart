@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -75,15 +76,44 @@ class Appointment {
     return data;
   }
 
+  Map<String, dynamic> toJsonCloudCalendar() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['date'] = date;
+    data['time'] = time;
+    data['number'] = number;
+    data['email'] = email;
+    data['notes'] = notes;
+    data['employee_id_list'] = employeeId;
+    data['treatment_id_list'] = serviceId;
+    data['client_id'] = clientId;
+    data['status_id'] = statusId;
+    data['date_timestamp'] = dateTimestamp!.toDate().toIso8601String();
+    data['start_time'] = startTime;
+    data['end_time'] = endTime;
+    data['room_id_list'] = roomId;
+    data['total_duration'] = duration;
+    data['is_regular'] = isRegular;
+    return data;
+  }
+
   String get dateString {
-    var date = DateTime.fromMillisecondsSinceEpoch(dateTimestamp!.millisecondsSinceEpoch).toLocal();
+    var date = DateTime.fromMillisecondsSinceEpoch(
+            dateTimestamp!.millisecondsSinceEpoch)
+        .toLocal();
     // dateTimestamp?.toDate().toUtc() ?? DateTime.now();
     return DateFormat("dd/MM/yyyy").format(date);
   }
 
   String get dateWithMonthName {
-    var date = DateTime.fromMillisecondsSinceEpoch(dateTimestamp!.millisecondsSinceEpoch).toLocal();
+    var date = DateTime.fromMillisecondsSinceEpoch(
+            dateTimestamp!.millisecondsSinceEpoch)
+        .toLocal();
     // dateTimestamp?.toDate().toUtc() ?? DateTime.now();
     return DateFormat("dd MMM").format(date);
+  }
+
+  @override
+  String toString() {
+    return 'Appointment(id: $id, date: $date, time: $time, number: $number, email: $email, notes: $notes, startTime: $startTime, endTime: $endTime, employeeId: $employeeId, serviceId: $serviceId, clientId: $clientId, statusId: $statusId, dateTimestamp: $dateTimestamp, roomId: $roomId, duration: $duration, isRegular: $isRegular)';
   }
 }

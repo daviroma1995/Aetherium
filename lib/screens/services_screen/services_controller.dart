@@ -49,6 +49,9 @@ class ServicesController extends GetxController {
         appointment = args ?? Appointment();
         list.addAll(args.serviceId);
         duration = args.duration;
+        print('If called');
+        print(duration);
+        print(list);
       }
     }
     print(list);
@@ -131,9 +134,12 @@ class ServicesController extends GetxController {
             if (service.id == treatementId) {
               service.isExtended.value = true;
 
-              for (int serviceIndex = 0; serviceIndex < treatmentCategoryId.length; serviceIndex++) {
+              for (int serviceIndex = 0;
+                  serviceIndex < treatmentCategoryId.length;
+                  serviceIndex++) {
                 final prevService = services[serviceIndex];
-                final index = services.indexWhere((element) => element.id == treatementId);
+                final index = services
+                    .indexWhere((element) => element.id == treatementId);
                 final currentService = services[index];
                 final temp = prevService;
                 services[serviceIndex] = currentService;
@@ -167,7 +173,8 @@ class ServicesController extends GetxController {
   }
 
   void moveToAppointmentBookingScreen() {
-    if (appointment.serviceId == null || args == null && appointment.serviceId!.isEmpty) {
+    if (appointment.serviceId == null ||
+        args == null && appointment.serviceId!.isEmpty) {
       print('Empty');
     } else {
       Get.to(
@@ -187,10 +194,13 @@ class ServicesController extends GetxController {
 
   void serviceDetailController(int serviceIndex, int subServiceIndex) {
     String serviceDocId = services[serviceIndex].id!;
-    var listSubServices = subServices.where((subService) => subService.treatmentCategoryId == serviceDocId).toList();
+    var listSubServices = subServices
+        .where((subService) => subService.treatmentCategoryId == serviceDocId)
+        .toList();
 
     Get.to(
-      () => ServiceDetailScreen(treatmentData: listSubServices[subServiceIndex]),
+      () =>
+          ServiceDetailScreen(treatmentData: listSubServices[subServiceIndex]),
       duration: const Duration(milliseconds: 700),
       curve: Curves.easeInQuad,
       transition: Transition.downToUp,
@@ -199,8 +209,10 @@ class ServicesController extends GetxController {
 
   void selectedServiceController(int serviceIndex, int subServiceIndex) async {
     isChanged = true;
-    var listOfSubServices =
-        subServices.where((subService) => subService.treatmentCategoryId == services[serviceIndex].id).toList();
+    var listOfSubServices = subServices
+        .where((subService) =>
+            subService.treatmentCategoryId == services[serviceIndex].id)
+        .toList();
     if (list.isEmpty) {
       list.add(listOfSubServices[subServiceIndex].id!);
       duration = int.parse(listOfSubServices[subServiceIndex].duration!);
@@ -208,7 +220,8 @@ class ServicesController extends GetxController {
       print(checkedServices);
     } else {
       if (list.contains(listOfSubServices[subServiceIndex].id!)) {
-        list.removeWhere((element) => element == listOfSubServices[subServiceIndex].id!);
+        list.removeWhere(
+            (element) => element == listOfSubServices[subServiceIndex].id!);
         duration -= int.parse(listOfSubServices[subServiceIndex].duration!);
         print(duration);
         print(checkedServices);
@@ -227,7 +240,8 @@ class ServicesController extends GetxController {
         list.add(listOfSubServices[subServiceIndex].id!);
       } else {
         if (list.contains(listOfSubServices[subServiceIndex].id!)) {
-          list.removeWhere((element) => element == listOfSubServices[subServiceIndex].id!);
+          list.removeWhere(
+              (element) => element == listOfSubServices[subServiceIndex].id!);
         } else {
           list.add(listOfSubServices[subServiceIndex].id!);
         }

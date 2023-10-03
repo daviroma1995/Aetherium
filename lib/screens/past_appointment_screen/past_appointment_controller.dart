@@ -8,6 +8,7 @@ import 'package:atherium_saloon_app/screens/appointment_details/appointment_deta
 import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -65,11 +66,11 @@ class PastAppointmentController extends GetxController {
         }
       }
       if (clients != null) {
-        pastAppointments.forEach((appointment) {
+        for (var appointment in pastAppointments) {
           var client = clients
               .firstWhere((element) => element['id'] == appointment.clientId);
           listOfClients.add(Client.fromJson(client));
-        });
+        }
       }
       for (var appointment in data) {
         for (int i = 0; i < statusData!.length; i++) {
@@ -125,10 +126,15 @@ class PastAppointmentController extends GetxController {
       //   }
       // });
       for (int i = 0; i < employeeData!.length; i++) {
-        if (employeeData[i]['id'] == appointment.employeeId![0]) {
+        if (appointment.employeeId!.isEmpty) {
+          break;
+        }
+        if (employeeData[i]['id'] == appointment.employeeId?[0]) {
           var employee = Employee.fromJson(employeeData[i]);
           employees.add(employee);
           break;
+        } else {
+          employees.add(Employee(name: tr('appointment')));
         }
       }
     }
@@ -139,11 +145,11 @@ class PastAppointmentController extends GetxController {
         }
       }
     }
-    services.forEach((service) {
+    for (var service in services) {
       var treatmentCategory = listOftreatmentCategories
           .firstWhere((element) => element.id == service.treatmentCategoryId);
       listOfTreatmentCategory.add(treatmentCategory);
-    });
+    }
     isInititalized.value = true;
   }
 

@@ -9,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/client.dart';
@@ -45,7 +44,7 @@ class AddNewClientController extends GetxController {
     imageFileString.value = LocalData.imageUrlString;
   }
 
-  RxString genderValue = 'Male'.obs;
+  RxString genderValue = tr('male').obs;
   RxBool isUpdating = false.obs;
   RxString imageFileString = ''.obs;
   final dateOfBirth = DateTime.now().obs;
@@ -104,7 +103,7 @@ class AddNewClientController extends GetxController {
     if (phone.text.isEmpty) {
       phoneHasError.value = true;
       phoneErrorMessage.value = tr('phone_is_required');
-    } else if (phone.text.length < 13 || phone.text.length > 13) {
+    } else if (phone.text.length < 6) {
       phoneHasError.value = true;
       phoneErrorMessage.value = tr('not_a_valid_number');
     } else {

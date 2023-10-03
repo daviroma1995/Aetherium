@@ -48,6 +48,7 @@ dependencies:
   googleapis: ^11.2.0
   googleapis_auth: ^1.4.1
   easy_localization: ^3.0.3
+  webview_flutter: ^4.2.4
   
 dev_dependencies:
   flutter_test:

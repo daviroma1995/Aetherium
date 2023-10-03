@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:atherium_saloon_app/screens/account_info_screen/account_info_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/primary_button.dart';
@@ -346,7 +345,7 @@ class AccountInfoScreen extends StatelessWidget {
                                     ),
                                     const SizedBox(height: 12.0),
                                     CustomLabelWidget(
-                                      label: AppLanguages.ADDRESS,
+                                      label: tr('address'),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!

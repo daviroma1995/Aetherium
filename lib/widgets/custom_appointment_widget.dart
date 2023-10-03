@@ -69,6 +69,7 @@ class CustomAppointmentCardWidget extends StatelessWidget {
                       children: [
                         Text(
                           title,
+                          overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge!

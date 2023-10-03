@@ -23,4 +23,9 @@ class TreatmentCategory {
     data['dark_icon'] = darkIconUrl;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'ID: $id,\nName $name,\n';
+  }
 }

@@ -28,6 +28,6 @@ class Notification {
 
   String get getDate {
     DateTime dateTime = date.toDate();
-    return DateFormat('DD MMM yyyy, hh:mm').format(dateTime);
+    return DateFormat('dd MMM yyyy, hh:mm').format(dateTime);
   }
 }

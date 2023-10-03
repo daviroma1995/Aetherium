@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:atherium_saloon_app/models/appointment.dart';
+import 'package:atherium_saloon_app/models/shop_info.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -22,6 +23,7 @@ int monthIndex = DateTime.now().month;
 
 class AppointMentBookingController extends GetxController {
   AppointMentBookingController({this.isEditing});
+  var shopinfo = ShopInfo().obs;
   bool? isEditing = false;
   RxBool isLoading = false.obs;
   RxBool calenderState = true.obs;
@@ -44,23 +46,73 @@ class AppointMentBookingController extends GetxController {
   var selectedEmloyees = <String>[].obs;
   var appointmentStatusList = <AppointmentStatus>[].obs;
   var statusLabels = <String>[].obs;
-  var initialDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0, 0, 0).obs;
+  var initialDate = DateTime(DateTime.now().year, DateTime.now().month,
+          (DateTime.now().day), 0, 0, 0, 0, 0)
+      .obs;
   String dateString = '';
   String timeString = '';
   Appointment appointment = Appointment();
   String previousStatus = '';
   String selectedStatus = '';
+  DateTime selectedDateTime = DateTime.now();
+  late String openingTime;
+  late String closingTime;
+  String closingHours = '';
   @override
   void onInit() async {
+    var shopInfoQuery =
+        await FirebaseFirestore.instance.collection('shop_info').get();
+    var queryDoc = shopInfoQuery.docs.first;
+    var shopInfoMap = queryDoc.data();
+    shopinfo.value = ShopInfo.fromJson(shopInfoMap);
     isLoading.value = true;
-    initialDate.value = args.dateTimestamp != null ? args.dateTimestamp.toDate() : initialDate.value;
-    selectedDate.value =
-        args.dateTimestamp != null ? DateFormat('MM/dd/yyyy').format(args.dateTimestamp.toDate()) : selectedDate.value;
+    openingTime =
+        shopinfo.value.openingHours?[DateTime.now().weekday - 1].openingTime ??
+            '';
+    closingTime =
+        shopinfo.value.openingHours?[DateTime.now().weekday - 1].closingTime ??
+            '';
+    int index = closingTime.indexOf(':');
+
+    if (index == 2) {
+      closingHours = '${closingTime[0]}${closingTime[1]}';
+    }
+    if (initialDate.value.weekday == 7) {
+      initialDate.value = DateTime(
+          DateTime.now().year, DateTime.now().month, (DateTime.now().day + 1));
+      calenderState.value = !calenderState.value;
+    } else if (args.dateTimestamp != null) {
+      DateTime date = args.dateTimestamp.toDate();
+      if (date.day < DateTime.now().day ||
+          date.month < DateTime.now().month ||
+          date.year < DateTime.now().year) {
+        initialDate.value = initialDate.value;
+        selectedDate.value = selectedDate.value;
+      } else {
+        initialDate.value = date;
+        selectedDate.value =
+            DateFormat('MM/dd/yyyy').format(args.dateTimestamp.toDate());
+      }
+    } else {
+      if (int.tryParse(closingHours)! < DateTime.now().hour) {
+        initialDate.value = DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
+        calenderState.value = !calenderState.value;
+        print('done');
+      }
+    }
+    // initialDate.value = args.dateTimestamp != null
+    //     ? args.dateTimestamp.toDate()
+    //     : initialDate.value;
+    // selectedDate.value = args.dateTimestamp != null
+    //     ? DateFormat('MM/dd/yyyy').format(args.dateTimestamp.toDate())
+    //     : selectedDate.value;
     args.notes = args.notes ?? '';
     notes.text = args.notes;
     args.isRegular = args.isRegular ?? true;
     treatments.bindStream(FirebaseServices.treatments());
-    var selectedEmployeeQuery = await FirebaseFirestore.instance.collection('employees').get();
+    var selectedEmployeeQuery =
+        await FirebaseFirestore.instance.collection('employees').get();
     for (var element in selectedEmployeeQuery.docs) {
       selectedEmloyees.add(element.id);
       var data = element.data();
@@ -68,16 +120,31 @@ class AppointMentBookingController extends GetxController {
       employees.add(Employee.fromJson(data));
     }
     args.employeeId = selectedEmloyees;
-    var data = await FirebaseServices.getDataWhere(collection: 'clients', value: FirebaseServices.cuid, key: 'user_id');
+    var data = await FirebaseServices.getDataWhere(
+        collection: 'clients', value: FirebaseServices.cuid, key: 'user_id');
     currentUser.value = Client.fromJson(data!);
     for (int i = 0; i < args.serviceId.length; i++) {
-      var data = await FirebaseFirestore.instance.collection('treatments').doc(args.serviceId[i]).get();
+      var data = await FirebaseFirestore.instance
+          .collection('treatments')
+          .doc(args.serviceId[i])
+          .get();
       var map = data.data()!;
       map['id'] = data.id;
       selectedTreatmentsMap.add(map);
     }
 
-    await loadTimeslots(treatments: selectedTreatmentsMap, appointmentDate: selectedDate.value);
+    // if (args.dateTimestamp != null) {
+    //   if (args.dateTimestamp.toDate().day >= DateTime.now().day &&
+    //       args.dateTimestamp.toDate().month >= DateTime.now().month &&
+    //       args.dateTimestamp.toDate().year >= DateTime.now().year) {
+    //     await loadTimeslots(
+    //         treatments: selectedTreatmentsMap,
+    //         appointmentDate: selectedDate.value);
+    //   }
+    // } else {
+    await loadTimeslots(
+        treatments: selectedTreatmentsMap, appointmentDate: selectedDate.value);
+    // }
     if (currentUser.value.isAdmin == true) {
       isAdmin.value = true;
     }
@@ -87,7 +154,9 @@ class AppointMentBookingController extends GetxController {
     }
 
     args.dateTimestamp = args.dateTimestamp ??
-        Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0, 0, 0).toLocal());
+        Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day, 0, 0, 0, 0, 0)
+            .toLocal());
     args.time = args.time == null
         ? avaliableSlots.isNotEmpty
             ? avaliableSlots[0]
@@ -135,17 +204,35 @@ class AppointMentBookingController extends GetxController {
   }
 
   void next() {
+    if (args.dateTimestamp != null) {
+      if (args.dateTimestamp.toDate().day < DateTime.now().day ||
+          args.dateTimestamp.toDate().month < DateTime.now().month ||
+          args.dateTimestamp.toDate().year < DateTime.now().year) {
+        Fluttertoast.showToast(msg: tr('appointment_past'));
+        return;
+      }
+    }
     selectedTreatements = <Treatment>[];
-    if (avaliableSlots.isEmpty) {
-      Fluttertoast.showToast(msg: 'No timeslot selected select a timeslot first', backgroundColor: AppColors.ERROR_COLOR);
+    if (selectedDateTime.day < DateTime.now().day ||
+        selectedDateTime.month < DateTime.now().month ||
+        selectedDateTime.year < DateTime.now().year) {
+      Fluttertoast.showToast(msg: tr('appointment_past'));
+      return;
+    } else if (avaliableSlots.isEmpty) {
+      Fluttertoast.showToast(
+          msg: 'No timeslot selected select a timeslot first',
+          backgroundColor: AppColors.ERROR_COLOR);
     } else {
-      DateTime time = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0, 0, 0).toLocal();
+      DateTime time = DateTime(DateTime.now().year, DateTime.now().month,
+              DateTime.now().day, 0, 0, 0, 0, 0)
+          .toLocal();
       args.dateTimestamp ??= Timestamp.fromDate(time);
       print('${args.dateTimestamp.toDate()} : date');
       args.serviceId.forEach((service) {
         log('Called');
         for (int index = 0; index < treatments.length; index++) {
-          if (treatments[index].name == service || treatments[index].id == service) {
+          if (treatments[index].name == service ||
+              treatments[index].id == service) {
             selectedTreatements.add(treatments[index]);
           }
         }
@@ -165,7 +252,9 @@ class AppointMentBookingController extends GetxController {
     }
   }
 
-  Future<void> loadTimeslots({required List<Map<String, dynamic>> treatments, required String appointmentDate}) async {
+  Future<void> loadTimeslots(
+      {required List<Map<String, dynamic>> treatments,
+      required String appointmentDate}) async {
     isLoading.value = true;
     // print(json.encode({"date": appointmentDate, "treatments": treatments}));
     print(isEditing);
@@ -176,12 +265,18 @@ class AppointMentBookingController extends GetxController {
     avaliableSlots.value = <String>[];
     filteredEmployees.value = <Employee>[];
     var client = http.Client();
-    var url = Uri.parse("https://us-central1-aetherium-salon.cloudfunctions.net/timeslots");
+    var url = Uri.parse(
+        "https://us-central1-aetherium-salon.cloudfunctions.net/timeslots");
     try {
       var response = await client.post(url,
           body: isEditing ?? false
-              ? json.encode({"date": appointmentDate, "treatments": treatments, "appointment_id": args.id})
-              : json.encode({"date": appointmentDate, "treatments": treatments}));
+              ? json.encode({
+                  "date": appointmentDate,
+                  "treatments": treatments,
+                  "appointment_id": args.id
+                })
+              : json
+                  .encode({"date": appointmentDate, "treatments": treatments}));
       var responseBody = response.body;
       // print(responseBody);
       var resList = json.decode(responseBody);
@@ -197,7 +292,10 @@ class AppointMentBookingController extends GetxController {
       var listOFEmployeeId = slotdata[0].employeeIdList;
       if (listOFEmployeeId!.isNotEmpty) {
         for (var id in listOFEmployeeId) {
-          var data = await FirebaseFirestore.instance.collection('employees').doc(id).get();
+          var data = await FirebaseFirestore.instance
+              .collection('employees')
+              .doc(id)
+              .get();
           var snapshot = data.data();
 
           filteredEmployees.add(Employee.fromJson(snapshot!));
@@ -216,7 +314,8 @@ class AppointMentBookingController extends GetxController {
       // }
       // args.employeId = resList[0]['employee_id_list'].isEmpty ?? [];
       if (avaliableSlots.isEmpty) {
-        Fluttertoast.showToast(msg: 'No slots available select another date', backgroundColor: AppColors.ERROR_COLOR);
+        Fluttertoast.showToast(
+            msg: tr('no_time_slots'), backgroundColor: AppColors.ERROR_COLOR);
       } else {
         args.time = avaliableSlots[0];
         args.startTime = slotdata[0].startTime;
@@ -226,13 +325,15 @@ class AppointMentBookingController extends GetxController {
     } catch (ex) {
       log(ex.toString());
 
-      Fluttertoast.showToast(msg: 'unknown! : No slots available select another date', backgroundColor: AppColors.ERROR_COLOR);
+      Fluttertoast.showToast(
+          msg: tr('no_time_slots'), backgroundColor: AppColors.ERROR_COLOR);
     }
     isLoading.value = false;
   }
 
   Future<void> loadStatues() async {
-    var statusQuery = await FirebaseFirestore.instance.collection('appointment_status').get();
+    var statusQuery =
+        await FirebaseFirestore.instance.collection('appointment_status').get();
     var docs = statusQuery.docs;
     for (var doc in docs) {
       var data = doc.data();
@@ -249,7 +350,12 @@ class AppointMentBookingController extends GetxController {
   }
 
   String getStatusLabel() {
-    return appointmentStatusList.where((status) => status.id == args.statusId).toList()[0].label.toString().capitalize ??
+    return appointmentStatusList
+            .where((status) => status.id == args.statusId)
+            .toList()[0]
+            .label
+            .toString()
+            .capitalize ??
         tr('select');
   }
 }

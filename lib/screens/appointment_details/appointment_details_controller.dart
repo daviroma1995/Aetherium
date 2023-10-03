@@ -9,6 +9,7 @@ import 'package:atherium_saloon_app/screens/update_appointment_status/update_app
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../models/treatment.dart';
 
@@ -19,11 +20,34 @@ class AppointmentDetailsController extends GetxController {
   var servicesList = <Treatment>[].obs;
   bool isChanged = false;
   RxInt price = 0.obs;
-  bool isAdmin = Get.find<AgendaController>().currentUser.value.isAdmin ?? false;
+  bool isAdmin =
+      Get.find<AgendaController>().currentUser.value.isAdmin ?? false;
+  late WebViewController controller;
   @override
   void onInit() async {
     super.onInit();
     allTreatments.bindStream(FirebaseServices.treatments());
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onWebResourceError: (WebResourceError error) {},
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.startsWith('https://www.youtube.com/')) {
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(
+          'https://calendar.google.com/calendar/u/0/r/eventedit?text=Meeting+with+Beauty+Specialist&dates=\$rfcStartTime/\$rfcEndTime&details=&location=G7F5%2B6GJ+Brescia,+Province+of+Brescia,+Italy&sf=true&output=xml'));
   }
 
   @override
@@ -137,7 +161,8 @@ class AppointmentDetailsController extends GetxController {
       await FirebaseFirestore.instance
           .collection('appointments')
           .doc(appointment.id)
-          .set({"total_duration": FieldValue.increment(duration)}, SetOptions(merge: true));
+          .set({"total_duration": FieldValue.increment(duration)},
+              SetOptions(merge: true));
       var homeController = Get.find<HomeScreenController>();
       homeController.loadAppointments();
       var agendaController = Get.find<AgendaController>();
@@ -179,8 +204,10 @@ class AppointmentDetailsController extends GetxController {
     if (endTimeHours >= 24) {
       endTimeHours = endTimeHours - 24;
     }
-    String totalEndHours = endTimeHours < 9 ? '0$endTimeHours' : endTimeHours.toString();
-    String totalMinutes = endTimeMinutes < 9 ? '0$endTimeMinutes' : endTimeMinutes.toString();
+    String totalEndHours =
+        endTimeHours < 9 ? '0$endTimeHours' : endTimeHours.toString();
+    String totalMinutes =
+        endTimeMinutes < 9 ? '0$endTimeMinutes' : endTimeMinutes.toString();
     endTime.value = '$totalEndHours:$totalMinutes';
     return '$totalEndHours:$totalMinutes';
   }

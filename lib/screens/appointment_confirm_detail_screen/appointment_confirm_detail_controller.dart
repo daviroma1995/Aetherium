@@ -1,8 +1,12 @@
+import 'dart:convert';
+
+import 'package:atherium_saloon_app/models/appointment.dart';
 import 'package:atherium_saloon_app/screens/appointment_confirm_screen/appointment_confirm_screen.dart';
 import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 
 import '../../models/treatment.dart';
 import '../../network_utils/firebase_services.dart';
@@ -16,6 +20,7 @@ class AppointmentConfirmDetailController extends GetxController {
   RxInt price = 0.obs;
   String selectedStatus = '';
   String previousStatus = '';
+  RxBool isLoading = false.obs;
   @override
   void onInit() {
     super.onInit();
@@ -115,11 +120,15 @@ class AppointmentConfirmDetailController extends GetxController {
   }
 
   void confirm() async {
+    isLoading.value = true;
     HomeScreenController homeController = Get.find();
     AgendaController agendaController = Get.find();
 
     if (args.id == null) {
-      FirebaseFirestore.instance.collection('appointments').add(args.toJson());
+      await FirebaseFirestore.instance
+          .collection('appointments')
+          .add(args.toJson());
+      isLoading.value = false;
       Get.to(
         () => const AppointmentConfirmScreen(),
         duration: const Duration(milliseconds: 400),
@@ -129,7 +138,11 @@ class AppointmentConfirmDetailController extends GetxController {
       homeController.loadHomeScreen();
       agendaController.loadData();
     } else {
-      FirebaseFirestore.instance.collection('appointments').doc(args.id).set({
+      isLoading.value = true;
+      await FirebaseFirestore.instance
+          .collection('appointments')
+          .doc(args.id)
+          .set({
         'date': args.date,
         'time': args.time,
         'date_timestamp': args.dateTimestamp,
@@ -141,14 +154,40 @@ class AppointmentConfirmDetailController extends GetxController {
         'treatment_id_list': args.serviceId,
         'status_id': args.statusId,
       }, SetOptions(merge: true));
+      var appointmenDoc = await FirebaseFirestore.instance
+          .collection('appointments')
+          .doc(args.id)
+          .get();
+      var docId = appointmenDoc.id;
+      var appointmentData = appointmenDoc.data();
+      appointmentData!['id'] = docId;
+      var appointmentObject =
+          Appointment.fromJson(appointmentData).toJsonCloudCalendar();
+      var appointmentJson = json.encode({"appointment": appointmentObject});
+      print(appointmentJson);
+      try {
+        var uri = Uri.parse(
+            'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
+        var response = await post(
+          uri,
+          body: appointmentJson,
+        );
+        print('Response :: ${response.body}');
+      } catch (ex) {
+        print("Exception::: ${ex.toString()}");
+      }
+
       homeController.loadHomeScreen();
       agendaController.loadData();
-      print(selectedStatus != '');
-      print(selectedStatus.toLowerCase() == 'archiviato');
-      print('Selected : $selectedStatus');
-      print(previousStatus.toLowerCase() != 'archiviato');
-      print('Previous: $previousStatus');
-      var snapshot = await FirebaseFirestore.instance.collection('client_memberships').doc(args.clientId).get();
+      // print(selectedStatus != '');
+      // print(selectedStatus.toLowerCase() == 'archiviato');
+      // print('Selected : $selectedStatus');
+      // print(previousStatus.toLowerCase() != 'archiviato');
+      // print('Previous: $previousStatus');
+      var snapshot = await FirebaseFirestore.instance
+          .collection('client_memberships')
+          .doc(args.clientId)
+          .get();
       var data = snapshot.data();
       var points = data?['points'];
       if (selectedStatus != '' &&
@@ -156,7 +195,10 @@ class AppointmentConfirmDetailController extends GetxController {
           previousStatus.toLowerCase() != 'archiviato' &&
           points + 25 <= 300) {
         print('if Called');
-        await FirebaseFirestore.instance.collection('client_memberships').doc(args.clientId).update(
+        await FirebaseFirestore.instance
+            .collection('client_memberships')
+            .doc(args.clientId)
+            .update(
           {
             "points": FieldValue.increment(25),
           },
@@ -167,7 +209,10 @@ class AppointmentConfirmDetailController extends GetxController {
           selectedStatus.toLowerCase() != 'archiviato' &&
           points - 25 >= 0) {
         print('Else if called');
-        await FirebaseFirestore.instance.collection('client_memberships').doc(args.clientId).update(
+        await FirebaseFirestore.instance
+            .collection('client_memberships')
+            .doc(args.clientId)
+            .update(
           {
             "points": FieldValue.increment(-25),
           },
@@ -185,6 +230,7 @@ class AppointmentConfirmDetailController extends GetxController {
       await homeController.loadHomeScreen();
       await agendaController.loadData();
       homeController.refresh();
+      isLoading.value = false;
       Get.to(
         () => const AppointmentConfirmScreen(),
         duration: const Duration(milliseconds: 400),
@@ -226,8 +272,10 @@ class AppointmentConfirmDetailController extends GetxController {
     if (endTimeHours >= 24) {
       endTimeHours = endTimeHours - 24;
     }
-    String totalEndHours = endTimeHours < 9 ? '0$endTimeHours' : endTimeHours.toString();
-    String totalMinutes = endTimeMinutes < 9 ? '0$endTimeMinutes' : endTimeMinutes.toString();
+    String totalEndHours =
+        endTimeHours < 9 ? '0$endTimeHours' : endTimeHours.toString();
+    String totalMinutes =
+        endTimeMinutes < 9 ? '0$endTimeMinutes' : endTimeMinutes.toString();
 
     return '$totalEndHours:$totalMinutes';
   }

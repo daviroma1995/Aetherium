@@ -2,7 +2,6 @@ import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/primary_button.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../widgets/custom_drop_down_widget.dart';
@@ -203,7 +202,7 @@ class AddNewClient extends StatelessWidget {
                     ),
                     const SizedBox(height: 12.0),
                     CustomLabelWidget(
-                      label: 'address',
+                      label: tr('address'),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.w700,
                             color: isDark
@@ -214,7 +213,7 @@ class AddNewClient extends StatelessWidget {
                     Obx(
                       () => CustomInputFormField(
                         textEdigintController: controller.address,
-                        hintText: 'Address',
+                        hintText: tr('address'),
                         isValid: !controller.addressHasError.value,
                         onSubmit: () {},
                         onchange: (value) {
