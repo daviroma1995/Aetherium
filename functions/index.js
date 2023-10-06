@@ -2,8 +2,38 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 
 admin.initializeApp();
+exports.sendNotification = functions.firestore
+    .document("notifications/{docId}")
+    .onCreate(async (snap, context) => {
+      const data = snap.data();
+      const notificationContent = {
+        notification: {
+          title: data.title,
+          body: data.body,
+        },
+        data: {
+          id: data.id,
+          title: data.title,
+          body: data.body,
+          senderImage: data.senderImage,
+          senderId: data.senderId,
+          type: data.type,
+          appointmentId: data.appointmentId,
 
-exports.createUserwithEmail = functions.https.onRequest(async (req, res) =>{
+        },
+        apns: {
+          payload: {
+            aps: {
+              sound: "default",
+            },
+          },
+        },
+        topic: data.receiverId,
+      };
+      await admin.messaging().send(notificationContent);
+    });
+
+exports.createUserwithEmail = functions.https.onRequest(async (req, res) => {
   const {email, password} = req.body;
   try {
     const userData = await admin.auth().createUser({
