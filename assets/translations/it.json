@@ -200,5 +200,9 @@
     "no_time_slots": "Nessuno slot disponibile, selezionare un'altra data",
     "appointment_delete": "L'appuntamento verrà eliminato permanentemente",
     "delete_confirm": "Sei sicuro?",
-    "appointment": "Appuntamento"
+    "appointment": "Appuntamento",
+    "new_appointment": "Nuovo appuntamento",
+    "appointment_new_added": "ha aggiunto un nuovo appuntamento",
+    "appointment_new_added_successfully": "ha aggiunto un nuovo appuntamento",
+    "we_created_new_appointment": "abbiamo creato per te un nuovo appuntamento."
 }

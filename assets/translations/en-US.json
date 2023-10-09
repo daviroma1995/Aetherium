@@ -189,5 +189,9 @@
     "increase": "Increase",
     "appointment_delete": "Appointment will be deleted permanently",
     "delete_confirm": "Are you sure?",
-    "appointment": "Appuntamento"
+    "appointment": "Appuntamento",
+    "new_appointment": "New Appointment",
+    "appointment_new_added": "Added a new appointment",
+    "appointment_new_added_successfully": "New Appointment added successfully",
+    "we_created_new_appointment": "we created a new appointment for you."
 }

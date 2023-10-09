@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:atherium_saloon_app/models/notification_model.dart';
 import 'package:atherium_saloon_app/models/treatment_category.dart';
+import 'package:atherium_saloon_app/network_utils/firebase_messaging.dart';
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/screens/appointments_screen/appointments_screen.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:atherium_saloon_app/utils/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -260,6 +263,24 @@ class HomeScreenController extends GetxController {
         }
       },
     );
+  }
+
+  void sendNotification(String message) {
+    NotificationModel notification = NotificationModel(
+        id: '',
+        title: '${currentUser.value.firstName} send you a message',
+        body: message,
+        senderId: currentUser.value.userId!,
+        receiverId: 'U4Vob2BIBTPWBmwAAEh0iBzskBA3',
+        senderImage: '',
+        senderName: 'Basit',
+        createdAt: Timestamp.now(),
+        type: 'message',
+        desc: message,
+        status: '',
+        appointmentId: '',
+        clientId: '');
+    NotificationsSubscription.createNotification(notification: notification);
   }
 }
 

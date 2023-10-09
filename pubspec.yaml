@@ -24,9 +24,9 @@ dependencies:
   shared_preferences: ^2.0.20
   qr_flutter: any
   adaptive_dialog: ^1.8.3
-  image_picker: ^0.8.7+1
-  permission_handler: ^10.2.0
-  geolocator: ^9.0.2
+  image_picker: ^1.0.4
+  permission_handler: ^11.0.1
+  geolocator: ^10.1.0
   flutter_native_image: ^0.0.6+1
   adaptive_theme: ^3.2.0
   intl: ^0.18.0
@@ -40,23 +40,33 @@ dependencies:
   liquid_pull_to_refresh: ^3.0.1
   animated_radial_menu: ^0.0.1
   qr_code_scanner: ^1.0.1
-  http: ^0.13.6
+  http: ^1.1.0
   firebase_storage: ^11.2.1
   flutter_pdfview: ^1.3.1
-  firebase_app_check: ^0.1.4+2
+  firebase_app_check: ^0.2.0+1
   path_provider: ^2.0.15
   googleapis: ^11.2.0
   googleapis_auth: ^1.4.1
   easy_localization: ^3.0.3
   webview_flutter: ^4.2.4
+  flutter_local_notifications: ^16.0.0
+  firebase_messaging: ^14.6.9
   
 dev_dependencies:
   flutter_test:
     sdk: flutter        
 
   
-  flutter_lints: ^1.0.0
-  change_app_package_name: ^1.1.0     
+  flutter_lints: ^2.0.3
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/images/ic_launcher/res/mipmap-hdpi/ic_launcher_adaptive_fore.png"
+  min_sdk_android: 21
+  background_color: "#43231B"
+  remove_alpha_ios: true
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

@@ -19,7 +19,7 @@ class AgendaScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-        backgroundColor: AppColors.PRIMARY_DARK,
+        backgroundColor: isDark ? AppColors.PRIMARY_DARK : null,
         body: SafeArea(
           child: Column(
             children: [

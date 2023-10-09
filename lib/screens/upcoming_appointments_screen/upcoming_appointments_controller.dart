@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:atherium_saloon_app/models/appointment_status.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/models/treatment.dart';
@@ -8,6 +11,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 import '../../models/appointment.dart';
 import '../../models/client.dart';
@@ -55,7 +59,24 @@ class UpcomingAppointmentsController extends GetxController {
       await FirebaseFirestore.instance
           .collection('appointments')
           .doc(upcommingAppointments[id].id)
-          .delete();
+          .delete()
+          .then((value) async {
+        try {
+          var appointmentId = upcommingAppointments[id].id;
+          var uri = Uri.parse(
+              'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
+          var response = await http.post(
+            uri,
+            body: json.encode({
+              "operation": "DELETE",
+              "appointment_id": appointmentId,
+            }),
+          );
+          log('Response :: ${response.body}');
+        } catch (ex) {
+          log("Exception::: ${ex.toString()}");
+        }
+      });
       var homeController = Get.find<HomeScreenController>();
       homeController.loadHomeScreen();
       var agenda = Get.find<AgendaController>();

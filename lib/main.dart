@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+
 import 'firebase_options.dart';
 
 void main() async {
@@ -18,7 +19,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseAppCheck.instance.activate(
-    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+    webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
     androidProvider: AndroidProvider.playIntegrity,
     appleProvider: AppleProvider.deviceCheck,
   );
@@ -39,14 +40,16 @@ class MyApp extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: context.isDarkMode ? AppColors.BACKGROUND_COLOR : AppColors.BACKGROUND_DARK,
+        statusBarColor: context.isDarkMode
+            ? AppColors.BACKGROUND_COLOR
+            : AppColors.BACKGROUND_DARK,
         statusBarIconBrightness: isDark ? Brightness.dark : Brightness.light,
       ),
     );
     return AdaptiveTheme(
       light: lightTheme,
       dark: darkTheme,
-      initial: AdaptiveThemeMode.light,
+      initial: AdaptiveThemeMode.system,
       builder: (theme, darkTheme) => GetMaterialApp(
         supportedLocales: context.supportedLocales,
         localizationsDelegates: context.localizationDelegates,

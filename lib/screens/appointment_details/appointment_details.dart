@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../models/appointment.dart';
@@ -309,20 +312,28 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                           String url =
                                               'https://calendar.google.com/calendar/u/0/r/eventedit?text=Meeting+with+Beauty+Specialist&dates=$rfcStartTime/$rfcEndTime&details=&location=G7F5%2B6GJ+Brescia,+Province+of+Brescia,+Italy&sf=true&output=xml';
                                           const String urlSchemeAndroid =
-                                              'content://com.android.calendar/time/';
+                                              'content://com.android.calendar/';
                                           const String urlSchemeIOS =
                                               'calshow://';
-                                          if (await canLaunchUrlString(
-                                              urlSchemeAndroid)) {
-                                            await launchUrlString(
-                                                urlSchemeAndroid);
-                                          } else if (await canLaunchUrlString(
-                                              urlSchemeIOS)) {
-                                            await launchUrlString(urlSchemeIOS);
-                                          } else {
-                                            throw 'Could not open the calendar app';
+                                          if (Platform.isAndroid) {
+                                            if (await canLaunchUrl(
+                                                Uri.parse(urlSchemeAndroid))) {
+                                              await launchUrl(
+                                                Uri.parse(urlSchemeAndroid),
+                                                mode: LaunchMode
+                                                    .externalApplication,
+                                              );
+                                            }
                                           }
-
+                                          if (Platform.isIOS) {
+                                            if (await canLaunchUrlString(
+                                                urlSchemeIOS)) {
+                                              await launchUrlString(
+                                                  urlSchemeIOS);
+                                            } else {
+                                              throw 'Could not open the calendar app';
+                                            }
+                                          }
                                           // try {
                                           //   launchUrlString(url,
                                           //       mode: LaunchMode.inAppWebView,

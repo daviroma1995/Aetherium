@@ -116,10 +116,11 @@ class AppointmentBookingScreen extends StatelessWidget {
                                       !controller.calenderState.value;
                                   controller.args.date =
                                       controller.selectedDate.value;
-                                  bool isPastDay =
-                                      value.day < DateTime.now().day ||
+                                  bool isPastDay = (value.day <
+                                              DateTime.now().day ||
                                           value.month < DateTime.now().month ||
-                                          value.year < DateTime.now().year;
+                                          value.year < DateTime.now().year) &&
+                                      value.month <= DateTime.now().month;
                                   await controller.loadTimeslots(
                                       treatments:
                                           controller.selectedTreatmentsMap,
@@ -175,10 +176,12 @@ class AppointmentBookingScreen extends StatelessWidget {
                                       !controller.calenderState.value;
                                   controller.args.date =
                                       controller.selectedDate.value;
-                                  bool isPastDay =
-                                      value.day < DateTime.now().day ||
+                                  bool isPastDay = (value.day <
+                                              DateTime.now().day ||
                                           value.month < DateTime.now().month ||
-                                          value.year < DateTime.now().year;
+                                          value.year < DateTime.now().year) &&
+                                      value.month <= DateTime.now().month;
+
                                   await controller.loadTimeslots(
                                       treatments:
                                           controller.selectedTreatmentsMap,

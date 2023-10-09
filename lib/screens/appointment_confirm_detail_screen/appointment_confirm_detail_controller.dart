@@ -1,9 +1,14 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:atherium_saloon_app/models/appointment.dart';
+import 'package:atherium_saloon_app/models/notification_model.dart';
+import 'package:atherium_saloon_app/network_utils/firebase_messaging.dart';
 import 'package:atherium_saloon_app/screens/appointment_confirm_screen/appointment_confirm_screen.dart';
 import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
@@ -21,10 +26,16 @@ class AppointmentConfirmDetailController extends GetxController {
   String selectedStatus = '';
   String previousStatus = '';
   RxBool isLoading = false.obs;
+  String adminId = '';
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     allTreatments.bindStream(FirebaseServices.treatments());
+    var instance = await FirebaseFirestore.instance
+        .collection('clients')
+        .where('isAdmin', isEqualTo: true)
+        .get();
+    adminId = instance.docs.first.id;
   }
 
   @override
@@ -127,8 +138,67 @@ class AppointmentConfirmDetailController extends GetxController {
     if (args.id == null) {
       await FirebaseFirestore.instance
           .collection('appointments')
-          .add(args.toJson());
+          .add(args.toJson())
+          .then((value) async {
+        var docSnapshot = await value.get();
+        var data = docSnapshot.data();
+        if (kDebugMode) {
+          print('Data:::::: $data');
+        }
+        try {
+          if (data != null) {
+            var uri = Uri.parse(
+                'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
+            var response = await post(
+              uri,
+              body: json.encode(
+                {
+                  "operation": "CREATE",
+                  "appointment_id": docSnapshot.id,
+                  "appointment": {
+                    'client_id': data['client_id'],
+                    'date': data['date'],
+                    'date_timestamp': data['date_timestamp'].toString(),
+                    'email': data['email'],
+                    'employee_id_list': data['employee_id_list'],
+                    'end_time': data['end_time'],
+                    'is_regular': data['is_regular'],
+                    'noets': data['noets'],
+                    'number': data['number'],
+                    'room_id_list': data['room_id_list'],
+                    'start_time': data['start_time'],
+                    'status_id': data['status_id'],
+                    'time': data['time'],
+                    'total_duration': data['total_duration'],
+                    'treatment_id_list': data['treatment_id_list'],
+                  },
+                },
+              ),
+            );
+            log('Response :: ${response.body}');
+          }
+        } catch (ex) {
+          log("Exception::: ${ex.toString()}");
+        }
+        if (!homeController.currentUser.value.isAdmin!) {
+          sendNotification(tr('appointment_new_added_successfully'),
+              args.clientId, tr('new_appointment'),
+              appointmentId: value.id);
+          sendNotification(
+            '${homeController.currentUser.value.firstName} ${tr('appointment_new_added')}',
+            adminId,
+            tr('new_appointment'),
+            appointmentId: value.id,
+          );
+        }
+        if (homeController.currentUser.value.isAdmin!) {
+          sendNotification(
+              tr('we_created_new_appointment'), args.clientId, 'Admin',
+              appointmentId: value.id);
+        }
+      });
       isLoading.value = false;
+
       Get.to(
         () => const AppointmentConfirmScreen(),
         duration: const Duration(milliseconds: 400),
@@ -157,7 +227,44 @@ class AppointmentConfirmDetailController extends GetxController {
       var appointmenDoc = await FirebaseFirestore.instance
           .collection('appointments')
           .doc(args.id)
-          .get();
+          .get()
+          .then((value) async {
+        var data = value.data();
+        if (data != null) {
+          try {
+            var uri = Uri.parse(
+                'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
+
+            var response = await post(
+              uri,
+              body: json.encode({
+                "operationg": "UPDATE",
+                "appointment_id": value.id,
+                "appointment": {
+                  'client_id': data['client_id'],
+                  'date': data['date'],
+                  'date_timestamp': data['date_timestamp'].toString(),
+                  'email': data['email'],
+                  'employee_id_list': data['employee_id_list'],
+                  'end_time': data['end_time'],
+                  'is_regular': data['is_regular'],
+                  'noets': data['noets'],
+                  'number': data['number'],
+                  'room_id_list': data['room_id_list'],
+                  'start_time': data['start_time'],
+                  'status_id': data['status_id'],
+                  'time': data['time'],
+                  'total_duration': data['total_duration'],
+                  'treatment_id_list': data['treatment_id_list'],
+                },
+              }),
+            );
+            log('Response :: ${response.body}');
+          } catch (ex) {
+            log("Exception::: ${ex.toString()}");
+          }
+        }
+      });
       var docId = appointmenDoc.id;
       var appointmentData = appointmenDoc.data();
       appointmentData!['id'] = docId;
@@ -165,17 +272,6 @@ class AppointmentConfirmDetailController extends GetxController {
           Appointment.fromJson(appointmentData).toJsonCloudCalendar();
       var appointmentJson = json.encode({"appointment": appointmentObject});
       print(appointmentJson);
-      try {
-        var uri = Uri.parse(
-            'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
-        var response = await post(
-          uri,
-          body: appointmentJson,
-        );
-        print('Response :: ${response.body}');
-      } catch (ex) {
-        print("Exception::: ${ex.toString()}");
-      }
 
       homeController.loadHomeScreen();
       agendaController.loadData();
@@ -278,5 +374,25 @@ class AppointmentConfirmDetailController extends GetxController {
         endTimeMinutes < 9 ? '0$endTimeMinutes' : endTimeMinutes.toString();
 
     return '$totalEndHours:$totalMinutes';
+  }
+
+  void sendNotification(String message, String receiverId, String title,
+      {required String appointmentId}) {
+    HomeScreenController controller = Get.find();
+    NotificationModel notification = NotificationModel(
+        id: '',
+        title: title,
+        body: message,
+        senderId: controller.currentUser.value.userId!,
+        receiverId: receiverId,
+        senderImage: controller.currentUser.value.photo ?? '',
+        senderName: controller.currentUser.value.firstName!,
+        createdAt: Timestamp.now(),
+        type: 'apointment',
+        desc: message,
+        status: 'unread',
+        appointmentId: appointmentId,
+        clientId: '');
+    NotificationsSubscription.createNotification(notification: notification);
   }
 }
