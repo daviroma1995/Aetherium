@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, unused_local_variable
 
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:atherium_saloon_app/models/membership.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
@@ -140,7 +141,7 @@ class SelectClientController extends GetxController {
         client: clients[index],
       ),
       duration: const Duration(milliseconds: 300),
-      transition: Transition.downToUp,
+      transition: Platform.isIOS ? null : Transition.downToUp,
       arguments: clients[index].userId,
     );
   }

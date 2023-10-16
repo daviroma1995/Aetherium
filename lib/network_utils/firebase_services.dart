@@ -469,6 +469,7 @@ class FirebaseServices {
         .collection('notifications')
         .where('status', isEqualTo: 'unread')
         .where('client_id', isEqualTo: cuid)
+        .orderBy('createdAt', descending: true)
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
@@ -487,6 +488,7 @@ class FirebaseServices {
         .collection('notifications')
         .where('status', isEqualTo: 'unread')
         .where('client_id', isEqualTo: cuid)
+        .orderBy('createdAt', descending: true)
         .snapshots()
         .map((notification) {
       var notifications = <Notification>[];

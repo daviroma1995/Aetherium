@@ -1,10 +1,11 @@
+import 'dart:io';
+
 import 'package:atherium_saloon_app/models/client.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/select_client_screen/select_client_screen.dart';
 import 'package:atherium_saloon_app/screens/upcoming_appointments_screen/upcoming_appointments_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../past_appointment_screen/past_appointment_screen.dart';
@@ -52,14 +53,14 @@ class AppointmentsController extends GetxController {
         () => const ServicesScreen(),
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeInQuad,
-        transition: Transition.rightToLeft,
+        transition: Platform.isIOS ? null : Transition.rightToLeft,
       );
     } else {
       Get.to(
         () => SelectClientScreen(),
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeInQuad,
-        transition: Transition.rightToLeft,
+        transition: Platform.isIOS ? null : Transition.rightToLeft,
       );
     }
   }

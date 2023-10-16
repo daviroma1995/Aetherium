@@ -171,7 +171,7 @@ class AppointmentDetailsController extends GetxController {
             ),
         duration: const Duration(milliseconds: 700),
         curve: Curves.linear,
-        transition: Transition.downToUp,
+        transition: Platform.isIOS ? null : Transition.downToUp,
         arguments: appointment);
     isChanged = data;
   }
@@ -181,7 +181,7 @@ class AppointmentDetailsController extends GetxController {
       () => UpdateAppointmentStatusScreen(appointment: appointment),
       duration: const Duration(milliseconds: 700),
       curve: Curves.linear,
-      transition: Transition.downToUp,
+      transition: Platform.isIOS ? null : Transition.downToUp,
       arguments: appointment,
     );
   }

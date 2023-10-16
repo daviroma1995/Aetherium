@@ -54,7 +54,7 @@ class NotificationsSubscription {
   static Future<void> fcmSubscribe({required String topicId}) async {
     try {
       await firebaseMessaging.subscribeToTopic(topicId);
-      await firebaseMessaging.subscribeToTopic('bCh4DtuF9J7FX2D7aHIm');
+      // await firebaseMessaging.subscribeToTopic('bCh4DtuF9J7FX2D7aHIm');
       log("++Token subscribe++$topicId");
     } catch (error) {
       log(error.toString());

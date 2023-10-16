@@ -26,12 +26,14 @@ void main() async {
   );
 
   await LocalData.loadData();
-  runApp(EasyLocalization(
-    supportedLocales: const [Locale('it'), Locale('en, US')],
-    path: 'assets/translations',
-    fallbackLocale: const Locale('it'),
-    child: const MyApp(),
-  ));
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('it'), Locale('en, US')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('it'),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

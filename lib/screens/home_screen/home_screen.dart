@@ -505,7 +505,8 @@ class HomeScreen extends StatelessWidget {
                         final result = await Get.to(
                           () => EventsScreen(),
                           duration: const Duration(milliseconds: 400),
-                          transition: Transition.rightToLeft,
+                          transition:
+                              Platform.isIOS ? null : Transition.rightToLeft,
                           arguments: controller.events,
                         );
                         if (result != null) {

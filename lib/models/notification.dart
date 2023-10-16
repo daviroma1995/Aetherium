@@ -22,7 +22,7 @@ class Notification {
       desc: data['desc'] ?? '',
       status: data['status'] ?? '',
       title: data['title'] ?? '',
-      date: data['date'] ?? Timestamp.now(),
+      date: data['createdAt'] ?? Timestamp.now(),
     );
   }
 

@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
@@ -123,7 +125,9 @@ class AgendaScreen extends StatelessWidget {
                                             duration: const Duration(
                                               milliseconds: 600,
                                             ),
-                                            transition: Transition.downToUp,
+                                            transition: Platform.isIOS
+                                                ? null
+                                                : Transition.downToUp,
                                           ),
                                           child: AgendaCustomCardWidget(
                                             startTime: controller.getTime(

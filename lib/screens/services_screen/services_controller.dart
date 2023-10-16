@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:atherium_saloon_app/models/appointment.dart';
 import 'package:atherium_saloon_app/models/treatment_category.dart';
@@ -186,7 +187,7 @@ class ServicesController extends GetxController {
         ),
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeInQuad,
-        transition: Transition.rightToLeft,
+        transition: Platform.isIOS ? null : Transition.rightToLeft,
         arguments: appointment,
       );
     }
@@ -203,7 +204,7 @@ class ServicesController extends GetxController {
           ServiceDetailScreen(treatmentData: listSubServices[subServiceIndex]),
       duration: const Duration(milliseconds: 700),
       curve: Curves.easeInQuad,
-      transition: Transition.downToUp,
+      transition: Platform.isIOS ? null : Transition.downToUp,
     );
   }
 

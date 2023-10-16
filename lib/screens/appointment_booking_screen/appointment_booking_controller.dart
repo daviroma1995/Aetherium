@@ -1,17 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
+
 import 'package:atherium_saloon_app/models/appointment.dart';
-import 'package:atherium_saloon_app/models/shop_info.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:atherium_saloon_app/models/client.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
+import 'package:atherium_saloon_app/models/shop_info.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 import '../../models/appointment_status.dart';
 import '../../models/timeslot.dart';
@@ -246,7 +248,7 @@ class AppointMentBookingController extends GetxController {
           previousStatus: previousStatus,
         ),
         duration: const Duration(milliseconds: 600),
-        transition: Transition.downToUp,
+        transition: Platform.isIOS ? null : Transition.downToUp,
         arguments: args,
       );
     }

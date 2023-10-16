@@ -94,7 +94,7 @@ class HomeScreenController extends GetxController {
         isAdmin: currentUser.value.isAdmin ?? false,
       ),
       duration: const Duration(milliseconds: 600),
-      transition: Transition.rightToLeft,
+      transition: Platform.isIOS ? null : Transition.rightToLeft,
       arguments: appointments[index].clientId,
     );
     if (data == true) {
@@ -178,7 +178,9 @@ class HomeScreenController extends GetxController {
         () => const ServicesScreen(),
         duration: const Duration(milliseconds: 600),
         curve: Curves.linear,
-        transition: Transition.rightToLeft,
+        preventDuplicates: true,
+        fullscreenDialog: true,
+        transition: Platform.isIOS ? null : Transition.rightToLeft,
       );
       return;
     }
@@ -186,7 +188,7 @@ class HomeScreenController extends GetxController {
       () => SelectClientScreen(),
       duration: const Duration(milliseconds: 600),
       curve: Curves.linear,
-      transition: Transition.rightToLeft,
+      transition: Platform.isIOS ? null : Transition.rightToLeft,
     );
   }
 
@@ -195,7 +197,7 @@ class HomeScreenController extends GetxController {
       () => const AppointmentsScreen(),
       duration: const Duration(milliseconds: 600),
       curve: Curves.linear,
-      transition: Transition.rightToLeft,
+      transition: Platform.isIOS ? null : Transition.rightToLeft,
     );
   }
 
@@ -205,13 +207,15 @@ class HomeScreenController extends GetxController {
           arguments: index,
           duration: const Duration(milliseconds: 600),
           curve: Curves.easeInCubic,
-          transition: Transition.downToUp);
+          preventDuplicates: true,
+          transition: Platform.isIOS ? null : Transition.downToUp);
     } else {
       Get.to(() => SelectClientScreen(),
           arguments: index,
           duration: const Duration(milliseconds: 600),
           curve: Curves.easeInCubic,
-          transition: Transition.downToUp);
+          preventDuplicates: true,
+          transition: Platform.isIOS ? null : Transition.downToUp);
     }
   }
 
@@ -219,7 +223,7 @@ class HomeScreenController extends GetxController {
     final result = await Get.to(
       () => EventDetailsScreen(),
       arguments: events[index],
-      transition: Transition.downToUp,
+      transition: Platform.isIOS ? null : Transition.downToUp,
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeInCubic,
     );
@@ -237,6 +241,7 @@ class HomeScreenController extends GetxController {
     _uid = FirebaseServices.cuid;
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
+        await loadHomeScreen();
         var map = await FirebaseServices.getCurrentUser();
         currentUser.value = Client.fromJson(map);
 

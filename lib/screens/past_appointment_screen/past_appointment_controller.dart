@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unused_local_variable
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:atherium_saloon_app/models/appointment_status.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
@@ -178,7 +179,7 @@ class PastAppointmentController extends GetxController {
         isPast: true,
         isAdmin: isAdmin,
       ),
-      transition: Transition.rightToLeft,
+      transition: Platform.isIOS ? null : Transition.rightToLeft,
       duration: const Duration(milliseconds: 400),
     )?.then((value) {
       if (value == true) {

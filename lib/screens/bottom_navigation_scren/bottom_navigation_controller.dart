@@ -31,14 +31,20 @@ class BottomNavigationController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    // NotificationsSubscription.setup();
+    await FirebaseMessaging.instance.requestPermission(
+      badge: true,
+      alert: true,
+      provisional: true,
+      sound: true,
+      criticalAlert: true,
+      announcement: true,
+    );
     if (FirebaseAuth.instance.currentUser != null) {
       var data = await FirebaseServices.getDataWhere(
           collection: 'clients', key: 'user_id', value: FirebaseServices.cuid);
       client.value = Client.fromJson(data ?? {});
     }
-    await NotificationsSubscription.fcmUnSubscribe(
-        appUserId: 'U4Vob2BIBTPWBmwAAEh0iBzskBA3');
+
     await NotificationsSubscription.fcmSubscribe(topicId: client.value.userId!);
 
     await initMessaging();
@@ -119,6 +125,7 @@ class BottomNavigationController extends GetxController {
 
     // onMessage: When the app is open and it receives a push notification
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      log('Notification message::: ${message.toString()}');
       HomeScreenController controller = Get.find();
       AgendaController agendaController = Get.find();
       agendaController.loadData();
@@ -132,26 +139,32 @@ class BottomNavigationController extends GetxController {
     });
 
     // replacement for onResume: When the app is in the background and opened directly from the push notification.
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      HomeScreenController controller = Get.find();
-      AgendaController agendaController = Get.find();
-      await controller.loadHomeScreen();
-      await agendaController.loadData().then((value) async {
-        var appointmentId = message.data['appointmentId'];
-        Appointment appointment;
-        var instance = FirebaseFirestore.instance;
-        var documentSnapshot =
-            await instance.collection('appointments').doc(appointmentId).get();
-        var data = documentSnapshot.data();
-        appointment = Appointment.fromJson(data!);
-        Get.to(
-          () => AppointmentDetailsScreen(
-            appointment: appointment,
-            isAdmin: controller.currentUser.value.isAdmin!,
-            isDetail: true,
-          ),
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (RemoteMessage message) async {
+        HomeScreenController controller = Get.find();
+        AgendaController agendaController = Get.find();
+        await controller.loadHomeScreen();
+        await agendaController.loadData().then(
+          (value) async {
+            var appointmentId = message.data['appointmentId'];
+            Appointment appointment;
+            var instance = FirebaseFirestore.instance;
+            var documentSnapshot = await instance
+                .collection('appointments')
+                .doc(appointmentId)
+                .get();
+            var data = documentSnapshot.data();
+            appointment = Appointment.fromJson(data!);
+            Get.to(
+              () => AppointmentDetailsScreen(
+                appointment: appointment,
+                isAdmin: controller.currentUser.value.isAdmin!,
+                isDetail: true,
+              ),
+            );
+          },
         );
-      });
-    });
+      },
+    );
   }
 }

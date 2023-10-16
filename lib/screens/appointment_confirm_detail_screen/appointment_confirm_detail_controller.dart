@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:atherium_saloon_app/models/appointment.dart';
 import 'package:atherium_saloon_app/models/notification_model.dart';
@@ -163,7 +164,7 @@ class AppointmentConfirmDetailController extends GetxController {
                     'employee_id_list': data['employee_id_list'],
                     'end_time': data['end_time'],
                     'is_regular': data['is_regular'],
-                    'noets': data['noets'],
+                    'notes': data['noets'],
                     'number': data['number'],
                     'room_id_list': data['room_id_list'],
                     'start_time': data['start_time'],
@@ -175,6 +176,7 @@ class AppointmentConfirmDetailController extends GetxController {
                 },
               ),
             );
+            log('Client id::::>>. ${data['client_id']} ');
             log('Response :: ${response.body}');
           }
         } catch (ex) {
@@ -185,7 +187,7 @@ class AppointmentConfirmDetailController extends GetxController {
               args.clientId, tr('new_appointment'),
               appointmentId: value.id);
           sendNotification(
-            '${homeController.currentUser.value.firstName} ${tr('appointment_new_added')}',
+            '${homeController.currentUser.value.firstName} ${homeController.currentUser.value.lastName} ${tr('appointment_new_added')}',
             adminId,
             tr('new_appointment'),
             appointmentId: value.id,
@@ -202,7 +204,7 @@ class AppointmentConfirmDetailController extends GetxController {
       Get.to(
         () => const AppointmentConfirmScreen(),
         duration: const Duration(milliseconds: 400),
-        transition: Transition.leftToRight,
+        transition: Platform.isIOS ? null : Transition.leftToRight,
         curve: Curves.linear,
       );
       homeController.loadHomeScreen();
@@ -248,7 +250,7 @@ class AppointmentConfirmDetailController extends GetxController {
                   'employee_id_list': data['employee_id_list'],
                   'end_time': data['end_time'],
                   'is_regular': data['is_regular'],
-                  'noets': data['noets'],
+                  'notes': data['noets'],
                   'number': data['number'],
                   'room_id_list': data['room_id_list'],
                   'start_time': data['start_time'],
@@ -275,11 +277,7 @@ class AppointmentConfirmDetailController extends GetxController {
 
       homeController.loadHomeScreen();
       agendaController.loadData();
-      // print(selectedStatus != '');
-      // print(selectedStatus.toLowerCase() == 'archiviato');
-      // print('Selected : $selectedStatus');
-      // print(previousStatus.toLowerCase() != 'archiviato');
-      // print('Previous: $previousStatus');
+
       var snapshot = await FirebaseFirestore.instance
           .collection('client_memberships')
           .doc(args.clientId)
@@ -330,7 +328,7 @@ class AppointmentConfirmDetailController extends GetxController {
       Get.to(
         () => const AppointmentConfirmScreen(),
         duration: const Duration(milliseconds: 400),
-        transition: Transition.leftToRight,
+        transition: Platform.isIOS ? null : Transition.leftToRight,
         curve: Curves.linear,
       );
       // await homeController.loadHomeScreen();
@@ -386,7 +384,8 @@ class AppointmentConfirmDetailController extends GetxController {
         senderId: controller.currentUser.value.userId!,
         receiverId: receiverId,
         senderImage: controller.currentUser.value.photo ?? '',
-        senderName: controller.currentUser.value.firstName!,
+        senderName:
+            '${controller.currentUser.value.firstName!} ${controller.currentUser.value.lastName}',
         createdAt: Timestamp.now(),
         type: 'apointment',
         desc: message,

@@ -6,7 +6,7 @@ class NotificationPermissionController extends GetxController {
 
   @override
   void onInit() async {
-    if (await Permission.notification.request().isGranted) {
+    if (await Permission.notification.isGranted) {
       isPermissionGranted.value = true;
     } else {
       isPermissionGranted.value = false;
