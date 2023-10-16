@@ -88,8 +88,9 @@ class HomeScreen extends StatelessWidget {
                       onTap: () {
                         Get.to(
                           () => NotificationsScreen(),
-                          duration: const Duration(milliseconds: 600),
-                          transition: Transition.downToUp,
+                          duration: const Duration(milliseconds: 400),
+                          transition:
+                              Platform.isAndroid ? Transition.downToUp : null,
                         );
                       },
                       borderRadius: BorderRadius.circular(25.0),

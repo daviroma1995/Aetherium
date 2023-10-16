@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../agenda_screen/agenda_screen.dart';
-
 import '../loyality_card_screen/loyality_card_screen.dart';
 import '../profile_screen/profile_screen.dart';
 
@@ -32,7 +31,7 @@ class BottomNavigationController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-
+    // NotificationsSubscription.setup();
     if (FirebaseAuth.instance.currentUser != null) {
       var data = await FirebaseServices.getDataWhere(
           collection: 'clients', key: 'user_id', value: FirebaseServices.cuid);
@@ -41,6 +40,7 @@ class BottomNavigationController extends GetxController {
     await NotificationsSubscription.fcmUnSubscribe(
         appUserId: 'U4Vob2BIBTPWBmwAAEh0iBzskBA3');
     await NotificationsSubscription.fcmSubscribe(topicId: client.value.userId!);
+
     await initMessaging();
   }
 

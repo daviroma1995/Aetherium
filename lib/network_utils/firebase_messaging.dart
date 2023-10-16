@@ -33,7 +33,7 @@ class NotificationsSubscription {
 
   static Future<void> showNotification(context) async {
     try {
-      await setup(context);
+      await setup();
       await firebaseMessaging.requestPermission(
         alert: true,
         badge: true,
@@ -79,11 +79,12 @@ class NotificationsSubscription {
     await docRef.set(notification.toMap());
   }
 
-  static Future<void> setup(context) async {
+  static Future<void> setup() async {
     const androidInitializationSetting = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
     );
-    const iosInitializationSetting = DarwinInitializationSettings(
+    final DarwinInitializationSettings iosInitializationSetting =
+        DarwinInitializationSettings(
       defaultPresentAlert: true,
       defaultPresentBadge: true,
       defaultPresentBanner: true,
@@ -94,8 +95,35 @@ class NotificationsSubscription {
       requestCriticalPermission: true,
       requestProvisionalPermission: true,
       requestSoundPermission: true,
+
+      // ...
+      notificationCategories: [
+        DarwinNotificationCategory(
+          'demoCategory',
+          actions: <DarwinNotificationAction>[
+            DarwinNotificationAction.plain('id_1', 'Action 1'),
+            DarwinNotificationAction.plain(
+              'id_2',
+              'Action 2',
+              options: <DarwinNotificationActionOption>{
+                DarwinNotificationActionOption.destructive,
+              },
+            ),
+            DarwinNotificationAction.plain(
+              'id_3',
+              'Action 3',
+              options: <DarwinNotificationActionOption>{
+                DarwinNotificationActionOption.foreground,
+              },
+            ),
+          ],
+          options: <DarwinNotificationCategoryOption>{
+            DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
+          },
+        )
+      ],
     );
-    const initSettings = InitializationSettings(
+    final initSettings = InitializationSettings(
         android: androidInitializationSetting, iOS: iosInitializationSetting);
     await flutterLocalNotificationsPlugin.initialize(
       initSettings,
@@ -118,7 +146,6 @@ class NotificationsSubscription {
       importance: Importance.max,
       playSound: true,
     );
-
     AndroidNotificationDetails androidNotificationDetail =
         AndroidNotificationDetails(
       channel.id, channel.name,

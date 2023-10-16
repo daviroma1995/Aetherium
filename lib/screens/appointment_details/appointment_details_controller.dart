@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:add_2_calendar/add_2_calendar.dart' as calendar;
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:atherium_saloon_app/models/appointment.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
@@ -23,6 +25,7 @@ class AppointmentDetailsController extends GetxController {
   bool isAdmin =
       Get.find<AgendaController>().currentUser.value.isAdmin ?? false;
   late WebViewController controller;
+  late calendar.Event event;
   @override
   void onInit() async {
     super.onInit();
@@ -54,6 +57,33 @@ class AppointmentDetailsController extends GetxController {
   void onClose() {
     super.onClose();
     allTreatments.close();
+  }
+
+  Future<void> addToCalendar({
+    required String title,
+    required String description,
+    required DateTime startDate,
+    required DateTime endDate,
+    required String email,
+  }) async {
+    event = calendar.Event(
+      title: title,
+      description: description,
+      location: 'Aetherium Estetica Saloon',
+      startDate: startDate,
+      endDate: endDate,
+      iosParams: const IOSParams(
+        reminder: Duration(
+            hours:
+                1), // on iOS, you can set alarm notification after your event.
+      ),
+      androidParams: AndroidParams(
+        emailInvites: [email],
+        // on Android, you can add invite emails to your event.
+      ),
+    );
+    bool isAdded = await calendar.Add2Calendar.addEvent2Cal(event);
+    print(isAdded);
   }
 
   String totalPrice(List<String> service) {

@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:io';
-
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../models/appointment.dart';
 import '../../utils/constants.dart';
@@ -286,67 +282,75 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                   Visibility(
                                     visible: isEditable,
                                     child: PrimaryButton(
-                                        width: Get.width,
-                                        color: isDark
-                                            ? AppColors.SECONDARY_LIGHT
-                                            : AppColors.PRIMARY_COLOR,
-                                        buttonText: 'add_to_google_calendar',
-                                        buttonTextColor: isDark
-                                            ? AppColors.BACKGROUND_DARK
-                                            : AppColors.WHITE_COLOR,
-                                        onTap: () async {
-                                          final startTime = DateTime.parse(
-                                                  appointment.startTime!)
-                                              .toUtc();
-                                          final rfcStartTime =
-                                              DateFormat("yyyyMMdd'T'HHmmss")
-                                                  .format(startTime);
-                                          final endTime = DateTime.parse(
-                                                  appointment.endTime!)
-                                              .toUtc();
-                                          final rfcEndTime =
-                                              DateFormat("yyyyMMdd'T'HHmmss")
-                                                  .format(endTime);
-                                          print('$startTime, $endTime');
-                                          print('$rfcStartTime , $rfcEndTime');
-                                          String url =
-                                              'https://calendar.google.com/calendar/u/0/r/eventedit?text=Meeting+with+Beauty+Specialist&dates=$rfcStartTime/$rfcEndTime&details=&location=G7F5%2B6GJ+Brescia,+Province+of+Brescia,+Italy&sf=true&output=xml';
-                                          const String urlSchemeAndroid =
-                                              'content://com.android.calendar/';
-                                          const String urlSchemeIOS =
-                                              'calshow://';
-                                          if (Platform.isAndroid) {
-                                            if (await canLaunchUrl(
-                                                Uri.parse(urlSchemeAndroid))) {
-                                              await launchUrl(
-                                                Uri.parse(urlSchemeAndroid),
-                                                mode: LaunchMode
-                                                    .externalApplication,
-                                              );
-                                            }
-                                          }
-                                          if (Platform.isIOS) {
-                                            if (await canLaunchUrlString(
-                                                urlSchemeIOS)) {
-                                              await launchUrlString(
-                                                  urlSchemeIOS);
-                                            } else {
-                                              throw 'Could not open the calendar app';
-                                            }
-                                          }
-                                          // try {
-                                          //   launchUrlString(url,
-                                          //       mode: LaunchMode.inAppWebView,
-                                          //       webOnlyWindowName:
-                                          //           'Google Calendar',
-                                          //       webViewConfiguration:
-                                          //           const WebViewConfiguration(
-                                          //               enableJavaScript:
-                                          //                   true));
-                                          // } catch (ex) {
-                                          //   print(ex);
-                                          // }
-                                        }),
+                                      width: Get.width,
+                                      color: isDark
+                                          ? AppColors.SECONDARY_LIGHT
+                                          : AppColors.PRIMARY_COLOR,
+                                      buttonText: 'add_to_google_calendar',
+                                      buttonTextColor: isDark
+                                          ? AppColors.BACKGROUND_DARK
+                                          : AppColors.WHITE_COLOR,
+                                      onTap: () async {
+                                        final startTime = DateTime.parse(
+                                                appointment.startTime!)
+                                            .toUtc();
+                                        final rfcStartTime =
+                                            DateFormat("yyyyMMdd'T'HHmmss")
+                                                .format(startTime);
+                                        final endTime =
+                                            DateTime.parse(appointment.endTime!)
+                                                .toUtc();
+                                        final rfcEndTime =
+                                            DateFormat("yyyyMMdd'T'HHmmss")
+                                                .format(endTime);
+                                        print('$startTime, $endTime');
+                                        print('$rfcStartTime , $rfcEndTime');
+                                        // String url =
+                                        //     'https://calendar.google.com/calendar/u/0/r/eventedit?text=Meeting+with+Beauty+Specialist&dates=$rfcStartTime/$rfcEndTime&details=&location=G7F5%2B6GJ+Brescia,+Province+of+Brescia,+Italy&sf=true&output=xml';
+                                        // const String urlSchemeAndroid =
+                                        //     'content://com.android.calendar/';
+                                        // const String urlSchemeIOS =
+                                        //     'calshow://';
+                                        // if (Platform.isAndroid) {
+                                        //   if (await canLaunchUrl(
+                                        //       Uri.parse(urlSchemeAndroid))) {
+                                        //     await launchUrl(
+                                        //       Uri.parse(urlSchemeAndroid),
+                                        //       mode: LaunchMode
+                                        //           .externalApplication,
+                                        //     );
+                                        //   }
+                                        // }
+                                        // if (Platform.isIOS) {
+                                        //   if (await canLaunchUrlString(
+                                        //       urlSchemeIOS)) {
+                                        //     await launchUrlString(
+                                        //         urlSchemeIOS);
+                                        //   } else {
+                                        //     throw 'Could not open the calendar app';
+                                        //   }
+                                        // }
+                                        // try {
+                                        //   launchUrlString(url,
+                                        //       mode: LaunchMode.inAppWebView,
+                                        //       webOnlyWindowName:
+                                        //           'Google Calendar',
+                                        //       webViewConfiguration:
+                                        //           const WebViewConfiguration(
+                                        //               enableJavaScript:
+                                        //                   true));
+                                        // } catch (ex) {
+                                        //   print(ex);
+                                        // }
+                                        await controller.addToCalendar(
+                                            title: 'Aetherium Saloon',
+                                            description:
+                                                'Meeting with beauty specialist',
+                                            startDate: startTime,
+                                            endDate: endTime,
+                                            email: appointment.email!);
+                                      },
+                                    ),
                                   ),
                                   // AspectRatio(
                                   //   aspectRatio: .4,

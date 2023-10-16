@@ -23,6 +23,10 @@ exports.sendNotification = functions.firestore
       apns: {
         payload: {
           aps: {
+            "alert": {
+              title: data.title,
+              body: data.body,
+            },
             sound: "default",
           },
         },
