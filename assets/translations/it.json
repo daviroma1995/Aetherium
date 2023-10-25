@@ -204,5 +204,18 @@
     "new_appointment": "Nuovo appuntamento",
     "appointment_new_added": "ha aggiunto un nuovo appuntamento",
     "appointment_new_added_successfully": "ha aggiunto un nuovo appuntamento",
-    "we_created_new_appointment": "abbiamo creato per te un nuovo appuntamento."
+    "we_created_new_appointment": "abbiamo creato per te un nuovo appuntamento.",
+    "no_timeslot_selected": "Prime di procedere, seleziona un'orario",
+    "Gen": "Gen",
+    "Feb": "Feb",
+    "Mar": "Mar",
+    "Apr": "Apr",
+    "May": "Mag",
+    "Jun": "Giu",
+    "Jul": "Lug",
+    "Aug": "Ago",
+    "Sep": "Set",
+    "Oct": "Ott",
+    "Nov": "Nov",
+    "Dec": "Dic"
 }

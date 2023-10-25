@@ -259,7 +259,8 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                   ],
                                 ),
                                 const SizedBox(height: 40.0),
-                                if (controller.args.employeeId != null)
+                                if (controller.args.employeeId != null &&
+                                    controller.args.employeeId.isNotEmpty)
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -287,7 +288,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                             title: homecontroller
                                                 .getEmployeeName(controller.args
                                                         .employeeId[index] ??
-                                                    '8f1cYZExVjeOo2sBDmQC'),
+                                                    ''),
                                             imageUrl: AppAssets.USER_IMAGE,
                                             subtitle:
                                                 tr('fragrances_and_perfumes'),
@@ -298,17 +299,22 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                     ],
                                   ),
                                 const SizedBox(height: 20.0),
-                                Text(
-                                  '${tr('note')}:',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium!
-                                      .copyWith(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 16.0,
-                                          color: isDark
-                                              ? AppColors.WHITE_COLOR
-                                              : AppColors.SECONDARY_COLOR),
+                                Visibility(
+                                  visible: controller.args.notes
+                                      .toString()
+                                      .isNotEmpty,
+                                  child: Text(
+                                    '${tr('note')}:',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium!
+                                        .copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16.0,
+                                            color: isDark
+                                                ? AppColors.WHITE_COLOR
+                                                : AppColors.SECONDARY_COLOR),
+                                  ),
                                 ),
                                 const SizedBox(height: 20.0),
                                 Text(

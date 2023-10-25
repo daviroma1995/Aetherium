@@ -358,17 +358,22 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                   //       controller: controller.controller),
                                   // ),
                                   const SizedBox(height: 20.0),
-                                  Text(
-                                    '${tr('beauty_specialist')}:',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium!
-                                        .copyWith(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 16.0,
-                                            color: isDark
-                                                ? AppColors.WHITE_COLOR
-                                                : AppColors.SECONDARY_COLOR),
+                                  Visibility(
+                                    visible:
+                                        appointment.employeeId?.isNotEmpty ??
+                                            false,
+                                    child: Text(
+                                      '${tr('beauty_specialist')}:',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium!
+                                          .copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 16.0,
+                                              color: isDark
+                                                  ? AppColors.WHITE_COLOR
+                                                  : AppColors.SECONDARY_COLOR),
+                                    ),
                                   ),
                                   const SizedBox(height: 20.0),
                                   ListView.builder(
@@ -386,17 +391,21 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                         );
                                       }),
                                   const SizedBox(height: 20.0),
-                                  Text(
-                                    '${tr('note')}:',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium!
-                                        .copyWith(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 16.0,
-                                            color: isDark
-                                                ? AppColors.WHITE_COLOR
-                                                : AppColors.SECONDARY_COLOR),
+                                  Visibility(
+                                    visible:
+                                        appointment.notes?.isNotEmpty ?? false,
+                                    child: Text(
+                                      '${tr('note')}:',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium!
+                                          .copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 16.0,
+                                              color: isDark
+                                                  ? AppColors.WHITE_COLOR
+                                                  : AppColors.SECONDARY_COLOR),
+                                    ),
                                   ),
                                   const SizedBox(height: 20.0),
                                   Text(

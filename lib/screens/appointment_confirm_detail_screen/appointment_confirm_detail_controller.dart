@@ -226,6 +226,10 @@ class AppointmentConfirmDetailController extends GetxController {
         'treatment_id_list': args.serviceId,
         'status_id': args.statusId,
       }, SetOptions(merge: true));
+      var appointmentDocs = await FirebaseFirestore.instance
+          .collection('appointments')
+          .doc(args.id)
+          .get();
       var appointmenDoc = await FirebaseFirestore.instance
           .collection('appointments')
           .doc(args.id)
@@ -267,8 +271,8 @@ class AppointmentConfirmDetailController extends GetxController {
           }
         }
       });
-      var docId = appointmenDoc.id;
-      var appointmentData = appointmenDoc.data();
+      var docId = appointmentDocs.id;
+      var appointmentData = appointmentDocs.data();
       appointmentData!['id'] = docId;
       var appointmentObject =
           Appointment.fromJson(appointmentData).toJsonCloudCalendar();

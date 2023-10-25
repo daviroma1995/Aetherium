@@ -193,5 +193,18 @@
     "new_appointment": "New Appointment",
     "appointment_new_added": "Added a new appointment",
     "appointment_new_added_successfully": "New Appointment added successfully",
-    "we_created_new_appointment": "we created a new appointment for you."
+    "we_created_new_appointment": "we created a new appointment for you.",
+    "no_timeslot_selected": "Not time slot selected",
+    "Jan": "Jan",
+    "Feb": "Feb",
+    "Mar": "Mar",
+    "Apr": "Apr",
+    "May": "May",
+    "Jun": "Jun",
+    "Jul": "Jul",
+    "Aug": "Aug",
+    "Sep": "Sep",
+    "Oct": "Oct",
+    "Nov": "Nov",
+    "Dec": "Dec"
 }

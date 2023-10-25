@@ -222,7 +222,7 @@ class AppointMentBookingController extends GetxController {
       return;
     } else if (avaliableSlots.isEmpty) {
       Fluttertoast.showToast(
-          msg: 'No timeslot selected select a timeslot first',
+          msg: tr('no_timeslot_selected'),
           backgroundColor: AppColors.ERROR_COLOR);
     } else {
       DateTime time = DateTime(DateTime.now().year, DateTime.now().month,

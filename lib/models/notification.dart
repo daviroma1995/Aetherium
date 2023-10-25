@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Notification {
   final String id;
@@ -28,6 +28,12 @@ class Notification {
 
   String get getDate {
     DateTime dateTime = date.toDate();
-    return DateFormat('dd MMM yyyy, hh:mm').format(dateTime);
+    var month = DateFormat('MMM').format(dateTime);
+    month = tr(month);
+    final day = DateFormat('dd').format(dateTime);
+    final year = DateFormat('yyyy').format(dateTime);
+    final time = DateFormat('hh:mm').format(dateTime);
+
+    return '$day $month $year, $time';
   }
 }
