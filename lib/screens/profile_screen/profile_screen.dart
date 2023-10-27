@@ -1,11 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:atherium_saloon_app/screens/profile_screen/profile_screen_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:atherium_saloon_app/screens/profile_screen/profile_screen_controller.dart';
-
-import '../../utils/constants.dart';
 import '../../widgets/custom_list_tile.dart';
 
 class ProfileScreen extends StatelessWidget {

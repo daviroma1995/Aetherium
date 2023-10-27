@@ -76,6 +76,7 @@ class FirebaseServices {
       final snapShot = await FirebaseFirestore.instance
           .collection(collection)
           .orderBy('date_timestamp', descending: false)
+          .orderBy('start_time', descending: false)
           .get();
       for (var queryDocumentSnapshot in snapShot.docs) {
         var data = queryDocumentSnapshot.data();

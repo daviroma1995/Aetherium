@@ -60,6 +60,7 @@ class AppointMentBookingController extends GetxController {
   late String openingTime;
   late String closingTime;
   String closingHours = '';
+  bool isPastDay = false;
   @override
   void onInit() async {
     var shopInfoQuery =
@@ -207,17 +208,19 @@ class AppointMentBookingController extends GetxController {
 
   void next() {
     if (args.dateTimestamp != null) {
-      if (args.dateTimestamp.toDate().day < DateTime.now().day ||
-          args.dateTimestamp.toDate().month < DateTime.now().month ||
-          args.dateTimestamp.toDate().year < DateTime.now().year) {
+      if ((args.dateTimestamp.toDate().day < DateTime.now().day ||
+              args.dateTimestamp.toDate().month < DateTime.now().month ||
+              args.dateTimestamp.toDate().year < DateTime.now().year) &&
+          args.dateTimestamp.toDate().month <= DateTime.now().month) {
         Fluttertoast.showToast(msg: tr('appointment_past'));
         return;
       }
     }
     selectedTreatements = <Treatment>[];
-    if (selectedDateTime.day < DateTime.now().day ||
-        selectedDateTime.month < DateTime.now().month ||
-        selectedDateTime.year < DateTime.now().year) {
+    if ((selectedDateTime.day < DateTime.now().day ||
+            selectedDateTime.month < DateTime.now().month ||
+            selectedDateTime.year < DateTime.now().year) &&
+        selectedDateTime.month <= DateTime.now().month) {
       Fluttertoast.showToast(msg: tr('appointment_past'));
       return;
     } else if (avaliableSlots.isEmpty) {
@@ -315,7 +318,7 @@ class AppointMentBookingController extends GetxController {
       //   }
       // }
       // args.employeId = resList[0]['employee_id_list'].isEmpty ?? [];
-      if (avaliableSlots.isEmpty) {
+      if (avaliableSlots.isEmpty && isPastDay == false) {
         Fluttertoast.showToast(
             msg: tr('no_time_slots'), backgroundColor: AppColors.ERROR_COLOR);
       } else {
@@ -326,9 +329,10 @@ class AppointMentBookingController extends GetxController {
       }
     } catch (ex) {
       log(ex.toString());
-
-      Fluttertoast.showToast(
-          msg: tr('no_time_slots'), backgroundColor: AppColors.ERROR_COLOR);
+      if (isPastDay == false) {
+        Fluttertoast.showToast(
+            msg: tr('no_time_slots'), backgroundColor: AppColors.ERROR_COLOR);
+      }
     }
     isLoading.value = false;
   }

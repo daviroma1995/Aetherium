@@ -8,7 +8,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../utils/constants.dart';
-
 import 'consultations_controller.dart';
 
 class ConsultationsScreen extends StatelessWidget {
@@ -154,9 +153,9 @@ class ConsultationsScreen extends StatelessWidget {
                         alignment: Alignment.center,
                         height: 50.0,
                         width: null,
-                        child: const Text(
-                          'No Consultations',
-                          style: TextStyle(
+                        child: Text(
+                          tr('no_consultations'),
+                          style: const TextStyle(
                               fontSize: 20.0, fontWeight: FontWeight.bold),
                         ),
                       ),

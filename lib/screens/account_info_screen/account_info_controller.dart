@@ -63,10 +63,12 @@ class AccountInfoController extends GetxController {
         log('Error: ${ex.toString()}');
       }
     }
-    genderValue.value = currentClient.value.gender!.toLowerCase() == 'm' ||
-            currentClient.value.gender!.toLowerCase() == 'male'
-        ? 'Male'
-        : 'Female';
+
+    genderValue.value = tr(currentClient.value.gender! == "maschio"
+        ? 'male'
+        : currentClient.value.gender! == "altro"
+            ? 'other'
+            : 'female');
     isLoading.value = false;
   }
 
@@ -214,8 +216,7 @@ class AccountInfoController extends GetxController {
       currentClient.value.lastName = surName.text;
       currentClient.value.email = email.text;
       currentClient.value.phoneNumber = phone.text;
-      currentClient.value.gender =
-          genderValue.value.toLowerCase() == 'male' ? 'M' : 'F';
+      currentClient.value.gender = genderValue.value.toLowerCase();
       currentClient.value.address = address.text;
       currentClient.value.birthday = Timestamp.fromDate(dateOfBirth.value);
       await FirebaseFirestore.instance

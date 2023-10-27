@@ -56,27 +56,29 @@ class UpcomingAppointmentsController extends GetxController {
 
   Future<void> deleteAppointment(int id) async {
     try {
+      var appointmentId = upcommingAppointments[id].id;
+      var uri = Uri.parse(
+          'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
+      var response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          "operation": "DELETE",
+          "appointment_id": appointmentId,
+        }),
+      );
+      log('Response :: ${response.body}');
+    } catch (ex) {
+      log("Exception::: ${ex.toString()}");
+    }
+    try {
       await FirebaseFirestore.instance
           .collection('appointments')
           .doc(upcommingAppointments[id].id)
           .delete()
-          .then((value) async {
-        try {
-          var appointmentId = upcommingAppointments[id].id;
-          var uri = Uri.parse(
-              'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
-          var response = await http.post(
-            uri,
-            body: json.encode({
-              "operation": "DELETE",
-              "appointment_id": appointmentId,
-            }),
-          );
-          log('Response :: ${response.body}');
-        } catch (ex) {
-          log("Exception::: ${ex.toString()}");
-        }
-      });
+          .then((value) async {});
       var homeController = Get.find<HomeScreenController>();
       homeController.loadHomeScreen();
       var agenda = Get.find<AgendaController>();

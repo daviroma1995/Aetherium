@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_screen.dart';
-import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../network_utils/firebase_messaging.dart';
 import '../../utils/shared_preferences.dart';
 import '../forget_password_screen/foreget_password_screen.dart';
 import '../splash_screen/splash_controller.dart';
@@ -24,12 +24,6 @@ class LoginController extends GetxController {
 
   User? get user {
     return _user;
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-    // _initialScreen();
   }
 
   _initialScreen() async {
@@ -92,6 +86,8 @@ class LoginController extends GetxController {
 
   void logout() async {
     LocalData.setIsLogedIn(false);
+    await NotificationsSubscription.fcmUnSubscribe(
+        appUserId: FirebaseAuth.instance.currentUser!.uid);
     await auth.signOut();
     Get.offAll(() => LoginScreen());
   }

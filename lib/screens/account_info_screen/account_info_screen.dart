@@ -336,7 +336,11 @@ class AccountInfoScreen extends StatelessWidget {
                                       () => CustomDropDown(
                                         height: 50.0,
                                         label: tr('select_gender'),
-                                        options: [tr('male'), tr('female')],
+                                        options: [
+                                          tr('male'),
+                                          tr('female'),
+                                          tr('other'),
+                                        ],
                                         value: controller.genderValue.value,
                                         onChange: (value) {
                                           controller.changeValue(value);

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:atherium_saloon_app/models/appointment.dart';
 import 'package:atherium_saloon_app/models/notification_model.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_messaging.dart';
 import 'package:atherium_saloon_app/screens/appointment_confirm_screen/appointment_confirm_screen.dart';
@@ -148,33 +147,40 @@ class AppointmentConfirmDetailController extends GetxController {
         }
         try {
           if (data != null) {
+            log('Calling__________');
             var uri = Uri.parse(
                 'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
+            var body = {
+              "operation": "CREATE",
+              "appointment_id": docSnapshot.id,
+              "appointment": {
+                'client_id': data['client_id'],
+                'date': data['date'],
+                'date_timestamp': {
+                  "__time__":
+                      data['date_timestamp'].toDate().toUtc().toIso8601String()
+                },
+                'email': data['email'],
+                'employee_id_list': data['employee_id_list'],
+                'end_time': data['end_time'],
+                'is_regular': data['is_regular'],
+                'notes': data['noets'] ?? '',
+                'number': data['number'],
+                'room_id_list': data['room_id_list'],
+                'start_time': data['start_time'],
+                'status_id': data['status_id'],
+                'time': data['time'],
+                'total_duration': data['total_duration'],
+                'treatment_id_list': data['treatment_id_list'],
+              },
+            };
+            log('Body :::::: ${json.encode(body)}');
             var response = await post(
               uri,
-              body: json.encode(
-                {
-                  "operation": "CREATE",
-                  "appointment_id": docSnapshot.id,
-                  "appointment": {
-                    'client_id': data['client_id'],
-                    'date': data['date'],
-                    'date_timestamp': data['date_timestamp'].toString(),
-                    'email': data['email'],
-                    'employee_id_list': data['employee_id_list'],
-                    'end_time': data['end_time'],
-                    'is_regular': data['is_regular'],
-                    'notes': data['noets'],
-                    'number': data['number'],
-                    'room_id_list': data['room_id_list'],
-                    'start_time': data['start_time'],
-                    'status_id': data['status_id'],
-                    'time': data['time'],
-                    'total_duration': data['total_duration'],
-                    'treatment_id_list': data['treatment_id_list'],
-                  },
-                },
-              ),
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: json.encode(body),
             );
             log('Client id::::>>. ${data['client_id']} ');
             log('Response :: ${response.body}');
@@ -183,9 +189,9 @@ class AppointmentConfirmDetailController extends GetxController {
           log("Exception::: ${ex.toString()}");
         }
         if (!homeController.currentUser.value.isAdmin!) {
-          sendNotification(tr('appointment_new_added_successfully'),
-              args.clientId, tr('new_appointment'),
-              appointmentId: value.id);
+          // sendNotification(tr('appointment_new_added_successfully'),
+          //     args.clientId, tr('new_appointment'),
+          //     appointmentId: value.id);
           sendNotification(
             '${homeController.currentUser.value.firstName} ${homeController.currentUser.value.lastName} ${tr('appointment_new_added')}',
             adminId,
@@ -240,16 +246,19 @@ class AppointmentConfirmDetailController extends GetxController {
           try {
             var uri = Uri.parse(
                 'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
-
-            var response = await post(
-              uri,
-              body: json.encode({
+            var body = json.encode(
+              {
                 "operationg": "UPDATE",
                 "appointment_id": value.id,
                 "appointment": {
                   'client_id': data['client_id'],
                   'date': data['date'],
-                  'date_timestamp': data['date_timestamp'].toString(),
+                  'date_timestamp': {
+                    "__time__": data['date_timestamp']
+                        .toDate()
+                        .toUtc()
+                        .toIso8601String()
+                  },
                   'email': data['email'],
                   'employee_id_list': data['employee_id_list'],
                   'end_time': data['end_time'],
@@ -263,7 +272,15 @@ class AppointmentConfirmDetailController extends GetxController {
                   'total_duration': data['total_duration'],
                   'treatment_id_list': data['treatment_id_list'],
                 },
-              }),
+              },
+            );
+            log('Body ::::: $body');
+            var response = await post(
+              uri,
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: body,
             );
             log('Response :: ${response.body}');
           } catch (ex) {
@@ -274,10 +291,10 @@ class AppointmentConfirmDetailController extends GetxController {
       var docId = appointmentDocs.id;
       var appointmentData = appointmentDocs.data();
       appointmentData!['id'] = docId;
-      var appointmentObject =
-          Appointment.fromJson(appointmentData).toJsonCloudCalendar();
-      var appointmentJson = json.encode({"appointment": appointmentObject});
-      print(appointmentJson);
+      // var appointmentObject =
+      //     Appointment.fromJson(appointmentData).toJsonCloudCalendar();
+      // var appointmentJson = json.encode({"appointment": appointmentObject});
+      // print(appointmentJson);
 
       homeController.loadHomeScreen();
       agendaController.loadData();

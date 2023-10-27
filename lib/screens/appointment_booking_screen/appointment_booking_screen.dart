@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:atherium_saloon_app/models/appointment.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/models/timeslot.dart';
@@ -82,127 +81,138 @@ class AppointmentBookingScreen extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Obx(() => controller.calenderState.value
-                            ? Calendar(
-                                events: const {},
-                                hideTodayIcon: true,
-                                initialDate: controller.initialDate.value,
-                                // controller.args.dateTimestamp != null
-                                //     ? controller.args.dateTimestamp.toDate()
-                                //     : controller.initialDate.value,
-                                onDateSelected: (value) async {
-                                  print(controller.openingTime);
-                                  controller.selectedDateTime = value;
-                                  controller.args.dateTimestamp =
-                                      Timestamp.fromDate(DateTime(
-                                              value.year,
-                                              value.month,
-                                              value.day,
-                                              0,
-                                              0,
-                                              0,
-                                              0,
-                                              0)
-                                          .toLocal());
-                                  controller.selectedDate.value =
-                                      DateFormat("MM/dd/yyyy").format(
-                                    DateTime(value.year, value.month, value.day,
-                                            0, 0, 0, 0, 0)
-                                        .toLocal(),
-                                  );
-                                  print(controller.args.dateTimestamp.toDate());
-                                  controller.initialDate.value = value;
-                                  controller.calenderState.value =
-                                      !controller.calenderState.value;
-                                  controller.args.date =
-                                      controller.selectedDate.value;
-                                  bool isPastDay = (value.day <
-                                              DateTime.now().day ||
-                                          value.month < DateTime.now().month ||
-                                          value.year < DateTime.now().year) &&
-                                      value.month <= DateTime.now().month;
-                                  await controller.loadTimeslots(
-                                      treatments:
-                                          controller.selectedTreatmentsMap,
-                                      appointmentDate:
-                                          controller.selectedDate.value);
-                                  if (isPastDay) {
-                                    Fluttertoast.showToast(
-                                        msg: tr('appointment_past'));
-                                    controller.slotdata = <Timeslot>[];
-                                    controller.avaliableSlots.value =
-                                        <String>[];
-                                    controller.filteredEmployees.value =
-                                        <Employee>[];
-                                    return;
-                                  }
-                                  if (value.weekday == 7) {
-                                    Fluttertoast.showToast(msg: '');
-                                    return;
-                                  }
-                                },
-                              )
-                            : Calendar(
-                                // ignore: prefer_const_literals_to_create_immutables
-                                events: const {},
-                                hideTodayIcon: true,
-                                initialDate: controller.initialDate.value,
-                                // controller.args.dateTimestamp != null
-                                //     ? controller.args.dateTimestamp.toDate()
-                                //     : controller.initialDate.value,
-                                onDateSelected: (value) async {
-                                  controller.selectedDateTime = value;
-                                  controller.args.dateTimestamp =
-                                      Timestamp.fromDate(DateTime(
-                                              value.year,
-                                              value.month,
-                                              value.day,
-                                              0,
-                                              0,
-                                              0,
-                                              0,
-                                              0)
-                                          .toLocal());
-                                  controller.selectedDate.value =
-                                      DateFormat("MM/dd/yyyy").format(
-                                    DateTime(value.year, value.month, value.day,
-                                            0, 0, 0, 0, 0)
-                                        .toLocal(),
-                                  );
-                                  print(controller.args.dateTimestamp.toDate());
+                        child: Obx(
+                          () => controller.calenderState.value
+                              ? Calendar(
+                                  events: const {},
+                                  hideTodayIcon: true,
+                                  initialDate: controller.initialDate.value,
+                                  // controller.args.dateTimestamp != null
+                                  //     ? controller.args.dateTimestamp.toDate()
+                                  //     : controller.initialDate.value,
+                                  onDateSelected: (value) async {
+                                    bool isPastDay = (value.day <
+                                                DateTime.now().day ||
+                                            value.month <
+                                                DateTime.now().month ||
+                                            value.year < DateTime.now().year) &&
+                                        value.month <= DateTime.now().month;
+                                    if (isPastDay) {
+                                      controller.isPastDay = true;
+                                      Fluttertoast.showToast(
+                                          msg: tr('appointment_past'));
+                                      controller.slotdata = <Timeslot>[];
+                                      controller.avaliableSlots.value =
+                                          <String>[];
+                                      controller.filteredEmployees.value =
+                                          <Employee>[];
+                                      return;
+                                    }
+                                    print(controller.openingTime);
+                                    controller.selectedDateTime = value;
+                                    controller.args.dateTimestamp =
+                                        Timestamp.fromDate(DateTime(
+                                                value.year,
+                                                value.month,
+                                                value.day,
+                                                0,
+                                                0,
+                                                0,
+                                                0,
+                                                0)
+                                            .toLocal());
+                                    controller.selectedDate.value =
+                                        DateFormat("MM/dd/yyyy").format(
+                                      DateTime(value.year, value.month,
+                                              value.day, 0, 0, 0, 0, 0)
+                                          .toLocal(),
+                                    );
+                                    print(
+                                        controller.args.dateTimestamp.toDate());
+                                    controller.initialDate.value = value;
+                                    controller.calenderState.value =
+                                        !controller.calenderState.value;
+                                    controller.args.date =
+                                        controller.selectedDate.value;
 
-                                  controller.initialDate.value = value;
-                                  controller.calenderState.value =
-                                      !controller.calenderState.value;
-                                  controller.args.date =
-                                      controller.selectedDate.value;
-                                  bool isPastDay = (value.day <
-                                              DateTime.now().day ||
-                                          value.month < DateTime.now().month ||
-                                          value.year < DateTime.now().year) &&
-                                      value.month <= DateTime.now().month;
+                                    await controller.loadTimeslots(
+                                        treatments:
+                                            controller.selectedTreatmentsMap,
+                                        appointmentDate:
+                                            controller.selectedDate.value);
 
-                                  await controller.loadTimeslots(
-                                      treatments:
-                                          controller.selectedTreatmentsMap,
-                                      appointmentDate:
-                                          controller.selectedDate.value);
-                                  if (isPastDay) {
-                                    Fluttertoast.showToast(
-                                        msg: tr('appointment_past'));
-                                    controller.slotdata = <Timeslot>[];
-                                    controller.avaliableSlots.value =
-                                        <String>[];
-                                    controller.filteredEmployees.value =
-                                        <Employee>[];
-                                    return;
-                                  }
-                                  if (value.weekday == 7) {
-                                    Fluttertoast.showToast(msg: '');
-                                    return;
-                                  }
-                                },
-                              )),
+                                    // if (value.weekday == 7) {
+                                    //   Fluttertoast.showToast(msg: '');
+                                    //   return;
+                                    // }
+                                  },
+                                )
+                              : Calendar(
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  events: const {},
+                                  hideTodayIcon: true,
+                                  initialDate: controller.initialDate.value,
+                                  // controller.args.dateTimestamp != null
+                                  //     ? controller.args.dateTimestamp.toDate()
+                                  //     : controller.initialDate.value,
+                                  onDateSelected: (value) async {
+                                    bool isPastDay = (value.day <
+                                                DateTime.now().day ||
+                                            value.month <
+                                                DateTime.now().month ||
+                                            value.year < DateTime.now().year) &&
+                                        value.month <= DateTime.now().month;
+                                    if (isPastDay) {
+                                      controller.isPastDay = true;
+                                      Fluttertoast.showToast(
+                                          msg: tr('appointment_past'));
+                                      controller.slotdata = <Timeslot>[];
+                                      controller.avaliableSlots.value =
+                                          <String>[];
+                                      controller.filteredEmployees.value =
+                                          <Employee>[];
+                                      return;
+                                    }
+                                    controller.selectedDateTime = value;
+                                    controller.args.dateTimestamp =
+                                        Timestamp.fromDate(DateTime(
+                                                value.year,
+                                                value.month,
+                                                value.day,
+                                                0,
+                                                0,
+                                                0,
+                                                0,
+                                                0)
+                                            .toLocal());
+                                    controller.selectedDate.value =
+                                        DateFormat("MM/dd/yyyy").format(
+                                      DateTime(value.year, value.month,
+                                              value.day, 0, 0, 0, 0, 0)
+                                          .toLocal(),
+                                    );
+                                    print(
+                                        controller.args.dateTimestamp.toDate());
+
+                                    controller.initialDate.value = value;
+                                    controller.calenderState.value =
+                                        !controller.calenderState.value;
+                                    controller.args.date =
+                                        controller.selectedDate.value;
+
+                                    await controller.loadTimeslots(
+                                        treatments:
+                                            controller.selectedTreatmentsMap,
+                                        appointmentDate:
+                                            controller.selectedDate.value);
+
+                                    // if (value.weekday == 7) {
+                                    //   Fluttertoast.showToast(msg: '');
+                                    //   return;
+                                    // }
+                                  },
+                                ),
+                        ),
                       ),
                       const SizedBox(height: 35.0),
                       Container(

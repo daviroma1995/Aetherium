@@ -72,6 +72,7 @@ class AppointmentDetailsController extends GetxController {
       location: 'Aetherium Estetica Saloon',
       startDate: startDate,
       endDate: endDate,
+      timeZone: DateTime.now().timeZoneName,
       iosParams: const IOSParams(
         reminder: Duration(
             hours:

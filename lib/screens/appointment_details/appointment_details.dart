@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -292,56 +291,13 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                           : AppColors.WHITE_COLOR,
                                       onTap: () async {
                                         final startTime = DateTime.parse(
-                                                appointment.startTime!)
-                                            .toUtc();
-                                        final rfcStartTime =
-                                            DateFormat("yyyyMMdd'T'HHmmss")
-                                                .format(startTime);
-                                        final endTime =
-                                            DateTime.parse(appointment.endTime!)
-                                                .toUtc();
-                                        final rfcEndTime =
-                                            DateFormat("yyyyMMdd'T'HHmmss")
-                                                .format(endTime);
-                                        print('$startTime, $endTime');
-                                        print('$rfcStartTime , $rfcEndTime');
-                                        // String url =
-                                        //     'https://calendar.google.com/calendar/u/0/r/eventedit?text=Meeting+with+Beauty+Specialist&dates=$rfcStartTime/$rfcEndTime&details=&location=G7F5%2B6GJ+Brescia,+Province+of+Brescia,+Italy&sf=true&output=xml';
-                                        // const String urlSchemeAndroid =
-                                        //     'content://com.android.calendar/';
-                                        // const String urlSchemeIOS =
-                                        //     'calshow://';
-                                        // if (Platform.isAndroid) {
-                                        //   if (await canLaunchUrl(
-                                        //       Uri.parse(urlSchemeAndroid))) {
-                                        //     await launchUrl(
-                                        //       Uri.parse(urlSchemeAndroid),
-                                        //       mode: LaunchMode
-                                        //           .externalApplication,
-                                        //     );
-                                        //   }
-                                        // }
-                                        // if (Platform.isIOS) {
-                                        //   if (await canLaunchUrlString(
-                                        //       urlSchemeIOS)) {
-                                        //     await launchUrlString(
-                                        //         urlSchemeIOS);
-                                        //   } else {
-                                        //     throw 'Could not open the calendar app';
-                                        //   }
-                                        // }
-                                        // try {
-                                        //   launchUrlString(url,
-                                        //       mode: LaunchMode.inAppWebView,
-                                        //       webOnlyWindowName:
-                                        //           'Google Calendar',
-                                        //       webViewConfiguration:
-                                        //           const WebViewConfiguration(
-                                        //               enableJavaScript:
-                                        //                   true));
-                                        // } catch (ex) {
-                                        //   print(ex);
-                                        // }
+                                            appointment.startTime!);
+                                        final endTime = DateTime.parse(
+                                            appointment.endTime!);
+                                        print(endTime);
+                                        // print('$startTime, $endTime');
+                                        // print('$rfcStartTime , $rfcEndTime');
+
                                         await controller.addToCalendar(
                                             title: 'Aetherium Saloon',
                                             description:

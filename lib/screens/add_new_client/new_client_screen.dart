@@ -193,7 +193,7 @@ class AddNewClient extends StatelessWidget {
                       () => CustomDropDown(
                         height: 50.0,
                         label: 'Select Gender',
-                        options: [tr('male'), tr('female')],
+                        options: [tr('male'), tr('female'), tr('other')],
                         value: controller.genderValue.value,
                         onChange: (value) {
                           controller.changeValue(value);
@@ -274,7 +274,17 @@ class AddNewClient extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Obx(
-                          () => Text(controller.getDateOfBirth),
+                          () => Text(
+                            controller.getDateOfBirth,
+                            style: TextStyle(
+                                color: isDark
+                                    ? controller.getDateOfBirth == tr('date')
+                                        ? AppColors.GREY_COLOR
+                                        : AppColors.GREY_COLOR
+                                    : controller.getDateOfBirth == tr('date')
+                                        ? AppColors.GREY_COLOR
+                                        : AppColors.PRIMARY_DARK),
+                          ),
                         ),
                       ),
                     ),

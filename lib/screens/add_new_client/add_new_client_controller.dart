@@ -44,11 +44,16 @@ class AddNewClientController extends GetxController {
     imageFileString.value = LocalData.imageUrlString;
   }
 
-  RxString genderValue = tr('male').obs;
+  RxString genderValue = tr('gender').obs;
   RxBool isUpdating = false.obs;
   RxString imageFileString = ''.obs;
   final dateOfBirth = DateTime.now().obs;
   String get getDateOfBirth {
+    if (dateOfBirth.value.day == DateTime.now().day &&
+        dateOfBirth.value.month == DateTime.now().month &&
+        dateOfBirth.value.year == DateTime.now().year) {
+      return tr('date');
+    }
     final day = dateOfBirth.value.day < 10
         ? '0${dateOfBirth.value.day}'
         : dateOfBirth.value.day.toString();
