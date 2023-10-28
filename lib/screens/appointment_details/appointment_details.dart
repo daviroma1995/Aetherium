@@ -33,6 +33,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
+    controller.endDate = DateTime.parse(appointment.endTime!);
     controller.getEndTime(
         appointment.time!, appointment.duration!, appointment);
     return WillPopScope(
@@ -301,7 +302,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                             description:
                                                 'Meeting with beauty specialist',
                                             startDate: startTime,
-                                            endDate: endTime,
+                                            endDate: controller.endDate,
                                             email: appointment.email!);
                                       },
                                     ),

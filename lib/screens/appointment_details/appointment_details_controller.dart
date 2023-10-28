@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:add_2_calendar/add_2_calendar.dart' as calendar;
@@ -12,6 +14,7 @@ import 'package:atherium_saloon_app/screens/update_appointment_status/update_app
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../models/treatment.dart';
@@ -19,6 +22,7 @@ import '../../models/treatment.dart';
 class AppointmentDetailsController extends GetxController {
   final durationText = TextEditingController();
   var allTreatments = <Treatment>[].obs;
+  DateTime endDate = DateTime.now();
   RxString endTime = ''.obs;
   final appointmentServicesIds = Get.arguments;
   var servicesList = <Treatment>[].obs;
@@ -47,6 +51,9 @@ class AppointmentDetailsController extends GetxController {
     required DateTime endDate,
     required String email,
   }) async {
+    if (durationText.text.isNotEmpty) {
+      endDate = endDate.add(Duration(minutes: int.parse(durationText.text)));
+    }
     event = calendar.Event(
       title: title,
       description: description,
@@ -170,13 +177,55 @@ class AppointmentDetailsController extends GetxController {
 
   Future<bool> updateDuration(Appointment appointment, num duration) async {
     String endTimeStr = appointment.endTime!;
-    DateTime endTimeDate = DateTime.parse(endTimeStr);
+    DateTime endTimeDate = endDate;
     endTimeDate =
         endTimeDate.add(Duration(minutes: int.parse(durationText.text)));
+    endDate = endTimeDate;
     String hours = endTimeDate.hour.toString();
     String minutes = endTimeDate.minute.toString();
     endTime.value = '$hours:$minutes';
     endTimeStr = endTimeDate.toIso8601String();
+    try {
+      var uri = Uri.parse(
+          'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
+      var body = json.encode(
+        {
+          "operationg": "UPDATE",
+          "appointment_id": appointment.id,
+          "appointment": {
+            'client_id': appointment.clientId,
+            'date': appointment.date,
+            'date_timestamp': {
+              "__time__":
+                  appointment.dateTimestamp!.toDate().toUtc().toIso8601String()
+            },
+            'email': appointment.email,
+            'employee_id_list': appointment.employeeId,
+            'end_time': endTimeStr,
+            'is_regular': appointment.isRegular,
+            'notes': appointment.notes,
+            'number': appointment.number,
+            'room_id_list': appointment.roomId,
+            'start_time': appointment.startTime,
+            'status_id': appointment.statusId,
+            'time': appointment.time,
+            'total_duration': appointment.duration,
+            'treatment_id_list': appointment.serviceId,
+          },
+        },
+      );
+      log('Body ::::: $body');
+      var response = await post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: body,
+      );
+      log('Response :: ${response.body}');
+    } catch (ex) {
+      log("Exception::: ${ex.toString()}");
+    }
     try {
       await FirebaseFirestore.instance
           .collection('appointments')
@@ -198,12 +247,13 @@ class AppointmentDetailsController extends GetxController {
   }
 
   String getEndTime(String startTime, num duration, Appointment appointment) {
-    String endTimeStr = appointment.endTime!;
-    DateTime endTimeDate = DateTime.parse(endTimeStr);
-    if (durationText.text.isNotEmpty) {
-      endTimeDate =
-          endTimeDate.add(Duration(minutes: int.parse(durationText.text)));
-    }
+    // String endTimeStr = appointment.endTime!;
+    DateTime endTimeDate = endDate;
+    // if (durationText.text.isNotEmpty) {
+    //   endTimeDate =
+    //       endTimeDate.add(Duration(minutes: int.parse(durationText.text)));
+    // }
+    // endDate = endTimeDate;
     endTime.value =
         '${endTimeDate.hour < 10 ? '0${endTimeDate.hour}' : endTimeDate.hour}:${endTimeDate.minute < 10 ? '0${endTimeDate.minute}' : endTimeDate.minute}';
     return endTime.toString();
