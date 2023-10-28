@@ -55,13 +55,20 @@ class AppointmentDetailsController extends GetxController {
     if (durationText.text.isNotEmpty) {
       endDate = endDate.add(Duration(minutes: int.parse(durationText.text)));
     }
+    print(startDate.timeZoneName);
+    print(endDate.timeZoneName);
+    print(startDate);
+    var startTimeOffset = (startDate.toLocal().timeZoneOffset);
+    var endTimeOffset = endDate.toLocal().timeZoneOffset;
+    endDate = endDate.subtract(endTimeOffset);
+    startDate = startDate.subtract(startTimeOffset);
     event = calendar.Event(
       title: title,
       description: description,
       location: 'Aetherium Estetica Saloon',
       startDate: startDate,
       endDate: endDate,
-      timeZone: DateTime.now().timeZoneName,
+      // timeZone: DateTime.now().timeZoneName,
       iosParams: const IOSParams(
         reminder: Duration(
             hours:
@@ -191,7 +198,7 @@ class AppointmentDetailsController extends GetxController {
           'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
       var body = json.encode(
         {
-          "operationg": "UPDATE",
+          "operation": "UPDATE",
           "appointment_id": appointment.id,
           "appointment": {
             'client_id': appointment.clientId,

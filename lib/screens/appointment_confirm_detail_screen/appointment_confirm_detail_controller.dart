@@ -248,7 +248,7 @@ class AppointmentConfirmDetailController extends GetxController {
                 'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
             var body = json.encode(
               {
-                "operationg": "UPDATE",
+                "operation": "UPDATE",
                 "appointment_id": value.id,
                 "appointment": {
                   'client_id': data['client_id'],

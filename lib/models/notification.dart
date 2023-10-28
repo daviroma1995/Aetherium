@@ -32,7 +32,7 @@ class Notification {
     month = tr(month);
     final day = DateFormat('dd').format(dateTime);
     final year = DateFormat('yyyy').format(dateTime);
-    final time = DateFormat('hh:mm').format(dateTime);
+    final time = DateFormat('HH:mm').format(dateTime);
 
     return '$day $month $year, $time';
   }
