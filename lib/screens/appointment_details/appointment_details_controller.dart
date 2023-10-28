@@ -7,6 +7,7 @@ import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
+import 'package:atherium_saloon_app/screens/upcoming_appointments_screen/upcoming_appointments_controller.dart';
 import 'package:atherium_saloon_app/screens/update_appointment_status/update_appointment_status_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../../models/treatment.dart';
 
 class AppointmentDetailsController extends GetxController {
+  final durationText = TextEditingController();
   var allTreatments = <Treatment>[].obs;
   RxString endTime = ''.obs;
   final appointmentServicesIds = Get.arguments;
@@ -30,27 +32,6 @@ class AppointmentDetailsController extends GetxController {
   void onInit() async {
     super.onInit();
     allTreatments.bindStream(FirebaseServices.treatments());
-    controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {
-            // Update loading bar.
-          },
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) {},
-          onWebResourceError: (WebResourceError error) {},
-          onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              return NavigationDecision.prevent;
-            }
-            return NavigationDecision.navigate;
-          },
-        ),
-      )
-      ..loadRequest(Uri.parse(
-          'https://calendar.google.com/calendar/u/0/r/eventedit?text=Meeting+with+Beauty+Specialist&dates=\$rfcStartTime/\$rfcEndTime&details=&location=G7F5%2B6GJ+Brescia,+Province+of+Brescia,+Italy&sf=true&output=xml'));
   }
 
   @override
@@ -188,16 +169,27 @@ class AppointmentDetailsController extends GetxController {
   }
 
   Future<bool> updateDuration(Appointment appointment, num duration) async {
+    String endTimeStr = appointment.endTime!;
+    DateTime endTimeDate = DateTime.parse(endTimeStr);
+    endTimeDate =
+        endTimeDate.add(Duration(minutes: int.parse(durationText.text)));
+    String hours = endTimeDate.hour.toString();
+    String minutes = endTimeDate.minute.toString();
+    endTime.value = '$hours:$minutes';
+    endTimeStr = endTimeDate.toIso8601String();
     try {
       await FirebaseFirestore.instance
           .collection('appointments')
           .doc(appointment.id)
-          .set({"total_duration": FieldValue.increment(duration)},
-              SetOptions(merge: true));
+          .set({
+        "total_duration": FieldValue.increment(duration),
+        "end_time": endTimeStr,
+      }, SetOptions(merge: true));
       var homeController = Get.find<HomeScreenController>();
       homeController.loadAppointments();
       var agendaController = Get.find<AgendaController>();
       agendaController.loadData();
+      Get.find<UpcomingAppointmentsController>().loadData();
       return true;
     } catch (ex) {
       stdout.writeln('Error: $ex');
@@ -205,7 +197,17 @@ class AppointmentDetailsController extends GetxController {
     }
   }
 
-  String getEndTime(String startTime, num duration) {
+  String getEndTime(String startTime, num duration, Appointment appointment) {
+    String endTimeStr = appointment.endTime!;
+    DateTime endTimeDate = DateTime.parse(endTimeStr);
+    if (durationText.text.isNotEmpty) {
+      endTimeDate =
+          endTimeDate.add(Duration(minutes: int.parse(durationText.text)));
+    }
+    endTime.value =
+        '${endTimeDate.hour < 10 ? '0${endTimeDate.hour}' : endTimeDate.hour}:${endTimeDate.minute < 10 ? '0${endTimeDate.minute}' : endTimeDate.minute}';
+    return endTime.toString();
+
     String hours;
     String minutes;
     if (startTime[1] != ':') {

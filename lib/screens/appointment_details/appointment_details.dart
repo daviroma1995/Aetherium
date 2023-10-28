@@ -12,8 +12,6 @@ import '../../widgets/primary_button.dart';
 import '../../widgets/text_row_widget.dart';
 import '../home_screen/home_screen_controller.dart';
 import 'appointment_details_controller.dart';
-// import 'package:flutter_googlecalendar/flutter_googlecalendar.dart';
-// import 'package:atherium_saloon_app/packages/google_calendar/lib/flutter_googlecalendar.dart';
 
 class AppointmentDetailsScreen extends StatelessWidget {
   final controller = Get.put(AppointmentDetailsController());
@@ -31,12 +29,12 @@ class AppointmentDetailsScreen extends StatelessWidget {
   final bool isPast;
   final bool isAdmin;
   final Appointment appointment;
-  final durationText = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
-    controller.getEndTime(appointment.time!, appointment.duration!);
+    controller.getEndTime(
+        appointment.time!, appointment.duration!, appointment);
     return WillPopScope(
       onWillPop: () async {
         Get.back(result: controller.isChanged);
@@ -397,18 +395,13 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                         inputFormatters: [
                                           FilteringTextInputFormatter.digitsOnly
                                         ],
-                                        controller: durationText,
-                                        decoration: InputDecoration(
-                                          hintText:
-                                              appointment.duration!.toString(),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 10.0,
-                                                  vertical: 0.0),
-                                          enabledBorder:
-                                              const OutlineInputBorder(),
-                                          focusedBorder:
-                                              const OutlineInputBorder(),
+                                        controller: controller.durationText,
+                                        decoration: const InputDecoration(
+                                          hintText: '0',
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 10.0, vertical: 0.0),
+                                          enabledBorder: OutlineInputBorder(),
+                                          focusedBorder: OutlineInputBorder(),
                                         ),
                                       ),
                                     ),
@@ -426,24 +419,27 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                         ? AppColors.SECONDARY_LIGHT
                                         : AppColors.PRIMARY_COLOR,
                                     onTap: () async {
-                                      if (durationText.text != '') {
+                                      if (controller.durationText.text != '') {
                                         bool duartionIsUpdated =
                                             await controller.updateDuration(
-                                                appointment,
-                                                num.parse(durationText.text));
+                                          appointment,
+                                          num.parse(
+                                              controller.durationText.text),
+                                        );
                                         if (duartionIsUpdated) {
                                           controller.getEndTime(
                                               appointment.time!,
                                               (appointment.duration! +
-                                                  num.parse(
-                                                      durationText.text)));
+                                                  num.parse(controller
+                                                      .durationText.text)),
+                                              appointment);
 
                                           Fluttertoast.showToast(
                                               msg:
-                                                  '${tr('duration_increased')} ${durationText.text} ${tr('minutes')} ');
+                                                  '${tr('duration_increased')} ${controller.durationText.text} ${tr('minutes')} ');
                                           FocusManager.instance.primaryFocus
                                               ?.unfocus();
-                                          durationText.text = '';
+                                          controller.durationText.text = '';
                                           Get.find<HomeScreenController>()
                                               .loadHomeScreen();
                                           Get.find<AgendaController>()

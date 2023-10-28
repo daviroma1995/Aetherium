@@ -358,41 +358,44 @@ class AppointmentConfirmDetailController extends GetxController {
   }
 
   String getEndTime(String startTime, num duration) {
-    String hours;
-    String minutes;
-    if (startTime[1] != ':') {
-      hours = startTime[0] + startTime[1];
-      if (startTime.length == 5) {
-        minutes = startTime[3] + startTime[4];
-      } else {
-        minutes = startTime[3];
-      }
-    } else {
-      hours = startTime[0];
-      if (startTime.length == 4) {
-        minutes = startTime[2] + startTime[3];
-      } else {
-        minutes = startTime[2];
-      }
-    }
-    String endHours = (duration ~/ 60).toString().replaceAll('-', '')[0];
-    String endMinutes = (duration % 60).toString();
+    String time = DateFormat('hh:mm').format(DateTime.parse(args.endTime));
+    return time;
+    // ! Fixes the time duration issue
+    // String hours;
+    // String minutes;
+    // if (startTime[1] != ':') {
+    //   hours = startTime[0] + startTime[1];
+    //   if (startTime.length == 5) {
+    //     minutes = startTime[3] + startTime[4];
+    //   } else {
+    //     minutes = startTime[3];
+    //   }
+    // } else {
+    //   hours = startTime[0];
+    //   if (startTime.length == 4) {
+    //     minutes = startTime[2] + startTime[3];
+    //   } else {
+    //     minutes = startTime[2];
+    //   }
+    // }
+    // String endHours = (duration ~/ 60).toString().replaceAll('-', '')[0];
+    // String endMinutes = (duration % 60).toString();
 
-    var endTimeHours = int.parse(hours) + int.parse(endHours);
-    var endTimeMinutes = int.parse(minutes) + int.parse(endMinutes);
-    if (endTimeMinutes >= 60) {
-      endTimeHours += 1;
-      endTimeMinutes -= 60;
-    }
-    if (endTimeHours >= 24) {
-      endTimeHours = endTimeHours - 24;
-    }
-    String totalEndHours =
-        endTimeHours < 9 ? '0$endTimeHours' : endTimeHours.toString();
-    String totalMinutes =
-        endTimeMinutes < 9 ? '0$endTimeMinutes' : endTimeMinutes.toString();
+    // var endTimeHours = int.parse(hours) + int.parse(endHours);
+    // var endTimeMinutes = int.parse(minutes) + int.parse(endMinutes);
+    // if (endTimeMinutes >= 60) {
+    //   endTimeHours += 1;
+    //   endTimeMinutes -= 60;
+    // }
+    // if (endTimeHours >= 24) {
+    //   endTimeHours = endTimeHours - 24;
+    // }
+    // String totalEndHours =
+    //     endTimeHours < 9 ? '0$endTimeHours' : endTimeHours.toString();
+    // String totalMinutes =
+    //     endTimeMinutes < 9 ? '0$endTimeMinutes' : endTimeMinutes.toString();
 
-    return '$totalEndHours:$totalMinutes';
+    // return '$totalEndHours:$totalMinutes';
   }
 
   void sendNotification(String message, String receiverId, String title,

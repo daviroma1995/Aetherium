@@ -51,7 +51,7 @@ class ServicesController extends GetxController {
         list.addAll(args.serviceId);
         duration = args.duration;
         print('If called');
-        print(duration);
+        print('duration: $duration');
         print(list);
       }
     }
