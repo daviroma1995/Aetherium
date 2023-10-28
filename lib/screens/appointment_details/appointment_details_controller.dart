@@ -42,6 +42,7 @@ class AppointmentDetailsController extends GetxController {
   void onClose() {
     super.onClose();
     allTreatments.close();
+    Get.reload();
   }
 
   Future<void> addToCalendar({
@@ -238,10 +239,11 @@ class AppointmentDetailsController extends GetxController {
       homeController.loadAppointments();
       var agendaController = Get.find<AgendaController>();
       agendaController.loadData();
-      Get.find<UpcomingAppointmentsController>().loadData();
+      Get.put<UpcomingAppointmentsController>(UpcomingAppointmentsController())
+          .loadData();
       return true;
     } catch (ex) {
-      stdout.writeln('Error: $ex');
+      log('Error: $ex');
       return false;
     }
   }
