@@ -358,7 +358,7 @@ class AppointmentConfirmDetailController extends GetxController {
   }
 
   String getEndTime(String startTime, num duration) {
-    String time = DateFormat('hh:mm').format(DateTime.parse(args.endTime));
+    String time = DateFormat('HH:mm').format(DateTime.parse(args.endTime));
     return time;
     // ! Fixes the time duration issue
     // String hours;
