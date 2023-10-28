@@ -250,7 +250,16 @@ class AgendaController extends GetxController {
     return time;
   }
 
-  List getDuration(List services, String startTime) {
+  String getDuration(Appointment appointment) {
+    String time = '';
+    var startTime = DateTime.parse(appointment.startTime!);
+    var endTime = DateTime.parse(appointment.endTime!);
+    Duration duration = endTime.difference(startTime);
+    time = duration.inMinutes.toString();
+    return '$time Min';
+  }
+
+  List getDurationList(List services, String startTime) {
     String time = '';
 
     int duration = 0;
@@ -294,7 +303,9 @@ class AgendaController extends GetxController {
     return [time, endTime];
   }
 
-  String getEndTime(String startTime, num duration) {
+  String getEndTime(String startTime, num duration, Appointment appointment) {
+    var endDate = DateTime.parse(appointment.endTime!);
+    return DateFormat('HH:mm').format(endDate);
     String hours;
     String minutes;
     if (startTime[1] != ':') {

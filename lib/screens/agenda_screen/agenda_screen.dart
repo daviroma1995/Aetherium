@@ -134,13 +134,15 @@ class AgendaScreen extends StatelessWidget {
                                                 controller
                                                     .appointments[index].time!),
                                             endTime: controller.getEndTime(
-                                              controller
-                                                  .appointments[index].time!,
-                                              controller.appointments[index]
-                                                  .duration!,
-                                            ),
-                                            duration:
-                                                '${controller.appointments[index].duration.toString()} Min',
+                                                controller
+                                                    .appointments[index].time!,
+                                                controller.appointments[index]
+                                                    .duration!,
+                                                controller.appointments[index]),
+                                            duration: controller.getDuration(
+                                                controller.appointments[index]),
+                                            // duration:
+                                            //     '${controller.appointments[index].duration.toString()} Min',
                                             // duration: controller.getDuration(
                                             //     controller
                                             //         .appointments[index].serviceId!,
