@@ -355,7 +355,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                   },
                                 ).loading(controller.isLoading.value,
                                     loadingColor: isDark
-                                        ? AppColors.SECONDARY_LIGHT
+                                        ? AppColors.PRIMARY_DARK
                                         : AppColors.GREY_COLOR),
                               ),
                             ],
