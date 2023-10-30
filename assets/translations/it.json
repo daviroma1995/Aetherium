@@ -60,7 +60,7 @@
     "account_info_detail": "le mie informazioni",
     "my_information": "le mie informazioni",
     "logout": "Logout",
-    "profile": "Profile",
+    "profile": "Profilo",
     "terms_of_services": "Termini di servizio",
     "privacy": "Privacy",
     "phone+_number": "Phone Number",
@@ -217,5 +217,6 @@
     "Sep": "Set",
     "Oct": "Ott",
     "Nov": "Nov",
-    "Dec": "Dic"
+    "Dec": "Dic",
+    "appointment_saved_correctly": "Appuntamento salvato"
 }

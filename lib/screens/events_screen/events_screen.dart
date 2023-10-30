@@ -28,8 +28,8 @@ class EventsScreen extends StatelessWidget {
               onTap: () => controller.handleBack(),
               child: Container(
                 alignment: Alignment.center,
-                width: 32.0,
-                height: 32.0,
+                width: 40.0,
+                height: 40.0,
                 child: SvgPicture.asset(AppAssets.BACK_ARROW,
                     height: 14.0, width: 14.0),
               ),

@@ -195,6 +195,7 @@ class AddNewClient extends StatelessWidget {
                         label: 'Select Gender',
                         options: [tr('male'), tr('female'), tr('other')],
                         value: controller.genderValue.value,
+                        sort: false,
                         onChange: (value) {
                           controller.changeValue(value);
                         },
@@ -251,6 +252,32 @@ class AddNewClient extends StatelessWidget {
                           firstDate: DateTime.utc(1949, DateTime.january, 1),
                           lastDate: DateTime.now(),
                           helpText: 'Select Date of Birth',
+                          cancelText: tr('cancel'),
+                          confirmText: 'Ok',
+                          builder: (context, child) {
+                            return Theme(
+                              data: Theme.of(context).copyWith(
+                                colorScheme: ColorScheme.light(
+                                  primary: isDark
+                                      ? AppColors.PRIMARY_DARK
+                                      : AppColors.PRIMARY_COLOR, // <-- SEE HERE
+                                  onPrimary: isDark
+                                      ? AppColors.GREY_COLOR
+                                      : AppColors.WHITE_COLOR, // <-- SEE HERE
+                                  onSurface: isDark
+                                      ? AppColors.GREY_COLOR
+                                      : AppColors.GREY_DARK, // <-- SEE HERE
+                                ),
+                                textButtonTheme: TextButtonThemeData(
+                                  style: TextButton.styleFrom(
+                                      foregroundColor: isDark
+                                          ? AppColors.GREY_COLOR
+                                          : AppColors.PRIMARY_COLOR),
+                                ),
+                              ),
+                              child: child!,
+                            );
+                          },
                         );
                         controller.dateOfBirth.value = DateTime.parse(
                           date.toString(),

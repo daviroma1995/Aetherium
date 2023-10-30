@@ -303,7 +303,8 @@ class LoyalityCardScreen extends StatelessWidget {
                                   child: TextRowWidget(
                                     textOne:
                                         '${controller.membershipType!.name!.capitalize}',
-                                    textTwo: '12/08/2023',
+                                    textTwo: controller.clientMembership!
+                                        .getEndDate(),
                                     style: const TextStyle(
                                       color: AppColors.GREY_COLOR,
                                       fontSize: 14.0,

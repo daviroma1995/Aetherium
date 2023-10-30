@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+
 class Membership {
   String? id;
   String? startDate;
@@ -31,5 +33,16 @@ class Membership {
 
   double get percentage {
     return points! / 300;
+  }
+
+  String getEndDate() {
+    String date = '';
+    var inputFormat = DateFormat('dd/MM/yyyy');
+    var startDateTime = inputFormat.parse(startDate ?? '01/01/2000');
+
+    DateTime endDate = DateTime(
+        startDateTime.year + 1, startDateTime.month, startDateTime.day);
+    date = DateFormat('dd/MM/yyyy').format(endDate);
+    return date;
   }
 }

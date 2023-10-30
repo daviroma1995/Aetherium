@@ -424,14 +424,20 @@ class HomeScreen extends StatelessWidget {
                           ),
                           Obx(
                             () => Visibility(
-                              replacement: Container(
-                                alignment: Alignment.center,
-                                height: 100.0,
-                                // alignment: Alignment.center,
-                                child: Text(
-                                  tr('no_appointments'),
-                                  style: const TextStyle(
-                                      fontSize: 20.0, color: Colors.black),
+                              replacement: Visibility(
+                                visible: controller.isLoading.value == false,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 100.0,
+                                  // alignment: Alignment.center,
+                                  child: Text(
+                                    tr('no_appointments'),
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: isDark
+                                            ? AppColors.WHITE_COLOR
+                                            : Colors.black),
+                                  ),
                                 ),
                               ),
                               visible: controller.isLoading.value == false &&

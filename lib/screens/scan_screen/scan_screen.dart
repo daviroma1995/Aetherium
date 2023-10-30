@@ -3,12 +3,14 @@
 import 'dart:developer';
 
 import 'package:atherium_saloon_app/models/membership.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+
 import '../../models/client.dart';
 
 class ScanScreen extends StatefulWidget {
@@ -92,7 +94,7 @@ class _ScanScreenState extends State<ScanScreen> {
               .collection('client_memberships')
               .doc(client.id)
               .set(membership.toJson());
-          Fluttertoast.showToast(msg: 'Appointmetn updated Successfully');
+          Fluttertoast.showToast(msg: tr('appointment_saved_correctly'));
           Get.back();
         });
         // Send the clientData to another function to handle the data

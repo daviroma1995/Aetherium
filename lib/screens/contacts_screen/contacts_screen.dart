@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../utils/constants.dart';
-
 import 'contacts_controller.dart';
 
 // ignore: must_be_immutable
@@ -59,8 +58,8 @@ class ContactsScreen extends StatelessWidget {
               },
               child: Container(
                 alignment: Alignment.center,
-                width: 25.0,
-                height: 25.0,
+                width: 40.0,
+                height: 40.0,
                 child: SvgPicture.asset(AppAssets.BACK_ARROW,
                     height: 14.0, width: 14.0),
               ),
