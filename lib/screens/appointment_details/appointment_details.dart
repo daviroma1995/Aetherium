@@ -449,8 +449,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                           return;
                                         }
                                         Fluttertoast.showToast(
-                                            msg:
-                                                'Duration is not updated Something went Wrong');
+                                            msg: tr('duration_is_not_updated'));
                                         return;
                                       }
                                       Fluttertoast.showToast(

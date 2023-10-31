@@ -86,9 +86,10 @@ class AppointMentBookingController extends GetxController {
       calenderState.value = !calenderState.value;
     } else if (args.dateTimestamp != null) {
       DateTime date = args.dateTimestamp.toDate();
-      if (date.day < DateTime.now().day ||
-          date.month < DateTime.now().month ||
-          date.year < DateTime.now().year) {
+      if ((date.day < DateTime.now().day ||
+              date.month < DateTime.now().month ||
+              date.year < DateTime.now().year) &&
+          date.month < DateTime.now().month) {
         initialDate.value = initialDate.value;
         selectedDate.value = selectedDate.value;
       } else {
@@ -160,25 +161,30 @@ class AppointMentBookingController extends GetxController {
         Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month,
                 DateTime.now().day, 0, 0, 0, 0, 0)
             .toLocal());
-    args.time = args.time == null
-        ? avaliableSlots.isNotEmpty
-            ? avaliableSlots[0]
-            : null
-        : avaliableSlots.isNotEmpty
-            ? avaliableSlots[0]
-            : null;
+    // args.time = args.time == null
+    //     ? avaliableSlots.isNotEmpty
+    //         ? avaliableSlots[0]
+    //         : null
+    //     : avaliableSlots.isNotEmpty
+    //         ? avaliableSlots[0]
+    //         : null;
     args.statusId = args.statusId ?? '88aa7cf3-c6b6-4cab-91eb-247aa6445a0a';
-    args.date = selectedDate.value;
+    args.date = args.date ?? selectedDate.value;
     isLoading.value = false;
-    if (slotdata.isNotEmpty) {
-      args.roomId = args.roomId ?? slotdata[0].roomIdList;
-      args.startTime = args.startTime ?? slotdata[0].startTime;
-      args.endTime = args.endTime ?? slotdata[0].endTime;
-    } else {
-      args.roomId = null;
-      args.startTime = null;
-      args.endTime = null;
-    }
+    // if (args.time != null && slotdata.isNotEmpty) {
+    //   int index = avaliableSlots.indexOf(args.time);
+    //   args.roomId = slotdata[index].roomIdList;
+    //   args.startTime = slotdata[index].startTime;
+    //   args.endTime = slotdata[index].endTime;
+    // } else if (args.time == '' && slotdata.isNotEmpty) {
+    //   args.roomId = args.roomId ?? slotdata[0].roomIdList;
+    //   args.startTime = args.startTime ?? slotdata[0].startTime;
+    //   args.endTime = args.endTime ?? slotdata[0].endTime;
+    // } else {
+    //   args.roomId = null;
+    //   args.startTime = null;
+    //   args.endTime = null;
+    // }
     super.onInit();
   }
 
@@ -322,10 +328,20 @@ class AppointMentBookingController extends GetxController {
         Fluttertoast.showToast(
             msg: tr('no_time_slots'), backgroundColor: AppColors.ERROR_COLOR);
       } else {
-        args.time = avaliableSlots[0];
-        args.startTime = slotdata[0].startTime;
-        args.endTime = slotdata[0].endTime;
-        args.roomId = slotdata[0].roomIdList;
+        if (args.time != null) {
+          int index = avaliableSlots.indexOf(args.time);
+          selectedSlot.value = index;
+          args.time = avaliableSlots[index];
+          args.startTime = slotdata[index].startTime;
+          args.endTime = slotdata[index].endTime;
+          args.roomId = slotdata[index].roomIdList;
+        } else {
+          selectedSlot.value = 0;
+          args.time = avaliableSlots[0];
+          args.startTime = slotdata[0].startTime;
+          args.endTime = slotdata[0].endTime;
+          args.roomId = slotdata[0].roomIdList;
+        }
       }
     } catch (ex) {
       log(ex.toString());

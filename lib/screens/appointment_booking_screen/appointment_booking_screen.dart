@@ -86,11 +86,15 @@ class AppointmentBookingScreen extends StatelessWidget {
                               ? Calendar(
                                   events: const {},
                                   hideTodayIcon: true,
+                                  isLoading: controller.isLoading.value,
                                   initialDate: controller.initialDate.value,
                                   // controller.args.dateTimestamp != null
                                   //     ? controller.args.dateTimestamp.toDate()
                                   //     : controller.initialDate.value,
                                   onDateSelected: (value) async {
+                                    if (controller.isLoading.value) {
+                                      return;
+                                    }
                                     bool isPastDay = (value.day <
                                                 DateTime.now().day ||
                                             value.month <
@@ -134,7 +138,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                                         !controller.calenderState.value;
                                     controller.args.date =
                                         controller.selectedDate.value;
-
+                                    controller.args.time = null;
                                     await controller.loadTimeslots(
                                         treatments:
                                             controller.selectedTreatmentsMap,
@@ -151,11 +155,15 @@ class AppointmentBookingScreen extends StatelessWidget {
                                   // ignore: prefer_const_literals_to_create_immutables
                                   events: const {},
                                   hideTodayIcon: true,
+                                  isLoading: controller.isLoading.value,
                                   initialDate: controller.initialDate.value,
                                   // controller.args.dateTimestamp != null
                                   //     ? controller.args.dateTimestamp.toDate()
                                   //     : controller.initialDate.value,
                                   onDateSelected: (value) async {
+                                    if (controller.isLoading.value) {
+                                      return;
+                                    }
                                     bool isPastDay = (value.day <
                                                 DateTime.now().day ||
                                             value.month <
@@ -199,6 +207,7 @@ class AppointmentBookingScreen extends StatelessWidget {
                                         !controller.calenderState.value;
                                     controller.args.date =
                                         controller.selectedDate.value;
+                                    controller.args.time = null;
 
                                     await controller.loadTimeslots(
                                         treatments:

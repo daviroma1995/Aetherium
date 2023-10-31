@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 
 import '../utils/constants.dart';
 import '../utils/date_utils.dart';
@@ -24,6 +23,7 @@ class Range {
 
 // ignore: must_be_immutable
 class Calendar extends StatefulWidget {
+  final bool? isLoading;
   final ValueChanged<DateTime>? onDateSelected;
   final ValueChanged<DateTime>? onMonthChanged;
   final ValueChanged? onRangeSelected;
@@ -50,6 +50,7 @@ class Calendar extends StatefulWidget {
   Calendar({
     super.key,
     this.onMonthChanged,
+    this.isLoading,
     this.onDateSelected,
     this.onRangeSelected,
     this.hideBottomBar = false,
@@ -268,7 +269,12 @@ class _CalendarState extends State<Calendar> {
       }
       dayWidgets.add(
         CalendarTile(
-          onDateSelected: (date) => handleSelectedDateAndUserCallback(date),
+          onDateSelected: (date) {
+            if (widget.isLoading ?? false) {
+              return;
+            }
+            handleSelectedDateAndUserCallback(date);
+          },
           selectedColor: widget.selectedColor,
           todayColor: widget.todayColor,
           eventColor: widget.eventColor,
@@ -318,7 +324,12 @@ class _CalendarState extends State<Calendar> {
             events: widget.events![day],
             child: widget.dayBuilder!(context, day),
             date: day,
-            onDateSelected: (date) => handleSelectedDateAndUserCallback(date),
+            onDateSelected: (date) {
+              if (widget.isLoading ?? false) {
+                return;
+              }
+              handleSelectedDateAndUserCallback(date);
+            },
             isExpended: isExpanded,
             isSwapped: isSwapped,
           ),
@@ -333,7 +344,12 @@ class _CalendarState extends State<Calendar> {
               eventColor: widget.eventColor,
               eventDoneColor: widget.eventDoneColor,
               events: widget.events![day],
-              onDateSelected: (date) => handleSelectedDateAndUserCallback(date),
+              onDateSelected: (date) {
+                if (widget.isLoading ?? false) {
+                  return;
+                }
+                handleSelectedDateAndUserCallback(date);
+              },
               date: day,
               dateStyles: configureDateStyle(monthStarted, monthEnded),
               isSelected: Utils.isSameDay(selectedDate, day),
@@ -581,6 +597,9 @@ class _CalendarState extends State<Calendar> {
 
   void _launchDateSelectionCallback(DateTime day) {
     if (widget.onDateSelected != null) {
+      if (widget.isLoading ?? false) {
+        return;
+      }
       widget.onDateSelected!(day);
     }
     if (widget.onMonthChanged != null) {

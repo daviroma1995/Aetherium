@@ -217,7 +217,7 @@ class PastAppointmentController extends GetxController {
     homeControlelr.loadHomeScreen();
     agendaContrller.loadData();
     Fluttertoast.showToast(
-        msg: 'Appointment deleted Successfully',
+        msg: tr('appointment_deleted_successfully'),
         backgroundColor: AppColors.GREEN_COLOR);
   }
 }

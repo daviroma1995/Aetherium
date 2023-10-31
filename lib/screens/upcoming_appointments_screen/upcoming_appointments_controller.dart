@@ -84,10 +84,11 @@ class UpcomingAppointmentsController extends GetxController {
       var agenda = Get.find<AgendaController>();
       agenda.loadData();
       Fluttertoast.showToast(
-          msg: 'Appointment deleted Successfully',
+          msg: tr('appointment_deleted_successfully'),
           backgroundColor: AppColors.GREEN_COLOR);
     } catch (ex) {
-      Fluttertoast.showToast(msg: 'Something went wrong');
+      // Fluttertoast.showToast(msg: 'Something went wrong');
+      log(ex.toString());
     }
   }
 
