@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
@@ -14,11 +15,13 @@ class NotificationsController extends GetxController {
     notifications.bindStream(FirebaseServices.getUnreadNotficationsStream());
     super.onInit();
   }
-    @override
+
+  @override
   void onClose() {
     super.onClose();
     notifications.close();
   }
+
   void handleBack() {
     Get.back();
   }
@@ -29,7 +32,7 @@ class NotificationsController extends GetxController {
         FirebaseServices.markNotificationAsRead(notification.id);
       }
       Fluttertoast.showToast(
-          msg: 'All Notifications are marked as read',
+          msg: tr('notifications_read'),
           backgroundColor: AppColors.GREEN_COLOR);
       notifications.value = <Notification>[];
     }

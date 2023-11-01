@@ -1,19 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
+
 import 'package:atherium_saloon_app/models/appointment.dart';
-import 'package:atherium_saloon_app/screens/appointment_confirm_detail_screen/appointment_confirm_detail_controller.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:atherium_saloon_app/models/client.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
+import 'package:atherium_saloon_app/models/shop_info.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 import '../../models/appointment_status.dart';
 import '../../models/timeslot.dart';
@@ -24,14 +24,18 @@ import '../appointment_confirm_detail_screen/appointment_confirm_detail_screen.d
 int monthIndex = DateTime.now().month;
 
 class AppointMentBookingController extends GetxController {
+  AppointMentBookingController({this.isEditing});
+  var shopinfo = ShopInfo().obs;
+  bool? isEditing = false;
   RxBool isLoading = false.obs;
   RxBool calenderState = true.obs;
   RxBool hideTodayController = true.obs;
   RxBool shouldReset = false.obs;
   RxBool isExpaned = false.obs;
-  bool isEditing = false;
+  RxBool employeesLoaded = false.obs;
   var args = Get.arguments;
   var employees = <Employee>[].obs;
+  var filteredEmployees = <Employee>[].obs;
   var treatments = <Treatment>[].obs;
   var selectedTreatements = <Treatment>[];
   var currentUser = Client().obs;
@@ -45,30 +49,74 @@ class AppointMentBookingController extends GetxController {
   var appointmentStatusList = <AppointmentStatus>[].obs;
   var statusLabels = <String>[].obs;
   var initialDate = DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day, 0, 0, 0, 0, 0)
+          (DateTime.now().day), 0, 0, 0, 0, 0)
       .obs;
   String dateString = '';
   String timeString = '';
   Appointment appointment = Appointment();
   String previousStatus = '';
   String selectedStatus = '';
+  DateTime selectedDateTime = DateTime.now();
+  late String openingTime;
+  late String closingTime;
+  String closingHours = '';
+  bool isPastDay = false;
   @override
   void onInit() async {
+    var shopInfoQuery =
+        await FirebaseFirestore.instance.collection('shop_info').get();
+    var queryDoc = shopInfoQuery.docs.first;
+    var shopInfoMap = queryDoc.data();
+    shopinfo.value = ShopInfo.fromJson(shopInfoMap);
     isLoading.value = true;
-    initialDate.value = args.dateTimestamp != null
-        ? args.dateTimestamp.toDate()
-        : initialDate.value;
-    selectedDate.value = args.dateTimestamp != null
-        ? DateFormat('MM/dd/yyyy').format(args.dateTimestamp.toDate())
-        : selectedDate.value;
+    openingTime =
+        shopinfo.value.openingHours?[DateTime.now().weekday - 1].openingTime ??
+            '';
+    closingTime =
+        shopinfo.value.openingHours?[DateTime.now().weekday - 1].closingTime ??
+            '';
+    int index = closingTime.indexOf(':');
+
+    if (index == 2) {
+      closingHours = '${closingTime[0]}${closingTime[1]}';
+    }
+    if (initialDate.value.weekday == 7) {
+      initialDate.value = DateTime(
+          DateTime.now().year, DateTime.now().month, (DateTime.now().day + 1));
+      calenderState.value = !calenderState.value;
+    } else if (args.dateTimestamp != null) {
+      DateTime date = args.dateTimestamp.toDate();
+      if ((date.day < DateTime.now().day ||
+              date.month < DateTime.now().month ||
+              date.year < DateTime.now().year) &&
+          date.month < DateTime.now().month) {
+        initialDate.value = initialDate.value;
+        selectedDate.value = selectedDate.value;
+      } else {
+        initialDate.value = date;
+        selectedDate.value =
+            DateFormat('MM/dd/yyyy').format(args.dateTimestamp.toDate());
+      }
+    } else {
+      if (int.tryParse(closingHours)! < DateTime.now().hour) {
+        initialDate.value = DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
+        calenderState.value = !calenderState.value;
+        print('done');
+      }
+    }
+    // initialDate.value = args.dateTimestamp != null
+    //     ? args.dateTimestamp.toDate()
+    //     : initialDate.value;
+    // selectedDate.value = args.dateTimestamp != null
+    //     ? DateFormat('MM/dd/yyyy').format(args.dateTimestamp.toDate())
+    //     : selectedDate.value;
     args.notes = args.notes ?? '';
     notes.text = args.notes;
     args.isRegular = args.isRegular ?? true;
     treatments.bindStream(FirebaseServices.treatments());
-    var selectedEmployeeQuery = await FirebaseFirestore.instance
-        .collection('employees')
-        .where('treatment_id_list', arrayContainsAny: args.serviceId)
-        .get();
+    var selectedEmployeeQuery =
+        await FirebaseFirestore.instance.collection('employees').get();
     for (var element in selectedEmployeeQuery.docs) {
       selectedEmloyees.add(element.id);
       var data = element.data();
@@ -89,8 +137,18 @@ class AppointMentBookingController extends GetxController {
       selectedTreatmentsMap.add(map);
     }
 
+    // if (args.dateTimestamp != null) {
+    //   if (args.dateTimestamp.toDate().day >= DateTime.now().day &&
+    //       args.dateTimestamp.toDate().month >= DateTime.now().month &&
+    //       args.dateTimestamp.toDate().year >= DateTime.now().year) {
+    //     await loadTimeslots(
+    //         treatments: selectedTreatmentsMap,
+    //         appointmentDate: selectedDate.value);
+    //   }
+    // } else {
     await loadTimeslots(
         treatments: selectedTreatmentsMap, appointmentDate: selectedDate.value);
+    // }
     if (currentUser.value.isAdmin == true) {
       isAdmin.value = true;
     }
@@ -103,25 +161,30 @@ class AppointMentBookingController extends GetxController {
         Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month,
                 DateTime.now().day, 0, 0, 0, 0, 0)
             .toLocal());
-    args.time = args.time == null
-        ? avaliableSlots.isNotEmpty
-            ? avaliableSlots[0]
-            : null
-        : avaliableSlots.isNotEmpty
-            ? avaliableSlots[0]
-            : null;
+    // args.time = args.time == null
+    //     ? avaliableSlots.isNotEmpty
+    //         ? avaliableSlots[0]
+    //         : null
+    //     : avaliableSlots.isNotEmpty
+    //         ? avaliableSlots[0]
+    //         : null;
     args.statusId = args.statusId ?? '88aa7cf3-c6b6-4cab-91eb-247aa6445a0a';
-    args.date = selectedDate.value;
+    args.date = args.date ?? selectedDate.value;
     isLoading.value = false;
-    if (slotdata.isNotEmpty) {
-      args.roomId = args.roomId ?? slotdata[0].roomIdList;
-      args.startTime = args.startTime ?? slotdata[0].startTime;
-      args.endTime = args.endTime ?? slotdata[0].endTime;
-    } else {
-      args.roomId = null;
-      args.startTime = null;
-      args.endTime = null;
-    }
+    // if (args.time != null && slotdata.isNotEmpty) {
+    //   int index = avaliableSlots.indexOf(args.time);
+    //   args.roomId = slotdata[index].roomIdList;
+    //   args.startTime = slotdata[index].startTime;
+    //   args.endTime = slotdata[index].endTime;
+    // } else if (args.time == '' && slotdata.isNotEmpty) {
+    //   args.roomId = args.roomId ?? slotdata[0].roomIdList;
+    //   args.startTime = args.startTime ?? slotdata[0].startTime;
+    //   args.endTime = args.endTime ?? slotdata[0].endTime;
+    // } else {
+    //   args.roomId = null;
+    //   args.startTime = null;
+    //   args.endTime = null;
+    // }
     super.onInit();
   }
 
@@ -150,10 +213,25 @@ class AppointMentBookingController extends GetxController {
   }
 
   void next() {
+    if (args.dateTimestamp != null) {
+      if ((args.dateTimestamp.toDate().day < DateTime.now().day ||
+              args.dateTimestamp.toDate().month < DateTime.now().month ||
+              args.dateTimestamp.toDate().year < DateTime.now().year) &&
+          args.dateTimestamp.toDate().month <= DateTime.now().month) {
+        Fluttertoast.showToast(msg: tr('appointment_past'));
+        return;
+      }
+    }
     selectedTreatements = <Treatment>[];
-    if (avaliableSlots.isEmpty) {
+    if ((selectedDateTime.day < DateTime.now().day ||
+            selectedDateTime.month < DateTime.now().month ||
+            selectedDateTime.year < DateTime.now().year) &&
+        selectedDateTime.month <= DateTime.now().month) {
+      Fluttertoast.showToast(msg: tr('appointment_past'));
+      return;
+    } else if (avaliableSlots.isEmpty) {
       Fluttertoast.showToast(
-          msg: 'No timeslot selected select a timeslot first',
+          msg: tr('no_timeslot_selected'),
           backgroundColor: AppColors.ERROR_COLOR);
     } else {
       DateTime time = DateTime(DateTime.now().year, DateTime.now().month,
@@ -179,7 +257,7 @@ class AppointMentBookingController extends GetxController {
           previousStatus: previousStatus,
         ),
         duration: const Duration(milliseconds: 600),
-        transition: Transition.downToUp,
+        transition: Platform.isIOS ? null : Transition.downToUp,
         arguments: args,
       );
     }
@@ -190,19 +268,30 @@ class AppointMentBookingController extends GetxController {
       required String appointmentDate}) async {
     isLoading.value = true;
     // print(json.encode({"date": appointmentDate, "treatments": treatments}));
-
+    print(isEditing);
+    if (isEditing ?? false) {
+      print(args.id);
+    }
     slotdata = <Timeslot>[];
     avaliableSlots.value = <String>[];
+    filteredEmployees.value = <Employee>[];
     var client = http.Client();
     var url = Uri.parse(
         "https://us-central1-aetherium-salon.cloudfunctions.net/timeslots");
     try {
       var response = await client.post(url,
-          body:
-              json.encode({"date": appointmentDate, "treatments": treatments}));
+          body: isEditing ?? false
+              ? json.encode({
+                  "date": appointmentDate,
+                  "treatments": treatments,
+                  "appointment_id": args.id
+                })
+              : json
+                  .encode({"date": appointmentDate, "treatments": treatments}));
       var responseBody = response.body;
-      print(responseBody);
+      // print(responseBody);
       var resList = json.decode(responseBody);
+
       for (var data in resList) {
         var startTime = data['start_time'];
         var date = DateTime.parse(startTime);
@@ -210,22 +299,56 @@ class AppointMentBookingController extends GetxController {
         avaliableSlots.add(time);
         slotdata.add(Timeslot.fromJson(data));
       }
-      if (avaliableSlots.isEmpty) {
+
+      var listOFEmployeeId = slotdata[0].employeeIdList;
+      if (listOFEmployeeId!.isNotEmpty) {
+        for (var id in listOFEmployeeId) {
+          var data = await FirebaseFirestore.instance
+              .collection('employees')
+              .doc(id)
+              .get();
+          var snapshot = data.data();
+
+          filteredEmployees.add(Employee.fromJson(snapshot!));
+        }
+      }
+      args.employeeId = slotdata[0].employeeIdList;
+      employeesLoaded.value = true;
+
+      // for (var item in resList) {
+      //   if (filteredEmployees.contains(item)) {
+      //     continue;
+      //   } else {
+      //     filteredEmployees.add(employees
+      //         .firstWhere((value) => value.id == item['employee_id_list']));
+      //   }
+      // }
+      // args.employeId = resList[0]['employee_id_list'].isEmpty ?? [];
+      if (avaliableSlots.isEmpty && isPastDay == false) {
         Fluttertoast.showToast(
-            msg: 'No slots available select another date',
-            backgroundColor: AppColors.ERROR_COLOR);
+            msg: tr('no_time_slots'), backgroundColor: AppColors.ERROR_COLOR);
       } else {
-        args.time = avaliableSlots[0];
-        args.startTime = slotdata[0].startTime;
-        args.endTime = slotdata[0].endTime;
-        args.roomId = slotdata[0].roomIdList;
+        if (args.time != null) {
+          int index = avaliableSlots.indexOf(args.time);
+          selectedSlot.value = index;
+          args.time = avaliableSlots[index];
+          args.startTime = slotdata[index].startTime;
+          args.endTime = slotdata[index].endTime;
+          args.roomId = slotdata[index].roomIdList;
+        } else {
+          selectedSlot.value = 0;
+          args.time = avaliableSlots[0];
+          args.startTime = slotdata[0].startTime;
+          args.endTime = slotdata[0].endTime;
+          args.roomId = slotdata[0].roomIdList;
+        }
       }
     } catch (ex) {
       log(ex.toString());
-
-      Fluttertoast.showToast(
-          msg: 'API Error: Unknown error!',
-          backgroundColor: AppColors.ERROR_COLOR);
+      if (isPastDay == false) {
+        Fluttertoast.showToast(
+            msg: tr('no_time_slots'), backgroundColor: AppColors.ERROR_COLOR);
+      }
     }
     isLoading.value = false;
   }

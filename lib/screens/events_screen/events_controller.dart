@@ -1,8 +1,8 @@
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
+import 'dart:io';
+
 import 'package:get/get.dart';
 
 import '../../models/event.dart';
-
 import '../../network_utils/firebase_services.dart';
 import '../event_details/event_details_screen.dart';
 
@@ -35,7 +35,7 @@ class EventsController extends GetxController {
     final result = await Get.to(
       () => EventDetailsScreen(),
       duration: const Duration(milliseconds: 600),
-      transition: Transition.downToUp,
+      transition: Platform.isIOS ? null : Transition.downToUp,
       arguments: events[index],
     );
     if (result != null) {

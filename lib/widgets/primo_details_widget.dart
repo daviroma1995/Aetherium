@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -64,7 +65,7 @@ class PrimoDetailsWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 6.0),
                 Text(
-                  'By $date',
+                  '${tr('By')} $date',
                   style: const TextStyle(
                     color: AppColors.GREY_COLOR,
                     fontSize: 10.0,

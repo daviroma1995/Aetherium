@@ -13,9 +13,9 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/client.dart';
 import '../../utils/constants.dart';
 import '../../utils/image_picker.dart';
-import '../../models/client.dart';
 import '../login_screen/login_screen.dart';
 
 class AccountInfoController extends GetxController {
@@ -38,7 +38,7 @@ class AccountInfoController extends GetxController {
   RxString emailErrorMessage = ''.obs;
   RxString phoneErrorMessage = ''.obs;
   RxString addressErrorMessage = ''.obs;
-  RxString genderValue = 'Male'.obs;
+  RxString genderValue = tr('male').obs;
   Rx<XFile?> imageUrl = XFile('').obs;
   RxBool isUpdating = false.obs;
   RxString imageFileString = ''.obs;
@@ -63,10 +63,12 @@ class AccountInfoController extends GetxController {
         log('Error: ${ex.toString()}');
       }
     }
-    genderValue.value = currentClient.value.gender!.toLowerCase() == 'm' ||
-            currentClient.value.gender!.toLowerCase() == 'male'
-        ? 'Male'
-        : 'Female';
+
+    genderValue.value = tr(currentClient.value.gender! == "maschio"
+        ? 'male'
+        : currentClient.value.gender! == "altro"
+            ? 'other'
+            : 'female');
     isLoading.value = false;
   }
 
@@ -131,7 +133,7 @@ class AccountInfoController extends GetxController {
     if (phone.text.isEmpty) {
       phoneHasError.value = true;
       phoneErrorMessage.value = tr('phone_is_required');
-    } else if (phone.text.length < 13 || phone.text.length > 13) {
+    } else if (phone.text.length < 6) {
       phoneHasError.value = true;
       phoneErrorMessage.value = tr('not_a_valid_number');
     } else {
@@ -214,8 +216,7 @@ class AccountInfoController extends GetxController {
       currentClient.value.lastName = surName.text;
       currentClient.value.email = email.text;
       currentClient.value.phoneNumber = phone.text;
-      currentClient.value.gender =
-          genderValue.value.toLowerCase() == 'male' ? 'M' : 'F';
+      currentClient.value.gender = genderValue.value.toLowerCase();
       currentClient.value.address = address.text;
       currentClient.value.birthday = Timestamp.fromDate(dateOfBirth.value);
       await FirebaseFirestore.instance

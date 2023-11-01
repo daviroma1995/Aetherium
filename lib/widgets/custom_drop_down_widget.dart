@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -60,7 +61,9 @@ class CustomDropDown extends StatelessWidget {
         if (showLabel!)
           Text(
             label.toUpperCase(),
-            style: const TextStyle(fontWeight: FontWeight.w700),
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+            ),
           ),
         if (showLabel!) const SizedBox(height: 10),
         Container(
@@ -218,7 +221,14 @@ class CustomDropDown extends StatelessWidget {
                               ? (value is Map ? value['name'] : value)
                               : value ?? label.toUpperCase(),
                           maxLines: 2,
-                          style: const TextStyle(fontWeight: FontWeight.w700),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: isDark
+                                ? AppColors.GREY_COLOR
+                                : value == tr('gender')
+                                    ? AppColors.GREY_COLOR
+                                    : AppColors.PRIMARY_DARK,
+                          ),
                         ),
                         if (subHint != null)
                           Text(

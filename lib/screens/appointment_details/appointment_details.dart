@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -7,20 +6,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-
 import '../../models/appointment.dart';
-import '../../network_utils/firebase_services.dart';
 import '../../utils/constants.dart';
-import '../../utils/google_calendar.dart';
 import '../../widgets/primary_button.dart';
 import '../../widgets/text_row_widget.dart';
 import '../home_screen/home_screen_controller.dart';
 import 'appointment_details_controller.dart';
-// import 'package:flutter_googlecalendar/flutter_googlecalendar.dart';
-// import 'package:atherium_saloon_app/packages/google_calendar/lib/flutter_googlecalendar.dart';
 
 class AppointmentDetailsScreen extends StatelessWidget {
   final controller = Get.put(AppointmentDetailsController());
@@ -38,11 +29,13 @@ class AppointmentDetailsScreen extends StatelessWidget {
   final bool isPast;
   final bool isAdmin;
   final Appointment appointment;
-  final durationText = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
+    controller.endDate = DateTime.parse(appointment.endTime!);
+    controller.getEndTime(
+        appointment.time!, appointment.duration!, appointment);
     return WillPopScope(
       onWillPop: () async {
         Get.back(result: controller.isChanged);
@@ -59,16 +52,16 @@ class AppointmentDetailsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
-                borderRadius: BorderRadius.circular(25.0),
+                borderRadius: BorderRadius.circular(40.0),
                 onTap: isDetail == false
                     ? () {
                         Get.back(result: controller.isChanged);
                       }
-                    : () => Get.back(),
+                    : () => Get.back(result: appointment.serviceId!.isEmpty),
                 child: Container(
                   alignment: Alignment.center,
-                  width: 25.0,
-                  height: 25.0,
+                  width: 40.0,
+                  height: 40.0,
                   child: SvgPicture.asset(AppAssets.BACK_ARROW,
                       height: 14.0, width: 14.0),
                 ),
@@ -134,15 +127,18 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                                 : AppColors.SECONDARY_COLOR),
                                   ),
                                   const SizedBox(height: 10.0),
-                                  TextRowWidget(
-                                    textOne: appointment.dateString,
-                                    textTwo: appointment.time ?? '',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14.0,
-                                      color: isDark
-                                          ? AppColors.GREY_COLOR
-                                          : AppColors.BLACK_COLOR,
+                                  Obx(
+                                    () => TextRowWidget(
+                                      textOne: appointment.dateString,
+                                      textTwo:
+                                          '${appointment.time} - ${controller.endTime}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14.0,
+                                        color: isDark
+                                            ? AppColors.GREY_COLOR
+                                            : AppColors.BLACK_COLOR,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(height: 16.0),
@@ -234,7 +230,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                                             ),
                                                           ),
                                                           Text(
-                                                            '${controller.getPrice(appointment.serviceId![index])} \$',
+                                                            '${controller.getPrice(appointment.serviceId![index])} €',
                                                             style: TextStyle(
                                                               fontSize: 14.0,
                                                               fontWeight:
@@ -269,7 +265,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                               AppointmentDetailsController>(
                                             builder: (controller) {
                                               return Text(
-                                                '${controller.totalPrice(appointment.serviceId!)} \$',
+                                                '${controller.totalPrice(appointment.serviceId!)} €',
                                                 style: const TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -284,49 +280,55 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                   Visibility(
                                     visible: isEditable,
                                     child: PrimaryButton(
-                                        width: Get.width,
-                                        color: isDark
-                                            ? AppColors.SECONDARY_LIGHT
-                                            : AppColors.PRIMARY_COLOR,
-                                        buttonText: 'add_to_google_calendar',
-                                        onTap: () async {
-                                          final startTime = DateTime.parse(
-                                                  appointment.startTime!)
-                                              .toUtc();
-                                          final rfcStartTime =
-                                              DateFormat("yyyyMMdd'T'HHmmss")
-                                                  .format(startTime);
-                                          final endTime = DateTime.parse(
-                                                  appointment.endTime!)
-                                              .toUtc();
-                                          final rfcEndTime =
-                                              DateFormat("yyyyMMdd'T'HHmmss")
-                                                  .format(endTime);
-                                          print('$startTime, $endTime');
-                                          print('$rfcStartTime , $rfcEndTime');
-                                          String url =
-                                              'https://calendar.google.com/calendar/u/0/r/eventedit?text=Meeting+with+Beauty+Specialist&dates=$rfcStartTime/$rfcEndTime&details=&location=G7F5%2B6GJ+Brescia,+Province+of+Brescia,+Italy&sf=true&output=xml';
-                                          try {
-                                            launchUrlString(url,
-                                                mode: LaunchMode
-                                                    .externalApplication);
-                                          } catch (ex) {
-                                            print(ex);
-                                          }
-                                        }),
+                                      width: Get.width,
+                                      color: isDark
+                                          ? AppColors.SECONDARY_LIGHT
+                                          : AppColors.PRIMARY_COLOR,
+                                      buttonText: 'add_to_google_calendar',
+                                      buttonTextColor: isDark
+                                          ? AppColors.BACKGROUND_DARK
+                                          : AppColors.WHITE_COLOR,
+                                      onTap: () async {
+                                        final startTime = DateTime.parse(
+                                            appointment.startTime!);
+                                        final endTime = DateTime.parse(
+                                            appointment.endTime!);
+                                        print(endTime);
+                                        // print('$startTime, $endTime');
+                                        // print('$rfcStartTime , $rfcEndTime');
+
+                                        await controller.addToCalendar(
+                                            title: 'Aetherium Saloon',
+                                            description:
+                                                'Meeting with beauty specialist',
+                                            startDate: startTime,
+                                            endDate: controller.endDate,
+                                            email: appointment.email!);
+                                      },
+                                    ),
                                   ),
+                                  // AspectRatio(
+                                  //   aspectRatio: .4,
+                                  //   child: WebViewWidget(
+                                  //       controller: controller.controller),
+                                  // ),
                                   const SizedBox(height: 20.0),
-                                  Text(
-                                    '${tr('beauty_specialist')}:',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium!
-                                        .copyWith(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 16.0,
-                                            color: isDark
-                                                ? AppColors.WHITE_COLOR
-                                                : AppColors.SECONDARY_COLOR),
+                                  Visibility(
+                                    visible:
+                                        appointment.employeeId?.isNotEmpty ??
+                                            false,
+                                    child: Text(
+                                      '${tr('beauty_specialist')}:',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium!
+                                          .copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 16.0,
+                                              color: isDark
+                                                  ? AppColors.WHITE_COLOR
+                                                  : AppColors.SECONDARY_COLOR),
+                                    ),
                                   ),
                                   const SizedBox(height: 20.0),
                                   ListView.builder(
@@ -339,28 +341,32 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                           title: homecontroller.getEmployeeName(
                                               appointment.employeeId![index]),
                                           imageUrl: AppAssets.USER_IMAGE,
-                                          subtitle: 'Fragrances & Perfumes',
+                                          subtitle: tr('fragrances_perfumes'),
                                           isDark: isDark,
                                         );
                                       }),
                                   const SizedBox(height: 20.0),
-                                  Text(
-                                    '${tr('note')}:',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium!
-                                        .copyWith(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 16.0,
-                                            color: isDark
-                                                ? AppColors.WHITE_COLOR
-                                                : AppColors.SECONDARY_COLOR),
+                                  Visibility(
+                                    visible:
+                                        appointment.notes?.isNotEmpty ?? false,
+                                    child: Text(
+                                      '${tr('note')}:',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium!
+                                          .copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 16.0,
+                                              color: isDark
+                                                  ? AppColors.WHITE_COLOR
+                                                  : AppColors.SECONDARY_COLOR),
+                                    ),
                                   ),
                                   const SizedBox(height: 20.0),
                                   Text(
                                     appointment.notes == null ||
                                             appointment.notes!.isEmpty
-                                        ? 'No Notes avaialbe'
+                                        ? ''
                                         : appointment.notes!,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w400,
@@ -375,6 +381,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
+                          const SizedBox(height: 20.0),
                           if (isEditable && isAdmin)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -389,18 +396,13 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                         inputFormatters: [
                                           FilteringTextInputFormatter.digitsOnly
                                         ],
-                                        controller: durationText,
-                                        decoration: InputDecoration(
-                                          hintText:
-                                              appointment.duration!.toString(),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 10.0,
-                                                  vertical: 0.0),
-                                          enabledBorder:
-                                              const OutlineInputBorder(),
-                                          focusedBorder:
-                                              const OutlineInputBorder(),
+                                        controller: controller.durationText,
+                                        decoration: const InputDecoration(
+                                          hintText: '0',
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 10.0, vertical: 0.0),
+                                          enabledBorder: OutlineInputBorder(),
+                                          focusedBorder: OutlineInputBorder(),
                                         ),
                                       ),
                                     ),
@@ -410,7 +412,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                 ),
                                 PrimaryButton(
                                     width: Get.width * .5,
-                                    buttonText: 'increase_total_duration_by',
+                                    buttonText: 'increase',
                                     buttonTextColor: isDark
                                         ? AppColors.BACKGROUND_DARK
                                         : AppColors.WHITE_COLOR,
@@ -418,31 +420,40 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                         ? AppColors.SECONDARY_LIGHT
                                         : AppColors.PRIMARY_COLOR,
                                     onTap: () async {
-                                      if (durationText.text != '') {
+                                      if (controller.durationText.text != '') {
                                         bool duartionIsUpdated =
                                             await controller.updateDuration(
-                                                appointment,
-                                                num.parse(durationText.text));
+                                          appointment,
+                                          num.parse(
+                                              controller.durationText.text),
+                                        );
                                         if (duartionIsUpdated) {
+                                          controller.getEndTime(
+                                              appointment.time!,
+                                              (appointment.duration! +
+                                                  num.parse(controller
+                                                      .durationText.text)),
+                                              appointment);
+
                                           Fluttertoast.showToast(
                                               msg:
-                                                  'Duration Increased by ${durationText.text} Minutes');
+                                                  '${tr('duration_increased')} ${controller.durationText.text} ${tr('minutes')} ');
                                           FocusManager.instance.primaryFocus
                                               ?.unfocus();
-                                          durationText.text = '';
+                                          controller.durationText.text = '';
                                           Get.find<HomeScreenController>()
                                               .loadHomeScreen();
                                           Get.find<AgendaController>()
                                               .loadData();
+
                                           return;
                                         }
                                         Fluttertoast.showToast(
-                                            msg:
-                                                'Duration is not updated Something went Wrong');
+                                            msg: tr('duration_is_not_updated'));
                                         return;
                                       }
                                       Fluttertoast.showToast(
-                                          msg: 'The duration Field is Empty');
+                                          msg: tr('duration_empty'));
                                     })
                               ],
                             ),

@@ -32,8 +32,8 @@ class SettingsScreen extends StatelessWidget {
               onTap: () => controller.handleBack(),
               child: Container(
                 alignment: Alignment.center,
-                width: 25.0,
-                height: 25.0,
+                width: 40.0,
+                height: 40.0,
                 child: SvgPicture.asset(AppAssets.BACK_ARROW,
                     height: 14.0, width: 14.0),
               ),
@@ -130,13 +130,14 @@ class SettingsScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 20),
-                            const Text(
-                              'change_theme',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ).tr()
+                            Text('change_theme',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium!
+                                        .copyWith(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w700))
+                                .tr()
                           ],
                         ),
                         SvgPicture.asset(

@@ -11,7 +11,7 @@ class EventDetailsControlelr extends GetxController {
   void onInit() async {
     args = Get.arguments;
     isfavorite.value = args.isfavorite;
-    uid = await FirebaseServices.checkUserUid();
+    // uid = await FirebaseServices.checkUserUid();
     super.onInit();
   }
 

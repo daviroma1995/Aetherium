@@ -32,10 +32,13 @@ class ServicesScreen extends StatelessWidget {
   final String? date;
   final String? time;
   final Appointment? appointment;
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(
         ServicesController(uid: uid, clientEmail: clientEmail, number: number));
+    final data = controller.args;
+
     controller.isEditing = isEditing;
     controller.date = date ?? '';
     controller.time = time ?? '';
@@ -60,14 +63,14 @@ class ServicesScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
-                borderRadius: BorderRadius.circular(25.0),
+                borderRadius: BorderRadius.circular(40.0),
                 onTap: () {
                   Get.back(result: true);
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  width: 25.0,
-                  height: 25.0,
+                  width: 40.0,
+                  height: 40.0,
                   child: SvgPicture.asset(AppAssets.BACK_ARROW,
                       height: 14.0, width: 14.0),
                 ),

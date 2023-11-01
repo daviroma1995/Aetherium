@@ -23,7 +23,8 @@ class PastAppointmentScreen extends StatelessWidget {
       child: Obx(
         () => Column(
           children: [
-            controller.pastAppointments.isEmpty
+            controller.pastAppointments.isEmpty &&
+                    controller.isInititalized.value == true
                 ? SizedBox(
                     height: Get.height - 250.0,
                     width: Get.width,
@@ -79,7 +80,7 @@ class PastAppointmentScreen extends StatelessWidget {
                                                     color:
                                                         AppColors.ERROR_COLOR,
                                                     width: 60,
-                                                    buttonText: 'Yes',
+                                                    buttonText: tr('yes'),
                                                     onTap: () async {
                                                       await controller
                                                           .deleteAppointment(
@@ -97,9 +98,11 @@ class PastAppointmentScreen extends StatelessWidget {
                                                 return AlertDialog(
                                                   alignment: Alignment.center,
                                                   title: const Text(
-                                                      'Are you sure?'),
+                                                          'delete_confirm')
+                                                      .tr(),
                                                   content: const Text(
-                                                      'Appointment will be deleted permanently'),
+                                                          'appointment_delete')
+                                                      .tr(),
                                                   actions: [
                                                     yesButton,
                                                     noButton
@@ -111,7 +114,7 @@ class PastAppointmentScreen extends StatelessWidget {
                                           imageUrl: AppAssets.EVENT_IMAGE_ONE,
                                           title: controller.isAdmin
                                               ? '${controller.listOfClients[index].firstName.toString().capitalize} - ${controller.listOfClients[index].lastName.toString().capitalize}'
-                                              : '${controller.employees[0].name}',
+                                              : '${controller.employees.isNotEmpty && controller.employees.length - 1 >= index ? controller.employees[index].name : tr('appointment')}',
                                           subTitle:
                                               '${controller.listOfTreatmentCategory[index].name} - ${controller.services[index].name!}',
                                           color: controller.getColor(controller
@@ -128,11 +131,14 @@ class PastAppointmentScreen extends StatelessWidget {
                                     );
                             },
                           )
-                        : Center(
-                            child: CircularProgressIndicator(
-                              color: isDark
-                                  ? AppColors.SECONDARY_COLOR
-                                  : AppColors.GREY_COLOR,
+                        : SizedBox(
+                            height: Get.height / 1.5,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: isDark
+                                    ? AppColors.SECONDARY_COLOR
+                                    : AppColors.GREY_COLOR,
+                              ),
                             ),
                           ),
                   ),

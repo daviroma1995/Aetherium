@@ -1,12 +1,17 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:atherium_saloon_app/models/appointment_status.dart';
 import 'package:atherium_saloon_app/models/employee.dart';
 import 'package:atherium_saloon_app/models/treatment.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 import '../../models/appointment.dart';
 import '../../models/client.dart';
@@ -51,19 +56,39 @@ class UpcomingAppointmentsController extends GetxController {
 
   Future<void> deleteAppointment(int id) async {
     try {
+      var appointmentId = upcommingAppointments[id].id;
+      var uri = Uri.parse(
+          'https://us-central1-aetherium-salon.cloudfunctions.net/googleCalendarEvent');
+      var response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          "operation": "DELETE",
+          "appointment_id": appointmentId,
+        }),
+      );
+      log('Response :: ${response.body}');
+    } catch (ex) {
+      log("Exception::: ${ex.toString()}");
+    }
+    try {
       await FirebaseFirestore.instance
           .collection('appointments')
           .doc(upcommingAppointments[id].id)
-          .delete();
+          .delete()
+          .then((value) async {});
       var homeController = Get.find<HomeScreenController>();
       homeController.loadHomeScreen();
       var agenda = Get.find<AgendaController>();
       agenda.loadData();
       Fluttertoast.showToast(
-          msg: 'Appointment deleted Successfully',
+          msg: tr('appointment_deleted_successfully'),
           backgroundColor: AppColors.GREEN_COLOR);
     } catch (ex) {
-      Fluttertoast.showToast(msg: 'Something went wrong');
+      // Fluttertoast.showToast(msg: 'Something went wrong');
+      log(ex.toString());
     }
   }
 
@@ -125,10 +150,15 @@ class UpcomingAppointmentsController extends GetxController {
     }
     for (var appointment in upcommingAppointments) {
       for (int i = 0; i < employees!.length; i++) {
-        if (employees[i]['id'] == appointment.employeeId![0]) {
-          var employee = Employee.fromJson(employees[i]);
-          employeesData.add(employee);
-          break;
+        if (appointment.employeeId != null &&
+            appointment.employeeId!.isNotEmpty) {
+          if (employees[i]['id'] == appointment.employeeId?[0]) {
+            var employee = Employee.fromJson(employees[i]);
+            employeesData.add(employee);
+            break;
+          } else {
+            employeesData.add(Employee(name: tr('appointment')));
+          }
         }
       }
     }
@@ -147,11 +177,11 @@ class UpcomingAppointmentsController extends GetxController {
         listOfClients.add(Client.fromJson(client));
       }
     }
-    services.forEach((service) {
+    for (var service in services) {
       var treatmentCategory = listOftreatmentCategories
           .firstWhere((element) => element.id == service.treatmentCategoryId);
       listOfTreatmentCategory.add(treatmentCategory);
-    });
+    }
     isLoading.value = false;
   }
 }

@@ -76,6 +76,7 @@ class FirebaseServices {
       final snapShot = await FirebaseFirestore.instance
           .collection(collection)
           .orderBy('date_timestamp', descending: false)
+          .orderBy('start_time', descending: false)
           .get();
       for (var queryDocumentSnapshot in snapShot.docs) {
         var data = queryDocumentSnapshot.data();
@@ -469,6 +470,7 @@ class FirebaseServices {
         .collection('notifications')
         .where('status', isEqualTo: 'unread')
         .where('client_id', isEqualTo: cuid)
+        .orderBy('createdAt', descending: true)
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
@@ -487,6 +489,7 @@ class FirebaseServices {
         .collection('notifications')
         .where('status', isEqualTo: 'unread')
         .where('client_id', isEqualTo: cuid)
+        .orderBy('createdAt', descending: true)
         .snapshots()
         .map((notification) {
       var notifications = <Notification>[];

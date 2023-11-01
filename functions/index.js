@@ -2,9 +2,42 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 
 admin.initializeApp();
+exports.sendNotification = functions.firestore
+  .document("notifications/{docId}")
+  .onCreate(async (snap, context) => {
+    const data = snap.data();
+    const notificationContent = {
+      notification: {
+        title: data.title,
+        body: data.body,
+      },
+      data: {
+        id: JSON.stringify(data.id),
+        title: data.title,
+        body: data.body,
+        senderImage: JSON.stringify(data.senderImage),
+        senderId: JSON.stringify(data.senderId),
+        type: JSON.stringify(data.type),
+        appointmentId: data.appointmentId,
+      },
+      apns: {
+        payload: {
+          aps: {
+            "alert": {
+              title: data.title,
+              body: data.body,
+            },
+            sound: "default",
+          },
+        },
+      },
+      topic: data.receiverId,
+    };
+    await admin.messaging().send(notificationContent);
+  });
 
-exports.createUserwithEmail = functions.https.onRequest(async (req, res) =>{
-  const {email, password} = req.body;
+exports.createUserwithEmail = functions.https.onRequest(async (req, res) => {
+  const { email, password } = req.body;
   try {
     const userData = await admin.auth().createUser({
       email,
@@ -21,7 +54,7 @@ exports.createUserwithEmail = functions.https.onRequest(async (req, res) =>{
 });
 
 exports.deleteUser = functions.https.onRequest(async (req, res) => {
-  const {uid} = req.body;
+  const { uid } = req.body;
   console.log(uid);
   try {
     const user = await admin.auth().deleteUser(uid);

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:atherium_saloon_app/screens/account_info_screen/account_info_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/primary_button.dart';
@@ -337,7 +336,12 @@ class AccountInfoScreen extends StatelessWidget {
                                       () => CustomDropDown(
                                         height: 50.0,
                                         label: tr('select_gender'),
-                                        options: [tr('male'), tr('female')],
+                                        sort: false,
+                                        options: [
+                                          tr('male'),
+                                          tr('female'),
+                                          tr('other')
+                                        ],
                                         value: controller.genderValue.value,
                                         onChange: (value) {
                                           controller.changeValue(value);
@@ -346,7 +350,7 @@ class AccountInfoScreen extends StatelessWidget {
                                     ),
                                     const SizedBox(height: 12.0),
                                     CustomLabelWidget(
-                                      label: AppLanguages.ADDRESS,
+                                      label: tr('address'),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
@@ -405,6 +409,37 @@ class AccountInfoScreen extends StatelessWidget {
                                               1949, DateTime.january, 1),
                                           lastDate: DateTime.now(),
                                           helpText: tr('select_date_of_birth'),
+                                          cancelText: tr('cancel'),
+                                          confirmText: 'Ok',
+                                          builder: (context, child) {
+                                            return Theme(
+                                              data: Theme.of(context).copyWith(
+                                                colorScheme: ColorScheme.light(
+                                                  primary: isDark
+                                                      ? AppColors.PRIMARY_DARK
+                                                      : AppColors
+                                                          .PRIMARY_COLOR, // <-- SEE HERE
+                                                  onPrimary: isDark
+                                                      ? AppColors.GREY_COLOR
+                                                      : AppColors
+                                                          .WHITE_COLOR, // <-- SEE HERE
+                                                  onSurface: isDark
+                                                      ? AppColors.GREY_COLOR
+                                                      : AppColors
+                                                          .GREY_DARK, // <-- SEE HERE
+                                                ),
+                                                textButtonTheme:
+                                                    TextButtonThemeData(
+                                                  style: TextButton.styleFrom(
+                                                      foregroundColor: isDark
+                                                          ? AppColors.GREY_COLOR
+                                                          : AppColors
+                                                              .PRIMARY_COLOR),
+                                                ),
+                                              ),
+                                              child: child!,
+                                            );
+                                          },
                                         );
                                         controller.dateOfBirth.value =
                                             DateTime.parse(

@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:atherium_saloon_app/models/notification_model.dart';
 import 'package:atherium_saloon_app/models/treatment_category.dart';
+import 'package:atherium_saloon_app/network_utils/firebase_messaging.dart';
 import 'package:atherium_saloon_app/screens/appointment_details/appointment_details.dart';
 import 'package:atherium_saloon_app/screens/appointments_screen/appointments_screen.dart';
-
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
 import 'package:atherium_saloon_app/utils/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,10 +16,10 @@ import '../../models/appointment.dart';
 import '../../models/client.dart';
 import '../../models/employee.dart';
 import '../../models/event.dart';
+import '../../models/notification.dart' as notification;
 import '../../models/treatment.dart';
 import '../../network_utils/firebase_services.dart';
 import '../event_details/event_details_screen.dart';
-import '../../models/notification.dart' as notification;
 import '../select_client_screen/select_client_screen.dart';
 
 class HomeScreenController extends GetxController {
@@ -43,6 +46,8 @@ class HomeScreenController extends GetxController {
   }
 
   Future<void> loadHomeScreen() async {
+    services.clear();
+    isLoading.value = true;
     _uid = FirebaseServices.cuid;
     // treatmentCategories.value = await FirebaseServices.getTreatmentCategories();
     // log(treatmentCategories.toString());
@@ -55,9 +60,9 @@ class HomeScreenController extends GetxController {
     } catch (ex) {
       stdout.writeln(ex);
     }
-    isInitialized.value = true;
     LocalData.setIsLogedIn(true);
     await loadAppointments();
+    listOfClients.clear();
     if (currentUser.value.isAdmin ?? false) {
       var clients = await FirebaseServices.getData(collection: 'clients');
       for (var appointment in appointments) {
@@ -69,6 +74,8 @@ class HomeScreenController extends GetxController {
       }
     }
     isLoading.value = false;
+    isInitialized.value = true;
+    print(listOfClients);
   }
 
   @override
@@ -87,7 +94,7 @@ class HomeScreenController extends GetxController {
         isAdmin: currentUser.value.isAdmin ?? false,
       ),
       duration: const Duration(milliseconds: 600),
-      transition: Transition.rightToLeft,
+      transition: Platform.isIOS ? null : Transition.rightToLeft,
       arguments: appointments[index].clientId,
     );
     if (data == true) {
@@ -96,21 +103,27 @@ class HomeScreenController extends GetxController {
   }
 
   Future<void> loadAppointments() async {
-    appointmentsTreatmentCategoryList.clear();
+    appointmentsTreatmentCategoryList.value = <TreatmentCategory>[];
     var treatments = await FirebaseServices.getData(collection: 'treatments');
     var data = await FirebaseServices.getAppointments(
         isAdmin: currentUser.value.isAdmin!);
     appointments.value = data;
     for (var appointment in appointments) {
       for (int i = 0; i < treatments!.length; i++) {
-        if (appointment.serviceId![0] == treatments[i]['id']) {
+        if (appointment.serviceId![0] == treatments[i]['id'] &&
+            !services.contains(treatments[i]['id'])) {
           services.add(Treatment.fromJson(treatments[i]));
+          break;
         }
       }
     }
     for (var service in services) {
       int treatmentCategoryIndex = treatmentCategories
           .indexWhere((element) => service.treatmentCategoryId == element.id);
+      if (appointmentsTreatmentCategoryList
+          .contains(treatmentCategories[treatmentCategoryIndex])) {
+        // continue;
+      }
       appointmentsTreatmentCategoryList
           .add(treatmentCategories[treatmentCategoryIndex]);
     }
@@ -138,7 +151,10 @@ class HomeScreenController extends GetxController {
   }
   // Get Employee name
 
-  String getEmployeeName(String id) {
+  String getEmployeeName(String? id) {
+    if (id == null) {
+      return tr('appointment');
+    }
     for (var employee in appointmentsEmployee) {
       if (employee.id == id) {
         return employee.name!;
@@ -162,7 +178,9 @@ class HomeScreenController extends GetxController {
         () => const ServicesScreen(),
         duration: const Duration(milliseconds: 600),
         curve: Curves.linear,
-        transition: Transition.rightToLeft,
+        preventDuplicates: true,
+        fullscreenDialog: true,
+        transition: Platform.isIOS ? null : Transition.rightToLeft,
       );
       return;
     }
@@ -170,7 +188,7 @@ class HomeScreenController extends GetxController {
       () => SelectClientScreen(),
       duration: const Duration(milliseconds: 600),
       curve: Curves.linear,
-      transition: Transition.rightToLeft,
+      transition: Platform.isIOS ? null : Transition.rightToLeft,
     );
   }
 
@@ -179,7 +197,7 @@ class HomeScreenController extends GetxController {
       () => const AppointmentsScreen(),
       duration: const Duration(milliseconds: 600),
       curve: Curves.linear,
-      transition: Transition.rightToLeft,
+      transition: Platform.isIOS ? null : Transition.rightToLeft,
     );
   }
 
@@ -189,13 +207,15 @@ class HomeScreenController extends GetxController {
           arguments: index,
           duration: const Duration(milliseconds: 600),
           curve: Curves.easeInCubic,
-          transition: Transition.downToUp);
+          preventDuplicates: true,
+          transition: Platform.isIOS ? null : Transition.downToUp);
     } else {
       Get.to(() => SelectClientScreen(),
           arguments: index,
           duration: const Duration(milliseconds: 600),
           curve: Curves.easeInCubic,
-          transition: Transition.downToUp);
+          preventDuplicates: true,
+          transition: Platform.isIOS ? null : Transition.downToUp);
     }
   }
 
@@ -203,7 +223,7 @@ class HomeScreenController extends GetxController {
     final result = await Get.to(
       () => EventDetailsScreen(),
       arguments: events[index],
-      transition: Transition.downToUp,
+      transition: Platform.isIOS ? null : Transition.downToUp,
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeInCubic,
     );
@@ -221,6 +241,7 @@ class HomeScreenController extends GetxController {
     _uid = FirebaseServices.cuid;
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
+        await loadHomeScreen();
         var map = await FirebaseServices.getCurrentUser();
         currentUser.value = Client.fromJson(map);
 
@@ -247,6 +268,24 @@ class HomeScreenController extends GetxController {
         }
       },
     );
+  }
+
+  void sendNotification(String message) {
+    NotificationModel notification = NotificationModel(
+        id: '',
+        title: '${currentUser.value.firstName} send you a message',
+        body: message,
+        senderId: currentUser.value.userId!,
+        receiverId: 'U4Vob2BIBTPWBmwAAEh0iBzskBA3',
+        senderImage: '',
+        senderName: 'Basit',
+        createdAt: Timestamp.now(),
+        type: 'message',
+        desc: message,
+        status: '',
+        appointmentId: '',
+        clientId: '');
+    NotificationsSubscription.createNotification(notification: notification);
   }
 }
 

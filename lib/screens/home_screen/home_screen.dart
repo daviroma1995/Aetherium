@@ -1,17 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, invalid_use_of_protected_member
 
+import 'dart:io';
+
 import 'package:atherium_saloon_app/models/treatment_category.dart';
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_controller.dart';
 import 'package:atherium_saloon_app/screens/events_screen/events_screen.dart';
-
 import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
 import 'package:atherium_saloon_app/screens/notifications_screen/notifications_screen.dart';
-
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/form_field_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -58,6 +57,11 @@ class HomeScreen extends StatelessWidget {
                                 color:
                                     Theme.of(context).colorScheme.onBackground),
                       ).tr(),
+                      // ElevatedButton(
+                      //     onPressed: () {
+                      //       controller.sendNotification('Test');
+                      //     },
+                      //     child: const Text('Test')),
                       Obx(
                         () => controller.currentUser.value.firstName != null
                             ? Text(
@@ -84,8 +88,9 @@ class HomeScreen extends StatelessWidget {
                       onTap: () {
                         Get.to(
                           () => NotificationsScreen(),
-                          duration: const Duration(milliseconds: 600),
-                          transition: Transition.downToUp,
+                          duration: const Duration(milliseconds: 400),
+                          transition:
+                              Platform.isAndroid ? Transition.downToUp : null,
                         );
                       },
                       borderRadius: BorderRadius.circular(25.0),
@@ -179,7 +184,8 @@ class HomeScreen extends StatelessWidget {
                 backgroundColor:
                     isDark ? AppColors.SECONDARY_LIGHT : AppColors.WHITE_COLOR,
                 child: ListView(
-                  physics: const BouncingScrollPhysics(),
+                  physics:
+                      Platform.isAndroid ? const BouncingScrollPhysics() : null,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 22.0, right: 22.0),
@@ -246,7 +252,9 @@ class HomeScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 22.0, vertical: 20.0),
                             child: ListView.builder(
-                              physics: const BouncingScrollPhysics(),
+                              physics: Platform.isAndroid
+                                  ? const BouncingScrollPhysics()
+                                  : null,
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemExtent:
@@ -416,14 +424,20 @@ class HomeScreen extends StatelessWidget {
                           ),
                           Obx(
                             () => Visibility(
-                              replacement: Container(
-                                alignment: Alignment.center,
-                                height: 100.0,
-                                // alignment: Alignment.center,
-                                child: const Text(
-                                  'No appointments',
-                                  style: TextStyle(
-                                      fontSize: 20.0, color: Colors.black),
+                              replacement: Visibility(
+                                visible: controller.isLoading.value == false,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 100.0,
+                                  // alignment: Alignment.center,
+                                  child: Text(
+                                    tr('no_appointments'),
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: isDark
+                                            ? AppColors.WHITE_COLOR
+                                            : Colors.black),
+                                  ),
                                 ),
                               ),
                               visible: controller.isLoading.value == false &&
@@ -436,7 +450,9 @@ class HomeScreen extends StatelessWidget {
                                   child: SizedBox(
                                     height: 103.0,
                                     child: ListView.builder(
-                                      physics: const BouncingScrollPhysics(),
+                                      physics: Platform.isAndroid
+                                          ? const BouncingScrollPhysics()
+                                          : null,
                                       scrollDirection: Axis.horizontal,
                                       itemCount: controller.appointments.length,
                                       itemBuilder: (context, index) {
@@ -457,8 +473,13 @@ class HomeScreen extends StatelessWidget {
                                                 ? '${controller.listOfClients[index].firstName.toString().capitalize} - ${controller.listOfClients[index].lastName.toString().capitalize}'
                                                 : controller.getEmployeeName(
                                                     controller
-                                                        .appointments[index]
-                                                        .employeeId![0]),
+                                                            .appointments[index]
+                                                            .employeeId!
+                                                            .isNotEmpty
+                                                        ? controller
+                                                            .appointments[index]
+                                                            .employeeId![0]
+                                                        : null),
                                             subTitle:
                                                 '${controller.appointmentsTreatmentCategoryList[index].name ?? ''} - ${controller.getServices(controller.appointments[index].serviceId![0])}',
                                             date: controller
@@ -490,7 +511,8 @@ class HomeScreen extends StatelessWidget {
                         final result = await Get.to(
                           () => EventsScreen(),
                           duration: const Duration(milliseconds: 400),
-                          transition: Transition.rightToLeft,
+                          transition:
+                              Platform.isIOS ? null : Transition.rightToLeft,
                           arguments: controller.events,
                         );
                         if (result != null) {
@@ -512,7 +534,9 @@ class HomeScreen extends StatelessWidget {
                                   controller.events.isNotEmpty
                               ? ListView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  physics: const BouncingScrollPhysics(),
+                                  physics: Platform.isAndroid
+                                      ? const BouncingScrollPhysics()
+                                      : null,
                                   itemCount: controller.events.value.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
@@ -576,7 +600,7 @@ class HomeScreen extends StatelessWidget {
                                       alignment: Alignment.center,
                                       width: Get.width,
                                       child: Text(
-                                        'No Events Found',
+                                        tr('no_events_available'),
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineLarge,

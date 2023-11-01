@@ -24,12 +24,12 @@ class EventsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             InkWell(
-              borderRadius: BorderRadius.circular(25.0),
+              borderRadius: BorderRadius.circular(32.0),
               onTap: () => controller.handleBack(),
               child: Container(
                 alignment: Alignment.center,
-                width: 25.0,
-                height: 25.0,
+                width: 40.0,
+                height: 40.0,
                 child: SvgPicture.asset(AppAssets.BACK_ARROW,
                     height: 14.0, width: 14.0),
               ),
@@ -145,11 +145,12 @@ class EventsScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              placeholder: (context, url) =>  Center(
+                              placeholder: (context, url) => Center(
                                   child: CircularProgressIndicator(
-                                              color: isDark? AppColors.SECONDARY_COLOR : AppColors.GREY_COLOR,
-
-                                  )),
+                                color: isDark
+                                    ? AppColors.SECONDARY_COLOR
+                                    : AppColors.GREY_COLOR,
+                              )),
                               errorWidget: (context, url, error) =>
                                   const Icon(Icons.error),
                             ),

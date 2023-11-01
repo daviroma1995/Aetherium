@@ -1,10 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:atherium_saloon_app/screens/appointment_confirm_detail_screen/appointment_confirm_detail_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
-import 'package:atherium_saloon_app/screens/appointment_confirm_detail_screen/appointment_confirm_detail_controller.dart';
 
 import '../../models/treatment.dart';
 import '../../utils/constants.dart';
@@ -45,14 +44,14 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             InkWell(
-              borderRadius: BorderRadius.circular(25.0),
+              borderRadius: BorderRadius.circular(40.0),
               onTap: () {
                 Get.back();
               },
               child: Container(
                 alignment: Alignment.center,
-                width: 25.0,
-                height: 25.0,
+                width: 40.0,
+                height: 40.0,
                 child: SvgPicture.asset(AppAssets.BACK_ARROW,
                     height: 14.0, width: 14.0),
               ),
@@ -121,7 +120,8 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                 TextRowWidget(
                                   textOne: controller.args.dateString ??
                                       'Date Here ido',
-                                  textTwo: controller.args.time ?? 'TIme here',
+                                  textTwo:
+                                      '${controller.args.time} - ${controller.getEndTime(controller.args.time, controller.args.duration)}',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14.0,
@@ -214,7 +214,7 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                                           ),
                                                         ),
                                                         Text(
-                                                          '${services[index].price} \$',
+                                                          '${services[index].price} €',
                                                           style: TextStyle(
                                                             fontSize: 14.0,
                                                             fontWeight:
@@ -240,15 +240,15 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         const Text(
-                                          'Total',
+                                          'total',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
-                                        ),
+                                        ).tr(),
                                         GetBuilder<
                                             AppointmentConfirmDetailController>(
                                           builder: (controller) {
                                             return Text(
-                                              '${controller.getTotalPrice(services)} \$',
+                                              '${controller.getTotalPrice(services)} €',
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             );
@@ -259,7 +259,8 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                   ],
                                 ),
                                 const SizedBox(height: 40.0),
-                                if (controller.args.employeeId != null)
+                                if (controller.args.employeeId != null &&
+                                    controller.args.employeeId.isNotEmpty)
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -287,9 +288,10 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                             title: homecontroller
                                                 .getEmployeeName(controller.args
                                                         .employeeId[index] ??
-                                                    '8f1cYZExVjeOo2sBDmQC'),
+                                                    ''),
                                             imageUrl: AppAssets.USER_IMAGE,
-                                            subtitle: 'Fragrances & Perfumes',
+                                            subtitle:
+                                                tr('fragrances_and_perfumes'),
                                             isDark: isDark,
                                           );
                                         },
@@ -297,23 +299,28 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                                     ],
                                   ),
                                 const SizedBox(height: 20.0),
-                                Text(
-                                  '${tr('note')}:',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium!
-                                      .copyWith(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 16.0,
-                                          color: isDark
-                                              ? AppColors.WHITE_COLOR
-                                              : AppColors.SECONDARY_COLOR),
+                                Visibility(
+                                  visible: controller.args.notes
+                                      .toString()
+                                      .isNotEmpty,
+                                  child: Text(
+                                    '${tr('note')}:',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium!
+                                        .copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16.0,
+                                            color: isDark
+                                                ? AppColors.WHITE_COLOR
+                                                : AppColors.SECONDARY_COLOR),
+                                  ),
                                 ),
                                 const SizedBox(height: 20.0),
                                 Text(
                                   controller.args.notes == null ||
                                           controller.args.notes == ''
-                                      ? 'No Notes Added'
+                                      ? ''
                                       : controller.args.notes,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w400,
@@ -333,18 +340,23 @@ class AppointmentConfirmDetailScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              PrimaryButton(
-                                width: Get.width - 56,
-                                buttonText: 'confirm',
-                                buttonTextColor: isDark
-                                    ? AppColors.BLACK_COLOR
-                                    : AppColors.WHITE_COLOR,
-                                color: isDark
-                                    ? AppColors.SECONDARY_LIGHT
-                                    : AppColors.PRIMARY_COLOR,
-                                onTap: () {
-                                  controller.confirm();
-                                },
+                              Obx(
+                                () => PrimaryButton(
+                                  width: Get.width - 56,
+                                  buttonText: 'confirm',
+                                  buttonTextColor: isDark
+                                      ? AppColors.BLACK_COLOR
+                                      : AppColors.WHITE_COLOR,
+                                  color: isDark
+                                      ? AppColors.SECONDARY_LIGHT
+                                      : AppColors.PRIMARY_COLOR,
+                                  onTap: () {
+                                    controller.confirm();
+                                  },
+                                ).loading(controller.isLoading.value,
+                                    loadingColor: isDark
+                                        ? AppColors.PRIMARY_DARK
+                                        : AppColors.GREY_COLOR),
                               ),
                             ],
                           ),

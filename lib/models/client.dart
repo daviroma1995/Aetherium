@@ -63,4 +63,7 @@ class Client {
   }
 
   String get fullName => '$firstName $lastName';
+
+  @override
+  String toString() => 'CLIENT($id, $firstName)';
 }

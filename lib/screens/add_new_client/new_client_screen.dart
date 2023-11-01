@@ -2,7 +2,6 @@ import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/primary_button.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../widgets/custom_drop_down_widget.dart';
@@ -194,8 +193,9 @@ class AddNewClient extends StatelessWidget {
                       () => CustomDropDown(
                         height: 50.0,
                         label: 'Select Gender',
-                        options: [tr('male'), tr('female')],
+                        options: [tr('male'), tr('female'), tr('other')],
                         value: controller.genderValue.value,
+                        sort: false,
                         onChange: (value) {
                           controller.changeValue(value);
                         },
@@ -203,7 +203,7 @@ class AddNewClient extends StatelessWidget {
                     ),
                     const SizedBox(height: 12.0),
                     CustomLabelWidget(
-                      label: 'address',
+                      label: tr('address'),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.w700,
                             color: isDark
@@ -214,7 +214,7 @@ class AddNewClient extends StatelessWidget {
                     Obx(
                       () => CustomInputFormField(
                         textEdigintController: controller.address,
-                        hintText: 'Address',
+                        hintText: tr('address'),
                         isValid: !controller.addressHasError.value,
                         onSubmit: () {},
                         onchange: (value) {
@@ -252,6 +252,32 @@ class AddNewClient extends StatelessWidget {
                           firstDate: DateTime.utc(1949, DateTime.january, 1),
                           lastDate: DateTime.now(),
                           helpText: 'Select Date of Birth',
+                          cancelText: tr('cancel'),
+                          confirmText: 'Ok',
+                          builder: (context, child) {
+                            return Theme(
+                              data: Theme.of(context).copyWith(
+                                colorScheme: ColorScheme.light(
+                                  primary: isDark
+                                      ? AppColors.PRIMARY_DARK
+                                      : AppColors.PRIMARY_COLOR, // <-- SEE HERE
+                                  onPrimary: isDark
+                                      ? AppColors.GREY_COLOR
+                                      : AppColors.WHITE_COLOR, // <-- SEE HERE
+                                  onSurface: isDark
+                                      ? AppColors.GREY_COLOR
+                                      : AppColors.GREY_DARK, // <-- SEE HERE
+                                ),
+                                textButtonTheme: TextButtonThemeData(
+                                  style: TextButton.styleFrom(
+                                      foregroundColor: isDark
+                                          ? AppColors.GREY_COLOR
+                                          : AppColors.PRIMARY_COLOR),
+                                ),
+                              ),
+                              child: child!,
+                            );
+                          },
                         );
                         controller.dateOfBirth.value = DateTime.parse(
                           date.toString(),
@@ -275,7 +301,17 @@ class AddNewClient extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Obx(
-                          () => Text(controller.getDateOfBirth),
+                          () => Text(
+                            controller.getDateOfBirth,
+                            style: TextStyle(
+                                color: isDark
+                                    ? controller.getDateOfBirth == tr('date')
+                                        ? AppColors.GREY_COLOR
+                                        : AppColors.GREY_COLOR
+                                    : controller.getDateOfBirth == tr('date')
+                                        ? AppColors.GREY_COLOR
+                                        : AppColors.PRIMARY_DARK),
+                          ),
                         ),
                       ),
                     ),

@@ -1,9 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:atherium_saloon_app/models/client.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/account_info_screen/account_info_screen.dart';
 import 'package:atherium_saloon_app/screens/agenda_screen/agenda_controller.dart';
-
 import 'package:atherium_saloon_app/screens/consultations_screen/consultations_screen.dart';
 import 'package:atherium_saloon_app/screens/contacts_screen/contacts_screen.dart';
 import 'package:atherium_saloon_app/screens/home_screen/home_screen_controller.dart';
@@ -16,6 +17,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+
 import '../appointments_screen/appointments_screen.dart';
 
 List<ProfileItem> profileItems = [
@@ -106,7 +108,7 @@ class ProfileController extends GetxController {
       Get.to(
         () => const AppointmentsScreen(),
         duration: const Duration(milliseconds: 500),
-        transition: Transition.rightToLeft,
+        transition: Platform.isIOS ? null : Transition.rightToLeft,
         curve: Curves.ease,
       );
     }
@@ -114,7 +116,7 @@ class ProfileController extends GetxController {
       Get.to(
         () => SettingsScreen(),
         duration: const Duration(milliseconds: 500),
-        transition: Transition.rightToLeft,
+        transition: Platform.isIOS ? null : Transition.rightToLeft,
         curve: Curves.ease,
       );
     }
@@ -122,7 +124,7 @@ class ProfileController extends GetxController {
       Get.to(
         () => ConsultationsScreen(),
         duration: const Duration(milliseconds: 500),
-        transition: Transition.rightToLeft,
+        transition: Platform.isIOS ? null : Transition.rightToLeft,
         curve: Curves.ease,
       );
     }
@@ -130,7 +132,7 @@ class ProfileController extends GetxController {
       Get.to(
         () => ContactsScreen(),
         duration: const Duration(milliseconds: 500),
-        transition: Transition.rightToLeft,
+        transition: Platform.isIOS ? null : Transition.rightToLeft,
         curve: Curves.ease,
       );
     }
@@ -138,7 +140,7 @@ class ProfileController extends GetxController {
       Get.to(
         () => AccountInfoScreen(),
         duration: const Duration(milliseconds: 500),
-        transition: Transition.rightToLeft,
+        transition: Platform.isIOS ? null : Transition.rightToLeft,
         curve: Curves.ease,
       );
     }
@@ -147,7 +149,7 @@ class ProfileController extends GetxController {
         Get.to(
           () => const ScanScreen(),
           duration: const Duration(milliseconds: 500),
-          transition: Transition.rightToLeft,
+          transition: Platform.isIOS ? null : Transition.rightToLeft,
           curve: Curves.ease,
         );
       }

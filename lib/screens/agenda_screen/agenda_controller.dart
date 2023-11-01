@@ -3,12 +3,10 @@
 import 'dart:developer';
 
 import 'package:atherium_saloon_app/models/employee.dart';
+import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
-import 'package:atherium_saloon_app/screens/login_screen/login_controller.dart';
 
 import '../../models/appointment.dart';
 import '../../models/client.dart';
@@ -252,7 +250,16 @@ class AgendaController extends GetxController {
     return time;
   }
 
-  List getDuration(List services, String startTime) {
+  String getDuration(Appointment appointment) {
+    String time = '';
+    var startTime = DateTime.parse(appointment.startTime!);
+    var endTime = DateTime.parse(appointment.endTime!);
+    Duration duration = endTime.difference(startTime);
+    time = duration.inMinutes.toString();
+    return '$time Min';
+  }
+
+  List getDurationList(List services, String startTime) {
     String time = '';
 
     int duration = 0;
@@ -294,5 +301,45 @@ class AgendaController extends GetxController {
 
     // time = '$hours: Hours $minutes Mints';
     return [time, endTime];
+  }
+
+  String getEndTime(String startTime, num duration, Appointment appointment) {
+    var endDate = DateTime.parse(appointment.endTime!);
+    return DateFormat('HH:mm').format(endDate);
+    String hours;
+    String minutes;
+    if (startTime[1] != ':') {
+      hours = startTime[0] + startTime[1];
+      if (startTime.length == 5) {
+        minutes = startTime[3] + startTime[4];
+      } else {
+        minutes = startTime[3];
+      }
+    } else {
+      hours = startTime[0];
+      if (startTime.length == 4) {
+        minutes = startTime[2] + startTime[3];
+      } else {
+        minutes = startTime[2];
+      }
+    }
+    String endHours = (duration / 60).toString()[0];
+    String endMinutes = (duration % 60).toString();
+
+    var endTimeHours = num.parse(hours) + num.parse(endHours);
+    var endTimeMinutes = num.parse(minutes) + num.parse(endMinutes);
+    if (endTimeMinutes >= 60) {
+      endTimeHours += 1;
+      endTimeMinutes -= 60;
+    }
+    if (endTimeHours >= 24) {
+      endTimeHours = endTimeHours - 24;
+    }
+    String totalEndHours =
+        endTimeHours < 9 ? '0$endTimeHours' : endTimeHours.toString();
+    String totalMinutes =
+        endTimeMinutes < 9 ? '0$endTimeMinutes' : endTimeMinutes.toString();
+
+    return '$totalEndHours:$totalMinutes';
   }
 }

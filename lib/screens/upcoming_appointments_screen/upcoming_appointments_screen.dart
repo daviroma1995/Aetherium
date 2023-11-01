@@ -22,7 +22,8 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Obx(() => controller.upcommingAppointments.isEmpty
+          child: Obx(() => controller.upcommingAppointments.isEmpty &&
+                  controller.isLoading.value == false
               ? Column(
                   children: [
                     Container(
@@ -72,6 +73,7 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
               : Obx(
                   () => controller.isLoading.isTrue
                       ? SizedBox(
+                          height: Get.height / 1.5,
                           child: Center(
                             child: CircularProgressIndicator(
                               color: isDark
@@ -123,7 +125,8 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                                                               color: AppColors
                                                                   .ERROR_COLOR,
                                                               width: 60,
-                                                              buttonText: 'Yes',
+                                                              buttonText:
+                                                                  tr('yes'),
                                                               onTap: () async {
                                                                 log('Pressed');
                                                                 await controller
@@ -145,9 +148,11 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                                                         alignment:
                                                             Alignment.center,
                                                         title: const Text(
-                                                            'Are you sure?'),
+                                                                'delete_confirm')
+                                                            .tr(),
                                                         content: const Text(
-                                                            'Appointment will be deleted permanently'),
+                                                                'appointment_delete')
+                                                            .tr(),
                                                         actions: [
                                                           yesButton,
                                                           noButton
@@ -160,9 +165,17 @@ class UpcomingAppointmentsScreen extends StatelessWidget {
                                                     AppAssets.EVENT_IMAGE_ONE,
                                                 title: controller.isAdmin
                                                     ? '${controller.listOfClients[index].firstName.toString().capitalize} - ${controller.listOfClients[index].lastName.toString().capitalize}'
-                                                    : controller
-                                                        .employeesData[index]
-                                                        .name!,
+                                                    : controller.employeesData
+                                                                .isNotEmpty &&
+                                                            controller.employeesData
+                                                                        .length -
+                                                                    1 >=
+                                                                index
+                                                        ? controller
+                                                            .employeesData[
+                                                                index]
+                                                            .name!
+                                                        : tr('appointment'),
                                                 subTitle:
                                                     '${controller.listOfTreatmentCategory[index].name} - ${controller.services[index].name!}',
                                                 color: controller.getColor(

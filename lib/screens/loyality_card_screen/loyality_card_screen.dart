@@ -1,18 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
+import 'package:atherium_saloon_app/data.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/full_screen_image/full_screen_image.dart';
 import 'package:atherium_saloon_app/screens/loyality_card_screen/loyality_card_controller.dart';
 import 'package:atherium_saloon_app/screens/qr_code_screen/qr_code_screen.dart';
+import 'package:atherium_saloon_app/utils/constants.dart';
+import 'package:atherium_saloon_app/widgets/text_row_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-
-import 'package:atherium_saloon_app/data.dart';
-import 'package:atherium_saloon_app/utils/constants.dart';
-import 'package:atherium_saloon_app/widgets/text_row_widget.dart';
 
 import '../../widgets/primo_details_widget.dart';
 
@@ -244,7 +245,9 @@ class LoyalityCardScreen extends StatelessWidget {
                                         () => QrCodeScreen(),
                                         duration:
                                             const Duration(milliseconds: 600),
-                                        transition: Transition.downToUp,
+                                        transition: Platform.isIOS
+                                            ? null
+                                            : Transition.downToUp,
                                         curve: Curves.linear,
                                         arguments: controller.uid,
                                       );
@@ -300,7 +303,8 @@ class LoyalityCardScreen extends StatelessWidget {
                                   child: TextRowWidget(
                                     textOne:
                                         '${controller.membershipType!.name!.capitalize}',
-                                    textTwo: '12/08/2023',
+                                    textTwo: controller.clientMembership!
+                                        .getEndDate(),
                                     style: const TextStyle(
                                       color: AppColors.GREY_COLOR,
                                       fontSize: 14.0,
