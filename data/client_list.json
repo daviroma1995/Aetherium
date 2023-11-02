@@ -1,0 +1,22 @@
+[
+    {
+        "id": "d3797032-904f-45df-b515-397e1b9d7328",
+        "first_name": "Mario",
+        "last_name": "Rossi",
+        "gender": "M",
+        "phone_number": "+39 3395484848",
+        "email": "client@gmail.com",
+        "address": "Via delle marmaglie 8",
+        "photo": ""
+    },
+    {
+        "id": "d3797032-904f-45df-b515-397e1b9d7329",
+        "first_name": "Angela",
+        "last_name": "Maria",
+        "gender": "F",
+        "phone_number": "+39 3395456848",
+        "email": "client2@gmail.com",
+        "address": "Via delle marmaglie 10",
+        "photo": ""
+    }
+]

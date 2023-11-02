@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,18 +49,9 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB9DEwKgtw1pXSMfsrtihqxseuZdsQt7Ds',
-    appId: '1:216835986009:web:b480186cf51ee758c0d748',
-    messagingSenderId: '216835986009',
-    projectId: 'aetherium-salon',
-    authDomain: 'aetherium-salon.firebaseapp.com',
-    storageBucket: 'aetherium-salon.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyA7pnUJIv1pA2yYyWnhYYvshLMk6xTwrBc',
-    appId: '1:216835986009:android:158b1171922672c0c0d748',
+    appId: '1:216835986009:android:1906e84ecf9772cfc0d748',
     messagingSenderId: '216835986009',
     projectId: 'aetherium-salon',
     storageBucket: 'aetherium-salon.appspot.com',
@@ -62,21 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBj8Ffh2QZbEnHwBy3K_vqTKjguK5zcTGQ',
-    appId: '1:216835986009:ios:c82027a1bfaeb673c0d748',
+    appId: '1:216835986009:ios:4d79c6e6ce155f86c0d748',
     messagingSenderId: '216835986009',
     projectId: 'aetherium-salon',
     storageBucket: 'aetherium-salon.appspot.com',
-    iosClientId: '216835986009-c1ika74p5pk0svc9aob3rfbrs71akl2a.apps.googleusercontent.com',
-    iosBundleId: 'it.esteticaaurea.aetheriumSalon',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBj8Ffh2QZbEnHwBy3K_vqTKjguK5zcTGQ',
-    appId: '1:216835986009:ios:c82027a1bfaeb673c0d748',
-    messagingSenderId: '216835986009',
-    projectId: 'aetherium-salon',
-    storageBucket: 'aetherium-salon.appspot.com',
-    iosClientId: '216835986009-c1ika74p5pk0svc9aob3rfbrs71akl2a.apps.googleusercontent.com',
-    iosBundleId: 'it.esteticaaurea.aetheriumSalon',
+    androidClientId: '216835986009-6or0lmhv0tlcgftbc794c7jouj6gq1c0.apps.googleusercontent.com',
+    iosBundleId: 'com.fantechlabs.aetheriumSaloonApp',
   );
 }

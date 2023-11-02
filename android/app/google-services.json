@@ -7,6 +7,50 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:216835986009:android:1906e84ecf9772cfc0d748",
+        "android_client_info": {
+          "package_name": "com.fantechlabs.aetheriumsaloon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216835986009-qs954okm7fe307m5b373i0p88m8eh3bq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fantechlabs.aetheriumsaloon",
+            "certificate_hash": "f94f0234fedb9ae8370f16102b8cc2578cf651b6"
+          }
+        },
+        {
+          "client_id": "216835986009-ntk0an622o6qt1bidpnc2q2vein6k44f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7pnUJIv1pA2yYyWnhYYvshLMk6xTwrBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216835986009-djjp6lvgsr7m997ui4371aab33j59fb2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "216835986009-advfdo6gunevo1k7p4bgcf9v0efrvms7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "it.esteticaaurea.aetherium"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:216835986009:android:158b1171922672c0c0d748",
         "android_client_info": {
           "package_name": "it.esteticaaurea.aetherium_salon"
@@ -14,7 +58,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "216835986009-djjp6lvgsr7m997ui4371aab33j59fb2.apps.googleusercontent.com",
+          "client_id": "216835986009-ntk0an622o6qt1bidpnc2q2vein6k44f.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

@@ -1,0 +1,56 @@
+[
+    {
+        "id": "e762a53a-b2f6-451d-b4df-ecb1d1f7ca23",
+        "treatment_category_id": "72b4936e-29e2-4dc7-8907-179c6bcd79ab",
+        "name": "tradizionale",
+        "price": "66$",
+        "duration": "90 min",
+        "isLimited": false,
+        "availableDays": [],
+        "isEmployeeRequired": true
+    },
+    {
+        "id": "e762a53a-b2f6-451d-b4df-ecb1d1f7ca98",
+        "treatment_category_id": "72b4936e-29e2-4dc7-8907-179c6bcd79ab",
+        "name": "Semipermanente",
+        "price": "70$",
+        "duration": "90 min",
+        "isLimited": false,
+        "availableDays": [],
+        "isEmployeeRequired": true
+    },
+    {
+        "id": "e762a53a-b2f6-451d-b4df-ecb1d1f7ca62",
+        "treatment_category_id": "72b4936e-29e2-4dc7-8907-179c6bcd79ab",
+        "name": "Rimozione Gel",
+        "price": "70$",
+        "duration": "90 min",
+        "isLimited": false,
+        "availableDays": [],
+        "isEmployeeRequired": true
+    },
+    {
+        "id": "e762a53a-b2f6-451d-b4df-ecb1d1f7ca45",
+        "treatment_category_id": "72b4936e-29e2-4dc7-8907-179c6bcd79ab",
+        "name": "Rimozione Semi",
+        "price": "90$",
+        "duration": "90 min",
+        "isLimited": false,
+        "availableDays": [],
+        "isEmployeeRequired": true
+    },
+    {
+        "id": "e762a53a-b2f6-451d-b4df-ecb1d1f7cg56",
+        "treatment_category_id": "72b4936e-29e2-4dc7-8907-179c6bcd79ab",
+        "name": "Viso/Addome/Inguine/Schiena",
+        "price": "39$",
+        "duration": "30 min",
+        "isLimited": true,
+        "availableDays": [
+            "23/03/2023",
+            "23/04/2023",
+            "23/05/2023"
+        ],
+        "isEmployeeRequired": false
+    }
+]

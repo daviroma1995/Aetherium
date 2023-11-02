@@ -1,6 +1,6 @@
 {
-    "name": "aetherium_salon",
-    "short_name": "aetherium_salon",
+    "name": "aetherium_saloon_app",
+    "short_name": "aetherium_saloon_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
