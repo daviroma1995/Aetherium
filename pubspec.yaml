@@ -4,7 +4,7 @@ description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
-version: 1.0.0+1
+version: 1.0.0+8
 
 environment:
   sdk: '>=2.19.0 <4.0.0'
@@ -51,7 +51,7 @@ dependencies:
   webview_flutter: ^4.2.4
   flutter_local_notifications: ^16.0.0
   firebase_messaging: ^14.6.9
-  add_2_calendar: ^2.2.5
+  add_2_calendar: ^3.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter        
@@ -63,10 +63,10 @@ dev_dependencies:
 flutter_launcher_icons:
   ios: true
   android: true
-  image_path_ios: "assets/images/ic_launcher (1).png"
+  image_path_ios: "assets/images/launcher.png"
   image_path_android: "assets/images/ic_launcher (1).png"
   adaptive_icon_background: "assets/images/background_color.png"
-  adaptive_icon_foreground: "assets/images/ic_launcher (1).png"
+  adaptive_icon_foreground: "assets/images/launcher.png"
   remove_alpha_ios: true
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -125,7 +125,7 @@ class LoginController extends GetxController {
   }
 
   void validatePassword() {
-    if (passwordController.text.length < 8) {
+    if (passwordController.text.length < 6) {
       isPasswordValid.value = false;
       passwordErrorMessage.value = tr('password_must_be_8_characters_long');
     } else {
