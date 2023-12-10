@@ -1,0 +1,16 @@
+[
+    {
+        "id": "88aa7cf3-c6b6-4cab-91eb-247aa6445a0a",
+        "label": "confermato"
+    },
+    {
+        "id": "88aa7cf3-c6b6-4cab-91eb-247aa6445a05",
+        "label": "archiviato"
+    },{
+        "id": "88aa7cf3-c6b6-4cab-91eb-247aa6445a07",
+        "label": "cancellato"
+    },{
+        "id": "88aa7cf3-c6b6-4cab-91eb-247aa6445a4g",
+        "label": "no-show"
+    }
+]

@@ -1,0 +1,18 @@
+POST https://us-central1-aetherium-salon.cloudfunctions.net/timeslots
+Content-Type: application/json
+
+{
+    "date": "05/23/2023",
+    "treatments": [{
+        "id": "duIgxkxkS0JuV7O025Ou",
+        "duration": 60,
+        "is_employee_required": true,
+        "name": "tradizionale",
+        "price": 20,
+        "treatment_category_id": "LtTOqTyCqv9tznPnPlIY",
+        "room_id_list": [
+          "dVpxu2V9avzFT63SFClL"
+        ]
+    }
+]
+}

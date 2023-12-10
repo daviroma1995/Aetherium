@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>216835986009-tg5lod101ur4fkoj3jted3v63krjgsl5.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.216835986009-tg5lod101ur4fkoj3jted3v63krjgsl5</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBj8Ffh2QZbEnHwBy3K_vqTKjguK5zcTGQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>216835986009</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.fantechlabs.aetheriumSaloonApp</string>
+	<key>PROJECT_ID</key>
+	<string>aetherium-salon</string>
+	<key>STORAGE_BUCKET</key>
+	<string>aetherium-salon.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:216835986009:ios:3b3dbbce734c5bdcc0d748</string>
+</dict>
+</plist>
