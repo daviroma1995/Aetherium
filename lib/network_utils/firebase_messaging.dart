@@ -74,7 +74,7 @@ class NotificationsSubscription {
 
   static Future<void> createNotification(
       {required NotificationModel notification}) async {
-    DocumentReference docRef = firestore.collection('notifications').doc();
+    DocumentReference docRef = firestore.collection('new_notification').doc();
     notification.id = docRef.id;
     await docRef.set(notification.toMap());
   }
