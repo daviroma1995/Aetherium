@@ -29,7 +29,7 @@ class NotificationsController extends GetxController {
   void markasRead() {
     if (notifications.isNotEmpty) {
       for (var notification in notifications) {
-        FirebaseServices.markNotificationAsRead(notification.id);
+        FirebaseServices.markNotificationAsRead(notification);
       }
       Fluttertoast.showToast(
           msg: tr('notifications_read'),

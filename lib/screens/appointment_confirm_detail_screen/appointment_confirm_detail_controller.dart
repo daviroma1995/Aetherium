@@ -189,12 +189,9 @@ class AppointmentConfirmDetailController extends GetxController {
           log("Exception::: ${ex.toString()}");
         }
         if (!homeController.currentUser.value.isAdmin!) {
-          // sendNotification(tr('appointment_new_added_successfully'),
-          //     args.clientId, tr('new_appointment'),
-          //     appointmentId: value.id);
           sendNotification(
             '${homeController.currentUser.value.firstName} ${homeController.currentUser.value.lastName} ${tr('appointment_new_added')}',
-            adminId,
+            'admin',
             tr('new_appointment'),
             appointmentId: value.id,
           );
@@ -236,7 +233,7 @@ class AppointmentConfirmDetailController extends GetxController {
           .collection('appointments')
           .doc(args.id)
           .get();
-      var appointmenDoc = await FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('appointments')
           .doc(args.id)
           .get()
@@ -309,7 +306,6 @@ class AppointmentConfirmDetailController extends GetxController {
           selectedStatus.toLowerCase() == 'archiviato' &&
           previousStatus.toLowerCase() != 'archiviato' &&
           points + 25 <= 300) {
-        print('if Called');
         await FirebaseFirestore.instance
             .collection('client_memberships')
             .doc(args.clientId)
@@ -323,7 +319,6 @@ class AppointmentConfirmDetailController extends GetxController {
       } else if (previousStatus.toLowerCase() == 'archiviato' &&
           selectedStatus.toLowerCase() != 'archiviato' &&
           points - 25 >= 0) {
-        print('Else if called');
         await FirebaseFirestore.instance
             .collection('client_memberships')
             .doc(args.clientId)
@@ -335,10 +330,6 @@ class AppointmentConfirmDetailController extends GetxController {
         await homeController.loadHomeScreen();
         await agendaController.loadData();
       } else {
-        print('Else called');
-        print(selectedStatus);
-        print(previousStatus);
-        print(points);
         await homeController.loadHomeScreen();
         await agendaController.loadData();
       }
@@ -399,21 +390,27 @@ class AppointmentConfirmDetailController extends GetxController {
   }
 
   void sendNotification(String message, String receiverId, String title,
-      {required String appointmentId}) {
+      {required String appointmentId}) async {
     HomeScreenController controller = Get.find();
+    List<String> ids = [];
+    if (receiverId == 'admin' || receiverId == 'client') {
+      ids = await FirebaseServices().fetchUserIdz(receiverId);
+    } else {
+      ids.add(receiverId);
+    }
     NotificationModel notification = NotificationModel(
         id: '',
         title: title,
         body: message,
         senderId: controller.currentUser.value.userId!,
-        receiverId: receiverId,
+        receiverId: [receiverId],
         senderImage: controller.currentUser.value.photo ?? '',
         senderName:
             '${controller.currentUser.value.firstName!} ${controller.currentUser.value.lastName}',
         createdAt: Timestamp.now(),
         type: 'apointment',
         desc: message,
-        status: 'unread',
+        status: ids,
         appointmentId: appointmentId,
         clientId: '');
     NotificationsSubscription.createNotification(notification: notification);

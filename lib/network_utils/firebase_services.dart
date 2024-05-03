@@ -466,29 +466,27 @@ class FirebaseServices {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     List<Notification> unreadNotifications = [];
+
     await firestore
-        .collection('notifications')
-        .where('status', isEqualTo: 'unread')
-        .where('client_id', isEqualTo: cuid)
+        .collection('new_notification')
+        .where('status', arrayContains: cuid)
         .orderBy('createdAt', descending: true)
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         unreadNotifications.add(Notification.fromFirestore(doc));
       }
-      // Handle the list of unread notifications
-      // For example, you can update the UI with the notifications
     }).catchError((error) {
       log('Error getting documents: $error');
     });
+
     return unreadNotifications;
   }
 
   static Stream<List<Notification>> getUnreadNotficationsStream() {
     return FirebaseFirestore.instance
-        .collection('notifications')
-        .where('status', isEqualTo: 'unread')
-        .where('client_id', isEqualTo: cuid)
+        .collection('new_notification')
+        .where('status', arrayContains: cuid)
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((notification) {
@@ -501,13 +499,19 @@ class FirebaseServices {
     });
   }
 
-  static void markNotificationAsRead(String notificationId) {
-    DocumentReference notificationRef = FirebaseFirestore.instance
-        .collection('notifications')
-        .doc(notificationId);
-    notificationRef.update({
-      'status': 'read',
-    });
+  static void markNotificationAsRead(Notification notification) {
+    try {
+      var status = notification.status;
+      status.removeWhere((element) => element == cuid);
+      DocumentReference notificationRef = FirebaseFirestore.instance
+          .collection('new_notification')
+          .doc(notification.id);
+      notificationRef.update({
+        'status': status,
+      });
+    } catch (ex) {
+      log(ex.toString());
+    }
   }
 
   static Future<List<Treatment>> getServicesBasedOnMembershipType(
@@ -615,5 +619,17 @@ class FirebaseServices {
       consultations.add(Consultation.fromJson(data));
     }
     return consultations;
+  }
+
+  Future<List<String>> fetchUserIdz(String conditionString) async {
+    final List<String> clientIds = [];
+    var query = FirebaseFirestore.instance
+        .collection('clients')
+        .where('isAdmin', isEqualTo: conditionString == 'admin');
+    var snapshot = await query.get();
+    for (var element in snapshot.docs) {
+      clientIds.add(element.id);
+    }
+    return clientIds;
   }
 }

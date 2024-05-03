@@ -86,8 +86,12 @@ class LoginController extends GetxController {
 
   void logout() async {
     LocalData.setIsLogedIn(false);
-    await NotificationsSubscription.fcmUnSubscribe(
-        appUserId: FirebaseAuth.instance.currentUser!.uid);
+    Future.wait([
+      NotificationsSubscription.fcmUnSubscribe(
+          appUserId: FirebaseAuth.instance.currentUser!.uid),
+      NotificationsSubscription.fcmUnSubscribe(appUserId: 'client'),
+      NotificationsSubscription.fcmUnSubscribe(appUserId: 'admin'),
+    ]);
     await auth.signOut();
     Get.offAll(() => LoginScreen());
   }

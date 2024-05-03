@@ -276,13 +276,13 @@ class HomeScreenController extends GetxController {
         title: '${currentUser.value.firstName} send you a message',
         body: message,
         senderId: currentUser.value.userId!,
-        receiverId: 'U4Vob2BIBTPWBmwAAEh0iBzskBA3',
+        receiverId: [''],
         senderImage: '',
         senderName: 'Basit',
         createdAt: Timestamp.now(),
         type: 'message',
         desc: message,
-        status: '',
+        status: [],
         appointmentId: '',
         clientId: '');
     NotificationsSubscription.createNotification(notification: notification);
