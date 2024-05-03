@@ -8,11 +8,19 @@ class NotificationModel {
   String title;
   String body;
   String senderId;
+<<<<<<< HEAD
   String receiverId;
   String senderImage;
   String senderName;
   String desc;
   String status;
+=======
+  List<String> receiverId;
+  String senderImage;
+  String senderName;
+  String desc;
+  List<String> status;
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
   Timestamp createdAt;
   String type;
   String appointmentId;
@@ -39,13 +47,21 @@ class NotificationModel {
     String? title,
     String? body,
     String? senderId,
+<<<<<<< HEAD
     String? receiverId,
+=======
+    List<String>? receiverId,
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
     String? senderImage,
     String? senderName,
     Timestamp? createdAt,
     String? type,
     String? desc,
+<<<<<<< HEAD
     String? status,
+=======
+    List<String>? status,
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
     String? appointmentId,
     String? clientId,
     // Client? sender,
@@ -61,7 +77,11 @@ class NotificationModel {
       createdAt: createdAt ?? this.createdAt,
       type: type ?? this.type,
       desc: desc ?? this.desc,
+<<<<<<< HEAD
       status: status ?? this.desc,
+=======
+      status: status ?? this.status,
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
       appointmentId: appointmentId ?? this.appointmentId,
       clientId: clientId ?? this.clientId,
       // sender: sender ?? this.sender,
@@ -93,13 +113,21 @@ class NotificationModel {
       title: map['title'] as String,
       body: map['body'] as String,
       senderId: map['senderId'] as String,
+<<<<<<< HEAD
       receiverId: map['receiverId'] as String,
+=======
+      receiverId: map['receiverId'] as List<String>,
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
       senderImage: map['senderImage'] as String,
       senderName: map['senderName'] as String,
       createdAt: map['createdAt'] as Timestamp,
       type: map['type'] as String,
       desc: map['desc'] as String,
+<<<<<<< HEAD
       status: map['status'] as String,
+=======
+      status: map['status'] as List<String>,
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
       appointmentId: map['appointmentId'] as String,
       clientId: map['client_id'] as String,
     );

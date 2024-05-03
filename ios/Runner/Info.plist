@@ -6,6 +6,7 @@
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+<<<<<<< HEAD
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires access to the function to scan Qrcode is only available to admins, the owner of the shop this app has been designed for, not for clients of the Beauty shop that uses the app to manage appointments, on the Loyalty card screen, there is an icon to open a QrCode with information about the user, when the admin scans that QrCode the app consequently change the status of the appointment from "confirmed" to "archived" and add 25 points to the loyalty card total points</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -20,6 +21,12 @@
     <string>This app requires access to the one of our clients create an appointment, or the admin create one for them, when the user go on details they have the possibility to add their appointments to their google calendar, so we ask first for the permission of the calendar in order for them to be able to add it to their own Google Calendar app.</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>This app requires access to the function to scan Qrcode is only available to admins, the owner of the shop this app has been designed for, not for clients of the Beauty shop that uses the app to manage appointments, on the Loyalty card screen, there is an icon to open a QrCode with information about the user, when the admin scans that QrCode the app consequently change the status of the appointment from "confirmed" to "archived" and add 25 points to the loyalty card total points.</string>
+=======
+	<key>NSCalendarsUsageDescription</key>
+	<string>We will open calendar for you to add meeting to calendar.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>For location auto complete.</string>
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
 	<key>CFBundleDisplayName</key>
 	<string>Aetherium Saloon App</string>
 	<key>CFBundleExecutable</key>
@@ -40,6 +47,15 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+<<<<<<< HEAD
+=======
+	<key>NSCameraUsageDescription</key>
+	<string>Need to upload image</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Need to upload image</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Need to upload image</string>
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

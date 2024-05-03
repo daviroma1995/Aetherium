@@ -5,6 +5,10 @@
 import FlutterMacOS
 import Foundation
 
+<<<<<<< HEAD
+=======
+import appkit_ui_element_colors
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
 import cloud_firestore
 import cloud_functions
 import dynamic_color
@@ -24,6 +28,10 @@ import sqflite
 import url_launcher_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+<<<<<<< HEAD
+=======
+  AppkitUiElementColorsPlugin.register(with: registry.registrar(forPlugin: "AppkitUiElementColorsPlugin"))
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
   FLTFirebaseFirestorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseFirestorePlugin"))
   FLTFirebaseFunctionsPlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseFunctionsPlugin"))
   DynamicColorPlugin.register(with: registry.registrar(forPlugin: "DynamicColorPlugin"))

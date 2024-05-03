@@ -189,12 +189,18 @@ class AppointmentConfirmDetailController extends GetxController {
           log("Exception::: ${ex.toString()}");
         }
         if (!homeController.currentUser.value.isAdmin!) {
+<<<<<<< HEAD
           // sendNotification(tr('appointment_new_added_successfully'),
           //     args.clientId, tr('new_appointment'),
           //     appointmentId: value.id);
           sendNotification(
             '${homeController.currentUser.value.firstName} ${homeController.currentUser.value.lastName} ${tr('appointment_new_added')}',
             adminId,
+=======
+          sendNotification(
+            '${homeController.currentUser.value.firstName} ${homeController.currentUser.value.lastName} ${tr('appointment_new_added')}',
+            'admin',
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
             tr('new_appointment'),
             appointmentId: value.id,
           );
@@ -236,7 +242,11 @@ class AppointmentConfirmDetailController extends GetxController {
           .collection('appointments')
           .doc(args.id)
           .get();
+<<<<<<< HEAD
       var appointmenDoc = await FirebaseFirestore.instance
+=======
+      await FirebaseFirestore.instance
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
           .collection('appointments')
           .doc(args.id)
           .get()
@@ -309,7 +319,10 @@ class AppointmentConfirmDetailController extends GetxController {
           selectedStatus.toLowerCase() == 'archiviato' &&
           previousStatus.toLowerCase() != 'archiviato' &&
           points + 25 <= 300) {
+<<<<<<< HEAD
         print('if Called');
+=======
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
         await FirebaseFirestore.instance
             .collection('client_memberships')
             .doc(args.clientId)
@@ -323,7 +336,10 @@ class AppointmentConfirmDetailController extends GetxController {
       } else if (previousStatus.toLowerCase() == 'archiviato' &&
           selectedStatus.toLowerCase() != 'archiviato' &&
           points - 25 >= 0) {
+<<<<<<< HEAD
         print('Else if called');
+=======
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
         await FirebaseFirestore.instance
             .collection('client_memberships')
             .doc(args.clientId)
@@ -335,10 +351,13 @@ class AppointmentConfirmDetailController extends GetxController {
         await homeController.loadHomeScreen();
         await agendaController.loadData();
       } else {
+<<<<<<< HEAD
         print('Else called');
         print(selectedStatus);
         print(previousStatus);
         print(points);
+=======
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
         await homeController.loadHomeScreen();
         await agendaController.loadData();
       }
@@ -399,21 +418,40 @@ class AppointmentConfirmDetailController extends GetxController {
   }
 
   void sendNotification(String message, String receiverId, String title,
+<<<<<<< HEAD
       {required String appointmentId}) {
     HomeScreenController controller = Get.find();
+=======
+      {required String appointmentId}) async {
+    HomeScreenController controller = Get.find();
+    List<String> ids = [];
+    if (receiverId == 'admin' || receiverId == 'client') {
+      ids = await FirebaseServices().fetchUserIdz(receiverId);
+    } else {
+      ids.add(receiverId);
+    }
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
     NotificationModel notification = NotificationModel(
         id: '',
         title: title,
         body: message,
         senderId: controller.currentUser.value.userId!,
+<<<<<<< HEAD
         receiverId: receiverId,
+=======
+        receiverId: [receiverId],
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
         senderImage: controller.currentUser.value.photo ?? '',
         senderName:
             '${controller.currentUser.value.firstName!} ${controller.currentUser.value.lastName}',
         createdAt: Timestamp.now(),
         type: 'apointment',
         desc: message,
+<<<<<<< HEAD
         status: 'unread',
+=======
+        status: ids,
+>>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
         appointmentId: appointmentId,
         clientId: '');
     NotificationsSubscription.createNotification(notification: notification);
