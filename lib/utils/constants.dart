@@ -159,6 +159,8 @@ class AppAssets {
   static const PLUSS_BTN = 'assets/images/icons/add_btn.svg';
   static const CROSS_BTN = 'assets/images/icons/x-circle.svg';
   static const SCAN_ICON = 'assets/images/icons/scan_icon.svg';
+  static const DELETE_ICON = 'assets/images/icons/delete_account.svg';
+  static const MAP_ICON = 'assets/images/icons/map_pin.svg';
 }
 
 class AppLanguages {
@@ -258,6 +260,7 @@ class AppLanguages {
   static const APPOINTMENTCONFERMA = 'Appuntamento - Conferma';
   static const SELECT_CLIENT = 'Seleziona Cliente';
   static const INCREASE_TOTAL_DURATION = 'Increase Total Duration By';
+  static const DELETE_ACCOUNT = 'Increase Total Duration By';
 }
 
 class AppTextStyle {

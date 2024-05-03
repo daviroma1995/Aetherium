@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_screen.dart';
 import 'package:atherium_saloon_app/screens/login_screen/login_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -98,6 +99,16 @@ class LoginController extends GetxController {
     ]);
 >>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
     await auth.signOut();
+    Get.offAll(() => LoginScreen());
+  }
+
+  void deleteAccount() async {
+    LocalData.setIsLogedIn(false);
+    await NotificationsSubscription.fcmUnSubscribe(
+        appUserId: FirebaseAuth.instance.currentUser!.uid);
+  await  FirebaseFirestore.instance.collection('users').doc(auth.currentUser!.uid).delete();
+    await auth.currentUser!.delete();
+
     Get.offAll(() => LoginScreen());
   }
 

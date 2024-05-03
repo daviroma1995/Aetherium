@@ -27,7 +27,6 @@ class AccountInfoController extends GetxController {
   TextEditingController email = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController address = TextEditingController();
-
   RxBool nameHasError = false.obs;
   RxBool surNameHasError = false.obs;
   RxBool emailHasError = false.obs;

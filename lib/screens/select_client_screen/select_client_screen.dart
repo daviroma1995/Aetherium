@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -42,252 +43,373 @@ class SelectClientScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                child: CustomInputFormField(
-                  textEdigintController: controller.search,
-                  hintText: tr('search'),
-                  iconColor: AppColors.TEXT_FIELD_HINT_TEXT,
-                  isValid: true,
-                  onSubmit: () {},
-                  autoFocus: false,
-                  iconUrl: AppAssets.SEARCH_ICON,
-                  onchange: (value) {
-                    controller.searchText.value = value;
-                  },
-                ),
-              ),
-              const SizedBox(height: 22.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(),
+        body: Obx(() =>  Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                    child: CustomInputFormField(
+                      textEdigintController: controller.search,
+                      hintText: tr('search'),
+                      iconColor: AppColors.TEXT_FIELD_HINT_TEXT,
+                      isValid: true,
+                      onSubmit: () {},
+                      autoFocus: false,
+                      iconUrl: AppAssets.SEARCH_ICON,
+                      onchange: (value) {
+                        controller.searchText.value = value;
+                      },
+                    ),
                   ),
-                  child: Obx(
-                    () => controller.clients.isEmpty || controller.tier.isEmpty
-                        ? CircularProgressIndicator(
-                            color: isDark
-                                ? AppColors.SECONDARY_COLOR
-                                : AppColors.GREY_COLOR,
-                          )
-                        : controller.isLoaded.value
-                            ? ListView.builder(
-                                itemCount: controller.clients
-                                    .where((client) {
-                                      return client.fullName
-                                          .toLowerCase()
-                                          .contains(
-                                              controller.searchText.value);
-                                    })
-                                    .toList()
-                                    .length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  controller.searchedClients.value =
-                                      controller.clients.where((client) {
-                                    return client.fullName
-                                        .toLowerCase()
-                                        .contains(controller.searchText.value);
-                                  }).toList();
-                                  int selectedIndex = controller
-                                              .searchedClients.length >
-                                          1
-                                      ? index
-                                      : controller.clients.indexWhere((client) {
-                                          return client.fullName
-                                              .toLowerCase()
-                                              .contains(
-                                                  controller.searchText.value);
-                                        });
-                                  return GestureDetector(
-                                    onLongPress: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            var yesButton = PrimaryButton(
-                                                color: AppColors.ERROR_COLOR,
-                                                width: 60,
-                                                buttonText: 'Yes',
-                                                onTap: () async {
-                                                  await controller.longPress(
-                                                      controller.searchedClients
-                                                                  .length >
+                  const SizedBox(height: 22.0),
+
+                     IgnorePointer(
+                       ignoring: controller.isDeleting.value,
+                       child: Padding(
+                          padding: const EdgeInsets.only(left: 22.0, right: 22.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              border: Border.all(),
+                            ),
+                            child: Obx(
+                              () => controller.clients.isEmpty || controller.tier.isEmpty
+                                  ? CircularProgressIndicator(
+                                      color: isDark
+                                          ? AppColors.SECONDARY_COLOR
+                                          : AppColors.GREY_COLOR,
+                                    )
+                                  : controller.isLoaded.value
+                                      ? Container(
+                                          height:
+                                              MediaQuery.of(context).size.height / 1.41,
+                                          width: MediaQuery.of(context).size.width,
+                                          child: ListView.builder(
+                                            itemCount: controller.clients
+                                                .where((client) {
+                                                  return client.fullName
+                                                      .toLowerCase()
+                                                      .contains(
+                                                          controller.searchText.value);
+                                                })
+                                                .toList()
+                                                .length,
+                                            // shrinkWrap: true,
+                                            itemBuilder: (context, index) {
+                                              controller.searchedClients.value =
+                                                  controller.clients.where((client) {
+                                                return client.fullName
+                                                    .toLowerCase()
+                                                    .contains(
+                                                        controller.searchText.value);
+                                              }).toList();
+                                              int selectedIndex =
+                                                  controller.searchedClients.length > 1
+                                                      ? index
+                                                      : controller.clients
+                                                          .indexWhere((client) {
+                                                          return client.fullName
+                                                              .toLowerCase()
+                                                              .contains(controller
+                                                                  .searchText.value);
+                                                        });
+                                              return  GestureDetector(
+                                                onLongPress: () {
+                                                  //
+                                                  //     return AlertDialog(
+                                                  //       alignment: Alignment.center,
+                                                  //       title: Text(tr('are_you_sure')),
+                                                  //       content: FutureBuilder(
+                                                  //         // Replace with the asynchronous operation that deletes the account
+                                                  //         future: controller.longPress(
+                                                  //                           controller.searchedClients
+                                                  //                                       .length >
+                                                  //                                   1
+                                                  //                               ? index
+                                                  //                               : selectedIndex
+                                                  //         ),
+                                                  //         builder: (context, snapshot) {
+                                                  //           if (snapshot.connectionState == ConnectionState.waiting) {
+                                                  //             // Show a loading indicator while the deletion is in progress
+                                                  //             return CircularProgressIndicator();
+                                                  //           } else if (snapshot.hasError) {
+                                                  //             // Handle error case
+                                                  //             return Text(tr('error_occurred'));
+                                                  //           } else {
+                                                  //             // Show the confirmation message after successful deletion
+                                                  //             return Text(tr('user_account_deleted'));
+                                                  //           }
+                                                  //         },
+                                                  //       ),
+                                                  //       actions: [
+                                                  //         // If the deletion is still in progress, disable the buttons
+                                                  //         // until the operation completes
+                                                  //         TextButton(
+                                                  //           onPressed: snapshot.connectionState == ConnectionState.waiting
+                                                  //               ? null
+                                                  //               : () {
+                                                  //             Navigator.of(context).pop();
+                                                  //           },
+                                                  //           child: Text(tr('no')),
+                                                  //         ),
+                                                  //         ElevatedButton(
+                                                  //           onPressed: snapshot.connectionState == ConnectionState.waiting
+                                                  //               ? null
+                                                  //               : () async {
+                                                  //             // Perform the deletion operation here
+                                                  //             await controller.longPress(
+                                                  //                 controller.searchedClients.length > 1
+                                                  //                     ? index
+                                                  //                     : selectedIndex);
+                                                  //             Fluttertoast.showToast(msg: tr('user_deleted'));
+                                                  //             // Close the dialog
+                                                  //             Navigator.of(context).pop();
+                                                  //             Navigator.of(context).pop();
+                                                  //           },
+                                                  //           child: Text(tr('yes')),
+                                                  //         ),
+                                                  //       ],
+                                                  //     );
+                                                  //   },
+                                                  // );
+
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        var yesButton = PrimaryButton(
+                                                            color: AppColors.ERROR_COLOR,
+                                                            width: 60,
+                                                            buttonText: 'yes',
+                                                            onTap: () async {
+                                                              Navigator.of(context).pop();
+                                                              await controller.longPress(
+                                                                  controller.searchedClients
+                                                                              .length >
+                                                                          1
+                                                                      ? index
+                                                                      : selectedIndex);
+
+                                                              // ignore: use_build_context_synchronously
+                                                              Get.back();
+                                                              // Get.back();
+                                                              Fluttertoast.showToast(
+                                                                  msg:
+                                                                      tr('user_deleted'));
+                                                            });
+                                                        var noButton = TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(context).pop();
+                                                          },
+                                                          child: Text(tr('no')),
+                                                        );
+                                                        return controller.isDeleting.value?CupertinoActivityIndicator():
+                                                        AlertDialog(
+                                                          alignment: Alignment.center,
+                                                          title: Text(tr('are_you_sure')),
+                                                          content: Text(tr(
+                                                              'user_account_will_be_deleted_permanently')),
+                                                          actions: [yesButton, noButton],
+                                                        );
+                                                      });
+                                                },
+                                                onTap: () {
+                                                  controller.onTap(
+                                                      controller.searchedClients.length >
                                                               1
                                                           ? index
                                                           : selectedIndex);
-                                                  Fluttertoast.showToast(
-                                                      msg: 'User deleted');
-                                                  // ignore: use_build_context_synchronously
-                                                  Get.back();
-                                                  Get.back();
-                                                });
-                                            var noButton = TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('No'),
-                                            );
-                                            return AlertDialog(
-                                              alignment: Alignment.center,
-                                              title:
-                                                  const Text('Are you sure?'),
-                                              content: const Text(
-                                                  'User account will be deleted permanently'),
-                                              actions: [yesButton, noButton],
-                                            );
-                                          });
-                                    },
-                                    onTap: () {
-                                      controller.onTap(
-                                          controller.searchedClients.length > 1
-                                              ? index
-                                              : selectedIndex);
-                                    },
-                                    child: !controller.selectedClients.contains(
-                                            controller
-                                                .clients[controller
-                                                            .searchedClients
-                                                            .length >
-                                                        1
-                                                    ? index
-                                                    : selectedIndex]
-                                                .userId)
-                                        ? ClientTile(
-                                            index: controller.searchedClients
-                                                        .length >
-                                                    1
-                                                ? index
-                                                : selectedIndex,
-                                            onTap: controller.getClientDetails,
-                                            name:
-                                                '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
-                                            membership:
-                                                controller.tier[index].name!,
-                                            checkColor: AppColors.BORDER_COLOR,
-                                            textColor: isDark
-                                                ? AppColors.WHITE_COLOR
-                                                : AppColors.BLACK_COLOR,
-                                            iconColor: isDark
-                                                ? AppColors.WHITE_COLOR
-                                                : AppColors.BLACK_COLOR,
-                                          )
-                                        : ClientTile(
-                                            index: controller.searchedClients
-                                                        .length >
-                                                    1
-                                                ? index
-                                                : selectedIndex,
-                                            onTap: controller.getClientDetails,
-                                            name:
-                                                '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
-                                            membership:
-                                                controller.tier[index].name!,
-                                            textColor:
-                                                AppColors.SECONDARY_COLOR,
-                                            iconColor:
-                                                AppColors.SECONDARY_COLOR,
-                                            checkColor:
-                                                AppColors.SECONDARY_COLOR),
-                                  );
-                                },
-                              )
-                            : ListView.builder(
-                                itemCount: controller.clients
-                                    .where((client) {
-                                      return client.fullName
-                                          .toLowerCase()
-                                          .contains(
-                                              controller.searchText.value);
-                                    })
-                                    .toList()
-                                    .length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  controller.searchedClients.value =
-                                      controller.clients.where((client) {
-                                    return client.fullName
-                                        .toLowerCase()
-                                        .contains(controller.searchText.value);
-                                  }).toList();
-                                  int selectedIndex = controller
-                                              .searchedClients.length >
-                                          1
-                                      ? index
-                                      : controller.clients.indexWhere((client) {
-                                          return client.fullName
-                                              .toLowerCase()
-                                              .contains(
-                                                  controller.searchText.value);
-                                        });
-                                  return GestureDetector(
-                                    onTap: () {
-                                      controller.onTap(
-                                          controller.searchedClients.length > 1
-                                              ? index
-                                              : selectedIndex);
-                                    },
-                                    child: !controller.selectedClients.contains(
-                                            controller
-                                                .clients[controller
-                                                            .searchedClients
-                                                            .length >
-                                                        1
-                                                    ? index
-                                                    : selectedIndex]
-                                                .userId)
-                                        ? ClientTile(
-                                            index: controller.searchedClients
-                                                        .length >
-                                                    1
-                                                ? index
-                                                : selectedIndex,
-                                            onTap: controller.getClientDetails,
-                                            name:
-                                                '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
-                                            membership:
-                                                controller.tier[index].name!,
-                                            checkColor: AppColors.BORDER_COLOR,
-                                            textColor: isDark
-                                                ? AppColors.WHITE_COLOR
-                                                : AppColors.BLACK_COLOR,
-                                            iconColor: isDark
-                                                ? AppColors.WHITE_COLOR
-                                                : AppColors.BLACK_COLOR,
-                                          )
-                                        : ClientTile(
-                                            index: controller.searchedClients
-                                                        .length >
-                                                    1
-                                                ? index
-                                                : selectedIndex,
-                                            onTap: controller.getClientDetails,
-                                            name:
-                                                '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
-                                            membership:
-                                                controller.tier[index].name!,
-                                            textColor:
-                                                AppColors.SECONDARY_COLOR,
-                                            iconColor:
-                                                AppColors.SECONDARY_COLOR,
-                                            checkColor:
-                                                AppColors.SECONDARY_COLOR),
-                                  );
-                                },
-                              ),
-                  ),
+                                                },
+                                                child: !controller.selectedClients
+                                                        .contains(controller
+                                                            .clients[controller
+                                                                        .searchedClients
+                                                                        .length >
+                                                                    1
+                                                                ? index
+                                                                : selectedIndex]
+                                                            .userId)
+                                                    ? ClientTile(
+                                                        index: controller.searchedClients
+                                                                    .length >
+                                                                1
+                                                            ? index
+                                                            : selectedIndex,
+                                                        onTap:
+                                                            controller.getClientDetails,
+                                                        name:
+                                                            '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
+                                                        membership:
+                                                        // '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].membershipName}',
+                                                            controller.tier[index].name!,
+                                                        checkColor:
+                                                            AppColors.BORDER_COLOR,
+                                                        textColor: isDark
+                                                            ? AppColors.WHITE_COLOR
+                                                            : AppColors.BLACK_COLOR,
+                                                        iconColor: isDark
+                                                            ? AppColors.WHITE_COLOR
+                                                            : AppColors.BLACK_COLOR,
+                                                      )
+                                                    : ClientTile(
+                                                        index: controller.searchedClients
+                                                                    .length >
+                                                                1
+                                                            ? index
+                                                            : selectedIndex,
+                                                        onTap:
+                                                            controller.getClientDetails,
+                                                        name:
+                                                            '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
+                                                        membership:
+                                                        // '${{controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].membershipName!}}',
+                                                            controller.tier[index].name!,
+                                                        textColor:
+                                                            AppColors.SECONDARY_COLOR,
+                                                        iconColor:
+                                                            AppColors.SECONDARY_COLOR,
+                                                        checkColor:
+                                                            AppColors.SECONDARY_COLOR),
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      : Container(
+                                          height:
+                                              MediaQuery.of(context).size.height / 1.41,
+                                          width: MediaQuery.of(context).size.width,
+                                          child: ListView.builder(
+                                            itemCount: controller.clients
+                                                .where((client) {
+                                                  return client.fullName
+                                                      .toLowerCase()
+                                                      .contains(
+                                                          controller.searchText.value);
+                                                })
+                                                .toList()
+                                                .length,
+                                            // shrinkWrap: true,
+                                            itemBuilder: (context, index) {
+                                              // return Container(
+                                              //   height: 30,
+                                              //   width: 100,
+                                              //   color: Colors.green,
+                                              //   child: Text(index.toString()),
+                                              // );
+                                              controller.searchedClients.value =
+                                                  controller.clients.where((client) {
+                                                return client.fullName
+                                                    .toLowerCase()
+                                                    .contains(
+                                                        controller.searchText.value);
+                                              }).toList();
+                                              int selectedIndex =
+                                                  controller.searchedClients.length > 1
+                                                      ? index
+                                                      : controller.clients
+                                                          .indexWhere((client) {
+                                                          return client.fullName
+                                                              .toLowerCase()
+                                                              .contains(controller
+                                                                  .searchText.value);
+                                                        });
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  controller.onTap(
+                                                      controller.searchedClients.length >
+                                                              1
+                                                          ? index
+                                                          : selectedIndex);
+                                                },
+                                                child: !controller.selectedClients
+                                                        .contains(controller
+                                                            .clients[controller
+                                                                        .searchedClients
+                                                                        .length >
+                                                                    1
+                                                                ? index
+                                                                : selectedIndex]
+                                                            .userId)
+                                                    ? ClientTile(
+                                                        index: controller.searchedClients
+                                                                    .length >
+                                                                1
+                                                            ? index
+                                                            : selectedIndex,
+                                                        onTap:
+                                                            controller.getClientDetails,
+                                                        name:
+                                                            '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
+                                                        membership:
+                                                        // '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].membershipName}',
+                                                            controller.tier[index].name!,
+                                                        checkColor:
+                                                            AppColors.BORDER_COLOR,
+                                                        textColor: isDark
+                                                            ? AppColors.WHITE_COLOR
+                                                            : AppColors.BLACK_COLOR,
+                                                        iconColor: isDark
+                                                            ? AppColors.WHITE_COLOR
+                                                            : AppColors.BLACK_COLOR,
+                                                      )
+                                                    : ClientTile(
+                                                        index: controller.searchedClients
+                                                                    .length >
+                                                                1
+                                                            ? index
+                                                            : selectedIndex,
+                                                        onTap:
+                                                            controller.getClientDetails,
+                                                        name:
+                                                            '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].firstName!} ${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].lastName}',
+                                                        membership:
+                                                        // '${controller.clients[controller.searchedClients.length > 1 ? index : selectedIndex].membershipName!}',
+                                                            controller.tier[index].name!,
+                                                        textColor:
+                                                            AppColors.SECONDARY_COLOR,
+                                                        iconColor:
+                                                            AppColors.SECONDARY_COLOR,
+                                                        checkColor:
+                                                            AppColors.SECONDARY_COLOR),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                            ),
+                          ),
+                        ),
+                     ),
+
+
+
+                ],
+              ),
+            ),
+            Center(
+              child: Visibility(
+                visible: controller.isDeleting.value,
+                child: CupertinoActivityIndicator(
+                  radius: 30,
                 ),
-              )
-            ],
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 22.0),
+              ),
+            ),
+          ],
+        )),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        // floatingActionButton: Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 22.0),
+        //   child: PrimaryButton(
+        //     color: isDark ? AppColors.PRIMARY_DARK : AppColors.PRIMARY_COLOR,
+        //     buttonText: 'next',
+        //     width: Get.width,
+        //     onTap: () {
+        //       controller.goToServicesScreen();
+        //     },
+        //   ),
+        // ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 8),
           child: PrimaryButton(
             color: isDark ? AppColors.PRIMARY_DARK : AppColors.PRIMARY_COLOR,
             buttonText: 'next',
@@ -320,6 +442,7 @@ class ClientTile extends StatelessWidget {
   final Color checkColor;
   final Color textColor;
   final Function onTap;
+
   @override
   Widget build(BuildContext context) {
     return ListTile(

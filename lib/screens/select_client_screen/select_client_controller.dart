@@ -27,6 +27,7 @@ class SelectClientController extends GetxController {
   TextEditingController search = TextEditingController();
   RxString email = ''.obs;
   RxString phone = ''.obs;
+
   @override
   void onInit() async {
     super.onInit();
@@ -92,7 +93,52 @@ class SelectClientController extends GetxController {
     loadUsers();
   }
 
+  // void loadUsers() async {
+  //   try {
+  //     var apis = ["clients", "client_memberships", "membership_type"];
+  //     var collections = apis.map((e) => FirebaseFirestore.instance.collection(e).get());
+  //     var results = await Future.wait(collections);
+  //
+  //     var firebaseClients = results[0].docs.map((e) => Client.fromJson(e.data())).toList();
+  //     var memberships = results[1].docs.map((e) => Membership.fromJson(e.data())).toList();
+  //     var tiers = results[2].docs.map((e) => MembershipType.fromJson(e.data())).toList();
+  //
+  //     for (var client in firebaseClients) {
+  //       if (client.isAdmin == false) {
+  //         clients.add(client);
+  //         print('clients names:${client.firstName}');
+  //
+  //         // Find the membership for the current client
+  //         var clientMembership = memberships.firstWhere(
+  //               (membership) => membership.clientId == client.id,
+  //
+  //         );
+  //
+  //         if (clientMembership != null) {
+  //           // Find the membership type for the current client's membership
+  //           var membershipType = tiers.firstWhere(
+  //                 (type) => type.id == clientMembership.membershipTypeId,
+  //             orElse: () => null,
+  //           );
+  //
+  //           if (membershipType != null) {
+  //             // Associate the membership type with the client
+  //             client.membershipType = membershipType;
+  //             print('membership names:${membershipType.name}');
+  //           }
+  //         }
+  //       }
+  //     }
+  //
+  //     print("checking length are:${clients.length}");
+  //     isLoaded.value = !isLoaded.value;
+  //   } on Exception catch (e) {
+  //     print(e);
+  //   }
+  // }
+
   void loadUsers() async {
+    int i = 0;
     try {
       var apis = ["clients", "client_memberships", "membership_type"];
       var collections =
@@ -103,6 +149,7 @@ class SelectClientController extends GetxController {
       for (var client in firebaseClients) {
         if (client.isAdmin == false) {
           clients.add(client);
+          print('clients names:${clients.length}');
         }
       }
       var data =
@@ -113,12 +160,26 @@ class SelectClientController extends GetxController {
           .toList();
       for (var membership in data) {
         for (var membershipType in tiers) {
+          print(
+              'client user id:${membership.membershipTypeId}=${membershipType.id}=${membership.clientId != FirebaseServices.cuid}');
           if (membership.membershipTypeId == membershipType.id &&
               membership.clientId != FirebaseServices.cuid) {
-            tier.add(membershipType);
+            if (clients.length != tier.length) {
+              print('membership names:${membershipType.name}');
+              for(int i=0; i<clients.length; i++){
+                if(membership.clientId== clients[i].userId){
+                  tier.add(membershipType);
+                  break;
+                }
+              }
+
+
+            }
+            i++;
           }
         }
       }
+      print("checking length are:${clients.length}:${tier.length}");
       isLoaded.value = !isLoaded.value;
     } on Exception catch (e) {
       print(e);
@@ -157,11 +218,15 @@ class SelectClientController extends GetxController {
         arguments: args,
       );
     } else {
-      Fluttertoast.showToast(msg: 'Please select a client to continiue');
+      // Fluttertoast.showToast(msg: 'Please select a client to continiue');
     }
   }
 
+  RxBool isDeleting = false.obs;
+
   Future<void> longPress(int id) async {
+    isDeleting.value = true;
+
     var uid = clients[id].userId;
     var email = clients[id].email;
     await FirebaseFirestore.instance
@@ -187,6 +252,7 @@ class SelectClientController extends GetxController {
             'https://us-central1-aetherium-salon.cloudfunctions.net/deleteUser'),
         body: {"uid": uid});
     var data = response.body;
+    isDeleting.value = false;
     log(data.toString());
   }
 }

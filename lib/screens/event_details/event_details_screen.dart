@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:atherium_saloon_app/screens/event_details/event_details_controller.dart';
 import 'package:atherium_saloon_app/utils/constants.dart';
+import 'package:atherium_saloon_app/utils/date_utils.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -16,10 +17,13 @@ import '../../widgets/text_row_widget.dart';
 
 class EventDetailsScreen extends StatelessWidget {
   final controller = Get.put(EventDetailsControlelr());
+
   EventDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    print("start time:${Get.arguments.startTimeStamp}:endTime:${Get.arguments.endTimeStamp}");
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final Completer<GoogleMapController> controller0 =
         Completer<GoogleMapController>();
@@ -144,7 +148,7 @@ class EventDetailsScreen extends StatelessWidget {
                         const SizedBox(height: 10.0),
                         TextRowWidget(
                           textOne: Get.arguments.dateString,
-                          textTwo: 'Online',
+                          textTwo: Get.arguments.address,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,
@@ -170,8 +174,8 @@ class EventDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 10.0),
                         TextRowWidget(
-                          textOne: Get.arguments.startTimeString,
-                          textTwo: Get.arguments.endTimeString,
+                          textOne: Utils().formatTimestamp(Get.arguments.startTimeStamp),
+                          textTwo: Utils().formatTimestamp(Get.arguments.endTimeStamp),
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,
@@ -197,7 +201,10 @@ class EventDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 10.0),
                         TextRowWidget(
-                          textOne: Get.arguments.durationString,
+                          textOne: Utils().getTimeDifference(
+                              Get.arguments.startTimeStamp,
+                              Get.arguments.endTimeStamp),
+                          // Get.arguments.durationString,
                           textTwo: '',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,

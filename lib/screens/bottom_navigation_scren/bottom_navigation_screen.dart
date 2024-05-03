@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:atherium_saloon_app/screens/bottom_navigation_scren/bottom_navigation_controller.dart';
+import 'package:atherium_saloon_app/screens/events_screen/add_event_screen.dart';
 import 'package:atherium_saloon_app/screens/home_screen/home_screen.dart';
 import 'package:atherium_saloon_app/screens/profile_screen/profile_screen.dart';
 import 'package:atherium_saloon_app/screens/services_screen/services_screen.dart';
@@ -32,11 +33,16 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
   late Animation _leftButtonXAnimation;
   late Animation _leftButtonYAnimation;
 
+  late Animation _topButtonXAnimation;
+  late Animation _topButtonYAnimation;
+
   @override
   void initState() {
     controller.rightButtonController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 200));
     controller.leftButtonController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
+    controller.topButtonController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 200));
 
     _rightButtonXAnimation = Tween<double>(begin: 0.0, end: 50.0).animate(
@@ -52,6 +58,14 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
     _leftButtonYAnimation = Tween<double>(begin: 0.0, end: -50.0).animate(
         CurvedAnimation(
             parent: controller.leftButtonController, curve: Curves.bounceOut));
+
+    _topButtonXAnimation = Tween<double>(begin: 0.0, end: -50.0).animate(
+        CurvedAnimation(
+            parent: controller.topButtonController, curve: Curves.bounceOut));
+    _topButtonYAnimation = Tween<double>(begin: 0.0, end: -50.0).animate(
+        CurvedAnimation(
+            parent: controller.topButtonController, curve: Curves.bounceOut));
+
     controller.treatmentCategories.value = Get.arguments;
     super.initState();
   }
@@ -139,7 +153,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
                         : AppColors.WHITE_COLOR,
                     BlendMode.srcIn),
               ),
-              label: tr('agenda'),
+              label: tr('agenda_label'),
             ),
             BottomNavigationBarItem(
               backgroundColor:
@@ -163,7 +177,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
                         : AppColors.WHITE_COLOR,
                     BlendMode.srcIn),
               ),
-              label: tr('card'),
+              label: tr('card_label'),
             ),
             BottomNavigationBarItem(
               backgroundColor:
@@ -214,6 +228,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
         child: Stack(
           alignment: Alignment.center,
           children: [
+
             Positioned(
               bottom: 25.0,
               child: AnimatedBuilder(
@@ -228,10 +243,50 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
                       onTap: () async {
                         controller.reverse();
                         Get.to(
-                          () => AddNewClient(),
+                          () => AddEventScreen(),
                           duration: const Duration(milliseconds: 600),
                           transition:
                               Platform.isIOS ? null : Transition.downToUp,
+                          curve: Curves.easeInQuad,
+                        );
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100.0),
+                          color: isDark
+                              ? AppColors.PRIMARY_DARK
+                              : AppColors.SECONDARY_LIGHT,
+                        ),
+                        child: SvgPicture.asset(AppAssets.MAP_ICON),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Obx(() => controller.toggle.value==false?SizedBox.shrink():
+            Positioned(
+              left: controller.toggle.value == false?0:100.0,
+              bottom:controller.toggle.value == false?25: 60,
+              child: AnimatedBuilder(
+                animation: controller.topButtonController,
+                builder: (context, child) {
+                  return Transform(
+                    transform: Matrix4.translationValues(
+                        _topButtonXAnimation.value,
+                        _topButtonYAnimation.value,
+                        0),
+                    child: GestureDetector(
+                      onTap: () async {
+                        controller.reverse();
+                        Get.to(
+                              () => AddNewClient(),
+                          duration: const Duration(milliseconds: 600),
+                          transition:
+                          Platform.isIOS ? null : Transition.downToUp,
                           curve: Curves.easeInQuad,
                         );
                       },
@@ -251,7 +306,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen>
                   );
                 },
               ),
-            ),
+            )),
             Positioned(
               bottom: 25.0,
               child: AnimatedBuilder(

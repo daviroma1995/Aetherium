@@ -39,10 +39,12 @@ class HomeScreenController extends GetxController {
   var searchedService = "".obs;
   var appointmentsTreatmentCategoryList = <TreatmentCategory>[].obs;
   var listOfClients = <Client>[];
+  var allUsers = <Client>[];
   @override
   void onInit() async {
     super.onInit();
     await loadHomeScreen();
+    await getAllUsers();
   }
 
   Future<void> loadHomeScreen() async {
@@ -76,6 +78,20 @@ class HomeScreenController extends GetxController {
     isLoading.value = false;
     isInitialized.value = true;
     print(listOfClients);
+  }
+
+  getAllUsers()async{
+    var clients = await FirebaseServices.getData(collection: 'clients');
+    if(clients!=null){
+      for (var client in clients){
+        Client clientModel=Client.fromJson(client);
+        if(clientModel.isAdmin==false){
+          allUsers.add(clientModel);
+        }
+
+      }
+    }
+
   }
 
   @override

@@ -68,7 +68,7 @@ class _ScanScreenState extends State<ScanScreen> {
         var data = await FirebaseFirestore.instance
             .collection('appointments')
             .where('client_id', isEqualTo: client.id)
-            .orderBy('date_timestamp', descending: true)
+            .orderBy('date_timestamp')
             .get();
         var docs = data.docs;
         if (docs.isEmpty) {

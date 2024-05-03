@@ -283,7 +283,7 @@ class AccountInfoScreen extends StatelessWidget {
                                         : const SizedBox()),
                                     const SizedBox(height: 12.0),
                                     CustomLabelWidget(
-                                      label: 'telephone',
+                                      label: 'phone_number',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!

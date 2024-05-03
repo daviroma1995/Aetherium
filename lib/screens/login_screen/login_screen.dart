@@ -106,7 +106,7 @@ class LoginScreen extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: const Text(
-                          'forget_password?',
+                          'forget_password',
                           style: TextStyle(color: AppColors.GREY_DARK),
                         ).tr(),
                       ),

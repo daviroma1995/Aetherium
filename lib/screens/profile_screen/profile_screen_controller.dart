@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
+import 'package:atherium_saloon_app/main.dart';
 import 'package:atherium_saloon_app/models/client.dart';
 import 'package:atherium_saloon_app/network_utils/firebase_services.dart';
 import 'package:atherium_saloon_app/screens/account_info_screen/account_info_screen.dart';
@@ -34,11 +35,14 @@ List<ProfileItem> profileItems = [
       iconUrl: AppAssets.PROFILE_INFO_ICON),
   const ProfileItem(title: AppLanguages.SCAN, iconUrl: AppAssets.SCAN_ICON),
   const ProfileItem(title: AppLanguages.LOGOUT, iconUrl: AppAssets.EXIT_ICON),
+  const ProfileItem(
+      title: AppLanguages.DELETE_ACCOUNT, iconUrl: AppAssets.DELETE_ICON),
 ];
 
 class ProfileController extends GetxController {
   late String uid;
   var user = Client().obs;
+
   @override
   void onInit() async {
     uid = FirebaseServices.cuid;
@@ -58,6 +62,8 @@ class ProfileController extends GetxController {
         ProfileItem(
             title: tr('my_information'), iconUrl: AppAssets.PROFILE_INFO_ICON),
         ProfileItem(title: tr('logout'), iconUrl: AppAssets.EXIT_ICON),
+        ProfileItem(
+            title: tr('delete_account'), iconUrl: AppAssets.DELETE_ICON),
       ];
     } else {
       profileItems = [
@@ -71,6 +77,8 @@ class ProfileController extends GetxController {
             title: tr('my_information'), iconUrl: AppAssets.PROFILE_INFO_ICON),
         ProfileItem(title: tr('scan'), iconUrl: AppAssets.SCAN_ICON),
         ProfileItem(title: tr('logout'), iconUrl: AppAssets.EXIT_ICON),
+        ProfileItem(
+            title: tr('delete_account'), iconUrl: AppAssets.DELETE_ICON),
       ];
     }
     super.onInit();
@@ -85,8 +93,51 @@ class ProfileController extends GetxController {
     }
   }
 
+  void popup(Function() onTap) {
+    showDialog(
+      context: navigatorKey.currentContext!,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            tr('my_information'),
+            style: TextStyle(color: Color(0xff1f100b)),
+          ),
+          content: Container(
+              width: 200,
+              child: Text(tr('user_account_will_be_deleted_permanently'))),
+          actions: [
+            GestureDetector(
+              onTap: onTap,
+              child: Container(
+                height: 35,
+                width: 50,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(7),
+                    color: Color(0xffff5353)),
+                child: Center(
+                  child: Text(
+                    tr('yes'),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  tr('no'),
+                  style: TextStyle(color: Color(0xff1f100b)),
+                )),
+          ],
+        );
+      },
+    );
+  }
+
   void navigator(int index) async {
-    if (index == profileItems.length - 1) {
+    if (index == profileItems.length - 2) {
       // Get.offAll(
       //   () => LoginScreen(),
       //   duration: const Duration(milliseconds: 500),
@@ -101,6 +152,27 @@ class ProfileController extends GetxController {
       Get.delete<LoyalityCardController>(force: true);
       Get.delete<ProfileController>(force: true);
       controller.logout();
+      // LocalData.setIsLogedIn(false);
+      // Get.offAll(() => LoginScreen());
+    }
+    if (index == profileItems.length - 1) {
+      // Get.offAll(
+      //   () => LoginScreen(),
+      //   duration: const Duration(milliseconds: 500),
+      //   transition: Transition.circularReveal,
+      //   curve: Curves.ease,
+      // );
+      // Get.reloadAll();
+      popup(() {
+        final LoginController controller = Get.put(LoginController());
+        _deleteCacheDir();
+        Get.delete<HomeScreenController>(force: true);
+        Get.delete<AgendaController>(force: true);
+        Get.delete<LoyalityCardController>(force: true);
+        Get.delete<ProfileController>(force: true);
+        controller.deleteAccount();
+      });
+
       // LocalData.setIsLogedIn(false);
       // Get.offAll(() => LoginScreen());
     }
@@ -160,6 +232,7 @@ class ProfileController extends GetxController {
 class ProfileItem {
   final String title;
   final String iconUrl;
+
   const ProfileItem({
     required this.title,
     required this.iconUrl,

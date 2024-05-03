@@ -1,3 +1,7 @@
+import "package:atherium_saloon_app/network_utils/firebase_services.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:easy_localization/easy_localization.dart";
+import "package:get/get.dart";
 import "package:intl/intl.dart";
 
 class Utils {
@@ -158,5 +162,34 @@ class Utils {
 
   static DateTime nextWeek(DateTime w) {
     return w.add(const Duration(days: 7));
+  }
+
+  String getTimeDifference(Timestamp startTime, Timestamp endTime) {
+    // Convert Firestore timestamps to DateTime objects
+    DateTime startDateTime = startTime.toDate();
+    DateTime endDateTime = endTime.toDate();
+   print("start date:${startDateTime}:${endDateTime}");
+    // Calculate the time difference in minutes
+    int differenceInMinutes =
+        endDateTime.difference(startDateTime).inMinutes.abs();
+
+    // If the difference is less than 1 hour, return it in minutes
+    if (differenceInMinutes < 60) {
+      return '$differenceInMinutes ${tr('minutes')}';
+    }
+
+    // Otherwise, return the difference in hours
+    double differenceInHours = differenceInMinutes / 60;
+    return '${differenceInHours.toStringAsFixed(differenceInHours.truncateToDouble() == differenceInHours ? 0 : 1)} ${tr('hours')}';
+  }
+
+  String formatTimestamp(Timestamp timestamp) {
+    // Convert the Firestore Timestamp to a DateTime object
+    DateTime dateTime = timestamp.toDate();
+
+    // Format the DateTime object into a 24-hour time format
+    String formattedTime = DateFormat('HH:mm').format(dateTime);
+
+    return formattedTime;
   }
 }

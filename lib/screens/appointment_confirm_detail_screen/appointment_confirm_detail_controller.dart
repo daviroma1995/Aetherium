@@ -26,7 +26,10 @@ class AppointmentConfirmDetailController extends GetxController {
   String selectedStatus = '';
   String previousStatus = '';
   RxBool isLoading = false.obs;
-  String adminId = '';
+
+  // String adminId = '';
+  List<String> adminIds = [];
+
   @override
   void onInit() async {
     super.onInit();
@@ -35,7 +38,8 @@ class AppointmentConfirmDetailController extends GetxController {
         .collection('clients')
         .where('isAdmin', isEqualTo: true)
         .get();
-    adminId = instance.docs.first.id;
+    // adminId = instance.docs.first.id;
+    adminIds = instance.docs.map((doc) => doc.id).toList();
   }
 
   @override
@@ -81,6 +85,7 @@ class AppointmentConfirmDetailController extends GetxController {
   }
 
   var prices = [];
+
   String getToatlPrice() {
     var totalprice = 0;
     for (var price in prices) {
@@ -121,6 +126,7 @@ class AppointmentConfirmDetailController extends GetxController {
   }
 
   double totalprice = 0.0;
+
   double get totalPrice {
     if (args!.isNotEmpty && totalprice == 0.0) {
       for (int i = 0; i < args!.length; i++) {
@@ -193,14 +199,18 @@ class AppointmentConfirmDetailController extends GetxController {
           // sendNotification(tr('appointment_new_added_successfully'),
           //     args.clientId, tr('new_appointment'),
           //     appointmentId: value.id);
-          sendNotification(
+          sendAdminNotification(
             '${homeController.currentUser.value.firstName} ${homeController.currentUser.value.lastName} ${tr('appointment_new_added')}',
+<<<<<<< Updated upstream
             adminId,
 =======
           sendNotification(
             '${homeController.currentUser.value.firstName} ${homeController.currentUser.value.lastName} ${tr('appointment_new_added')}',
             'admin',
 >>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
+=======
+            adminIds,
+>>>>>>> Stashed changes
             tr('new_appointment'),
             appointmentId: value.id,
           );
@@ -415,6 +425,30 @@ class AppointmentConfirmDetailController extends GetxController {
     //     endTimeMinutes < 9 ? '0$endTimeMinutes' : endTimeMinutes.toString();
 
     // return '$totalEndHours:$totalMinutes';
+  }
+
+  void sendAdminNotification(
+      String message, List<String> receiverIds, String title,
+      {required String appointmentId}) {
+    HomeScreenController controller = Get.find();
+    for (String receiverId in receiverIds) {
+      NotificationModel notification = NotificationModel(
+          id: '',
+          title: title,
+          body: message,
+          senderId: controller.currentUser.value.userId!,
+          receiverId: receiverId,
+          senderImage: controller.currentUser.value.photo ?? '',
+          senderName:
+              '${controller.currentUser.value.firstName!} ${controller.currentUser.value.lastName}',
+          createdAt: Timestamp.now(),
+          type: 'apointment',
+          desc: message,
+          status: 'unread',
+          appointmentId: appointmentId,
+          clientId: '');
+      NotificationsSubscription.createNotification(notification: notification);
+    }
   }
 
   void sendNotification(String message, String receiverId, String title,

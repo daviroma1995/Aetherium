@@ -44,8 +44,8 @@ class Event {
   Event.fromDocumentSnapShot(QueryDocumentSnapshot<Map<String, dynamic>> json) {
     eventId = json['event_id'];
     address = json['address'];
-    clientId = json['client_id'].cast<String>();
-    date = json['date'];
+    clientId = json['client_id']?.cast<String>();
+    date = json['date'].toString();
     desc = json['desc'];
     dateTimstamp = json['date_timestamp'];
     startTimeStamp = json['start_timestamp'];
@@ -57,16 +57,16 @@ class Event {
     startTime = json['start_time'];
     subtitle = json['subtitle'];
     title = json['title'];
-    longitude = json['longitude'];
-    latitude = json['latitude'];
+    longitude = double.parse(json['longitude'].toString());
+    latitude = double.parse(json['latitude'].toString());
     isfavorite = json['isfavorite'];
   }
 
   Event.fromJson(Map<String, dynamic> json) {
     eventId = json['event_id'];
     address = json['address'];
-    clientId = json['client_id'].cast<String>();
-    date = json['date'];
+    clientId = json['client_id']?.cast<String>();
+    date = json['date'].toString();
     dateTimstamp = json['date_timestamp'];
     startTimeStamp = json['start_timestamp'];
     endTimeStamp = json['end_timestamp'];
@@ -78,8 +78,8 @@ class Event {
     startTime = json['start_time'];
     subtitle = json['subtitle'];
     title = json['title'];
-    longitude = json['longitude'];
-    latitude = json['latitude'];
+    longitude = json['longitude']==''?double.parse('00.0') :double.parse(json['longitude'].toString());
+    latitude = json['latitude']==''?double.parse('00.0') :double.parse(json['latitude'].toString());
     isfavorite = json['isfavorite'];
   }
 

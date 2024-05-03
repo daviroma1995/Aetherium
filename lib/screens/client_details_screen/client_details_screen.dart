@@ -19,6 +19,7 @@ class ClientDetailsScreen extends StatelessWidget {
   final Client client;
   @override
   Widget build(BuildContext context) {
+    print('client id-client details screen:${client.id}');
     var isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
@@ -119,7 +120,7 @@ class ClientDetailsScreen extends StatelessWidget {
                           const SizedBox(height: 20.0),
                           TextRowWidget(
                             textOne: '${tr('email')}:',
-                            textTwo: '${tr('number')}:',
+                            textTwo: '${tr('phone_number')}:',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16.0,
@@ -160,7 +161,7 @@ class ClientDetailsScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 20.0),
                           TextRowWidget(
-                            textOne: 'Tier: ',
+                            textOne: '${tr('client_tier')}: ',
                             textTwo: '${tr('points')}:',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
@@ -173,7 +174,9 @@ class ClientDetailsScreen extends StatelessWidget {
                           const SizedBox(height: 20.0),
                           Obx(
                             () => TextRowWidget(
-                              textOne: controller.loading.value
+                              textOne:
+
+                              controller.loading.value
                                   ? 'Waiting...'
                                   : controller.membershipType.value.name!
                                       .toString()

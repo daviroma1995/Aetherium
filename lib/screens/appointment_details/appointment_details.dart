@@ -143,7 +143,7 @@ class AppointmentDetailsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 16.0),
                                   TextRowWidget(
-                                    textOne: '${tr('number')}:',
+                                    textOne: '${tr('phone_number')}:',
                                     textTwo: '${tr('email')}:',
                                     style: Theme.of(context)
                                         .textTheme

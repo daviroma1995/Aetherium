@@ -1,6 +1,7 @@
 import 'package:atherium_saloon_app/utils/constants.dart';
 import 'package:atherium_saloon_app/widgets/primary_button.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,7 +16,10 @@ class AddNewClient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    controller.loadMembershipTypes();
+
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -147,7 +151,7 @@ class AddNewClient extends StatelessWidget {
                         : const SizedBox()),
                     const SizedBox(height: 12.0),
                     CustomLabelWidget(
-                      label: 'telephone',
+                      label: 'phone_number',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.w700,
                             color: isDark
@@ -203,6 +207,51 @@ class AddNewClient extends StatelessWidget {
                     ),
                     const SizedBox(height: 12.0),
                     CustomLabelWidget(
+                      label: 'loyalty_card_points',
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: isDark
+                            ? AppColors.WHITE_COLOR
+                            : AppColors.SECONDARY_COLOR,
+                      ),
+                    ),
+                    Obx(
+                          () => CustomDropDown(
+                        height: 50.0,
+                        label: 'Select Loyalty Card Points',
+                        options: controller.loyaltyPointsList,
+                        value: controller.loyaltyPoints.value,
+                        sort: false,
+                        onChange: (value) {
+                          controller.changeLoyaltyPointsValue(value);
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 12.0),
+                    CustomLabelWidget(
+                      label: 'client_tier',
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: isDark
+                            ? AppColors.WHITE_COLOR
+                            : AppColors.SECONDARY_COLOR,
+                      ),
+                    ),
+                    Obx(
+                          () => CustomDropDown(
+                        height: 50.0,
+                        label: 'Select Client Tier',
+                        options: controller.membershipTypesNames.value,
+                        value: controller.selectedMembership.value,
+                        sort: false,
+                        onChange: (value) {
+                          controller.changeMembershipTypeValue(value);
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(height: 12.0),
+                    CustomLabelWidget(
                       label: tr('address'),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.w700,
@@ -216,6 +265,7 @@ class AddNewClient extends StatelessWidget {
                         textEdigintController: controller.address,
                         hintText: tr('address'),
                         isValid: !controller.addressHasError.value,
+
                         onSubmit: () {},
                         onchange: (value) {
                           controller.validateAddress();
@@ -233,6 +283,39 @@ class AddNewClient extends StatelessWidget {
                                   const TextStyle(color: AppColors.ERROR_COLOR),
                             ),
                           )
+                        : const SizedBox()),
+                    const SizedBox(height: 12.0),
+                    CustomLabelWidget(
+                      label: tr('password'),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: isDark
+                            ? AppColors.WHITE_COLOR
+                            : AppColors.SECONDARY_COLOR,
+                      ),
+                    ),
+                    Obx(
+                          () => CustomInputFormField(
+                        textEdigintController: controller.password,
+                        hintText: tr('password'),
+                        isValid: !controller.passwordHasError.value,
+                        onSubmit: () {},
+                        onchange: (value) {
+                          controller.validatePassword();
+                        },
+                        autoFocus: false,
+                        paddingSymetric: 16.0,
+                      ),
+                    ),
+                    Obx(() => controller.passwordHasError.value == true
+                        ? Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        controller.passwordErrorMessage.value,
+                        style:
+                        const TextStyle(color: AppColors.ERROR_COLOR),
+                      ),
+                    )
                         : const SizedBox()),
                     const SizedBox(height: 12.0),
                     CustomLabelWidget(
@@ -334,39 +417,7 @@ class AddNewClient extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        PrimaryButton(
-                          width: Get.width / 2 - 28,
-                          buttonText: 'cancel',
-                          onTap: () async {
-                            Get.back();
-                          },
-                          // color: Colors.black,
-                          bordered: true,
-                          borderColor: isDark
-                              ? AppColors.SECONDARY_LIGHT
-                              : AppColors.PRIMARY_COLOR,
-                          buttonTextColor: isDark
-                              ? AppColors.SECONDARY_LIGHT
-                              : AppColors.PRIMARY_COLOR,
-                        ),
-                        const SizedBox(width: 12.0),
-                        PrimaryButton(
-                          width: Get.width / 2 - 28,
-                          buttonText: 'save',
-                          onTap: () {
-                            controller.validateAndSave();
-                          },
-                          color: isDark
-                              ? AppColors.SECONDARY_LIGHT
-                              : AppColors.PRIMARY_COLOR,
-                          buttonTextColor: isDark
-                              ? AppColors.PRIMARY_DARK
-                              : AppColors.WHITE_COLOR,
-                        ),
-                      ],
-                    ),
+
                     const SizedBox(height: 30.0)
                   ],
                 ),
@@ -374,6 +425,44 @@ class AddNewClient extends StatelessWidget {
             ],
           ),
         ),
+        bottomNavigationBar: Obx(() =>   Padding(
+          padding: const EdgeInsets.only(bottom: 5.0),
+          child: controller.isLoading.value?CupertinoActivityIndicator():
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              PrimaryButton(
+                width: Get.width / 2 - 28,
+                buttonText: 'cancel',
+                onTap: () async {
+                  Get.back();
+                },
+                // color: Colors.black,
+                bordered: true,
+                borderColor: isDark
+                    ? AppColors.SECONDARY_LIGHT
+                    : AppColors.PRIMARY_COLOR,
+                buttonTextColor: isDark
+                    ? AppColors.SECONDARY_LIGHT
+                    : AppColors.PRIMARY_COLOR,
+              ),
+              const SizedBox(width: 12.0),
+              PrimaryButton(
+                width: Get.width / 2 - 28,
+                buttonText: 'save',
+                onTap: () {
+                  controller.validateAndSave();
+                },
+                color: isDark
+                    ? AppColors.SECONDARY_LIGHT
+                    : AppColors.PRIMARY_COLOR,
+                buttonTextColor: isDark
+                    ? AppColors.PRIMARY_DARK
+                    : AppColors.WHITE_COLOR,
+              ),
+            ],
+          ),
+        )),
       ),
     );
   }

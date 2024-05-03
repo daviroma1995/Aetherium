@@ -182,6 +182,8 @@ class UpcomingAppointmentsController extends GetxController {
           .firstWhere((element) => element.id == service.treatmentCategoryId);
       listOfTreatmentCategory.add(treatmentCategory);
     }
+    upcommingAppointments.sort((a, b) => a.dateTimestamp!.compareTo(b.dateTimestamp!));
+
     isLoading.value = false;
   }
 }

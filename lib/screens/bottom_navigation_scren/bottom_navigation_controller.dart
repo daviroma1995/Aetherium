@@ -27,6 +27,7 @@ class BottomNavigationController extends GetxController {
   RxDouble leftRight = (Get.width / 2 - 25).obs;
   late final AnimationController rightButtonController;
   late final AnimationController leftButtonController;
+  late final AnimationController topButtonController;
   var treatmentCategories = <TreatmentCategory>[].obs;
   @override
   void onInit() async {
@@ -64,6 +65,7 @@ class BottomNavigationController extends GetxController {
     super.onClose();
     rightButtonController.dispose();
     leftButtonController.dispose();
+    topButtonController.dispose();
   }
 
   final screens = [
@@ -94,12 +96,14 @@ class BottomNavigationController extends GetxController {
   void reverse() {
     rightButtonController.reverse();
     leftButtonController.reverse();
+    topButtonController.reverse();
     toggle.value = false;
   }
 
   void forward() {
     rightButtonController.forward();
     leftButtonController.forward();
+    topButtonController.forward();
     toggle.value = true;
   }
 

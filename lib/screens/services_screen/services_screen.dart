@@ -76,7 +76,7 @@ class ServicesScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12.0),
-              Text('services_treatments',
+              Text('service_treatments',
                       style: Theme.of(context).textTheme.headlineLarge)
                   .tr(),
             ],
@@ -108,7 +108,7 @@ class ServicesScreen extends StatelessWidget {
                                         horizontal: 22.0),
                                     child: CustomInputFormField(
                                       textEdigintController: controller.search,
-                                      hintText: 'Search',
+                                      hintText: tr('search'),
                                       iconColor: AppColors.TEXT_FIELD_HINT_TEXT,
                                       isValid: true,
                                       onSubmit: () {},

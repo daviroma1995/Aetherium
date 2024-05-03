@@ -181,7 +181,7 @@ class _CalendarState extends State<Calendar> {
             Column(
               children: [
                 todayIcon ?? const SizedBox(),
-                Text(displayMonth,
+                Text(tr(displayMonth.toLowerCase()),
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                           fontSize: 22.0,
                           fontWeight: FontWeight.w400,
@@ -279,11 +279,11 @@ class _CalendarState extends State<Calendar> {
           todayColor: widget.todayColor,
           eventColor: widget.eventColor,
           eventDoneColor: widget.eventDoneColor,
-          events: widget.events![day],
+          events: widget.events![day.toLowerCase()],
           isDayOfWeek: true,
           date: calendarDays.firstWhereOrNull((e) =>
               DateFormat("EEE").format(e).toLowerCase() == day.toLowerCase()),
-          dayOfWeek: day,
+          dayOfWeek: tr(day.toLowerCase()),
           dayOfWeekStyle: widget.dayOfWeekStyle ??
               TextStyle(
                 color: widget.selectedColor,

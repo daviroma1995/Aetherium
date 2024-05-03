@@ -13,6 +13,8 @@ class Client {
   String? userId;
   bool? isAdmin;
   Timestamp? birthday;
+  String? password;
+  String? membershipName;
 
   Client(
       {this.id,
@@ -25,6 +27,8 @@ class Client {
       this.photo,
       this.userId,
       this.isAdmin,
+      this.password,
+      this.membershipName,
       this.birthday});
 
   Client.fromJson(Map<String, dynamic> json) {
@@ -39,6 +43,7 @@ class Client {
     userId = json['user_id'];
     isAdmin = json['isAdmin'];
     birthday = json['birthday'];
+    password = json['password'];
   }
 
   Map<String, dynamic> toJson() {
@@ -53,6 +58,7 @@ class Client {
     data['user_id'] = userId;
     data['birthday'] = birthday;
     data['isAdmin'] = isAdmin;
+    data['password'] = password;
     return data;
   }
 

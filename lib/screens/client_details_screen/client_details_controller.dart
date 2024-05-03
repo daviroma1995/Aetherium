@@ -14,6 +14,7 @@ class ClientDetailsController extends GetxController {
     var data = await FirebaseServices.getDataWhere(
         collection: 'client_memberships', key: 'client_id', value: args);
     clientMembership.value = Membership.fromJson(data!);
+    print("membership type id is:${clientMembership.value.membershipTypeId!}:${args}");
     var membershipData = await FirebaseServices.getDataWhere(
         collection: 'membership_type',
         key: 'id',

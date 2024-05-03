@@ -16,6 +16,7 @@ import '../models/treatment.dart';
 
 class FirebaseServices {
   static String cuid = FirebaseAuth.instance.currentUser?.uid ?? '';
+
   static Future<String> checkUserUid() async {
     late String uid;
     FirebaseAuth.instance.authStateChanges().listen(
@@ -124,25 +125,38 @@ class FirebaseServices {
   static Stream<List<Event>> eventStream() {
     var uid = cuid;
     return FirebaseFirestore.instance
-        .collection('events')
-        .orderBy('end_timestamp', descending: true)
-        .limit(3)
+        .collection('testEvents')
+        // .collection('events')
+        // .orderBy('date', descending: true)
+        // .limit(3)
         .snapshots()
         .map(
       (event) {
         List<Event> listEvents = [];
+        print("list event length:${event.docs.length}");
         for (var element in event.docs) {
           var document = element.data();
+          print("document data is:${document}");
 
           document['event_id'] = element.id;
-          Timestamp timestamp = document['end_timestamp'];
-          if (timestamp.seconds >= Timestamp.fromDate(DateTime.now()).seconds) {
+          // Timestamp timestamp =Timestamp.fromDate(DateTime.parse(document['date'])) ;
+          if (true) {
+          // if (timestamp.seconds >= Timestamp.fromDate(DateTime.now()).seconds) {
             var data = Event.fromJson(document);
-            data.isfavorite =
-                data.clientId!.where((id) => id == uid).toList().isNotEmpty;
-            listEvents.add(data);
+            print("client id is:");
+            if (data.clientId==null ||
+                data.clientId!.contains(cuid) ||
+                data.clientId!.every((element) => element.trim().isEmpty)) {
+              if(data.clientId!=null){
+                data.isfavorite =
+                    data.clientId!.where((id) => id == uid).toList().isNotEmpty;
+              }
+
+              listEvents.add(data);
+            }
           }
         }
+
         return listEvents;
       },
     );
@@ -166,6 +180,7 @@ class FirebaseServices {
       },
     );
   }
+
   // Get current user
 
   static Future<Map<String, dynamic>> getCurrentUser() async {
