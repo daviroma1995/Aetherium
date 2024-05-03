@@ -141,13 +141,13 @@ class FirebaseServices {
           document['event_id'] = element.id;
           // Timestamp timestamp =Timestamp.fromDate(DateTime.parse(document['date'])) ;
           if (true) {
-          // if (timestamp.seconds >= Timestamp.fromDate(DateTime.now()).seconds) {
+            // if (timestamp.seconds >= Timestamp.fromDate(DateTime.now()).seconds) {
             var data = Event.fromJson(document);
             print("client id is:");
-            if (data.clientId==null ||
+            if (data.clientId == null ||
                 data.clientId!.contains(cuid) ||
                 data.clientId!.every((element) => element.trim().isEmpty)) {
-              if(data.clientId!=null){
+              if (data.clientId != null) {
                 data.isfavorite =
                     data.clientId!.where((id) => id == uid).toList().isNotEmpty;
               }
@@ -481,48 +481,27 @@ class FirebaseServices {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     List<Notification> unreadNotifications = [];
-<<<<<<< HEAD
-    await firestore
-        .collection('notifications')
-        .where('status', isEqualTo: 'unread')
-        .where('client_id', isEqualTo: cuid)
-=======
 
     await firestore
         .collection('new_notification')
         .where('status', arrayContains: cuid)
->>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
         .orderBy('createdAt', descending: true)
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         unreadNotifications.add(Notification.fromFirestore(doc));
       }
-<<<<<<< HEAD
-      // Handle the list of unread notifications
-      // For example, you can update the UI with the notifications
-    }).catchError((error) {
-      log('Error getting documents: $error');
-    });
-=======
     }).catchError((error) {
       log('Error getting documents: $error');
     });
 
->>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
     return unreadNotifications;
   }
 
   static Stream<List<Notification>> getUnreadNotficationsStream() {
     return FirebaseFirestore.instance
-<<<<<<< HEAD
-        .collection('notifications')
-        .where('status', isEqualTo: 'unread')
-        .where('client_id', isEqualTo: cuid)
-=======
         .collection('new_notification')
         .where('status', arrayContains: cuid)
->>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((notification) {
@@ -535,15 +514,6 @@ class FirebaseServices {
     });
   }
 
-<<<<<<< HEAD
-  static void markNotificationAsRead(String notificationId) {
-    DocumentReference notificationRef = FirebaseFirestore.instance
-        .collection('notifications')
-        .doc(notificationId);
-    notificationRef.update({
-      'status': 'read',
-    });
-=======
   static void markNotificationAsRead(Notification notification) {
     try {
       var status = notification.status;
@@ -557,7 +527,6 @@ class FirebaseServices {
     } catch (ex) {
       log(ex.toString());
     }
->>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
   }
 
   static Future<List<Treatment>> getServicesBasedOnMembershipType(
@@ -666,8 +635,6 @@ class FirebaseServices {
     }
     return consultations;
   }
-<<<<<<< HEAD
-=======
 
   Future<List<String>> fetchUserIdz(String conditionString) async {
     final List<String> clientIds = [];
@@ -680,5 +647,4 @@ class FirebaseServices {
     }
     return clientIds;
   }
->>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
 }

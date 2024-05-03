@@ -40,6 +40,7 @@ class HomeScreenController extends GetxController {
   var appointmentsTreatmentCategoryList = <TreatmentCategory>[].obs;
   var listOfClients = <Client>[];
   var allUsers = <Client>[];
+
   @override
   void onInit() async {
     super.onInit();
@@ -80,18 +81,16 @@ class HomeScreenController extends GetxController {
     print(listOfClients);
   }
 
-  getAllUsers()async{
+  getAllUsers() async {
     var clients = await FirebaseServices.getData(collection: 'clients');
-    if(clients!=null){
-      for (var client in clients){
-        Client clientModel=Client.fromJson(client);
-        if(clientModel.isAdmin==false){
+    if (clients != null) {
+      for (var client in clients) {
+        Client clientModel = Client.fromJson(client);
+        if (clientModel.isAdmin == false) {
           allUsers.add(clientModel);
         }
-
       }
     }
-
   }
 
   @override
@@ -146,6 +145,7 @@ class HomeScreenController extends GetxController {
   }
 
   final searchController = TextEditingController();
+
   void onChange(String value) {
     searchedService.value = value;
   }
@@ -165,6 +165,7 @@ class HomeScreenController extends GetxController {
         eventId: events[index].eventId!, data: events[index]);
     events[index].isfavorite = !events[index].isfavorite!;
   }
+
   // Get Employee name
 
   String getEmployeeName(String? id) {
@@ -292,21 +293,13 @@ class HomeScreenController extends GetxController {
         title: '${currentUser.value.firstName} send you a message',
         body: message,
         senderId: currentUser.value.userId!,
-<<<<<<< HEAD
-        receiverId: 'U4Vob2BIBTPWBmwAAEh0iBzskBA3',
-=======
         receiverId: [''],
->>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
         senderImage: '',
         senderName: 'Basit',
         createdAt: Timestamp.now(),
         type: 'message',
         desc: message,
-<<<<<<< HEAD
-        status: '',
-=======
         status: [],
->>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
         appointmentId: '',
         clientId: '');
     NotificationsSubscription.createNotification(notification: notification);

@@ -3,18 +3,10 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-<<<<<<< HEAD
-=======
-  cloud_firestore
->>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
   dynamic_color
   file_selector_windows
   firebase_auth
   firebase_core
-<<<<<<< HEAD
-=======
-  firebase_storage
->>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
   geolocator_windows
   permission_handler_windows
   url_launcher_windows

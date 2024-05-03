@@ -87,17 +87,14 @@ class LoginController extends GetxController {
 
   void logout() async {
     LocalData.setIsLogedIn(false);
-<<<<<<< HEAD
-    await NotificationsSubscription.fcmUnSubscribe(
-        appUserId: FirebaseAuth.instance.currentUser!.uid);
-=======
+
     Future.wait([
       NotificationsSubscription.fcmUnSubscribe(
           appUserId: FirebaseAuth.instance.currentUser!.uid),
       NotificationsSubscription.fcmUnSubscribe(appUserId: 'client'),
       NotificationsSubscription.fcmUnSubscribe(appUserId: 'admin'),
     ]);
->>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
+
     await auth.signOut();
     Get.offAll(() => LoginScreen());
   }
@@ -145,11 +142,8 @@ class LoginController extends GetxController {
   }
 
   void validatePassword() {
-<<<<<<< HEAD
+
     if (passwordController.text.length < 6) {
-=======
-    if (passwordController.text.length < 8) {
->>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
       isPasswordValid.value = false;
       passwordErrorMessage.value = tr('password_must_be_8_characters_long');
     } else {

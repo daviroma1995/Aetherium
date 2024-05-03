@@ -47,15 +47,14 @@ class BottomNavigationController extends GetxController {
     }
 
     await NotificationsSubscription.fcmSubscribe(topicId: client.value.userId!);
-<<<<<<< HEAD
-=======
+
     if (client.value.isAdmin == false) {
       await NotificationsSubscription.fcmSubscribe(topicId: 'client');
     }
     if (client.value.isAdmin == true) {
       await NotificationsSubscription.fcmSubscribe(topicId: 'admin');
     }
->>>>>>> a7b79b91bb16a5abae7fea901dc01f535a0ebb5e
+
 
     await initMessaging();
   }
